@@ -9,4 +9,12 @@ const envSchema = z.object({
   ADMIN_SECRET: z.string(),
 });
 
-export const env = envSchema.parse(process.env);
+const parsed = envSchema.safeParse(process.env);
+
+if (!parsed.success && process.env.NODE_ENV === "production") {
+  throw new Error("Invalid environment variables");
+}
+
+export const env = parsed.success
+  ? parsed.data
+  : ({} as z.infer<typeof envSchema>);
