@@ -1,7 +1,7 @@
 import { BrandSchema } from "@/types/brand.schema";
 import { appendRow } from "@/lib/sheets.helpers";
 import { mapBrandToRow } from "@/lib/mappers/brand.mapper";
-import { sheets, SPREADSHEET_ID } from "@/lib/sheets";
+import { getSheetsClient } from "@/lib/sheets";
 
 export async function POST(req: Request) {
   try {
@@ -33,8 +33,10 @@ export async function POST(req: Request) {
 }
 
 export async function GET() {
+  const { sheets, spreadsheetId } = getSheetsClient();
+
   const res = await sheets.spreadsheets.values.get({
-    spreadsheetId: SPREADSHEET_ID,
+    spreadsheetId,
     range: "brands!A2:I",
   });
 
