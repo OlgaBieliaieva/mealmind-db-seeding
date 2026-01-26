@@ -9,12 +9,25 @@ const envSchema = z.object({
   ADMIN_SECRET: z.string(),
 });
 
-const parsed = envSchema.safeParse(process.env);
+let cachedEnv: z.infer<typeof envSchema> | null = null;
 
-if (!parsed.success && process.env.NODE_ENV === "production") {
-  throw new Error("Invalid environment variables");
+/**
+ * Reads and validates environment variables.
+ * IMPORTANT:
+ * - Called ONLY at runtime (inside API handlers)
+ * - Never during build
+ */
+export function getEnv() {
+  if (cachedEnv) {
+    return cachedEnv;
+  }
+
+  const parsed = envSchema.safeParse(process.env);
+
+  if (!parsed.success) {
+    throw new Error("Invalid environment variables");
+  }
+
+  cachedEnv = parsed.data;
+  return cachedEnv;
 }
-
-export const env = parsed.success
-  ? parsed.data
-  : ({} as z.infer<typeof envSchema>);

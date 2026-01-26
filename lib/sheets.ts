@@ -1,5 +1,7 @@
 import { google } from "googleapis";
-import { env } from "./env";
+import { getEnv } from "./env";
+
+const env = getEnv();
 
 const auth = new google.auth.JWT({
   email: env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
