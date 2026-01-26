@@ -1,2 +1,5 @@
-[extend]
-useDefault = true
+[allowlist]
+paths = [
+  ".next/**",
+  "node_modules/**"
+]

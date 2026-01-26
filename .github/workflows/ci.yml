@@ -31,15 +31,15 @@ jobs:
 
   secret-scan:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Install gitleaks
         run: |
           curl -sSL https://github.com/gitleaks/gitleaks/releases/download/v8.24.3/gitleaks_8.24.3_linux_x64.tar.gz | tar xz
           sudo mv gitleaks /usr/local/bin/gitleaks
 
-      - name: Run gitleaks
-        run: gitleaks detect --source . --no-git
+      - name: Run gitleaks (git-based)
+        run: gitleaks detect --redact
