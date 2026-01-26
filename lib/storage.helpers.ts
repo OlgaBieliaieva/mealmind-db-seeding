@@ -1,10 +1,11 @@
-import { bucket } from "@/lib/storage";
+import { getBucket } from "@/lib/storage";
 
 export async function uploadImageToGCS(
   fileBuffer: Buffer,
   fileName: string,
   contentType: string,
 ) {
+  const bucket = getBucket();
   const file = bucket.file(fileName);
 
   await file.save(fileBuffer, {
