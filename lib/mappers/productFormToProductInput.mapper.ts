@@ -1,8 +1,10 @@
 import { ProductFormValues } from "@/types/product-form.schema";
 import { ProductInput } from "@/types/product.schema";
+import { Brand } from "@/types/brand";
 
 export function mapProductFormToProductInput(
   values: ProductFormValues,
+  brand?: Brand,
 ): ProductInput {
   if (values.type === "generic") {
     return {
@@ -13,13 +15,15 @@ export function mapProductFormToProductInput(
       },
       unit: values.unit,
       category_id: 0,
-
       is_verified: false,
       source: "manual",
     };
   }
 
-  // branded
+  if (!brand) {
+    throw new Error("Brand is required for branded product");
+  }
+
   return {
     type: "branded",
     name: {
@@ -30,14 +34,9 @@ export function mapProductFormToProductInput(
     category_id: 0,
 
     brand: {
-      id: "", // TASK 1.4.1.3
-      name: {
-        en: "",
-        ua: "",
-      },
+      id: brand.brand_id,
+      name: brand.name,
     },
-
-    barcode: "testbarcode", // TASK 1.4.1.6
 
     is_verified: false,
     source: "manual",

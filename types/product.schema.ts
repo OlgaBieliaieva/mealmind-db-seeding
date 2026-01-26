@@ -76,7 +76,7 @@ const BrandedProductSchema = BaseProductSchema.extend({
   type: z.literal("branded"),
 
   brand: BrandSchema,
-  barcode: z.string().min(8),
+  barcode: z.string().min(8).optional(),
   parent_product_id: z.string().uuid().optional(),
 });
 
