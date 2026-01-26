@@ -1,8 +1,10 @@
-import { sheets, SPREADSHEET_ID } from "@/lib/sheets";
+import { getSheetsClient } from "@/lib/sheets";
 
 export async function readSheet(range: string): Promise<string[][]> {
+  const { sheets, spreadsheetId } = getSheetsClient();
+
   const res = await sheets.spreadsheets.values.get({
-    spreadsheetId: SPREADSHEET_ID,
+    spreadsheetId,
     range,
   });
 
