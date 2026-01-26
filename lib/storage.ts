@@ -1,6 +1,7 @@
 import { Storage } from "@google-cloud/storage";
-import { env } from "./env";
+import { getEnv } from "./env";
 
+const env = getEnv();
 export const storage = new Storage({
   projectId: env.GOOGLE_PROJECT_ID,
   credentials: {
