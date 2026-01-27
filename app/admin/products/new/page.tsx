@@ -13,6 +13,7 @@ import { Brand } from "@/types/brand";
 import { GenericProduct } from "@/types/generic-product";
 import { GenericProductSearch } from "@/components/GenericProductSearch";
 import { BarcodeInput } from "@/components/BarcodeInput";
+import { ProductPhotoUploader } from "@/components/ProductPhotoUploader";
 
 export default function AddProductPage() {
   const [loading, setLoading] = useState(false);
@@ -231,6 +232,8 @@ export default function AddProductPage() {
             <p className="text-sm text-red-600">{errors.unit.message}</p>
           )}
         </div>
+
+        <ProductPhotoUploader photos={watch("photos")} setValue={setValue} />
 
         <button
           type="submit"
