@@ -42,6 +42,8 @@ export function mapProductFormToProductInput(
 
     barcode: values.barcode?.trim() || undefined,
 
+    photos: values.photos?.length ? values.photos : undefined,
+
     is_verified: false,
     source: "manual",
   };

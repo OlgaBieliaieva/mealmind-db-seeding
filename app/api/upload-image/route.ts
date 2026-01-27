@@ -27,6 +27,7 @@ export async function POST(req: Request) {
     return Response.json({
       success: true,
       url: signedUrl,
+      objectName: fileName,
     });
   } catch (error: unknown) {
     console.error(error);
