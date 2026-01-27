@@ -38,6 +38,8 @@ export function mapProductFormToProductInput(
       name: brand.name,
     },
 
+    parent_product_id: values.parent_product_id,
+
     is_verified: false,
     source: "manual",
   };

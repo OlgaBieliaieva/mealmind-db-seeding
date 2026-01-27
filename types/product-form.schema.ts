@@ -12,6 +12,9 @@ export const ProductFormSchema = z.object({
   // new brand (v1)
   new_brand_name_en: z.string().optional(),
   new_brand_name_ua: z.string().optional(),
+
+  // parent product (generic)
+  parent_product_id: z.string().optional(),
 });
 
 export type ProductFormValues = z.infer<typeof ProductFormSchema>;
