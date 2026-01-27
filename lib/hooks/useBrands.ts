@@ -13,7 +13,7 @@ export function useBrands() {
         const data = await res.json();
 
         setBrands(data.brands ?? []);
-      } catch (e) {
+      } catch {
         setError("Failed to load brands");
       } finally {
         setLoading(false);
