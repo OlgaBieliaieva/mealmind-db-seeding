@@ -10,15 +10,21 @@ import { useState } from "react";
 import { mapProductFormToProductInput } from "@/lib/mappers/productFormToProductInput.mapper";
 import { useBrands } from "@/lib/hooks/useBrands";
 import { Brand } from "@/types/brand";
+import { GenericProduct } from "@/types/generic-product";
+import { GenericProductSearch } from "@/components/GenericProductSearch";
 
 export default function AddProductPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+  const [parentProduct, setParentProduct] = useState<GenericProduct | null>(
+    null,
+  );
   const { brands, loading: brandsLoading } = useBrands();
   const {
     watch,
     register,
+    setValue,
     handleSubmit,
     formState: { errors },
   } = useForm<ProductFormValues>({
@@ -181,6 +187,26 @@ export default function AddProductPage() {
                 />
               </div>
             )}
+          </div>
+        )}
+
+        {/* parent product */}
+        {watch("type") === "branded" && (
+          <div className="space-y-1">
+            <label className="text-sm font-medium">
+              Parent generic product
+            </label>
+
+            <GenericProductSearch
+              value={parentProduct}
+              onSelect={(product) => {
+                setParentProduct(product);
+                setValue(
+                  "parent_product_id",
+                  product ? product.product_id : undefined,
+                );
+              }}
+            />
           </div>
         )}
 
