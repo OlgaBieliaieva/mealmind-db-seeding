@@ -15,6 +15,7 @@ export const ProductFormSchema = z.object({
 
   // parent product (generic)
   parent_product_id: z.string().optional(),
+  barcode: z.string().min(8).optional(),
 });
 
 export type ProductFormValues = z.infer<typeof ProductFormSchema>;

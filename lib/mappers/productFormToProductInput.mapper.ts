@@ -40,6 +40,8 @@ export function mapProductFormToProductInput(
 
     parent_product_id: values.parent_product_id,
 
+    barcode: values.barcode?.trim() || undefined,
+
     is_verified: false,
     source: "manual",
   };

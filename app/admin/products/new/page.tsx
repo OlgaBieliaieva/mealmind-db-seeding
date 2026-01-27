@@ -12,6 +12,7 @@ import { useBrands } from "@/lib/hooks/useBrands";
 import { Brand } from "@/types/brand";
 import { GenericProduct } from "@/types/generic-product";
 import { GenericProductSearch } from "@/components/GenericProductSearch";
+import { BarcodeInput } from "@/components/BarcodeInput";
 
 export default function AddProductPage() {
   const [loading, setLoading] = useState(false);
@@ -36,6 +37,7 @@ export default function AddProductPage() {
   const type = watch("type");
 
   async function onSubmit(values: ProductFormValues) {
+    console.log("FORM VALUES", values);
     setLoading(true);
     setError(null);
     setSuccess(false);
@@ -208,6 +210,10 @@ export default function AddProductPage() {
               }}
             />
           </div>
+        )}
+
+        {type === "branded" && (
+          <BarcodeInput value={watch("barcode")} setValue={setValue} />
         )}
 
         {/* unit */}
