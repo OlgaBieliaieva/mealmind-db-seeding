@@ -14,6 +14,13 @@ export const ProductFormSchema = z.object({
   name_ua: z.string().min(1),
   type: TypeEnum,
   unit: UnitEnum,
+
+  // metadata
+  category_id: z.number(),
+  subcategory_id: z.number().optional(),
+
+  notes: z.string().optional(),
+  is_verified: z.boolean(),
   brand_id: z.string().optional(),
 
   // new brand (v1)
