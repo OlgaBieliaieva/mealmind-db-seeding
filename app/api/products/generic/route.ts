@@ -17,7 +17,7 @@ export async function GET(req: NextRequest) {
    * D type
    * H category_id
    */
-  const rows = await readSheet("products!A2:H");
+  const rows = await readSheet("products!A2:I");
 
   const items = rows
     .filter((row) => row[3] === "generic")
@@ -35,6 +35,7 @@ export async function GET(req: NextRequest) {
         ua: row[2],
       },
       category_id: Number(row[7]),
+      subcategory_id: Number(row[8]),
     }));
 
   return Response.json({ items });

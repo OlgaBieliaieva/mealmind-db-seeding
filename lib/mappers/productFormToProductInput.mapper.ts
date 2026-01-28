@@ -14,14 +14,13 @@ export function mapProductFormToProductInput(
         ua: values.name_ua,
       },
       unit: values.unit,
-      category_id: 0,
-      is_verified: false,
+      category_id: values.category_id,
+      subcategory_id: values.subcategory_id,
+      notes: values.notes,
+      is_verified: values.is_verified,
       source: "manual",
+      photos: values.photos,
     };
-  }
-
-  if (!brand) {
-    throw new Error("Brand is required for branded product");
   }
 
   return {
@@ -31,20 +30,17 @@ export function mapProductFormToProductInput(
       ua: values.name_ua,
     },
     unit: values.unit,
-    category_id: 0,
-
+    category_id: values.category_id,
+    subcategory_id: values.subcategory_id,
     brand: {
-      id: brand.brand_id,
-      name: brand.name,
+      id: brand!.brand_id,
+      name: brand!.name,
     },
-
+    barcode: values.barcode,
     parent_product_id: values.parent_product_id,
-
-    barcode: values.barcode?.trim() || undefined,
-
-    photos: values.photos?.length ? values.photos : undefined,
-
-    is_verified: false,
+    notes: values.notes,
+    is_verified: values.is_verified,
     source: "manual",
+    photos: values.photos,
   };
 }
