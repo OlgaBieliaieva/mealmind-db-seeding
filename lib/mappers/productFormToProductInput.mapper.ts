@@ -20,6 +20,9 @@ export function mapProductFormToProductInput(
       is_verified: values.is_verified,
       source: "manual",
       photos: values.photos,
+      ...(values.nutrients && Object.keys(values.nutrients).length > 0
+        ? { nutrients: values.nutrients }
+        : {}),
     };
   }
 
@@ -42,5 +45,8 @@ export function mapProductFormToProductInput(
     is_verified: values.is_verified,
     source: "manual",
     photos: values.photos,
+    ...(values.nutrients && Object.keys(values.nutrients).length > 0
+      ? { nutrients: values.nutrients }
+      : {}),
   };
 }

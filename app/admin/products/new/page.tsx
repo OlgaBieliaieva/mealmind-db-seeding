@@ -25,6 +25,30 @@ import { GenericProduct } from "@/types/generic-product";
 import { useNutrientsReference } from "@/lib/hooks/useNutrientsReference";
 import { NutrientsEditor } from "@/components/NutrientsEditor";
 
+const defaultProductFormValues: ProductFormValues = {
+  name_en: "",
+  name_ua: "",
+  type: "branded",
+  unit: "g",
+
+  category_id: undefined as unknown as number, // див. нижче
+  subcategory_id: undefined,
+
+  notes: "",
+  is_verified: false,
+
+  brand_id: undefined,
+  new_brand_name_en: "",
+  new_brand_name_ua: "",
+
+  parent_product_id: undefined,
+  barcode: undefined,
+
+  nutrients: {},
+
+  photos: [],
+};
+
 export default function AddProductPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -48,10 +72,7 @@ export default function AddProductPage() {
     formState: { errors },
   } = useForm<ProductFormValues>({
     resolver: zodResolver(ProductFormSchema),
-    defaultValues: {
-      type: "branded",
-      is_verified: false,
-    },
+    defaultValues: defaultProductFormValues,
   });
 
   const type = watch("type");
@@ -116,11 +137,9 @@ export default function AddProductPage() {
 
       if (!res.ok) throw new Error("Failed to create product");
       setSuccess(true);
+
       // 🧹 reset form
-      reset({
-        type: "branded",
-        is_verified: false,
-      });
+      reset(defaultProductFormValues);
 
       // 🧹 reset local state
       setParentProduct(null);
@@ -279,7 +298,6 @@ export default function AddProductPage() {
         ) : (
           <NutrientsEditor
             nutrientsRef={nutrientsRef}
-            parentProduct={parentProduct}
             watch={watch}
             setValue={setValue}
           />

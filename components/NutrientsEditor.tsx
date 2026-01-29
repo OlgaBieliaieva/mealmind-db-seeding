@@ -1,44 +1,17 @@
 "use client";
 
-import { useEffect } from "react";
 import { UseFormSetValue, UseFormWatch } from "react-hook-form";
-
 import { NutrientReference } from "@/types/nutrient.dto";
 import { ProductFormValues } from "@/types/product-form.schema";
-import { GenericProduct } from "@/types/generic-product";
 
 type Props = {
   nutrientsRef: NutrientReference[];
-  parentProduct?: GenericProduct | null;
   watch: UseFormWatch<ProductFormValues>;
   setValue: UseFormSetValue<ProductFormValues>;
 };
 
-export function NutrientsEditor({
-  nutrientsRef,
-  parentProduct,
-  watch,
-  setValue,
-}: Props) {
+export function NutrientsEditor({ nutrientsRef, watch, setValue }: Props) {
   const formNutrients = watch("nutrients") ?? {};
-
-  // 🔁 prefill from parent generic product
-  useEffect(() => {
-    if (!parentProduct?.nutrients) return;
-
-    const next: ProductFormValues["nutrients"] = {};
-
-    for (const [code, data] of Object.entries(parentProduct.nutrients)) {
-      if (data.value > 0) {
-        next[code] = {
-          value: data.value,
-          unit: data.unit,
-        };
-      }
-    }
-
-    setValue("nutrients", next, { shouldDirty: true });
-  }, [parentProduct, setValue]);
 
   return (
     <div className="space-y-3">
@@ -58,10 +31,8 @@ export function NutrientsEditor({
             key={nutrient.code}
             className="grid grid-cols-3 items-center gap-2"
           >
-            {/* name */}
             <div className="text-sm">{nutrient.name.ua}</div>
 
-            {/* value */}
             <input
               type="number"
               min={0}
@@ -93,7 +64,6 @@ export function NutrientsEditor({
               className="rounded border px-2 py-1"
             />
 
-            {/* unit */}
             <input
               type="text"
               value={current?.unit ?? nutrient.default_unit}
