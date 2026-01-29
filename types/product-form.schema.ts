@@ -9,6 +9,11 @@ export const ProductPhotoFormSchema = z.object({
   objectName: z.string(),
 });
 
+export const ProductFormNutrientSchema = z.object({
+  value: z.number(),
+  unit: z.string(),
+});
+
 export const ProductFormSchema = z.object({
   name_en: z.string().min(1),
   name_ua: z.string().min(1),
@@ -29,6 +34,9 @@ export const ProductFormSchema = z.object({
 
   // parent product (generic)
   parent_product_id: z.string().optional(),
+
+  nutrients: z.record(z.string(), ProductFormNutrientSchema).optional(),
+
   barcode: z.string().min(8).optional(),
   photos: z.array(ProductPhotoFormSchema).optional(),
 });
