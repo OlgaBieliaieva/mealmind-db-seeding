@@ -10,12 +10,4 @@ export type GenericProduct = {
   subcategory_id?: number;
 
   unit: "g" | "ml" | "pcs";
-
-  nutrients?: Record<
-    string,
-    {
-      value: number;
-      unit: string;
-    }
-  >;
 };
