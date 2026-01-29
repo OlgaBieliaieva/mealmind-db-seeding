@@ -22,6 +22,8 @@ import { ProductPhotoUploader } from "@/components/ProductPhotoUploader";
 
 import { Brand } from "@/types/brand";
 import { GenericProduct } from "@/types/generic-product";
+import { useNutrientsReference } from "@/lib/hooks/useNutrientsReference";
+import { NutrientsEditor } from "@/components/NutrientsEditor";
 
 export default function AddProductPage() {
   const [loading, setLoading] = useState(false);
@@ -34,6 +36,8 @@ export default function AddProductPage() {
 
   const { brands, loading: brandsLoading } = useBrands();
   const { categories, loading: categoriesLoading } = useCategories();
+  const { items: nutrientsRef, loading: nutrientsLoading } =
+    useNutrientsReference();
 
   const {
     watch,
@@ -268,6 +272,18 @@ export default function AddProductPage() {
             <p className="text-sm text-red-600">{errors.unit.message}</p>
           )}
         </div>
+
+        {/* nutrients */}
+        {nutrientsLoading ? (
+          <p className="text-sm text-gray-500">Loading nutrients…</p>
+        ) : (
+          <NutrientsEditor
+            nutrientsRef={nutrientsRef}
+            parentProduct={parentProduct}
+            watch={watch}
+            setValue={setValue}
+          />
+        )}
 
         {/* photo */}
         <ProductPhotoUploader photos={watch("photos")} setValue={setValue} />

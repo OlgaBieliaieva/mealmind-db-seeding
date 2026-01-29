@@ -1,11 +1,17 @@
 import { ProductInput } from "@/types/product.schema";
 import { generateUUID } from "@/lib/uuid";
 
+function normalizeRow(
+  row: (string | number | boolean | null | undefined)[],
+): (string | number | boolean | null)[] {
+  return row.map((v) => (v === undefined ? null : v));
+}
+
 export function mapProductToRow(product: ProductInput) {
   const productId = product.product_id ?? generateUUID();
   const now = new Date().toISOString();
 
-  const row = [
+  const rawRow = [
     productId, // product_id
     product.name.en, // name_en
     product.name.ua, // name_ua
@@ -28,5 +34,8 @@ export function mapProductToRow(product: ProductInput) {
     now, // updated_at
   ];
 
-  return { productId, row };
+  return {
+    productId,
+    row: normalizeRow(rawRow),
+  };
 }
