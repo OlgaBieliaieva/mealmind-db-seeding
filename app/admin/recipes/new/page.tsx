@@ -10,6 +10,7 @@ import { StepRow } from "@/components/recipe/StepRow";
 import { aggregateRecipeNutrients } from "@/lib/recipe-nutrients.aggregate";
 import { NutrientsMap } from "@/types/nutrients";
 import { RecipePreview } from "@/components/recipe/RecipePreview";
+import { validateRecipeForPublish } from "@/lib/recipe-validation";
 
 const productNutrientsMap: Record<string, NutrientsMap> = {};
 
@@ -31,6 +32,7 @@ export default function AdminRecipeCreatePage() {
   const [steps, setSteps] = useState<RecipeStepDraft[]>([]);
 
   const [loading, setLoading] = useState(false);
+  const [publishErrors, setPublishErrors] = useState<string[]>([]);
 
   function addIngredient() {
     setIngredients((prev) => [
@@ -85,6 +87,23 @@ export default function AdminRecipeCreatePage() {
     } finally {
       setLoading(false);
     }
+  }
+  async function handlePublish() {
+    const result = validateRecipeForPublish(form, ingredients, steps);
+
+    if (!result.valid) {
+      setPublishErrors(result.errors);
+      return;
+    }
+
+    await fetch("/api/recipes/publish", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        ...form,
+        status: "published",
+      }),
+    });
   }
 
   return (
@@ -226,6 +245,15 @@ export default function AdminRecipeCreatePage() {
           Cancel
         </button>
       </div>
+      {publishErrors.length > 0 && (
+        <div className="rounded border border-red-300 bg-red-50 p-3 text-sm">
+          <ul className="list-disc pl-5">
+            {publishErrors.map((err) => (
+              <li key={err}>{err}</li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }
