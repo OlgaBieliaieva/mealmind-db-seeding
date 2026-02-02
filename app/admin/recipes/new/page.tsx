@@ -1,10 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { nanoid } from "nanoid";
 import { RecipeCreatePayload } from "@/types/recipe";
 import { RecipeIngredientDraft } from "@/types/recipe-ingredient";
 import { IngredientRow } from "@/components/recipe/IngredientRow";
-import { nanoid } from "nanoid";
+import { RecipeStepDraft } from "@/types/recipe-step";
+import { StepRow } from "@/components/recipe/StepRow";
 
 export default function AdminRecipeCreatePage() {
   const [form, setForm] = useState<RecipeCreatePayload>({
@@ -21,6 +23,7 @@ export default function AdminRecipeCreatePage() {
     family_id: null,
   });
   const [ingredients, setIngredients] = useState<RecipeIngredientDraft[]>([]);
+  const [steps, setSteps] = useState<RecipeStepDraft[]>([]);
 
   const [loading, setLoading] = useState(false);
 
@@ -34,6 +37,28 @@ export default function AdminRecipeCreatePage() {
         is_optional: false,
       },
     ]);
+  }
+
+  function addStep() {
+    setSteps((prev) => [
+      ...prev,
+      {
+        id: nanoid(),
+        order: prev.length + 1,
+        text: "",
+      },
+    ]);
+  }
+
+  function removeStep(stepId: string) {
+    setSteps((prev) =>
+      prev
+        .filter((s) => s.id !== stepId)
+        .map((s, index) => ({
+          ...s,
+          order: index + 1,
+        })),
+    );
   }
 
   async function handleSubmit() {
@@ -146,6 +171,30 @@ export default function AdminRecipeCreatePage() {
           + Додати інгредієнт
         </button>
       </div>
+      {/* === Кроки приготування === */}
+      <div className="space-y-3">
+        <h2 className="font-medium">Кроки приготування</h2>
+
+        {steps.map((step) => (
+          <StepRow
+            key={step.id}
+            step={step}
+            onChange={(next) =>
+              setSteps((prev) => prev.map((s) => (s.id === step.id ? next : s)))
+            }
+            onRemove={() => removeStep(step.id)}
+          />
+        ))}
+
+        <button
+          type="button"
+          onClick={addStep}
+          className="rounded border px-3 py-1 text-sm"
+        >
+          + Додати крок
+        </button>
+      </div>
+
       {/* Actions */}
       <div className="flex gap-3">
         <button
