@@ -2,6 +2,9 @@
 
 import { useState } from "react";
 import { RecipeCreatePayload } from "@/types/recipe";
+import { RecipeIngredientDraft } from "@/types/recipe-ingredient";
+import { IngredientRow } from "@/components/recipe/IngredientRow";
+import { nanoid } from "nanoid";
 
 export default function AdminRecipeCreatePage() {
   const [form, setForm] = useState<RecipeCreatePayload>({
@@ -17,14 +20,27 @@ export default function AdminRecipeCreatePage() {
     status: "ready",
     family_id: null,
   });
+  const [ingredients, setIngredients] = useState<RecipeIngredientDraft[]>([]);
 
   const [loading, setLoading] = useState(false);
+
+  function addIngredient() {
+    setIngredients((prev) => [
+      ...prev,
+      {
+        id: nanoid(),
+        product_id: null,
+        quantity_g: 0,
+        is_optional: false,
+      },
+    ]);
+  }
 
   async function handleSubmit() {
     setLoading(true);
 
     try {
-      await fetch("/api/admin/recipes", {
+      await fetch("/api/recipes", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
@@ -101,7 +117,35 @@ export default function AdminRecipeCreatePage() {
           }
         />
       </div>
+      {/* === Інгредієнти === */}
+      <div className="space-y-3">
+        <h2 className="font-medium">Інгредієнти</h2>
 
+        {ingredients.map((ingredient) => (
+          <IngredientRow
+            key={ingredient.id}
+            ingredient={ingredient}
+            onChange={(next) =>
+              setIngredients((prev) =>
+                prev.map((item) => (item.id === ingredient.id ? next : item)),
+              )
+            }
+            onRemove={() =>
+              setIngredients((prev) =>
+                prev.filter((item) => item.id !== ingredient.id),
+              )
+            }
+          />
+        ))}
+
+        <button
+          type="button"
+          onClick={addIngredient}
+          className="rounded border px-3 py-1 text-sm"
+        >
+          + Додати інгредієнт
+        </button>
+      </div>
       {/* Actions */}
       <div className="flex gap-3">
         <button
