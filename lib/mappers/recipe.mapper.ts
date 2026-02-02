@@ -1,0 +1,36 @@
+import { RecipeDraftInput } from "@/types/recipe-create.dto";
+import { generateUUID } from "@/lib/uuid";
+
+export function mapRecipeDraftToRow(input: RecipeDraftInput) {
+  const now = new Date().toISOString();
+  const recipeId = input.recipe_id ?? generateUUID();
+
+  const row = [
+    recipeId, // A recipe_id
+    input.title ?? "", // B title
+    input.description ?? "", // C description
+    input.recipe_type_id ?? null, // D recipe_type_id
+
+    "admin", // E author_type (поки що)
+    null, // F author_user_id
+
+    input.visibility ?? "private", // G visibility
+    input.family_id ?? null, // H family_id
+
+    "draft", // I status
+
+    input.base_servings ?? 1, // J base_servings
+    input.base_output_weight_g ?? 0, // K base_output_weight_g
+    input.container_weight_g ?? null, // L container_weight_g
+
+    null, // M prep_time_min (пізніше)
+    null, // N cook_time_min
+    null, // O difficulty
+    null, // P photo_url
+
+    now, // Q created_at
+    now, // R updated_at
+  ];
+
+  return { recipeId, row };
+}
