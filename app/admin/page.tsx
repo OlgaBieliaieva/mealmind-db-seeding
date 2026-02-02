@@ -18,7 +18,7 @@ export default function AdminHomePage() {
 
         <Link
           href="/admin/recipes/new"
-          className="block rounded-xl border bg-gray-100 p-4 text-gray-400 cursor-not-allowed"
+          className="block rounded-xl border bg-white p-4 hover:bg-gray-50"
         >
           <div className="text-lg font-medium">🍽 Add recipe</div>
           <div className="text-sm">Coming soon</div>
