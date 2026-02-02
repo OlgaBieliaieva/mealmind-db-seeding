@@ -1,12 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { nanoid } from "nanoid";
 import { RecipeCreatePayload } from "@/types/recipe";
 import { RecipeIngredientDraft } from "@/types/recipe-ingredient";
 import { IngredientRow } from "@/components/recipe/IngredientRow";
 import { RecipeStepDraft } from "@/types/recipe-step";
 import { StepRow } from "@/components/recipe/StepRow";
+import { aggregateRecipeNutrients } from "@/lib/recipe-nutrients.aggregate";
+import { NutrientsMap } from "@/types/nutrients";
+import { RecipePreview } from "@/components/recipe/RecipePreview";
+
+const productNutrientsMap: Record<string, NutrientsMap> = {};
 
 export default function AdminRecipeCreatePage() {
   const [form, setForm] = useState<RecipeCreatePayload>({
@@ -60,6 +65,11 @@ export default function AdminRecipeCreatePage() {
         })),
     );
   }
+
+  const recipeNutrients = useMemo(
+    () => aggregateRecipeNutrients(ingredients, productNutrientsMap),
+    [ingredients],
+  );
 
   async function handleSubmit() {
     setLoading(true);
@@ -194,7 +204,14 @@ export default function AdminRecipeCreatePage() {
           + Додати крок
         </button>
       </div>
-
+      {/* === Попередній перегляд рецепта === */}
+      {ingredients.length > 0 && form.base_servings > 0 && (
+        <RecipePreview
+          servings={form.base_servings}
+          outputWeight={form.base_output_weight_g}
+          nutrients={recipeNutrients}
+        />
+      )}
       {/* Actions */}
       <div className="flex gap-3">
         <button
