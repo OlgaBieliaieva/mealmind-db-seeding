@@ -16,6 +16,8 @@ const productNutrientsMap: Record<string, NutrientsMap> = {};
 
 export default function AdminRecipeCreatePage() {
   const [form, setForm] = useState<RecipeCreatePayload>({
+    recipe_id: undefined,
+
     title: "",
     description: "",
     recipe_type_id: null,
@@ -25,9 +27,10 @@ export default function AdminRecipeCreatePage() {
     container_weight_g: null,
 
     visibility: "private",
-    status: "ready",
+    status: "draft",
     family_id: null,
   });
+
   const [ingredients, setIngredients] = useState<RecipeIngredientDraft[]>([]);
   const [steps, setSteps] = useState<RecipeStepDraft[]>([]);
 
@@ -77,17 +80,25 @@ export default function AdminRecipeCreatePage() {
     setLoading(true);
 
     try {
-      await fetch("/api/recipes", {
+      const res = await fetch("/api/recipes", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
 
-      // redirect or toast — пізніше
+      const data = await res.json();
+
+      if (data.recipe_id && !form.recipe_id) {
+        setForm((prev) => ({
+          ...prev,
+          recipe_id: data.recipe_id,
+        }));
+      }
     } finally {
       setLoading(false);
     }
   }
+
   async function handlePublish() {
     const result = validateRecipeForPublish(form, ingredients, steps);
 
@@ -96,12 +107,18 @@ export default function AdminRecipeCreatePage() {
       return;
     }
 
+    if (!form.recipe_id) {
+      setPublishErrors(["Спочатку збережіть рецепт"]);
+      return;
+    }
+
+    setPublishErrors([]);
+
     await fetch("/api/recipes/publish", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        ...form,
-        status: "published",
+        recipe_id: form.recipe_id,
       }),
     });
   }
@@ -236,13 +253,16 @@ export default function AdminRecipeCreatePage() {
         <button
           onClick={handleSubmit}
           disabled={loading}
-          className="rounded bg-black px-4 py-2 text-white"
+          className="rounded border px-4 py-2"
         >
-          Save recipe
+          Зберегти чернетку
         </button>
 
-        <button type="button" className="rounded border px-4 py-2">
-          Cancel
+        <button
+          onClick={handlePublish}
+          className="rounded bg-black px-4 py-2 text-white"
+        >
+          Опублікувати
         </button>
       </div>
       {publishErrors.length > 0 && (

@@ -39,11 +39,11 @@ export function validateRecipeForPublish(
   );
 
   if (validIngredients.length === 0) {
-    errors.push("Додайте хоча б один інгредієнт");
+    errors.push("Додайте хоча б один інгредієнт з кількістю");
   }
 
   if (steps.length === 0) {
-    errors.push("Додайте кроки приготування");
+    errors.push("Додайте хоча б один крок приготування");
   }
 
   return {
