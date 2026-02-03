@@ -1,64 +1,62 @@
 "use client";
 
 import { NutrientsMap } from "@/types/nutrients";
-import { useNutrientsReference } from "@/lib/hooks/useNutrientsReference";
+import { NutrientReference } from "@/types/nutrient.dto";
 
 type Props = {
   servings: number;
   outputWeight: number;
   nutrients: NutrientsMap;
+  nutrientRefs: NutrientReference[];
 };
 
-export function RecipePreview({ servings, outputWeight, nutrients }: Props) {
-  const { items: nutrientRefs, loading } = useNutrientsReference();
+export function RecipePreview({
+  servings,
+  outputWeight,
+  nutrients,
+  nutrientRefs,
+}: Props) {
+  if (!nutrientRefs.length || outputWeight <= 0) return null;
 
-  if (loading) {
-    return (
-      <div className="rounded border bg-gray-50 p-4 text-sm text-gray-500">
-        Завантаження поживної цінності…
-      </div>
-    );
-  }
+  const portionWeight = servings > 0 ? outputWeight / servings : outputWeight;
 
-  const macroRefs = nutrientRefs
-    .filter((n) => n.nutrient_group === "macro")
-    .sort((a, b) => a.sort_order - b.sort_order);
-
-  const portionWeight = servings > 0 ? Math.round(outputWeight / servings) : 0;
+  const nutrientsList = nutrientRefs.filter((n) => nutrients[n.nutrient_id]);
 
   return (
-    <div className="rounded border bg-gray-50 p-4 space-y-4">
-      <h2 className="font-medium">Попередній перегляд рецепта</h2>
+    <div className="rounded border bg-gray-50 p-4 space-y-3">
+      <h3 className="font-medium">Поживна цінність</h3>
 
-      {/* Portions */}
-      <div className="text-sm space-y-1">
-        <div>Порцій: {servings}</div>
-        <div>Загальний вихід: {outputWeight} г</div>
-        <div>Вага 1 порції: {portionWeight} г</div>
+      <div className="text-sm text-gray-600">
+        Вихід страви: {outputWeight} г · {servings} порц.
+        <br />
+        Вага порції: {portionWeight.toFixed(0)} г
       </div>
 
-      {/* Nutrition */}
-      <div>
-        <h3 className="text-sm font-medium mb-2">
-          Поживна цінність (на 1 порцію)
-        </h3>
+      <table className="w-full text-sm">
+        <tbody>
+          {nutrientsList.map((n) => {
+            const total = nutrients[n.nutrient_id].value;
 
-        <ul className="text-sm space-y-1">
-          {macroRefs.map((ref) => {
-            const total = nutrients[ref.nutrient_id]?.value ?? 0;
-            const perPortion = servings > 0 ? total / servings : 0;
+            const per100g = (total / outputWeight) * 100;
+
+            const perPortion = (per100g * portionWeight) / 100;
 
             return (
-              <li key={ref.nutrient_id} className="flex justify-between">
-                <span>{ref.name.ua}</span>
-                <span>
-                  {perPortion.toFixed(1)} {ref.default_unit}
-                </span>
-              </li>
+              <tr key={n.nutrient_id}>
+                <td>{n.name.ua}</td>
+
+                <td className="text-right">
+                  {per100g.toFixed(1)} {n.default_unit} / 100 г
+                </td>
+
+                <td className="text-right text-gray-500">
+                  {perPortion.toFixed(1)} {n.default_unit} / порц.
+                </td>
+              </tr>
             );
           })}
-        </ul>
-      </div>
+        </tbody>
+      </table>
     </div>
   );
 }

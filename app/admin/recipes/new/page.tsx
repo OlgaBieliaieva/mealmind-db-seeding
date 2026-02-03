@@ -2,17 +2,19 @@
 
 import { useState, useMemo } from "react";
 import { nanoid } from "nanoid";
+import { useProductNutrients } from "@/lib/hooks/useProductNutrients";
+import { useNutrientsReference } from "@/lib/hooks/useNutrientsReference";
 import { RecipeCreatePayload } from "@/types/recipe";
 import { RecipeIngredientDraft } from "@/types/recipe-ingredient";
 import { IngredientRow } from "@/components/recipe/IngredientRow";
 import { RecipeStepDraft } from "@/types/recipe-step";
 import { StepRow } from "@/components/recipe/StepRow";
 import { aggregateRecipeNutrients } from "@/lib/recipe-nutrients.aggregate";
-import { NutrientsMap } from "@/types/nutrients";
+// import { NutrientsMap } from "@/types/nutrients";
 import { RecipePreview } from "@/components/recipe/RecipePreview";
 import { validateRecipeForPublish } from "@/lib/recipe-validation";
 
-const productNutrientsMap: Record<string, NutrientsMap> = {};
+// const productNutrientsMap: Record<string, NutrientsMap> = {};
 
 export default function AdminRecipeCreatePage() {
   const [form, setForm] = useState<RecipeCreatePayload>({
@@ -33,6 +35,7 @@ export default function AdminRecipeCreatePage() {
 
   const [ingredients, setIngredients] = useState<RecipeIngredientDraft[]>([]);
   const [steps, setSteps] = useState<RecipeStepDraft[]>([]);
+  const { items: nutrientRefs } = useNutrientsReference();
 
   const [loading, setLoading] = useState(false);
   const [publishErrors, setPublishErrors] = useState<string[]>([]);
@@ -101,10 +104,27 @@ export default function AdminRecipeCreatePage() {
     };
   }
 
-  const recipeNutrients = useMemo(
-    () => aggregateRecipeNutrients(ingredients, productNutrientsMap),
+  const productIds = useMemo(
+    () => ingredients.map((i) => i.product_id).filter(Boolean) as string[],
     [ingredients],
   );
+
+  const productNutrientsMap = useProductNutrients(productIds);
+
+  const recipeNutrients = useMemo(
+    () => aggregateRecipeNutrients(ingredients, productNutrientsMap),
+    [ingredients, productNutrientsMap],
+  );
+
+  const calculatedWeight = useMemo(
+    () => ingredients.reduce((sum, i) => sum + (i.quantity_g || 0), 0),
+    [ingredients],
+  );
+
+  const effectiveOutputWeight =
+    form.base_output_weight_g > 0
+      ? form.base_output_weight_g
+      : calculatedWeight;
 
   async function handleSubmit() {
     setLoading(true);
@@ -299,14 +319,19 @@ export default function AdminRecipeCreatePage() {
           + Додати крок
         </button>
       </div>
+
       {/* === Попередній перегляд рецепта === */}
-      {ingredients.length > 0 && form.base_servings > 0 && (
-        <RecipePreview
-          servings={form.base_servings}
-          outputWeight={form.base_output_weight_g}
-          nutrients={recipeNutrients}
-        />
-      )}
+      {ingredients.length > 0 &&
+        form.base_servings > 0 &&
+        Object.keys(recipeNutrients).length > 0 && (
+          <RecipePreview
+            servings={form.base_servings}
+            outputWeight={effectiveOutputWeight}
+            nutrients={recipeNutrients}
+            nutrientRefs={nutrientRefs}
+          />
+        )}
+
       {/* Actions */}
       <div className="flex gap-3">
         <button
