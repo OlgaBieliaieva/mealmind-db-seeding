@@ -8,7 +8,7 @@ export function useNutrientsReference() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("/api/nutrients")
+    fetch("/api/nutrients/refs")
       .then((res) => res.json())
       .then((data) => setItems(data.items ?? []))
       .finally(() => setLoading(false));
