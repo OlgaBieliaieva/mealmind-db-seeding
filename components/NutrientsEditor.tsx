@@ -24,11 +24,11 @@ export function NutrientsEditor({ nutrientsRef, watch, setValue }: Props) {
       </div>
 
       {nutrientsRef.map((nutrient) => {
-        const current = formNutrients[nutrient.code];
+        const current = formNutrients[nutrient.nutrient_id];
 
         return (
           <div
-            key={nutrient.code}
+            key={nutrient.nutrient_id}
             className="grid grid-cols-3 items-center gap-2"
           >
             <div className="text-sm">{nutrient.name.ua}</div>
@@ -44,7 +44,7 @@ export function NutrientsEditor({ nutrientsRef, watch, setValue }: Props) {
                 if (!value || value <= 0) {
                   const rest = Object.fromEntries(
                     Object.entries(formNutrients).filter(
-                      ([key]) => key !== nutrient.code,
+                      ([key]) => key !== nutrient.nutrient_id,
                     ),
                   );
 
@@ -53,7 +53,7 @@ export function NutrientsEditor({ nutrientsRef, watch, setValue }: Props) {
                 }
 
                 setValue(
-                  `nutrients.${nutrient.code}`,
+                  `nutrients.${nutrient.nutrient_id}`,
                   {
                     value,
                     unit: current?.unit ?? nutrient.default_unit,
@@ -70,9 +70,13 @@ export function NutrientsEditor({ nutrientsRef, watch, setValue }: Props) {
               onChange={(e) => {
                 if (!current?.value) return;
 
-                setValue(`nutrients.${nutrient.code}.unit`, e.target.value, {
-                  shouldDirty: true,
-                });
+                setValue(
+                  `nutrients.${nutrient.nutrient_id}.unit`,
+                  e.target.value,
+                  {
+                    shouldDirty: true,
+                  },
+                );
               }}
               className="rounded border px-2 py-1"
             />
