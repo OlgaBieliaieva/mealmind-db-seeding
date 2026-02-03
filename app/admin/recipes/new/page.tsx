@@ -49,6 +49,23 @@ export default function AdminRecipeCreatePage() {
     ]);
   }
 
+  function mapIngredientsForApi(
+    recipeId: string,
+    ingredients: RecipeIngredientDraft[],
+  ) {
+    return {
+      recipe_id: recipeId,
+      ingredients: ingredients
+        .filter((i) => i.product_id && i.quantity_g > 0)
+        .map((i, index) => ({
+          product_id: i.product_id!,
+          quantity_g: i.quantity_g,
+          is_optional: i.is_optional,
+          order_index: index + 1,
+        })),
+    };
+  }
+
   function addStep() {
     setSteps((prev) => [
       ...prev,
@@ -71,6 +88,19 @@ export default function AdminRecipeCreatePage() {
     );
   }
 
+  function mapStepsForApi(recipeId: string, steps: RecipeStepDraft[]) {
+    return {
+      recipe_id: recipeId,
+      steps: steps
+        .filter((s) => s.text.trim().length > 0)
+        .map((s, index) => ({
+          step_number: index + 1,
+          instruction: s.text.trim(),
+          timer_sec: null,
+        })),
+    };
+  }
+
   const recipeNutrients = useMemo(
     () => aggregateRecipeNutrients(ingredients, productNutrientsMap),
     [ingredients],
@@ -80,6 +110,7 @@ export default function AdminRecipeCreatePage() {
     setLoading(true);
 
     try {
+      // 1️⃣ Save recipe meta
       const res = await fetch("/api/recipes", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -88,11 +119,39 @@ export default function AdminRecipeCreatePage() {
 
       const data = await res.json();
 
-      if (data.recipe_id && !form.recipe_id) {
+      const recipeId = form.recipe_id ?? data.recipe_id;
+
+      if (!recipeId) {
+        throw new Error("Recipe ID not returned");
+      }
+
+      if (!form.recipe_id) {
         setForm((prev) => ({
           ...prev,
-          recipe_id: data.recipe_id,
+          recipe_id: recipeId,
         }));
+      }
+
+      // 2️⃣ Save ingredients
+      if (ingredients.length > 0) {
+        const ingredientsPayload = mapIngredientsForApi(recipeId, ingredients);
+
+        await fetch("/api/recipes/ingredients", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(ingredientsPayload),
+        });
+      }
+
+      // 3️⃣ Save steps
+      if (steps.length > 0) {
+        const stepsPayload = mapStepsForApi(recipeId, steps);
+
+        await fetch("/api/recipes/steps", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(stepsPayload),
+        });
       }
     } finally {
       setLoading(false);
