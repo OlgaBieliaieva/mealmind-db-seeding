@@ -14,6 +14,7 @@ import { aggregateRecipeNutrients } from "@/lib/recipe-nutrients.aggregate";
 // import { NutrientsMap } from "@/types/nutrients";
 import { RecipePreview } from "@/components/recipe/RecipePreview";
 import { validateRecipeForPublish } from "@/lib/recipe-validation";
+import { RecipePhotoUploader } from "@/components/recipe/RecipePhotoUploader";
 
 // const productNutrientsMap: Record<string, NutrientsMap> = {};
 
@@ -140,6 +141,7 @@ export default function AdminRecipeCreatePage() {
       });
 
       const data = await res.json();
+      console.log(data);
 
       const recipeId = form.recipe_id ?? data.recipe_id;
 
@@ -222,6 +224,78 @@ export default function AdminRecipeCreatePage() {
           placeholder="Description"
           value={form.description}
           onChange={(e) => setForm({ ...form, description: e.target.value })}
+        />
+      </div>
+
+      {/* === Додаткова інформація === */}
+      <div className="space-y-3">
+        <h2 className="font-medium">Додаткова інформація</h2>
+
+        {/* Times */}
+        <div className="grid grid-cols-2 gap-3">
+          <input
+            type="number"
+            min={0}
+            placeholder="Підготовка (хв)"
+            className="rounded border px-3 py-2"
+            value={form.prep_time_min ?? ""}
+            onChange={(e) =>
+              setForm({
+                ...form,
+                prep_time_min: Number(e.target.value) || undefined,
+              })
+            }
+          />
+
+          <input
+            type="number"
+            min={0}
+            placeholder="Приготування (хв)"
+            className="rounded border px-3 py-2"
+            value={form.cook_time_min ?? ""}
+            onChange={(e) =>
+              setForm({
+                ...form,
+                cook_time_min: Number(e.target.value) || undefined,
+              })
+            }
+          />
+        </div>
+
+        {/* Difficulty */}
+        <select
+          className="w-full rounded border px-3 py-2"
+          value={form.difficulty ?? ""}
+          onChange={(e) => {
+            const value = e.target.value as "" | "easy" | "medium" | "hard";
+
+            setForm({
+              ...form,
+              difficulty: value === "" ? undefined : value,
+            });
+          }}
+        >
+          <option value="">Складність</option>
+          <option value="easy">Легко</option>
+          <option value="medium">Середньо</option>
+          <option value="hard">Складно</option>
+        </select>
+
+        {/* Photo */}
+        <RecipePhotoUploader
+          photos={form.photos}
+          onChange={(photos) =>
+            setForm((prev) => ({
+              ...prev,
+              photos,
+            }))
+          }
+          onCoverChange={(url) =>
+            setForm((prev) => ({
+              ...prev,
+              photo_url: url || undefined,
+            }))
+          }
         />
       </div>
 

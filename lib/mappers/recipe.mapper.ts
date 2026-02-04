@@ -23,10 +23,10 @@ export function mapRecipeDraftToRow(input: RecipeDraftInput) {
     input.base_output_weight_g ?? 0, // K base_output_weight_g
     input.container_weight_g ?? null, // L container_weight_g
 
-    null, // M prep_time_min (пізніше)
-    null, // N cook_time_min
-    null, // O difficulty
-    null, // P photo_url
+    input.prep_time_min ?? 0,
+    input.cook_time_min ?? 0,
+    input.difficulty ?? null,
+    input.photo_url ?? null,
 
     now, // Q created_at
     now, // R updated_at
