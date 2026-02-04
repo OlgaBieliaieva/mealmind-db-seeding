@@ -4,6 +4,7 @@ import { useState, useMemo } from "react";
 import { nanoid } from "nanoid";
 import { useProductNutrients } from "@/lib/hooks/useProductNutrients";
 import { useNutrientsReference } from "@/lib/hooks/useNutrientsReference";
+import { useRecipeTypes } from "@/lib/hooks/useRecipeTypes";
 import { RecipeCreatePayload } from "@/types/recipe";
 import { RecipeIngredientDraft } from "@/types/recipe-ingredient";
 import { IngredientRow } from "@/components/recipe/IngredientRow";
@@ -36,6 +37,7 @@ export default function AdminRecipeCreatePage() {
   const [ingredients, setIngredients] = useState<RecipeIngredientDraft[]>([]);
   const [steps, setSteps] = useState<RecipeStepDraft[]>([]);
   const { items: nutrientRefs } = useNutrientsReference();
+  const { items: recipeTypes } = useRecipeTypes();
 
   const [loading, setLoading] = useState(false);
   const [publishErrors, setPublishErrors] = useState<string[]>([]);
@@ -223,6 +225,20 @@ export default function AdminRecipeCreatePage() {
         />
       </div>
 
+      <select
+        value={form.recipe_type_id ?? ""}
+        onChange={(e) =>
+          setForm({ ...form, recipe_type_id: Number(e.target.value) })
+        }
+        className="w-full rounded border px-3 py-2"
+      >
+        <option value="">Тип страви</option>
+        {recipeTypes.map((type) => (
+          <option key={type.recipe_type_id} value={type.recipe_type_id}>
+            {type.name.ua}
+          </option>
+        ))}
+      </select>
       {/* Portions */}
       <div className="grid grid-cols-3 gap-3">
         <input
