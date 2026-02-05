@@ -80,3 +80,46 @@ export async function deleteRowsByRecipeId(
     });
   }
 }
+
+/**
+ * Видаляє запис з recipe_favorites
+ * where recipe_id + user_id + family_id
+ */
+export async function deleteRecipeFavorite(
+  recipeId: string,
+  userId: string,
+  familyId: string,
+) {
+  const { sheets, spreadsheetId } = getSheetsClient();
+
+  const range = "recipe_favorites!A2:E";
+
+  const res = await sheets.spreadsheets.values.get({
+    spreadsheetId,
+    range,
+  });
+
+  const rows = (res.data.values ?? []) as string[][];
+
+  const filtered = rows.filter(
+    (row) => !(row[1] === recipeId && row[2] === userId && row[3] === familyId),
+  );
+
+  if (filtered.length === rows.length) return;
+
+  await sheets.spreadsheets.values.clear({
+    spreadsheetId,
+    range,
+  });
+
+  if (filtered.length > 0) {
+    await sheets.spreadsheets.values.update({
+      spreadsheetId,
+      range,
+      valueInputOption: "USER_ENTERED",
+      requestBody: {
+        values: filtered,
+      },
+    });
+  }
+}
