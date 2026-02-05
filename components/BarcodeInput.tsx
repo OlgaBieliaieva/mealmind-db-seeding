@@ -23,41 +23,21 @@ export function BarcodeInput({ value, setValue }: Props) {
   const [error, setError] = useState<string | null>(null);
   const [scanSuccess, setScanSuccess] = useState(false);
 
-  const startScan = async () => {
+  /**
+   * Start scanning — ONLY toggles state.
+   * Actual camera init happens in useEffect.
+   */
+  const startScan = () => {
     if (isScanning) return;
 
     setError(null);
     setScanSuccess(false);
     setIsScanning(true);
-
-    const reader = new BrowserMultiFormatReader();
-    readerRef.current = reader;
-
-    try {
-      const controls = await reader.decodeFromVideoDevice(
-        undefined,
-        videoRef.current!,
-        (result) => {
-          if (!result) return;
-
-          setValue("barcode", result.getText(), {
-            shouldDirty: true,
-            shouldValidate: true,
-          });
-
-          setScanSuccess(true);
-          stopScan();
-        },
-      );
-
-      controlsRef.current = controls;
-    } catch (e) {
-      console.error("Barcode scan failed", e);
-      setError("Failed to access camera");
-      setIsScanning(false);
-    }
   };
 
+  /**
+   * Stop scanning and release camera
+   */
   const stopScan = () => {
     controlsRef.current?.stop();
     controlsRef.current = null;
@@ -65,11 +45,49 @@ export function BarcodeInput({ value, setValue }: Props) {
     setIsScanning(false);
   };
 
+  /**
+   * Initialize barcode scanner
+   * ONLY after <video> is mounted
+   */
   useEffect(() => {
+    if (!isScanning) return;
+    if (!videoRef.current) return;
+
+    const reader = new BrowserMultiFormatReader();
+    readerRef.current = reader;
+
+    let cancelled = false;
+
+    reader
+      .decodeFromVideoDevice(undefined, videoRef.current, (result) => {
+        if (!result || cancelled) return;
+
+        setValue("barcode", result.getText(), {
+          shouldDirty: true,
+          shouldValidate: true,
+        });
+
+        setScanSuccess(true);
+        stopScan();
+      })
+      .then((controls) => {
+        if (!cancelled) {
+          controlsRef.current = controls;
+        }
+      })
+      .catch((e) => {
+        console.error("Barcode scan failed", e);
+        setError("Failed to access camera");
+        setIsScanning(false);
+      });
+
     return () => {
+      cancelled = true;
       controlsRef.current?.stop();
+      controlsRef.current = null;
+      readerRef.current = null;
     };
-  }, []);
+  }, [isScanning, setValue]);
 
   return (
     <div className="space-y-2">
