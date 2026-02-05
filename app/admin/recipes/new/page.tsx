@@ -5,6 +5,7 @@ import { nanoid } from "nanoid";
 import { useProductNutrients } from "@/lib/hooks/useProductNutrients";
 import { useNutrientsReference } from "@/lib/hooks/useNutrientsReference";
 import { useRecipeTypes } from "@/lib/hooks/useRecipeTypes";
+import { useCuisines } from "@/lib/hooks/useCuisines";
 import { RecipeCreatePayload } from "@/types/recipe";
 import { RecipeIngredientDraft } from "@/types/recipe-ingredient";
 import { IngredientRow } from "@/components/recipe/IngredientRow";
@@ -15,6 +16,7 @@ import { aggregateRecipeNutrients } from "@/lib/recipe-nutrients.aggregate";
 import { RecipePreview } from "@/components/recipe/RecipePreview";
 import { validateRecipeForPublish } from "@/lib/recipe-validation";
 import { RecipePhotoUploader } from "@/components/recipe/RecipePhotoUploader";
+import { CuisineSelector } from "@/components/recipe/CuisineSelector";
 
 // const productNutrientsMap: Record<string, NutrientsMap> = {};
 
@@ -42,6 +44,9 @@ export default function AdminRecipeCreatePage() {
 
   const [loading, setLoading] = useState(false);
   const [publishErrors, setPublishErrors] = useState<string[]>([]);
+
+  const [cuisineIds, setCuisineIds] = useState<number[]>([]);
+  const { items: cuisines, loading: cuisinesLoading } = useCuisines();
 
   function addIngredient() {
     setIngredients((prev) => [
@@ -156,7 +161,18 @@ export default function AdminRecipeCreatePage() {
         }));
       }
 
-      // 2️⃣ Save ingredients
+      // 2️⃣ Save cuisine tags
+      if (cuisineIds.length > 0) {
+        await fetch("/api/recipes/cuisines", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            recipe_id: recipeId,
+            cuisine_ids: cuisineIds,
+          }),
+        });
+      }
+      // 3️⃣ Save ingredients
       if (ingredients.length > 0) {
         const ingredientsPayload = mapIngredientsForApi(recipeId, ingredients);
 
@@ -167,7 +183,7 @@ export default function AdminRecipeCreatePage() {
         });
       }
 
-      // 3️⃣ Save steps
+      //  Save steps
       if (steps.length > 0) {
         const stepsPayload = mapStepsForApi(recipeId, steps);
 
@@ -183,7 +199,9 @@ export default function AdminRecipeCreatePage() {
   }
 
   async function handlePublish() {
-    const result = validateRecipeForPublish(form, ingredients, steps);
+    const result = validateRecipeForPublish(form, ingredients, steps, {
+      cuisineIds,
+    });
 
     if (!result.valid) {
       setPublishErrors(result.errors);
@@ -298,6 +316,14 @@ export default function AdminRecipeCreatePage() {
           }
         />
       </div>
+
+      {!cuisinesLoading && (
+        <CuisineSelector
+          items={cuisines}
+          value={cuisineIds}
+          onChange={setCuisineIds}
+        />
+      )}
 
       <select
         value={form.recipe_type_id ?? ""}
