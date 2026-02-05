@@ -11,6 +11,10 @@ export function validateRecipeForPublish(
   recipe: RecipeCreatePayload,
   ingredients: RecipeIngredientDraft[],
   steps: RecipeStepDraft[],
+  options: {
+    cuisineIds: number[];
+    dietaryTagIds?: number[];
+  },
 ): RecipeValidationResult {
   const errors: string[] = [];
 
@@ -25,8 +29,13 @@ export function validateRecipeForPublish(
   if (!recipe.recipe_type_id) {
     errors.push("Оберіть тип рецепта");
   }
+
   if (!recipe.photo_url) {
     errors.push("Рекомендується додати фото рецепта");
+  }
+
+  if (options.cuisineIds.length === 0) {
+    errors.push("Рекомендуємо вказати кухню рецепта");
   }
 
   if (
@@ -35,6 +44,7 @@ export function validateRecipeForPublish(
   ) {
     errors.push("Рекомендується вказати час приготування");
   }
+
   if (recipe.base_servings <= 0) {
     errors.push("Кількість порцій має бути більшою за 0");
   }
