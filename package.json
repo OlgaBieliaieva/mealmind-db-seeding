@@ -9,7 +9,7 @@
     "lint": "eslint"
   },
   "engines": {
-    "node": "18.x"
+    "node": "20.x"
   },
   "dependencies": {
     "@google-cloud/storage": "^7.18.0",
