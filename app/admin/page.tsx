@@ -21,7 +21,15 @@ export default function AdminHomePage() {
           className="block rounded-xl border bg-white p-4 hover:bg-gray-50"
         >
           <div className="text-lg font-medium">🍽 Add recipe</div>
-          <div className="text-sm">Coming soon</div>
+          <div className="text-sm text-gray-500">Add your recipes</div>
+        </Link>
+
+        <Link
+          href="/admin/recipes"
+          className="block rounded-xl border bg-white p-4 hover:bg-gray-50"
+        >
+          <div className="text-lg font-medium">📋 Recipes</div>
+          <div className="text-sm text-gray-500">View and manage recipes</div>
         </Link>
       </div>
     </div>
