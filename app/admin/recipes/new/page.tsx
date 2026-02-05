@@ -6,19 +6,18 @@ import { useProductNutrients } from "@/lib/hooks/useProductNutrients";
 import { useNutrientsReference } from "@/lib/hooks/useNutrientsReference";
 import { useRecipeTypes } from "@/lib/hooks/useRecipeTypes";
 import { useCuisines } from "@/lib/hooks/useCuisines";
+import { useDietaryTags } from "@/lib/hooks/useDietaryTags";
 import { RecipeCreatePayload } from "@/types/recipe";
 import { RecipeIngredientDraft } from "@/types/recipe-ingredient";
 import { IngredientRow } from "@/components/recipe/IngredientRow";
 import { RecipeStepDraft } from "@/types/recipe-step";
 import { StepRow } from "@/components/recipe/StepRow";
 import { aggregateRecipeNutrients } from "@/lib/recipe-nutrients.aggregate";
-// import { NutrientsMap } from "@/types/nutrients";
 import { RecipePreview } from "@/components/recipe/RecipePreview";
 import { validateRecipeForPublish } from "@/lib/recipe-validation";
 import { RecipePhotoUploader } from "@/components/recipe/RecipePhotoUploader";
 import { CuisineSelector } from "@/components/recipe/CuisineSelector";
-
-// const productNutrientsMap: Record<string, NutrientsMap> = {};
+import { DietaryTagSelector } from "@/components/recipe/DietaryTagSelector";
 
 export default function AdminRecipeCreatePage() {
   const [form, setForm] = useState<RecipeCreatePayload>({
@@ -47,6 +46,9 @@ export default function AdminRecipeCreatePage() {
 
   const [cuisineIds, setCuisineIds] = useState<number[]>([]);
   const { items: cuisines, loading: cuisinesLoading } = useCuisines();
+
+  const [dietaryTagIds, setDietaryTagIds] = useState<number[]>([]);
+  const { items: dietaryTags, loading: dietaryTagsLoading } = useDietaryTags();
 
   function addIngredient() {
     setIngredients((prev) => [
@@ -193,6 +195,18 @@ export default function AdminRecipeCreatePage() {
           body: JSON.stringify(stepsPayload),
         });
       }
+
+      // Save dietary-tags
+      if (dietaryTagIds.length > 0) {
+        await fetch("/api/recipes/dietary-tags", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            recipe_id: recipeId,
+            dietary_tag_ids: dietaryTagIds,
+          }),
+        });
+      }
     } finally {
       setLoading(false);
     }
@@ -201,6 +215,7 @@ export default function AdminRecipeCreatePage() {
   async function handlePublish() {
     const result = validateRecipeForPublish(form, ingredients, steps, {
       cuisineIds,
+      dietaryTagIds,
     });
 
     if (!result.valid) {
@@ -447,6 +462,14 @@ export default function AdminRecipeCreatePage() {
             nutrientRefs={nutrientRefs}
           />
         )}
+
+      {!dietaryTagsLoading && (
+        <DietaryTagSelector
+          items={dietaryTags}
+          value={dietaryTagIds}
+          onChange={setDietaryTagIds}
+        />
+      )}
 
       {/* Actions */}
       <div className="flex gap-3">

@@ -65,6 +65,10 @@ export function validateRecipeForPublish(
     errors.push("Додайте хоча б один крок приготування");
   }
 
+  if (options.dietaryTagIds?.length === 0) {
+    errors.push("Рекомендуємо вказати дієтичні теги");
+  }
+
   return {
     valid: errors.length === 0,
     errors,
