@@ -151,7 +151,6 @@ export default function AdminRecipeCreatePage() {
       });
 
       const data = await res.json();
-      console.log(data);
 
       const recipeId = form.recipe_id ?? data.recipe_id;
 
