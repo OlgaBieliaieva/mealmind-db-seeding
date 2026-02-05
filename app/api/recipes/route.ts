@@ -4,6 +4,7 @@ import { mapRecipeDraftToRow } from "@/lib/mappers/recipe.mapper";
 import { appendRow } from "@/lib/sheets.helpers";
 import { findRecipeRow } from "@/lib/recipes.read";
 import { updateSheetRow } from "@/lib/sheets.update";
+import { readSheet } from "@/lib/sheets.read";
 
 export async function POST(req: Request) {
   try {
@@ -62,4 +63,22 @@ export async function POST(req: Request) {
       { status: 400 },
     );
   }
+}
+
+export async function GET() {
+  const rows = await readSheet("recipes!A2:R");
+
+  const items = rows.map((row) => ({
+    recipe_id: row[0],
+    title: row[1],
+    description: row[2],
+    recipe_type_id: Number(row[3]) || null,
+    visibility: row[6],
+    status: row[8],
+    base_servings: Number(row[9]),
+    photo_url: row[15] || null,
+    created_at: row[16],
+  }));
+
+  return Response.json({ items });
 }
