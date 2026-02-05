@@ -14,6 +14,7 @@ export function validateRecipeForPublish(
   options: {
     cuisineIds: number[];
     dietaryTagIds?: number[];
+    authorLinksCount?: number;
   },
 ): RecipeValidationResult {
   const errors: string[] = [];
@@ -67,6 +68,10 @@ export function validateRecipeForPublish(
 
   if (options.dietaryTagIds?.length === 0) {
     errors.push("Рекомендуємо вказати дієтичні теги");
+  }
+
+  if ((options?.authorLinksCount ?? 0) === 0) {
+    errors.push("Рекомендуємо додати посилання на автора рецепта");
   }
 
   return {

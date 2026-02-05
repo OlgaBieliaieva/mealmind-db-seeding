@@ -9,6 +9,7 @@ import { useCuisines } from "@/lib/hooks/useCuisines";
 import { useDietaryTags } from "@/lib/hooks/useDietaryTags";
 import { RecipeCreatePayload } from "@/types/recipe";
 import { RecipeIngredientDraft } from "@/types/recipe-ingredient";
+import { AuthorLink } from "@/types/author-link";
 import { IngredientRow } from "@/components/recipe/IngredientRow";
 import { RecipeStepDraft } from "@/types/recipe-step";
 import { StepRow } from "@/components/recipe/StepRow";
@@ -18,6 +19,7 @@ import { validateRecipeForPublish } from "@/lib/recipe-validation";
 import { RecipePhotoUploader } from "@/components/recipe/RecipePhotoUploader";
 import { CuisineSelector } from "@/components/recipe/CuisineSelector";
 import { DietaryTagSelector } from "@/components/recipe/DietaryTagSelector";
+import { AuthorLinksEditor } from "@/components/recipe/AuthorLinksEditor";
 
 export default function AdminRecipeCreatePage() {
   const [form, setForm] = useState<RecipeCreatePayload>({
@@ -49,6 +51,7 @@ export default function AdminRecipeCreatePage() {
 
   const [dietaryTagIds, setDietaryTagIds] = useState<number[]>([]);
   const { items: dietaryTags, loading: dietaryTagsLoading } = useDietaryTags();
+  const [authorLinks, setAuthorLinks] = useState<AuthorLink[]>([]);
 
   function addIngredient() {
     setIngredients((prev) => [
@@ -207,6 +210,18 @@ export default function AdminRecipeCreatePage() {
           }),
         });
       }
+
+      // Save author-links
+      if (authorLinks.length > 0) {
+        await fetch("/api/recipes/author-links", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            recipe_id: recipeId,
+            links: authorLinks.filter((l) => l.url.trim().length > 0),
+          }),
+        });
+      }
     } finally {
       setLoading(false);
     }
@@ -216,6 +231,7 @@ export default function AdminRecipeCreatePage() {
     const result = validateRecipeForPublish(form, ingredients, steps, {
       cuisineIds,
       dietaryTagIds,
+      authorLinksCount: authorLinks.length,
     });
 
     if (!result.valid) {
@@ -470,6 +486,8 @@ export default function AdminRecipeCreatePage() {
           onChange={setDietaryTagIds}
         />
       )}
+
+      <AuthorLinksEditor value={authorLinks} onChange={setAuthorLinks} />
 
       {/* Actions */}
       <div className="flex gap-3">
