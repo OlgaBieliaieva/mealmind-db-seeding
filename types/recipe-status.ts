@@ -1,1 +1,1 @@
-export type RecipeStatus = "draft" | "ready" | "published";
+export type RecipeStatus = "draft" | "ready" | "published" | "archived";
