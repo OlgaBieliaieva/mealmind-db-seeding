@@ -1,28 +1,21 @@
-"use client";
+import { readSheet } from "@/lib/sheets.read";
+import RecipesList from "@/components/recipe/RecipesList";
 
-import { useRecipes } from "@/lib/hooks/useRecipes";
-import { RecipeRow } from "@/components/recipe/RecipeRow";
+export default async function AdminRecipesPage() {
+  const rows = await readSheet("recipes!A2:Z");
 
-export default function AdminRecipesPage() {
-  const { items, loading } = useRecipes();
-
-  if (loading) {
-    return <p className="text-sm text-gray-500">Loading recipes…</p>;
-  }
+  const items = rows.map((row) => ({
+    recipe_id: row[0],
+    title: row[1],
+    status: row[8],
+    visibility: row[6],
+    photo_url: row[15] ?? null,
+  }));
 
   return (
     <div className="space-y-4">
       <h1 className="text-xl font-semibold">Recipes</h1>
-
-      {items.length === 0 && (
-        <p className="text-sm text-gray-500">No recipes yet</p>
-      )}
-
-      <div className="space-y-2">
-        {items.map((recipe) => (
-          <RecipeRow key={recipe.recipe_id} recipe={recipe} />
-        ))}
-      </div>
+      <RecipesList items={items} />
     </div>
   );
 }

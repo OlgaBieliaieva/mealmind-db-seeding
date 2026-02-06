@@ -1,50 +1,42 @@
 "use client";
 
 import Link from "next/link";
-import { useRecipeFavorite } from "@/lib/hooks/useRecipeFavorite";
-import { RecipeListItem } from "@/lib/hooks/useRecipes";
 
 type Props = {
-  recipe: RecipeListItem;
+  recipe: {
+    recipe_id: string;
+    title: string;
+    status: string;
+    visibility: string;
+  };
+  isFavorite: boolean;
+  onToggleFavorite: () => void;
 };
 
-// TODO auth
-const ADMIN_USER_ID = "00000000-0000-0000-0000-000000000000";
-const ADMIN_FAMILY_ID = "00000000-0000-0000-0000-000000000000";
-
-export function RecipeRow({ recipe }: Props) {
-  const { isFavorite, toggle } = useRecipeFavorite({
-    recipeId: recipe.recipe_id,
-    userId: ADMIN_USER_ID,
-    familyId: ADMIN_FAMILY_ID,
-  });
-
+export function RecipeRow({ recipe, isFavorite, onToggleFavorite }: Props) {
   return (
     <div className="flex items-center justify-between rounded border p-3">
-      <div>
+      <Link
+        href={`/admin/recipes/${recipe.recipe_id}`}
+        className="flex-1 hover:underline"
+      >
         <div className="font-medium">{recipe.title}</div>
         <div className="text-xs text-gray-500">
           {recipe.status} · {recipe.visibility}
         </div>
-      </div>
+      </Link>
 
-      <div className="flex items-center gap-3">
-        <button
-          type="button"
-          onClick={toggle}
-          className="text-xl"
-          title="Favorite"
-        >
-          {isFavorite ? "⭐" : "☆"}
-        </button>
-
-        <Link
-          href={`/admin/recipes/${recipe.recipe_id}/edit`}
-          className="text-sm underline"
-        >
-          Edit
-        </Link>
-      </div>
+      <button
+        type="button"
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          onToggleFavorite();
+        }}
+        className="ml-3 text-xl"
+      >
+        {isFavorite ? "⭐" : "☆"}
+      </button>
     </div>
   );
 }
