@@ -17,13 +17,38 @@ export async function getRecipeById(
 
   if (!recipeRow) return null;
 
+  const recipeTypeRows = await readSheet("recipe_types!A2:Z");
+
+  const recipeTypesMap = Object.fromEntries(
+    recipeTypeRows.map((row) => [
+      Number(row[0]), // recipe_type_id
+      row[3] || row[2], // name_ua || name_en
+    ]),
+  );
+
   const recipe = {
     recipe_id: recipeRow[0],
     title: recipeRow[1],
     description: recipeRow[2],
+
     status: recipeRow[8] as RecipeFull["recipe"]["status"],
     visibility: recipeRow[6] as RecipeFull["recipe"]["visibility"],
+
     photo_url: recipeRow[15] || null,
+
+    recipe_type_id: recipeRow[3] ? Number(recipeRow[3]) : null,
+    recipe_type_name:
+      recipeRow[3] && recipeTypesMap[Number(recipeRow[3])]
+        ? recipeTypesMap[Number(recipeRow[3])]
+        : null,
+
+    difficulty: recipeRow[14] as RecipeFull["recipe"]["difficulty"] | null,
+
+    prep_time_min: recipeRow[12] ? Number(recipeRow[12]) : null,
+    cook_time_min: recipeRow[13] ? Number(recipeRow[13]) : null,
+
+    base_servings: Number(recipeRow[9] || 0),
+    base_output_weight_g: Number(recipeRow[10] || 0),
   };
 
   // ===============================
