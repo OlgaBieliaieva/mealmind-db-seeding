@@ -12,6 +12,14 @@ type Props = {
     description: string;
     status: "draft" | "ready" | "published" | "archived";
     photo_url?: string | null;
+
+    recipe_type_id: number | null;
+    recipe_type_name: string | null;
+    difficulty: "easy" | "medium" | "hard" | null;
+    prep_time_min: number | null;
+    cook_time_min: number | null;
+    base_servings: number;
+    base_output_weight_g: number;
   };
 
   ingredients: RecipeIngredientView[];
@@ -33,6 +41,12 @@ type Props = {
   onToggleFavorite: () => void;
 };
 
+const difficultyMap = {
+  easy: "Легко",
+  medium: "Середньо",
+  hard: "Складно",
+};
+
 export default function RecipeView({
   recipe,
   ingredients,
@@ -45,6 +59,8 @@ export default function RecipeView({
 }: Props) {
   const router = useRouter();
 
+  const totalTime =
+    (Number(recipe.prep_time_min) ?? 0) + (Number(recipe.cook_time_min) ?? 0);
   async function handleDeleteOrArchive() {
     if (recipe.status === "draft") {
       await fetch(`/api/recipes/${recipe.recipe_id}`, {
@@ -139,7 +155,52 @@ export default function RecipeView({
           )}
         </div>
       </div>
+      {/* Quick facts */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 rounded-lg border bg-gray-50 p-4 text-sm">
+        <div>
+          <div className="text-gray-500">Тип страви</div>
+          <div className="font-medium">{recipe.recipe_type_name ?? "—"}</div>
+        </div>
 
+        <div>
+          <div className="text-gray-500">Складність</div>
+          <div className="font-medium">
+            {recipe.difficulty ? difficultyMap[recipe.difficulty] : "—"}
+          </div>
+        </div>
+
+        <div>
+          <div className="text-gray-500">Час</div>
+          <div className="font-medium">
+            {totalTime > 0 ? `${totalTime} хв` : "—"}
+          </div>
+        </div>
+
+        <div>
+          <div className="text-gray-500">Порції</div>
+          <div className="font-medium">{recipe.base_servings || "—"}</div>
+        </div>
+
+        <div>
+          <div className="text-gray-500">Загальний вихід</div>
+          <div className="font-medium">
+            {recipe.base_output_weight_g
+              ? `${recipe.base_output_weight_g} г`
+              : "—"}
+          </div>
+        </div>
+
+        <div>
+          <div className="text-gray-500">На порцію</div>
+          <div className="font-medium">
+            {recipe.base_output_weight_g && recipe.base_servings
+              ? `${Math.round(
+                  recipe.base_output_weight_g / recipe.base_servings,
+                )} г`
+              : "—"}
+          </div>
+        </div>
+      </div>
       {/* Ingredients */}
       <section className="space-y-2">
         <h2 className="font-medium">Інгредієнти</h2>

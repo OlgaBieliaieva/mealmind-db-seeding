@@ -31,6 +31,15 @@ export type RecipeFull = {
     status: "draft" | "ready" | "published" | "archived";
     visibility: "private" | "public";
     photo_url?: string | null;
+
+    recipe_type_id: number | null;
+    recipe_type_name: string | null;
+
+    difficulty: "easy" | "medium" | "hard" | null;
+    prep_time_min: number | null;
+    cook_time_min: number | null;
+    base_servings: number;
+    base_output_weight_g: number;
   };
 
   ingredients: RecipeIngredientView[];
