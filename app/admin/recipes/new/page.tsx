@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { generateUUID } from "@/lib/uuid";
 import { nanoid } from "nanoid";
 import { useProductNutrients } from "@/lib/hooks/useProductNutrients";
 import { useNutrientsReference } from "@/lib/hooks/useNutrientsReference";
@@ -20,6 +21,7 @@ import { RecipePhotoUploader } from "@/components/recipe/RecipePhotoUploader";
 import { CuisineSelector } from "@/components/recipe/CuisineSelector";
 import { DietaryTagSelector } from "@/components/recipe/DietaryTagSelector";
 import { AuthorLinksEditor } from "@/components/recipe/AuthorLinksEditor";
+import { RecipeVideoDraft } from "@/types/recipe-video";
 
 export default function AdminRecipeCreatePage() {
   const [form, setForm] = useState<RecipeCreatePayload>({
@@ -52,6 +54,7 @@ export default function AdminRecipeCreatePage() {
   const [dietaryTagIds, setDietaryTagIds] = useState<number[]>([]);
   const { items: dietaryTags, loading: dietaryTagsLoading } = useDietaryTags();
   const [authorLinks, setAuthorLinks] = useState<AuthorLink[]>([]);
+  const [videos, setVideos] = useState<RecipeVideoDraft[]>([]);
 
   function addIngredient() {
     setIngredients((prev) => [
@@ -134,10 +137,25 @@ export default function AdminRecipeCreatePage() {
     [ingredients],
   );
 
-  const effectiveOutputWeight =
-    form.base_output_weight_g > 0
-      ? form.base_output_weight_g
-      : calculatedWeight;
+  // const effectiveOutputWeight =
+  //   form.base_output_weight_g > 0
+  //     ? form.base_output_weight_g
+  //     : calculatedWeight;
+
+  const effectiveOutputWeight = useMemo(() => {
+    // 1. Беремо базову вагу (якщо введена) або суму інгредієнтів
+    const rawWeight =
+      form.base_output_weight_g && form.base_output_weight_g > 0
+        ? form.base_output_weight_g
+        : calculatedWeight;
+
+    // 2. Якщо є контейнер — віднімаємо
+    if (form.container_weight_g && form.container_weight_g > 0) {
+      return Math.max(rawWeight - form.container_weight_g, 0);
+    }
+
+    return rawWeight;
+  }, [form.base_output_weight_g, form.container_weight_g, calculatedWeight]);
 
   async function handleSubmit() {
     setLoading(true);
@@ -218,6 +236,25 @@ export default function AdminRecipeCreatePage() {
           body: JSON.stringify({
             recipe_id: recipeId,
             links: authorLinks.filter((l) => l.url.trim().length > 0),
+          }),
+        });
+      }
+
+      // Save recipe videos
+      if (videos.length > 0) {
+        await fetch("/api/recipe-videos", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            recipe_id: recipeId,
+            videos: videos
+              .filter((v) => v.url.trim().length > 0)
+              .map((v) => ({
+                platform: v.platform,
+                url: v.url.trim(),
+                author_name: v.author_name?.trim() || null,
+                author_url: v.author_url?.trim() || null,
+              })),
           }),
         });
       }
@@ -413,6 +450,13 @@ export default function AdminRecipeCreatePage() {
           }
         />
       </div>
+      {form.container_weight_g && form.container_weight_g > 0 && (
+        <div className="text-sm text-gray-500">
+          Фактична вага страви:{" "}
+          <span className="font-medium">{effectiveOutputWeight} г</span>
+          <span className="ml-1">(без контейнера)</span>
+        </div>
+      )}
       {/* === Інгредієнти === */}
       <div className="space-y-3">
         <h2 className="font-medium">Інгредієнти</h2>
@@ -487,6 +531,106 @@ export default function AdminRecipeCreatePage() {
       )}
 
       <AuthorLinksEditor value={authorLinks} onChange={setAuthorLinks} />
+      {/* === Відео рецепта === */}
+      <div className="space-y-3">
+        <h2 className="font-medium">Відео рецепта</h2>
+
+        {videos.map((video) => (
+          <div key={video.id} className="grid grid-cols-4 gap-2">
+            <select
+              className="rounded border px-2 py-1"
+              value={video.platform}
+              onChange={(e) =>
+                setVideos((prev) =>
+                  prev.map((v) =>
+                    v.id === video.id
+                      ? {
+                          ...v,
+                          platform: e.target
+                            .value as RecipeVideoDraft["platform"],
+                        }
+                      : v,
+                  ),
+                )
+              }
+            >
+              <option value="youtube">YouTube</option>
+              <option value="instagram">Instagram</option>
+              <option value="tiktok">TikTok</option>
+            </select>
+
+            <input
+              className="col-span-2 rounded border px-2 py-1"
+              placeholder="Посилання на відео"
+              value={video.url}
+              onChange={(e) =>
+                setVideos((prev) =>
+                  prev.map((v) =>
+                    v.id === video.id ? { ...v, url: e.target.value } : v,
+                  ),
+                )
+              }
+            />
+
+            <button
+              type="button"
+              onClick={() =>
+                setVideos((prev) => prev.filter((v) => v.id !== video.id))
+              }
+              className="text-sm text-red-500"
+            >
+              ✕
+            </button>
+
+            <input
+              className="col-span-2 rounded border px-2 py-1"
+              placeholder="Автор (optional)"
+              value={video.author_name ?? ""}
+              onChange={(e) =>
+                setVideos((prev) =>
+                  prev.map((v) =>
+                    v.id === video.id
+                      ? { ...v, author_name: e.target.value }
+                      : v,
+                  ),
+                )
+              }
+            />
+
+            <input
+              className="col-span-2 rounded border px-2 py-1"
+              placeholder="Посилання на автора (optional)"
+              value={video.author_url ?? ""}
+              onChange={(e) =>
+                setVideos((prev) =>
+                  prev.map((v) =>
+                    v.id === video.id
+                      ? { ...v, author_url: e.target.value }
+                      : v,
+                  ),
+                )
+              }
+            />
+          </div>
+        ))}
+
+        <button
+          type="button"
+          onClick={() =>
+            setVideos((prev) => [
+              ...prev,
+              {
+                id: generateUUID(),
+                platform: "youtube",
+                url: "",
+              },
+            ])
+          }
+          className="rounded border px-3 py-1 text-sm"
+        >
+          + Додати відео
+        </button>
+      </div>
 
       {/* Actions */}
       <div className="flex gap-3">

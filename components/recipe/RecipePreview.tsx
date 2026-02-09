@@ -20,8 +20,6 @@ export function RecipePreview({
 
   const portionWeight = servings > 0 ? outputWeight / servings : outputWeight;
 
-  const nutrientsList = nutrientRefs.filter((n) => nutrients[n.nutrient_id]);
-
   return (
     <div className="rounded border bg-gray-50 p-4 space-y-3">
       <h3 className="font-medium">Поживна цінність</h3>
@@ -34,10 +32,10 @@ export function RecipePreview({
 
       <table className="w-full text-sm">
         <tbody>
-          {nutrientsList.map((n) => {
-            const total = nutrients[n.nutrient_id].value;
+          {nutrientRefs.map((n) => {
+            const total = nutrients[n.nutrient_id]?.value ?? 0;
 
-            const per100g = (total / outputWeight) * 100;
+            const per100g = outputWeight > 0 ? (total / outputWeight) * 100 : 0;
 
             const perPortion = (per100g * portionWeight) / 100;
 
