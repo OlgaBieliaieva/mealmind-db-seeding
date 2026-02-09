@@ -8,14 +8,16 @@ export async function POST(req: Request) {
     const body = await req.json();
     const input = RecipeVideoCreateSchema.parse(body);
 
-    const { recipeVideoId, row } = mapRecipeVideoToRow(input);
+    for (const video of input.videos) {
+      const { row } = mapRecipeVideoToRow({
+        recipe_id: input.recipe_id,
+        ...video,
+      });
 
-    await appendRow("recipe_videos", row);
+      await appendRow("recipe_videos", row);
+    }
 
-    return NextResponse.json({
-      ok: true,
-      recipe_video_id: recipeVideoId,
-    });
+    return NextResponse.json({ ok: true });
   } catch (error) {
     console.error(error);
 

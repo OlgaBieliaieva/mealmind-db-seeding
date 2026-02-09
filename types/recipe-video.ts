@@ -9,3 +9,11 @@ export type RecipeVideo = {
   author_url: string | null;
   created_at: string;
 };
+
+export type RecipeVideoDraft = {
+  id: string; // локальний (uuid)
+  platform: RecipeVideoPlatform;
+  url: string;
+  author_name?: string;
+  author_url?: string;
+};

@@ -1,20 +1,26 @@
-import { randomUUID } from "crypto";
-import { RecipeVideoCreateInput } from "@/types/recipe-video-create.dto";
+import { generateUUID } from "../uuid";
 
-export function mapRecipeVideoToRow(input: RecipeVideoCreateInput) {
-  const recipeVideoId = randomUUID();
-  const createdAt = new Date().toISOString();
+type Input = {
+  recipe_id: string;
+  platform: "youtube" | "instagram" | "tiktok";
+  url: string;
+  author_name?: string | null;
+  author_url?: string | null;
+};
+
+export function mapRecipeVideoToRow(input: Input) {
+  const recipeVideoId = generateUUID();
 
   return {
     recipeVideoId,
     row: [
-      recipeVideoId, // A recipe_video_id
-      input.recipe_id, // B recipe_id
-      input.platform, // C platform
-      input.url, // D url
-      input.author_name ?? "", // E author_name
-      input.author_url ?? "", // F author_url
-      createdAt, // G created_at
+      recipeVideoId,
+      input.recipe_id,
+      input.platform,
+      input.url,
+      input.author_name ?? "",
+      input.author_url ?? "",
+      new Date().toISOString(),
     ],
   };
 }
