@@ -1,6 +1,8 @@
 import { readSheet } from "@/lib/sheets.read";
 import RecipesList from "@/components/recipe/RecipesList";
 
+export const dynamic = "force-dynamic";
+
 export default async function AdminRecipesPage() {
   const rows = await readSheet("recipes!A2:Z");
 
