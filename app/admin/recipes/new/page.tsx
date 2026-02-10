@@ -3,14 +3,16 @@
 import { useState, useMemo } from "react";
 import { generateUUID } from "@/lib/uuid";
 import { nanoid } from "nanoid";
+
 import { useProductNutrients } from "@/lib/hooks/useProductNutrients";
 import { useNutrientsReference } from "@/lib/hooks/useNutrientsReference";
 import { useRecipeTypes } from "@/lib/hooks/useRecipeTypes";
 import { useCuisines } from "@/lib/hooks/useCuisines";
 import { useDietaryTags } from "@/lib/hooks/useDietaryTags";
+import { useRecipeAuthors } from "@/lib/hooks/useRecipeAuthors";
+
 import { RecipeCreatePayload } from "@/types/recipe";
 import { RecipeIngredientDraft } from "@/types/recipe-ingredient";
-import { AuthorLink } from "@/types/author-link";
 import { IngredientRow } from "@/components/recipe/IngredientRow";
 import { RecipeStepDraft } from "@/types/recipe-step";
 import { StepRow } from "@/components/recipe/StepRow";
@@ -20,8 +22,8 @@ import { validateRecipeForPublish } from "@/lib/recipe-validation";
 import { RecipePhotoUploader } from "@/components/recipe/RecipePhotoUploader";
 import { CuisineSelector } from "@/components/recipe/CuisineSelector";
 import { DietaryTagSelector } from "@/components/recipe/DietaryTagSelector";
-import { AuthorLinksEditor } from "@/components/recipe/AuthorLinksEditor";
 import { RecipeVideoDraft } from "@/types/recipe-video";
+import { RecipeAuthorSelector } from "@/components/recipe/RecipeAuthorSelector";
 
 export default function AdminRecipeCreatePage() {
   const [form, setForm] = useState<RecipeCreatePayload>({
@@ -53,7 +55,9 @@ export default function AdminRecipeCreatePage() {
 
   const [dietaryTagIds, setDietaryTagIds] = useState<number[]>([]);
   const { items: dietaryTags, loading: dietaryTagsLoading } = useDietaryTags();
-  const [authorLinks, setAuthorLinks] = useState<AuthorLink[]>([]);
+  const [recipeAuthorId, setRecipeAuthorId] = useState<string | null>(null);
+  const { items: recipeAuthors } = useRecipeAuthors();
+
   const [videos, setVideos] = useState<RecipeVideoDraft[]>([]);
 
   function addIngredient() {
@@ -228,18 +232,6 @@ export default function AdminRecipeCreatePage() {
         });
       }
 
-      // Save author-links
-      if (authorLinks.length > 0) {
-        await fetch("/api/recipes/author-links", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            recipe_id: recipeId,
-            links: authorLinks.filter((l) => l.url.trim().length > 0),
-          }),
-        });
-      }
-
       // Save recipe videos
       if (videos.length > 0) {
         await fetch("/api/recipe-videos", {
@@ -252,7 +244,7 @@ export default function AdminRecipeCreatePage() {
               .map((v) => ({
                 platform: v.platform,
                 url: v.url.trim(),
-                recipe_author_id: v.recipe_author_id,
+                recipe_author_id: recipeAuthorId,
               })),
           }),
         });
@@ -266,7 +258,6 @@ export default function AdminRecipeCreatePage() {
     const result = validateRecipeForPublish(form, ingredients, steps, {
       cuisineIds,
       dietaryTagIds,
-      authorLinksCount: authorLinks.length,
     });
 
     if (!result.valid) {
@@ -529,7 +520,13 @@ export default function AdminRecipeCreatePage() {
         />
       )}
 
-      <AuthorLinksEditor value={authorLinks} onChange={setAuthorLinks} />
+      {/* === Автор рецепта === */}
+      <RecipeAuthorSelector
+        value={recipeAuthorId}
+        items={recipeAuthors}
+        onChange={setRecipeAuthorId}
+      />
+
       {/* === Відео рецепта === */}
       <div className="space-y-3">
         <h2 className="font-medium">Відео рецепта</h2>
@@ -570,7 +567,7 @@ export default function AdminRecipeCreatePage() {
                 )
               }
             />
-            {/* TODO: selector авторів */}
+
             <button
               type="button"
               onClick={() =>
