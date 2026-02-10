@@ -25,4 +25,6 @@ export type RecipeCreatePayload = {
   visibility: "private" | "public";
   status: RecipeStatus;
   family_id: string | null;
+
+  recipe_author_id?: string | null;
 };

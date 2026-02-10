@@ -15,7 +15,7 @@ export async function GET(
   const { id } = ParamsSchema.parse(rawParams);
 
   const [recipes, ingredients, steps, cuisines] = await Promise.all([
-    readSheet("recipes!A2:R"),
+    readSheet("recipes!A2:S"),
     readSheet("recipe_ingredients!A2:F"),
     readSheet("recipe_steps!A2:E"),
     readSheet("recipe_cuisines!A2:C"),
@@ -34,14 +34,14 @@ export async function GET(
       description: recipe[2],
       recipe_type_id: recipe[3] ? Number(recipe[3]) : null,
       author_type: recipe[4] ?? null,
-      visibility: recipe[6],
-      status: recipe[8],
-      base_servings: Number(recipe[9] || 0),
-      base_output_weight_g: Number(recipe[10] || 0),
-      prep_time_min: recipe[12] ? Number(recipe[12]) : null,
-      cook_time_min: recipe[13] ? Number(recipe[13]) : null,
-      difficulty: recipe[14] ?? null,
-      photo_url: recipe[15] || null,
+      visibility: recipe[7],
+      status: recipe[9],
+      base_servings: Number(recipe[10] || 0),
+      base_output_weight_g: Number(recipe[11] || 0),
+      prep_time_min: recipe[13] ? Number(recipe[13]) : null,
+      cook_time_min: recipe[14] ? Number(recipe[14]) : null,
+      difficulty: recipe[15] ?? null,
+      photo_url: recipe[16] || null,
     },
 
     ingredients: ingredients
