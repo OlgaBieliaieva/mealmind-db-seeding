@@ -9,7 +9,7 @@ export async function POST(req: Request) {
     const input = RecipeVideoCreateSchema.parse(body);
 
     for (const video of input.videos) {
-      const { row } = mapRecipeVideoToRow({
+      const row = mapRecipeVideoToRow({
         recipe_id: input.recipe_id,
         ...video,
       });

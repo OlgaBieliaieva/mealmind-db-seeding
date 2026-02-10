@@ -252,8 +252,7 @@ export default function AdminRecipeCreatePage() {
               .map((v) => ({
                 platform: v.platform,
                 url: v.url.trim(),
-                author_name: v.author_name?.trim() || null,
-                author_url: v.author_url?.trim() || null,
+                recipe_author_id: v.recipe_author_id,
               })),
           }),
         });
@@ -571,7 +570,7 @@ export default function AdminRecipeCreatePage() {
                 )
               }
             />
-
+            {/* TODO: selector авторів */}
             <button
               type="button"
               onClick={() =>
@@ -581,36 +580,6 @@ export default function AdminRecipeCreatePage() {
             >
               ✕
             </button>
-
-            <input
-              className="col-span-2 rounded border px-2 py-1"
-              placeholder="Автор (optional)"
-              value={video.author_name ?? ""}
-              onChange={(e) =>
-                setVideos((prev) =>
-                  prev.map((v) =>
-                    v.id === video.id
-                      ? { ...v, author_name: e.target.value }
-                      : v,
-                  ),
-                )
-              }
-            />
-
-            <input
-              className="col-span-2 rounded border px-2 py-1"
-              placeholder="Посилання на автора (optional)"
-              value={video.author_url ?? ""}
-              onChange={(e) =>
-                setVideos((prev) =>
-                  prev.map((v) =>
-                    v.id === video.id
-                      ? { ...v, author_url: e.target.value }
-                      : v,
-                  ),
-                )
-              }
-            />
           </div>
         ))}
 
@@ -623,6 +592,7 @@ export default function AdminRecipeCreatePage() {
                 id: generateUUID(),
                 platform: "youtube",
                 url: "",
+                recipe_author_id: null,
               },
             ])
           }
