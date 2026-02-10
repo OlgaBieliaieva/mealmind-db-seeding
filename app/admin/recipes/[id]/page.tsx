@@ -9,7 +9,7 @@ type Props = {
 };
 
 export default async function RecipePage({ params }: Props) {
-  const { id } = await params; // ✅ ОБОВʼЯЗКОВО
+  const { id } = await params;
 
   const data = await getRecipeById(id);
 

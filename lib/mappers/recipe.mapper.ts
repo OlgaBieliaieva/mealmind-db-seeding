@@ -27,6 +27,7 @@ export function mapRecipeDraftToRow(input: RecipeDraftInput) {
     input.cook_time_min ?? 0,
     input.difficulty ?? null,
     input.photo_url ?? null,
+    input.recipe_author_id ?? null,
 
     now, // Q created_at
     now, // R updated_at

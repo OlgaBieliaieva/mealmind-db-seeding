@@ -28,6 +28,7 @@ export const RecipeDraftSchema = z.object({
 
   visibility: z.enum(["private", "public"]).optional().default("private"),
   family_id: z.string().uuid().nullable().optional(),
+  recipe_author_id: z.string().uuid().nullable().optional(),
 });
 
 export type RecipeDraftInput = z.infer<typeof RecipeDraftSchema>;

@@ -66,18 +66,18 @@ export async function POST(req: Request) {
 }
 
 export async function GET() {
-  const rows = await readSheet("recipes!A2:R");
+  const rows = await readSheet("recipes!A2:S");
 
   const items = rows.map((row) => ({
     recipe_id: row[0],
     title: row[1],
     description: row[2],
     recipe_type_id: Number(row[3]) || null,
-    visibility: row[6],
-    status: row[8],
-    base_servings: Number(row[9]),
-    photo_url: row[15] || null,
-    created_at: row[16],
+    visibility: row[7],
+    status: row[9],
+    base_servings: Number(row[10]),
+    photo_url: row[16] || null,
+    created_at: row[17],
   }));
 
   return Response.json({ items });

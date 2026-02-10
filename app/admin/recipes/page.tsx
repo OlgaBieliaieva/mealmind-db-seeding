@@ -9,9 +9,9 @@ export default async function AdminRecipesPage() {
   const items = rows.map((row) => ({
     recipe_id: row[0],
     title: row[1],
-    status: row[8],
-    visibility: row[6],
-    photo_url: row[15] ?? null,
+    status: row[9],
+    visibility: row[7],
+    photo_url: row[16] ?? null,
   }));
 
   return (

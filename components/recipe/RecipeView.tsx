@@ -32,9 +32,22 @@ type Props = {
     dietary_tag_id: number;
     name: string;
   }[];
-  authors: {
-    platform: string;
+  author: {
+    recipe_author_id: string;
+    display_name: string;
+    type: "user" | "blogger" | "system";
+    avatar_url: string | null;
+    profile_url: string | null;
+  } | null;
+  videos: {
+    recipe_video_id: string;
+    platform: "youtube" | "instagram" | "tiktok";
     url: string;
+    author: {
+      recipe_author_id: string;
+      display_name: string;
+      profile_url: string | null;
+    } | null;
   }[];
 
   isFavorite: boolean;
@@ -53,7 +66,8 @@ export default function RecipeView({
   steps,
   cuisines,
   dietary_tags,
-  authors,
+  author,
+  videos,
   isFavorite,
   onToggleFavorite,
 }: Props) {
@@ -118,22 +132,42 @@ export default function RecipeView({
           </div>
 
           {/* Author */}
-          {authors.length > 0 && (
-            <div className="text-sm text-gray-500">
-              by{" "}
-              {authors.map((a) => (
-                <a
-                  key={a.url}
-                  href={a.url}
-                  target="_blank"
-                  className="underline mr-2"
-                >
-                  {a.platform}
-                </a>
-              ))}
+          {author && (
+            <div className="flex items-center gap-2 text-sm text-gray-600">
+              {author.avatar_url ? (
+                <Image
+                  src={author.avatar_url}
+                  alt={author.display_name}
+                  width={32}
+                  height={32}
+                  className="rounded-full"
+                />
+              ) : (
+                <div className="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center text-xs">
+                  👤
+                </div>
+              )}
+
+              <span>
+                by{" "}
+                {author.profile_url ? (
+                  <a
+                    href={author.profile_url}
+                    target="_blank"
+                    className="underline"
+                  >
+                    {author.display_name}
+                  </a>
+                ) : (
+                  <span className="font-medium">{author.display_name}</span>
+                )}
+              </span>
+
+              {author.type === "system" && (
+                <span className="text-xs text-gray-400">(MealMind)</span>
+              )}
             </div>
           )}
-
           <p className="text-gray-700">{recipe.description}</p>
         </div>
 
@@ -234,6 +268,39 @@ export default function RecipeView({
           ))}
         </ol>
       </section>
+
+      {videos.length > 0 && (
+        <section className="space-y-3">
+          <h2 className="font-medium">Відео рецепта</h2>
+
+          <ul className="space-y-2">
+            {videos.map((v) => (
+              <li key={v.recipe_video_id} className="text-sm">
+                <a href={v.url} target="_blank" className="underline">
+                  {v.platform}
+                </a>
+
+                {v.author && (
+                  <span className="text-gray-500 ml-2">
+                    —{" "}
+                    {v.author.profile_url ? (
+                      <a
+                        href={v.author.profile_url}
+                        target="_blank"
+                        className="underline"
+                      >
+                        {v.author.display_name}
+                      </a>
+                    ) : (
+                      v.author.display_name
+                    )}
+                  </span>
+                )}
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
 
       {/* Actions */}
       <div className="flex gap-3 pt-4">

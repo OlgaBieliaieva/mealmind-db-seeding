@@ -8,13 +8,13 @@ export async function POST(req: Request) {
     const body = await req.json();
     const input = RecipeAuthorCreateSchema.parse(body);
 
-    const { recipeAuthorId, row } = mapRecipeAuthorToRow(input);
+    const { row, author } = mapRecipeAuthorToRow(input);
 
     await appendRow("recipes_authors", row);
 
     return NextResponse.json({
       ok: true,
-      recipe_author_id: recipeAuthorId,
+      author,
     });
   } catch (error) {
     return NextResponse.json(

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { generateUUID } from "@/lib/uuid";
 import { nanoid } from "nanoid";
 
@@ -24,6 +24,7 @@ import { CuisineSelector } from "@/components/recipe/CuisineSelector";
 import { DietaryTagSelector } from "@/components/recipe/DietaryTagSelector";
 import { RecipeVideoDraft } from "@/types/recipe-video";
 import { RecipeAuthorSelector } from "@/components/recipe/RecipeAuthorSelector";
+import { RecipeAuthor } from "@/types/recipe-author";
 
 export default function AdminRecipeCreatePage() {
   const [form, setForm] = useState<RecipeCreatePayload>({
@@ -56,9 +57,14 @@ export default function AdminRecipeCreatePage() {
   const [dietaryTagIds, setDietaryTagIds] = useState<number[]>([]);
   const { items: dietaryTags, loading: dietaryTagsLoading } = useDietaryTags();
   const [recipeAuthorId, setRecipeAuthorId] = useState<string | null>(null);
-  const { items: recipeAuthors } = useRecipeAuthors();
+  const { items: recipeAuthorsFromApi } = useRecipeAuthors();
+  const [recipeAuthors, setRecipeAuthors] = useState<RecipeAuthor[]>([]);
 
   const [videos, setVideos] = useState<RecipeVideoDraft[]>([]);
+
+  useEffect(() => {
+    setRecipeAuthors(recipeAuthorsFromApi);
+  }, [recipeAuthorsFromApi]);
 
   function addIngredient() {
     setIngredients((prev) => [
@@ -163,13 +169,20 @@ export default function AdminRecipeCreatePage() {
 
   async function handleSubmit() {
     setLoading(true);
-
+    const recipePayload: RecipeCreatePayload = {
+      ...form,
+      recipe_author_id: recipeAuthorId,
+      base_output_weight_g:
+        form.base_output_weight_g && form.base_output_weight_g > 0
+          ? form.base_output_weight_g
+          : effectiveOutputWeight,
+    };
     try {
       // 1️⃣ Save recipe meta
       const res = await fetch("/api/recipes", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify(recipePayload),
       });
 
       const data = await res.json();
@@ -525,6 +538,10 @@ export default function AdminRecipeCreatePage() {
         value={recipeAuthorId}
         items={recipeAuthors}
         onChange={setRecipeAuthorId}
+        onCreateAuthor={(author) => {
+          setRecipeAuthors((prev) => [...prev, author]);
+          setRecipeAuthorId(author.recipe_author_id);
+        }}
       />
 
       {/* === Відео рецепта === */}

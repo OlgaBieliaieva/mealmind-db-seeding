@@ -1,5 +1,6 @@
 import { RecipeIngredientView } from "@/types/recipe-ingredient";
 import { RecipeStepDraft } from "@/types/recipe-step";
+import { RecipeVideo } from "@/types/recipe-video";
 
 export type RecipeViewRecipe = {
   recipe_id: string;
@@ -23,6 +24,14 @@ export type RecipeViewStep = {
   timer_sec: number | null;
 };
 
+export type RecipeVideoView = Omit<RecipeVideo, "recipe_author_id"> & {
+  author: {
+    recipe_author_id: string;
+    display_name: string;
+    profile_url: string | null;
+  } | null;
+};
+
 export type RecipeFull = {
   recipe: {
     recipe_id: string;
@@ -40,6 +49,7 @@ export type RecipeFull = {
     cook_time_min: number | null;
     base_servings: number;
     base_output_weight_g: number;
+    recipe_author_id: string | null;
   };
 
   ingredients: RecipeIngredientView[];
@@ -55,8 +65,13 @@ export type RecipeFull = {
     name: string;
   }[];
 
-  authors: {
-    platform: string;
-    url: string;
-  }[];
+  author: {
+    recipe_author_id: string;
+    display_name: string;
+    type: "user" | "blogger" | "system";
+    avatar_url: string | null;
+    profile_url: string | null;
+  } | null;
+
+  videos: RecipeVideoView[];
 };

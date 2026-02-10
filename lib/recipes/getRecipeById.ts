@@ -3,6 +3,8 @@ import { RecipeIngredientView } from "@/types/recipe-ingredient";
 import { RecipeStepDraft } from "@/types/recipe-step";
 import { RecipeFull } from "@/types/recipe-views";
 import { parseSheetBoolean } from "@/lib/utils/sheetBoolean";
+import { parseRecipeAuthorType } from "../parsers/recipeAuthorType";
+import { getRecipeVideos } from "./getRecipeVideos";
 
 export async function getRecipeById(
   recipeId: string,
@@ -30,11 +32,11 @@ export async function getRecipeById(
     recipe_id: recipeRow[0],
     title: recipeRow[1],
     description: recipeRow[2],
+    recipe_author_id: recipeRow[6] || null,
+    status: recipeRow[9] as RecipeFull["recipe"]["status"],
+    visibility: recipeRow[7] as RecipeFull["recipe"]["visibility"],
 
-    status: recipeRow[8] as RecipeFull["recipe"]["status"],
-    visibility: recipeRow[6] as RecipeFull["recipe"]["visibility"],
-
-    photo_url: recipeRow[15] || null,
+    photo_url: recipeRow[16] || null,
 
     recipe_type_id: recipeRow[3] ? Number(recipeRow[3]) : null,
     recipe_type_name:
@@ -42,14 +44,34 @@ export async function getRecipeById(
         ? recipeTypesMap[Number(recipeRow[3])]
         : null,
 
-    difficulty: recipeRow[14] as RecipeFull["recipe"]["difficulty"] | null,
+    difficulty: recipeRow[15] as RecipeFull["recipe"]["difficulty"] | null,
 
-    prep_time_min: recipeRow[12] ? Number(recipeRow[12]) : null,
-    cook_time_min: recipeRow[13] ? Number(recipeRow[13]) : null,
+    prep_time_min: recipeRow[12] ? Number(recipeRow[13]) : null,
+    cook_time_min: recipeRow[13] ? Number(recipeRow[14]) : null,
 
-    base_servings: Number(recipeRow[9] || 0),
-    base_output_weight_g: Number(recipeRow[10] || 0),
+    base_servings: Number(recipeRow[10] || 0),
+    base_output_weight_g: Number(recipeRow[11] || 0),
   };
+
+  // ===============================
+  // 1️⃣a Recipe Author
+  // ===============================
+  let author = null;
+
+  if (recipe.recipe_author_id) {
+    const authorRows = await readSheet("recipes_authors!A2:G");
+    const row = authorRows.find((r) => r[0] === recipe.recipe_author_id);
+
+    if (row) {
+      author = {
+        recipe_author_id: row[0],
+        type: parseRecipeAuthorType(row[1]),
+        display_name: row[2],
+        avatar_url: row[3] || null,
+        profile_url: row[4] || null,
+      };
+    }
+  }
 
   // ===============================
   // 2️⃣ Products + Brands (JOIN DATA)
@@ -147,22 +169,17 @@ export async function getRecipeById(
     }));
 
   // ===============================
-  // 5️⃣ Author links
+  // 6️⃣ Recipe Videos
   // ===============================
-  const authorRows = await readSheet("author_links!A2:D");
+  const videos = await getRecipeVideos(recipeId);
 
-  const authors = authorRows
-    .filter((row) => row[1] === recipeId)
-    .map((row) => ({
-      platform: row[2],
-      url: row[3],
-    }));
   return {
     recipe,
+    author,
     ingredients,
     steps,
     cuisines,
     dietary_tags,
-    authors,
+    videos,
   };
 }
