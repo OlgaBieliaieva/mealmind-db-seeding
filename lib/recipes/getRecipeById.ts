@@ -48,8 +48,8 @@ export async function getRecipeById(
 
     difficulty: recipeRow[15] as RecipeFull["recipe"]["difficulty"] | null,
 
-    prep_time_min: recipeRow[12] ? Number(recipeRow[13]) : null,
-    cook_time_min: recipeRow[13] ? Number(recipeRow[14]) : null,
+    prep_time_min: recipeRow[13] ? Number(recipeRow[13]) : null,
+    cook_time_min: recipeRow[14] ? Number(recipeRow[14]) : null,
 
     base_servings: Number(recipeRow[10] || 0),
     base_output_weight_g: Number(recipeRow[11] || 0),
