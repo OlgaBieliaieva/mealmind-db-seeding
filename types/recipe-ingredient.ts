@@ -15,3 +15,8 @@ export type RecipeIngredientView = {
   is_optional: boolean;
   order: number;
 };
+
+export type IngredientForNutrition = {
+  product_id: string;
+  quantity_g: number;
+};
