@@ -31,6 +31,16 @@ export default function AdminHomePage() {
           <div className="text-lg font-medium">📋 Recipes</div>
           <div className="text-sm text-gray-500">View and manage recipes</div>
         </Link>
+
+        <Link
+          href="/admin/menu-plans"
+          className="block rounded-xl border bg-white p-4 hover:bg-gray-50"
+        >
+          <div className="text-lg font-medium">📅 Menu plans</div>
+          <div className="text-sm text-gray-500">
+            Create and manage weekly family plans
+          </div>
+        </Link>
       </div>
     </div>
   );
