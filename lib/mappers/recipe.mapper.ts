@@ -1,8 +1,10 @@
 import { RecipeDraftInput } from "@/types/recipe-create.dto";
+import { RecipeCreatePayload } from "@/types/recipe";
 import { generateUUID } from "@/lib/uuid";
 
+const now = new Date().toISOString();
+
 export function mapRecipeDraftToRow(input: RecipeDraftInput) {
-  const now = new Date().toISOString();
   const recipeId = input.recipe_id ?? generateUUID();
 
   const row = [
@@ -34,4 +36,31 @@ export function mapRecipeDraftToRow(input: RecipeDraftInput) {
   ];
 
   return { recipeId, row };
+}
+
+export function mapRecipeToRowForUpdate(
+  recipeId: string,
+  input: RecipeCreatePayload,
+) {
+  return [
+    recipeId,
+    input.title,
+    input.description,
+    input.recipe_type_id ?? "",
+    "admin", // E author_type (поки що)
+    null, // F author_user_id
+    input.recipe_author_id ?? "",
+    input.visibility,
+    input.family_id ?? "",
+    input.status,
+    input.base_servings,
+    input.base_output_weight_g,
+    input.container_weight_g ?? "",
+    input.prep_time_min ?? "",
+    input.cook_time_min ?? "",
+    input.difficulty ?? "",
+    input.photo_url ?? "",
+    input.created_at ?? "",
+    now, // updated_at
+  ];
 }

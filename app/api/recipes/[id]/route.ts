@@ -1,5 +1,7 @@
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { readSheet } from "@/lib/sheets.read";
+import { updateRow } from "@/lib/sheets.helpers";
+import { mapRecipeToRowForUpdate } from "@/lib/mappers/recipe.mapper";
 import { z } from "zod";
 
 const ParamsSchema = z.object({
@@ -65,4 +67,20 @@ export async function GET(
 
     cuisines: cuisines.filter((c) => c[0] === id).map((c) => Number(c[1])),
   });
+}
+
+export async function PUT(
+  req: NextRequest,
+  context: { params: Promise<{ id: string }> },
+) {
+  const rawParams = await context.params;
+  const { id } = ParamsSchema.parse(rawParams);
+
+  const body = await req.json();
+
+  const updatedRow = mapRecipeToRowForUpdate(id, body);
+
+  await updateRow("recipes", id, updatedRow, 0);
+
+  return NextResponse.json({ ok: true });
 }

@@ -27,4 +27,5 @@ export type RecipeCreatePayload = {
   family_id: string | null;
 
   recipe_author_id?: string | null;
+  created_at?: Date;
 };

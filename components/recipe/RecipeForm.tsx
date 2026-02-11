@@ -1,0 +1,813 @@
+"use client";
+
+import { useState, useMemo, useEffect } from "react";
+import { generateUUID } from "@/lib/uuid";
+import { nanoid } from "nanoid";
+
+import { useProductNutrients } from "@/lib/hooks/useProductNutrients";
+import { useNutrientsReference } from "@/lib/hooks/useNutrientsReference";
+import { useRecipeTypes } from "@/lib/hooks/useRecipeTypes";
+import { useCuisines } from "@/lib/hooks/useCuisines";
+import { useDietaryTags } from "@/lib/hooks/useDietaryTags";
+import { useRecipeAuthors } from "@/lib/hooks/useRecipeAuthors";
+
+import { RecipeCreatePayload } from "@/types/recipe";
+import { RecipeFull } from "@/types/recipe-views";
+import { RecipeIngredientDraft } from "@/types/recipe-ingredient";
+import { IngredientRow } from "@/components/recipe/IngredientRow";
+import { RecipeStepDraft } from "@/types/recipe-step";
+import { StepRow } from "@/components/recipe/StepRow";
+import { aggregateRecipeNutrients } from "@/lib/recipe-nutrients.aggregate";
+import { RecipePreview } from "@/components/recipe/RecipePreview";
+import { validateRecipeForPublish } from "@/lib/recipe-validation";
+import { RecipePhotoUploader } from "@/components/recipe/RecipePhotoUploader";
+import { CuisineSelector } from "@/components/recipe/CuisineSelector";
+import { DietaryTagSelector } from "@/components/recipe/DietaryTagSelector";
+import { RecipeVideoDraft } from "@/types/recipe-video";
+import { RecipeAuthorSelector } from "@/components/recipe/RecipeAuthorSelector";
+import { RecipeAuthor } from "@/types/recipe-author";
+
+type Props = {
+  mode: "create" | "edit";
+  initialData?: RecipeFull;
+};
+
+export function RecipeForm({ mode, initialData }: Props) {
+  const isEdit = mode === "edit";
+
+  // =============================
+  // 1️⃣ STATE
+  // =============================
+
+  const [form, setForm] = useState<RecipeCreatePayload>({
+    recipe_id: undefined,
+    title: "",
+    description: "",
+    recipe_type_id: null,
+    base_servings: 1,
+    base_output_weight_g: 0,
+    container_weight_g: null,
+    visibility: "private",
+    status: "draft",
+    family_id: null,
+    recipe_author_id: null,
+  });
+
+  const [ingredients, setIngredients] = useState<RecipeIngredientDraft[]>([]);
+  const [steps, setSteps] = useState<RecipeStepDraft[]>([]);
+  const [videos, setVideos] = useState<RecipeVideoDraft[]>([]);
+  const [cuisineIds, setCuisineIds] = useState<number[]>([]);
+  const [dietaryTagIds, setDietaryTagIds] = useState<number[]>([]);
+  const [recipeAuthorId, setRecipeAuthorId] = useState<string | null>(null);
+  const [recipeAuthors, setRecipeAuthors] = useState<RecipeAuthor[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
+  const [saveSuccess, setSaveSuccess] = useState<string | null>(null);
+
+  const [publishError, setPublishError] = useState<string | null>(null);
+  const [publishSuccess, setPublishSuccess] = useState<string | null>(null);
+  const [publishErrors, setPublishErrors] = useState<string[]>([]);
+
+  const { items: nutrientRefs } = useNutrientsReference(); //
+  const { items: recipeTypes } = useRecipeTypes(); //
+  const { items: cuisines, loading: cuisinesLoading } = useCuisines(); //
+  const { items: dietaryTags, loading: dietaryTagsLoading } = useDietaryTags(); //
+  const { items: recipeAuthorsFromApi } = useRecipeAuthors(); //
+
+  // =============================
+  // 2️⃣ HYDRATE FOR EDIT
+  // =============================
+
+  useEffect(() => {
+    if (!isEdit || !initialData) return;
+
+    setForm({
+      recipe_id: initialData.recipe.recipe_id,
+      title: initialData.recipe.title,
+      description: initialData.recipe.description,
+      recipe_type_id: initialData.recipe.recipe_type_id,
+      base_servings: initialData.recipe.base_servings,
+      base_output_weight_g: initialData.recipe.base_output_weight_g,
+      container_weight_g: null,
+      visibility: initialData.recipe.visibility,
+      status: initialData.recipe.status,
+      family_id: null,
+      recipe_author_id: initialData.recipe.recipe_author_id,
+      prep_time_min: initialData.recipe.prep_time_min ?? undefined,
+      cook_time_min: initialData.recipe.cook_time_min ?? undefined,
+      difficulty: initialData.recipe.difficulty ?? undefined,
+      photo_url: initialData.recipe.photo_url ?? undefined,
+      photos: initialData.recipe.photo_url
+        ? [
+            {
+              url: initialData.recipe.photo_url,
+              objectName: initialData.recipe.title,
+            },
+          ]
+        : [],
+    });
+
+    setRecipeAuthorId(initialData.recipe.recipe_author_id ?? null);
+
+    setIngredients(
+      initialData.ingredients.map((i) => ({
+        id: i.id,
+        product_id: i.product_id,
+        quantity_g: i.quantity_g,
+        is_optional: i.is_optional,
+        product_name: i.product_name,
+      })),
+    );
+
+    setSteps(
+      initialData.steps.map((s) => ({
+        id: s.id,
+        order: s.order,
+        text: s.text,
+      })),
+    );
+
+    setCuisineIds(initialData.cuisines.map((c) => c.cuisine_id));
+    setDietaryTagIds(initialData.dietary_tags.map((d) => d.dietary_tag_id));
+
+    setVideos(
+      initialData.videos.map((v) => ({
+        id: v.recipe_video_id,
+        platform: v.platform,
+        url: v.url,
+        recipe_author_id: v.author?.recipe_author_id ?? null,
+      })),
+    );
+  }, [isEdit, initialData]);
+
+  useEffect(() => {
+    setRecipeAuthors(recipeAuthorsFromApi);
+  }, [recipeAuthorsFromApi]);
+
+  function addIngredient() {
+    setIngredients((prev) => [
+      ...prev,
+      {
+        id: nanoid(),
+        product_id: null,
+        quantity_g: 0,
+        is_optional: false,
+      },
+    ]);
+  }
+
+  function mapIngredientsForApi(
+    recipeId: string,
+    ingredients: RecipeIngredientDraft[],
+  ) {
+    return {
+      recipe_id: recipeId,
+      ingredients: ingredients
+        .filter((i) => i.product_id && i.quantity_g > 0)
+        .map((i, index) => ({
+          product_id: i.product_id!,
+          quantity_g: i.quantity_g,
+          is_optional: i.is_optional,
+          order_index: index + 1,
+        })),
+    };
+  }
+
+  function addStep() {
+    setSteps((prev) => [
+      ...prev,
+      {
+        id: nanoid(),
+        order: prev.length + 1,
+        text: "",
+      },
+    ]);
+  }
+
+  function removeStep(stepId: string) {
+    setSteps((prev) =>
+      prev
+        .filter((s) => s.id !== stepId)
+        .map((s, index) => ({
+          ...s,
+          order: index + 1,
+        })),
+    );
+  }
+
+  function mapStepsForApi(recipeId: string, steps: RecipeStepDraft[]) {
+    return {
+      recipe_id: recipeId,
+      steps: steps
+        .filter((s) => s.text.trim().length > 0)
+        .map((s, index) => ({
+          step_number: index + 1,
+          instruction: s.text.trim(),
+          timer_sec: null,
+        })),
+    };
+  }
+
+  const productIds = useMemo(
+    () => ingredients.map((i) => i.product_id).filter(Boolean) as string[],
+    [ingredients],
+  );
+
+  const productNutrientsMap = useProductNutrients(productIds);
+
+  const recipeNutrients = useMemo(
+    () =>
+      aggregateRecipeNutrients(
+        ingredients.map((i) => ({
+          product_id: i.product_id!,
+          quantity_g: i.quantity_g,
+        })),
+        productNutrientsMap,
+      ),
+    [ingredients, productNutrientsMap],
+  );
+
+  const calculatedWeight = useMemo(
+    () => ingredients.reduce((sum, i) => sum + (i.quantity_g || 0), 0),
+    [ingredients],
+  );
+
+  // const effectiveOutputWeight =
+  //   form.base_output_weight_g > 0
+  //     ? form.base_output_weight_g
+  //     : calculatedWeight;
+
+  const effectiveOutputWeight = useMemo(() => {
+    // 1. Беремо базову вагу (якщо введена) або суму інгредієнтів
+    const rawWeight =
+      form.base_output_weight_g && form.base_output_weight_g > 0
+        ? form.base_output_weight_g
+        : calculatedWeight;
+
+    // 2. Якщо є контейнер — віднімаємо
+    if (form.container_weight_g && form.container_weight_g > 0) {
+      return Math.max(rawWeight - form.container_weight_g, 0);
+    }
+
+    return rawWeight;
+  }, [form.base_output_weight_g, form.container_weight_g, calculatedWeight]);
+
+  async function handleSubmit() {
+    setLoading(true);
+
+    setSaveError(null);
+    setSaveSuccess(null);
+    setPublishError(null);
+    setPublishSuccess(null);
+    setPublishErrors([]);
+
+    try {
+      const recipePayload: RecipeCreatePayload = {
+        ...form,
+        recipe_author_id: recipeAuthorId,
+        base_output_weight_g:
+          form.base_output_weight_g && form.base_output_weight_g > 0
+            ? form.base_output_weight_g
+            : effectiveOutputWeight,
+      };
+
+      const recipeId = await saveRecipeMeta(recipePayload);
+
+      if (isEdit) {
+        await resetChildren(recipeId);
+      }
+
+      await saveChildren(recipeId);
+
+      setSaveSuccess(
+        isEdit ? "Рецепт успішно оновлено" : "Рецепт успішно створено",
+      );
+    } catch (error) {
+      setSaveError(
+        error instanceof Error ? error.message : "Помилка збереження рецепта",
+      );
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function saveRecipeMeta(payload: RecipeCreatePayload): Promise<string> {
+    if (isEdit) {
+      await fetch(`/api/recipes/${payload.recipe_id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      return payload.recipe_id!;
+    }
+
+    const res = await fetch("/api/recipes", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+
+    const data = await res.json();
+
+    if (!data.recipe_id) {
+      throw new Error("Recipe ID not returned");
+    }
+
+    setForm((prev) => ({
+      ...prev,
+      recipe_id: data.recipe_id,
+    }));
+
+    return data.recipe_id;
+  }
+
+  async function resetChildren(recipeId: string) {
+    await fetch(`/api/recipes/${recipeId}/reset-children`, {
+      method: "POST",
+    });
+  }
+
+  async function saveChildren(recipeId: string) {
+    // Cuisines
+    if (cuisineIds.length > 0) {
+      await fetch("/api/recipes/cuisines", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          recipe_id: recipeId,
+          cuisine_ids: cuisineIds,
+        }),
+      });
+    }
+
+    // Ingredients
+    if (ingredients.length > 0) {
+      const ingredientsPayload = mapIngredientsForApi(recipeId, ingredients);
+
+      await fetch("/api/recipes/ingredients", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(ingredientsPayload),
+      });
+    }
+
+    // Steps
+    if (steps.length > 0) {
+      const stepsPayload = mapStepsForApi(recipeId, steps);
+
+      await fetch("/api/recipes/steps", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(stepsPayload),
+      });
+    }
+
+    // Dietary tags
+    if (dietaryTagIds.length > 0) {
+      await fetch("/api/recipes/dietary-tags", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          recipe_id: recipeId,
+          dietary_tag_ids: dietaryTagIds,
+        }),
+      });
+    }
+
+    // Videos
+    if (videos.length > 0) {
+      await fetch("/api/recipe-videos", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          recipe_id: recipeId,
+          videos: videos
+            .filter((v) => v.url.trim().length > 0)
+            .map((v) => ({
+              platform: v.platform,
+              url: v.url.trim(),
+              recipe_author_id: v.recipe_author_id ?? recipeAuthorId,
+            })),
+        }),
+      });
+    }
+  }
+
+  async function handlePublish() {
+    setPublishError(null);
+    setPublishSuccess(null);
+    setSaveError(null);
+
+    const result = validateRecipeForPublish(form, ingredients, steps, {
+      cuisineIds,
+      dietaryTagIds,
+    });
+
+    if (!result.valid) {
+      setPublishErrors(result.errors);
+      return;
+    }
+
+    if (!form.recipe_id) {
+      setPublishError("Спочатку збережіть рецепт");
+      return;
+    }
+
+    try {
+      await fetch("/api/recipes/publish", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          recipe_id: form.recipe_id,
+        }),
+      });
+
+      setPublishSuccess("Рецепт успішно опубліковано");
+    } catch (err) {
+      setPublishError(
+        err instanceof Error ? err.message : "Помилка публікації рецепта",
+      );
+    }
+  }
+
+  return (
+    <div className="max-w-3xl space-y-6">
+      <h1 className="text-xl font-semibold">Create recipe</h1>
+
+      {/* Basic info */}
+      <div className="space-y-2">
+        <input
+          className="w-full rounded border px-3 py-2"
+          placeholder="Recipe title"
+          value={form.title}
+          onChange={(e) => setForm({ ...form, title: e.target.value })}
+        />
+
+        <textarea
+          className="w-full rounded border px-3 py-2"
+          placeholder="Description"
+          value={form.description}
+          onChange={(e) => setForm({ ...form, description: e.target.value })}
+        />
+      </div>
+
+      {/* === Додаткова інформація === */}
+      <div className="space-y-3">
+        <h2 className="font-medium">Додаткова інформація</h2>
+
+        {/* Times */}
+        <div className="grid grid-cols-2 gap-3">
+          <input
+            type="number"
+            min={0}
+            placeholder="Підготовка (хв)"
+            className="rounded border px-3 py-2"
+            value={form.prep_time_min ?? ""}
+            onChange={(e) =>
+              setForm({
+                ...form,
+                prep_time_min: Number(e.target.value) || undefined,
+              })
+            }
+          />
+
+          <input
+            type="number"
+            min={0}
+            placeholder="Приготування (хв)"
+            className="rounded border px-3 py-2"
+            value={form.cook_time_min ?? ""}
+            onChange={(e) =>
+              setForm({
+                ...form,
+                cook_time_min: Number(e.target.value) || undefined,
+              })
+            }
+          />
+        </div>
+
+        {/* Difficulty */}
+        <select
+          className="w-full rounded border px-3 py-2"
+          value={form.difficulty ?? ""}
+          onChange={(e) => {
+            const value = e.target.value as "" | "easy" | "medium" | "hard";
+
+            setForm({
+              ...form,
+              difficulty: value === "" ? undefined : value,
+            });
+          }}
+        >
+          <option value="">Складність</option>
+          <option value="easy">Легко</option>
+          <option value="medium">Середньо</option>
+          <option value="hard">Складно</option>
+        </select>
+
+        {/* Photo */}
+        <RecipePhotoUploader
+          photos={form.photos}
+          onChange={(photos) =>
+            setForm((prev) => ({
+              ...prev,
+              photos,
+            }))
+          }
+          onCoverChange={(url) =>
+            setForm((prev) => ({
+              ...prev,
+              photo_url: url || undefined,
+            }))
+          }
+        />
+      </div>
+
+      {!cuisinesLoading && (
+        <CuisineSelector
+          items={cuisines}
+          value={cuisineIds}
+          onChange={setCuisineIds}
+        />
+      )}
+
+      <select
+        value={form.recipe_type_id ?? ""}
+        onChange={(e) =>
+          setForm({ ...form, recipe_type_id: Number(e.target.value) })
+        }
+        className="w-full rounded border px-3 py-2"
+      >
+        <option value="">Тип страви</option>
+        {recipeTypes.map((type) => (
+          <option key={type.recipe_type_id} value={type.recipe_type_id}>
+            {type.name.ua}
+          </option>
+        ))}
+      </select>
+      {/* Portions */}
+      <div className="grid grid-cols-3 gap-3">
+        <input
+          type="number"
+          min={1}
+          className="rounded border px-3 py-2"
+          placeholder="Servings"
+          value={form.base_servings}
+          onChange={(e) =>
+            setForm({
+              ...form,
+              base_servings: Number(e.target.value),
+            })
+          }
+        />
+
+        <input
+          type="number"
+          min={0}
+          className="rounded border px-3 py-2"
+          placeholder="Output weight (g)"
+          value={form.base_output_weight_g}
+          onChange={(e) =>
+            setForm({
+              ...form,
+              base_output_weight_g: Number(e.target.value),
+            })
+          }
+        />
+
+        <input
+          type="number"
+          min={0}
+          className="rounded border px-3 py-2"
+          placeholder="Container weight (g)"
+          value={form.container_weight_g ?? ""}
+          onChange={(e) =>
+            setForm({
+              ...form,
+              container_weight_g: Number(e.target.value),
+            })
+          }
+        />
+      </div>
+      {form.container_weight_g && form.container_weight_g > 0 && (
+        <div className="text-sm text-gray-500">
+          Фактична вага страви:{" "}
+          <span className="font-medium">{effectiveOutputWeight} г</span>
+          <span className="ml-1">(без контейнера)</span>
+        </div>
+      )}
+      {/* === Інгредієнти === */}
+      <div className="space-y-3">
+        <h2 className="font-medium">Інгредієнти</h2>
+
+        {ingredients.map((ingredient) => (
+          <IngredientRow
+            key={ingredient.id}
+            ingredient={ingredient}
+            onChange={(next) =>
+              setIngredients((prev) =>
+                prev.map((item) => (item.id === ingredient.id ? next : item)),
+              )
+            }
+            onRemove={() =>
+              setIngredients((prev) =>
+                prev.filter((item) => item.id !== ingredient.id),
+              )
+            }
+          />
+        ))}
+
+        <button
+          type="button"
+          onClick={addIngredient}
+          className="rounded border px-3 py-1 text-sm"
+        >
+          + Додати інгредієнт
+        </button>
+      </div>
+      {/* === Кроки приготування === */}
+      <div className="space-y-3">
+        <h2 className="font-medium">Кроки приготування</h2>
+
+        {steps.map((step) => (
+          <StepRow
+            key={step.id}
+            step={step}
+            onChange={(next) =>
+              setSteps((prev) => prev.map((s) => (s.id === step.id ? next : s)))
+            }
+            onRemove={() => removeStep(step.id)}
+          />
+        ))}
+
+        <button
+          type="button"
+          onClick={addStep}
+          className="rounded border px-3 py-1 text-sm"
+        >
+          + Додати крок
+        </button>
+      </div>
+
+      {/* === Попередній перегляд рецепта === */}
+      {ingredients.length > 0 &&
+        form.base_servings > 0 &&
+        Object.keys(recipeNutrients).length > 0 && (
+          <RecipePreview
+            servings={form.base_servings}
+            outputWeight={effectiveOutputWeight}
+            nutrients={recipeNutrients}
+            nutrientRefs={nutrientRefs}
+          />
+        )}
+
+      {!dietaryTagsLoading && (
+        <DietaryTagSelector
+          items={dietaryTags}
+          value={dietaryTagIds}
+          onChange={setDietaryTagIds}
+        />
+      )}
+
+      {/* === Автор рецепта === */}
+      <RecipeAuthorSelector
+        value={recipeAuthorId}
+        items={recipeAuthors}
+        onChange={setRecipeAuthorId}
+        onCreateAuthor={(author) => {
+          setRecipeAuthors((prev) => [...prev, author]);
+          setRecipeAuthorId(author.recipe_author_id);
+        }}
+      />
+
+      {/* === Відео рецепта === */}
+      <div className="space-y-3">
+        <h2 className="font-medium">Відео рецепта</h2>
+
+        {videos.map((video) => (
+          <div key={video.id} className="grid grid-cols-4 gap-2">
+            <select
+              className="rounded border px-2 py-1"
+              value={video.platform}
+              onChange={(e) =>
+                setVideos((prev) =>
+                  prev.map((v) =>
+                    v.id === video.id
+                      ? {
+                          ...v,
+                          platform: e.target
+                            .value as RecipeVideoDraft["platform"],
+                        }
+                      : v,
+                  ),
+                )
+              }
+            >
+              <option value="youtube">YouTube</option>
+              <option value="instagram">Instagram</option>
+              <option value="tiktok">TikTok</option>
+            </select>
+
+            <input
+              className="col-span-2 rounded border px-2 py-1"
+              placeholder="Посилання на відео"
+              value={video.url}
+              onChange={(e) =>
+                setVideos((prev) =>
+                  prev.map((v) =>
+                    v.id === video.id ? { ...v, url: e.target.value } : v,
+                  ),
+                )
+              }
+            />
+
+            <button
+              type="button"
+              onClick={() =>
+                setVideos((prev) => prev.filter((v) => v.id !== video.id))
+              }
+              className="text-sm text-red-500"
+            >
+              ✕
+            </button>
+          </div>
+        ))}
+
+        <button
+          type="button"
+          onClick={() =>
+            setVideos((prev) => [
+              ...prev,
+              {
+                id: generateUUID(),
+                platform: "youtube",
+                url: "",
+                recipe_author_id: null,
+              },
+            ])
+          }
+          className="rounded border px-3 py-1 text-sm"
+        >
+          + Додати відео
+        </button>
+      </div>
+
+      {/* Actions */}
+      <div className="flex gap-3">
+        <button
+          onClick={handleSubmit}
+          disabled={loading}
+          className="rounded border px-4 py-2"
+        >
+          Зберегти чернетку
+        </button>
+
+        <button
+          onClick={handlePublish}
+          className="rounded bg-black px-4 py-2 text-white"
+        >
+          Опублікувати
+        </button>
+      </div>
+      {/* Save success */}
+      {saveSuccess && (
+        <div className="rounded border border-green-300 bg-green-50 p-3 text-sm text-green-700">
+          {saveSuccess}
+        </div>
+      )}
+
+      {/* Save error */}
+      {saveError && (
+        <div className="rounded border border-red-300 bg-red-50 p-3 text-sm text-red-700">
+          {saveError}
+        </div>
+      )}
+
+      {/* Publish success */}
+      {publishSuccess && (
+        <div className="rounded border border-green-300 bg-green-50 p-3 text-sm text-green-700">
+          {publishSuccess}
+        </div>
+      )}
+
+      {/* Publish error */}
+      {publishError && (
+        <div className="rounded border border-red-300 bg-red-50 p-3 text-sm text-red-700">
+          {publishError}
+        </div>
+      )}
+
+      {/* Validation errors */}
+      {publishErrors.length > 0 && (
+        <div className="rounded border border-red-300 bg-red-50 p-3 text-sm">
+          <ul className="list-disc pl-5">
+            {publishErrors.map((err) => (
+              <li key={err}>{err}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
+  );
+}

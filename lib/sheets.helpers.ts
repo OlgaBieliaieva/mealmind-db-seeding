@@ -1,5 +1,8 @@
 import { getSheetsClient } from "./sheets";
 
+export type SheetCell = string | number | boolean | null | Date;
+export type SheetRow = SheetCell[];
+
 export async function appendRow(
   sheetName: string,
   values: (string | number | boolean | null)[],
@@ -122,4 +125,76 @@ export async function deleteRecipeFavorite(
       },
     });
   }
+}
+
+export async function deleteRowsRecipeId(
+  sheetName: string,
+  recipeId: string,
+  recipeIdColumnIndex: number,
+) {
+  const { sheets, spreadsheetId } = getSheetsClient();
+
+  const range = `${sheetName}!A2:Z`;
+
+  const res = await sheets.spreadsheets.values.get({
+    spreadsheetId,
+    range,
+  });
+
+  const rows = (res.data.values ?? []) as string[][];
+
+  if (!rows.length) return;
+
+  const filteredRows = rows.filter(
+    (row) => row[recipeIdColumnIndex] !== recipeId,
+  );
+
+  if (filteredRows.length === rows.length) return;
+
+  await sheets.spreadsheets.values.clear({
+    spreadsheetId,
+    range,
+  });
+
+  if (filteredRows.length > 0) {
+    await sheets.spreadsheets.values.update({
+      spreadsheetId,
+      range,
+      valueInputOption: "USER_ENTERED",
+      requestBody: {
+        values: filteredRows,
+      },
+    });
+  }
+}
+
+export async function updateRow(
+  sheetName: string,
+  recipeId: string,
+  newRow: SheetRow,
+  idColumnIndex = 0,
+) {
+  const { sheets, spreadsheetId } = getSheetsClient();
+
+  const range = `${sheetName}!A2:Z`;
+
+  const res = await sheets.spreadsheets.values.get({
+    spreadsheetId,
+    range,
+  });
+
+  const rows = (res.data.values ?? []) as SheetRow[];
+
+  const updatedRows = rows.map((row) =>
+    row[idColumnIndex] === recipeId ? newRow : row,
+  );
+
+  await sheets.spreadsheets.values.update({
+    spreadsheetId,
+    range,
+    valueInputOption: "USER_ENTERED",
+    requestBody: {
+      values: updatedRows,
+    },
+  });
 }
