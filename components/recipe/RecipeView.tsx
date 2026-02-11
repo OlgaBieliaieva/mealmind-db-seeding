@@ -1,9 +1,13 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { RecipeIngredientView } from "@/types/recipe-ingredient";
 import { RecipeStepDraft } from "@/types/recipe-step";
+import { NutrientsMap } from "@/types/nutrients";
+import { NutrientReference } from "@/types/nutrient.dto";
+import { RecipePreview } from "./RecipePreview";
 
 type Props = {
   recipe: {
@@ -49,7 +53,8 @@ type Props = {
       profile_url: string | null;
     } | null;
   }[];
-
+  nutrients: NutrientsMap;
+  nutrientRefs: NutrientReference[];
   isFavorite: boolean;
   onToggleFavorite: () => void;
 };
@@ -68,9 +73,12 @@ export default function RecipeView({
   dietary_tags,
   author,
   videos,
+  nutrients,
+  nutrientRefs,
   isFavorite,
   onToggleFavorite,
 }: Props) {
+  const [showNutrition, setShowNutrition] = useState(false);
   const router = useRouter();
 
   const totalTime =
@@ -109,7 +117,7 @@ export default function RecipeView({
               {isFavorite ? "⭐" : "☆"}
             </button>
           </div>
-
+          <p className="text-gray-600">{recipe.description}</p>
           {/* Meta tags */}
           <div className="flex flex-wrap gap-2">
             {cuisines.map((c) => (
@@ -149,7 +157,6 @@ export default function RecipeView({
               )}
 
               <span>
-                by{" "}
                 {author.profile_url ? (
                   <a
                     href={author.profile_url}
@@ -168,7 +175,6 @@ export default function RecipeView({
               )}
             </div>
           )}
-          <p className="text-gray-700">{recipe.description}</p>
         </div>
 
         {/* Right */}
@@ -258,6 +264,29 @@ export default function RecipeView({
         </ul>
       </section>
 
+      {/* Nutrients */}
+      <button
+        type="button"
+        onClick={() => setShowNutrition((v) => !v)}
+        className="text-sm text-blue-600 underline"
+      >
+        {showNutrition
+          ? "Сховати поживну цінність"
+          : "Показати поживну цінність"}
+      </button>
+      {showNutrition &&
+        recipe.base_output_weight_g > 0 &&
+        recipe.base_servings > 0 &&
+        Object.keys(nutrients).length > 0 && (
+          <section className="space-y-2">
+            <RecipePreview
+              servings={recipe.base_servings}
+              outputWeight={recipe.base_output_weight_g}
+              nutrients={nutrients}
+              nutrientRefs={nutrientRefs}
+            />
+          </section>
+        )}
       {/* Steps */}
       <section className="space-y-2">
         <h2 className="font-medium">Кроки приготування</h2>

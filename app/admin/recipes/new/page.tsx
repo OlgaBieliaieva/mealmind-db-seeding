@@ -138,7 +138,14 @@ export default function AdminRecipeCreatePage() {
   const productNutrientsMap = useProductNutrients(productIds);
 
   const recipeNutrients = useMemo(
-    () => aggregateRecipeNutrients(ingredients, productNutrientsMap),
+    () =>
+      aggregateRecipeNutrients(
+        ingredients.map((i) => ({
+          product_id: i.product_id!,
+          quantity_g: i.quantity_g,
+        })),
+        productNutrientsMap,
+      ),
     [ingredients, productNutrientsMap],
   );
 

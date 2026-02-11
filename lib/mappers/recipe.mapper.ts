@@ -13,6 +13,7 @@ export function mapRecipeDraftToRow(input: RecipeDraftInput) {
 
     "admin", // E author_type (поки що)
     null, // F author_user_id
+    input.recipe_author_id ?? null, // додано G recipe_author_id
 
     input.visibility ?? "private", // G visibility
     input.family_id ?? null, // H family_id
@@ -27,7 +28,6 @@ export function mapRecipeDraftToRow(input: RecipeDraftInput) {
     input.cook_time_min ?? 0,
     input.difficulty ?? null,
     input.photo_url ?? null,
-    input.recipe_author_id ?? null,
 
     now, // Q created_at
     now, // R updated_at

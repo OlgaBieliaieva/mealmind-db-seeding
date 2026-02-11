@@ -5,6 +5,8 @@ import { RecipeFull } from "@/types/recipe-views";
 import { parseSheetBoolean } from "@/lib/utils/sheetBoolean";
 import { parseRecipeAuthorType } from "../parsers/recipeAuthorType";
 import { getRecipeVideos } from "./getRecipeVideos";
+import { NutrientsMap } from "@/types/nutrients";
+import { aggregateRecipeNutrients } from "../recipe-nutrients.aggregate";
 
 export async function getRecipeById(
   recipeId: string,
@@ -121,6 +123,38 @@ export async function getRecipeById(
     .sort((a, b) => a.order - b.order);
 
   // ===============================
+  // 3️⃣a Product nutrients
+  // ===============================
+  const productNutrientRows = await readSheet("product_nutrients!A2:Z");
+
+  const productNutrientsMap: Record<string, NutrientsMap> = {};
+
+  for (const row of productNutrientRows) {
+    const productId = row[1];
+    const nutrientId = row[2];
+    const value = Number(
+      typeof row[3] === "string" ? row[3].replace(",", ".") : row[3],
+    );
+    const unit = row[5] || undefined;
+
+    if (!Number.isFinite(value)) continue;
+
+    if (!productNutrientsMap[productId]) {
+      productNutrientsMap[productId] = {};
+    }
+
+    productNutrientsMap[productId][nutrientId] = { value, unit };
+  }
+  const nutrients = aggregateRecipeNutrients(
+    ingredients.map((i) => ({
+      product_id: i.product_id,
+      quantity_g: i.quantity_g,
+      is_optional: i.is_optional,
+    })),
+    productNutrientsMap,
+  );
+
+  // ===============================
   // 4️⃣ Steps
   // ===============================
   const stepRows = await readSheet("recipe_steps!A2:Z");
@@ -181,5 +215,6 @@ export async function getRecipeById(
     cuisines,
     dietary_tags,
     videos,
+    nutrients,
   };
 }

@@ -1,6 +1,7 @@
 import { RecipeIngredientView } from "@/types/recipe-ingredient";
 import { RecipeStepDraft } from "@/types/recipe-step";
 import { RecipeVideo } from "@/types/recipe-video";
+import { NutrientsMap } from "./nutrients";
 
 export type RecipeViewRecipe = {
   recipe_id: string;
@@ -74,4 +75,5 @@ export type RecipeFull = {
   } | null;
 
   videos: RecipeVideoView[];
+  nutrients: NutrientsMap;
 };
