@@ -3,6 +3,9 @@ export type MenuEntry = {
   menu_day_id: string;
   user_id: string;
   meal_type_id: number;
-  recipe_id: string | null;
+  entry_type: "recipe" | "product";
+  entry_id: string;
   servings: number | null;
+  quantity: number | null;
+  created_at: string;
 };
