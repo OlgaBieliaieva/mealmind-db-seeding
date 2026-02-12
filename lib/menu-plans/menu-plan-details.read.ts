@@ -1,4 +1,6 @@
 import { readSheet } from "@/lib/sheets.read";
+import { getMenuEntries } from "@/lib/menu-entries/menu-entries.read";
+import { MenuEntry } from "@/types/menu-entry";
 
 export type MenuDay = {
   menu_day_id: string;
@@ -11,6 +13,7 @@ export type MenuPlanDetails = {
   start_date: string;
   end_date: string;
   days: MenuDay[];
+  entries: MenuEntry[];
 };
 
 export async function getMenuPlanDetails(
@@ -20,6 +23,11 @@ export async function getMenuPlanDetails(
   const dayRows = await readSheet("menu_days!A2:D");
 
   const planRow = planRows.find((row) => row[0] === planId);
+  const allEntries = await getMenuEntries();
+
+  const entries = allEntries.filter((entry) =>
+    days.some((d) => d.menu_day_id === entry.menu_day_id),
+  );
 
   if (!planRow) return null;
 
@@ -37,5 +45,6 @@ export async function getMenuPlanDetails(
     start_date: planRow[2],
     end_date: planRow[3],
     days,
+    entries,
   };
 }

@@ -1,12 +1,14 @@
 import Image from "next/image";
 import { MealType } from "@/lib/meal-types/meal-types.read";
 import MealBlock from "./MealBlock";
+import { MenuEntry } from "@/types/menu-entry";
 
 type Props = {
   first_name: string;
   avatar_url?: string | null;
   sex?: "male" | "female" | null;
   mealTypes: MealType[];
+  entries: MenuEntry[];
 };
 
 export default function MemberCard({
@@ -14,6 +16,7 @@ export default function MemberCard({
   avatar_url,
   sex,
   mealTypes,
+  entries,
 }: Props) {
   const defaultAvatar =
     sex === "female"
@@ -41,7 +44,11 @@ export default function MemberCard({
       {/* Meals */}
       <div className="px-4">
         {mealTypes.map((meal) => (
-          <MealBlock key={meal.meal_type_id} title={meal.name_ua} />
+          <MealBlock
+            key={meal.meal_type_id}
+            title={meal.name_ua}
+            entries={entries}
+          />
         ))}
       </div>
     </div>
