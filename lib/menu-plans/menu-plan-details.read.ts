@@ -19,15 +19,10 @@ export type MenuPlanDetails = {
 export async function getMenuPlanDetails(
   planId: string,
 ): Promise<MenuPlanDetails | null> {
-  const planRows = await readSheet("menu_plans!A2:F");
+  const planRows = await readSheet("menu_plans!A2:H");
   const dayRows = await readSheet("menu_days!A2:D");
 
   const planRow = planRows.find((row) => row[0] === planId);
-  const allEntries = await getMenuEntries();
-
-  const entries = allEntries.filter((entry) =>
-    days.some((d) => d.menu_day_id === entry.menu_day_id),
-  );
 
   if (!planRow) return null;
 
@@ -38,6 +33,11 @@ export async function getMenuPlanDetails(
       date: row[2],
     }))
     .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+
+  const allEntries = await getMenuEntries();
+  const entries = allEntries.filter((entry) =>
+    days.some((d) => d.menu_day_id === entry.menu_day_id),
+  );
 
   return {
     menu_plan_id: planRow[0],
