@@ -1,6 +1,9 @@
+"use client";
+
 import { FamilyMember } from "@/lib/families/family-members.read";
 import { MealType } from "@/lib/meal-types/meal-types.read";
 import { MenuEntry } from "@/types/menu-entry";
+import MealBlock from "./MealBlock";
 
 type Props = {
   members: FamilyMember[];
@@ -12,8 +15,8 @@ type Props = {
 export default function ByMealsLayout({
   members,
   mealTypes,
-  // entries,
-  // activeDayId
+  entries,
+  activeDayId,
 }: Props) {
   return (
     <div className="space-y-4">
@@ -22,17 +25,36 @@ export default function ByMealsLayout({
           key={meal.meal_type_id}
           className="rounded-2xl overflow-hidden border bg-white"
         >
-          <div className="bg-green-200 px-4 py-3">{meal.name_ua}</div>
+          {/* Meal header */}
+          <div className="bg-green-200 px-4 py-3">
+            <span className="font-medium text-gray-800">{meal.name_ua}</span>
+          </div>
 
+          {/* Members inside meal */}
           <div className="px-4">
-            {members.map((member) => (
-              <div
-                key={member.user_id}
-                className="border-t py-3 text-sm text-gray-600"
-              >
-                {member.first_name}
-              </div>
-            ))}
+            {members.map((member) => {
+              const filteredEntries = entries.filter(
+                (entry) =>
+                  entry.menu_day_id === activeDayId &&
+                  entry.user_id === member.user_id &&
+                  entry.meal_type_id === meal.meal_type_id,
+              );
+
+              return (
+                <MealBlock
+                  key={member.user_id}
+                  title={member.first_name}
+                  entries={filteredEntries}
+                  onAdd={() => {
+                    console.log("Add entry:", {
+                      menu_day_id: activeDayId,
+                      user_id: member.user_id,
+                      meal_type_id: meal.meal_type_id,
+                    });
+                  }}
+                />
+              );
+            })}
           </div>
         </div>
       ))}
