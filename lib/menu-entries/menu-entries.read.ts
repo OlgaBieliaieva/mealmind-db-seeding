@@ -2,7 +2,7 @@ import { readSheet } from "@/lib/sheets.read";
 import { MenuEntry } from "@/types/menu-entry";
 
 export async function getMenuEntries(): Promise<MenuEntry[]> {
-  const rows = await readSheet("menu_entries!A2:F");
+  const rows = await readSheet("menu_entries!A2:I");
 
   return rows.map((row) => ({
     menu_entry_id: row[0],

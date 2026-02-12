@@ -11,6 +11,7 @@ type Props = {
 export default function MealBlock({ title, entries }: Props) {
   const [open, setOpen] = useState(false);
   const hasEntries = entries.length > 0;
+
   return (
     <div className="border-t">
       <button
@@ -22,8 +23,14 @@ export default function MealBlock({ title, entries }: Props) {
         <span className="text-gray-400">{open ? "▴" : "+"}</span>
       </button>
 
-      {open && !hasEntries && (
+      {open && !hasEntries ? (
         <div className="pb-3 text-sm text-gray-400">No meals added yet</div>
+      ) : (
+        entries.map((entry, ind) => (
+          <p key={ind}>
+            {entry.menu_entry_id} - {entry.servings}
+          </p>
+        ))
       )}
     </div>
   );

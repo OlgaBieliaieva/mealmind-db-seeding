@@ -1,7 +1,6 @@
 export const dynamic = "force-dynamic";
 
 import { getMenuPlanDetails } from "@/lib/menu-plans/menu-plan-details.read";
-import DaySelector from "@/components/menu-plan/DaySelector";
 import { getWeekRangeFromDate, generateFullWeek } from "@/lib/date/week";
 import { formatDateDDMMYY } from "@/lib/date/format";
 import { getMealTypes } from "@/lib/meal-types/meal-types.read";
@@ -37,13 +36,13 @@ export default async function MenuPlanDetailsPage({ params }: Props) {
             {formatDateDDMMYY(week.start)} — {formatDateDDMMYY(week.end)}
           </p>
         </div>
-
-        <DaySelector fullWeek={fullWeek} planDaysMap={planDaysMap} />
       </div>
       <PlanLayout
         members={members}
         mealTypes={mealTypes}
         entries={plan.entries}
+        fullWeek={fullWeek}
+        planDaysMap={planDaysMap}
       />
     </>
   );

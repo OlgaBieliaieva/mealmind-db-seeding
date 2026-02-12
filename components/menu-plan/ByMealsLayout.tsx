@@ -6,12 +6,14 @@ type Props = {
   members: FamilyMember[];
   mealTypes: MealType[];
   entries: MenuEntry[];
+  activeDayId?: string;
 };
 
 export default function ByMealsLayout({
   members,
   mealTypes,
-  // entries
+  // entries,
+  // activeDayId
 }: Props) {
   return (
     <div className="space-y-4">

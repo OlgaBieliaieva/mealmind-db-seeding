@@ -7,23 +7,24 @@ type Props = {
   members: FamilyMember[];
   mealTypes: MealType[];
   entries: MenuEntry[];
+  activeDayId?: string;
 };
 
 export default function ByMembersLayout({
   members,
   mealTypes,
   entries,
+  activeDayId,
 }: Props) {
   return (
     <div className="space-y-4">
       {members.map((member) => (
         <MemberCard
           key={member.user_id}
-          first_name={member.first_name}
-          avatar_url={member.avatar_url}
-          sex={member.sex}
+          member={member}
           mealTypes={mealTypes}
           entries={entries}
+          activeDayId={activeDayId}
         />
       ))}
     </div>

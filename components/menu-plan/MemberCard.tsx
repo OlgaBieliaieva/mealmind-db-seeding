@@ -1,29 +1,29 @@
 import Image from "next/image";
 import { MealType } from "@/lib/meal-types/meal-types.read";
+import { FamilyMember } from "@/lib/families/family-members.read";
 import MealBlock from "./MealBlock";
 import { MenuEntry } from "@/types/menu-entry";
 
 type Props = {
-  first_name: string;
-  avatar_url?: string | null;
-  sex?: "male" | "female" | null;
+  member: FamilyMember;
   mealTypes: MealType[];
   entries: MenuEntry[];
+  activeDayId?: string;
 };
 
 export default function MemberCard({
-  first_name,
-  avatar_url,
-  sex,
+  member,
+
   mealTypes,
   entries,
+  activeDayId,
 }: Props) {
   const defaultAvatar =
-    sex === "female"
+    member.sex === "female"
       ? "/avatars/default-female.jpg"
       : "/avatars/default-male.jpg";
 
-  const src = avatar_url || defaultAvatar;
+  const src = member.avatar_url || defaultAvatar;
 
   return (
     <div className="rounded-2xl overflow-hidden border bg-white">
@@ -32,24 +32,33 @@ export default function MemberCard({
         <div className="relative w-8 h-8">
           <Image
             src={src}
-            alt={first_name}
+            alt={member.first_name}
             fill
             className="rounded-full object-cover"
           />
         </div>
 
-        <span className="font-medium text-gray-800">{first_name}</span>
+        <span className="font-medium text-gray-800">{member.first_name}</span>
       </div>
 
       {/* Meals */}
       <div className="px-4">
-        {mealTypes.map((meal) => (
-          <MealBlock
-            key={meal.meal_type_id}
-            title={meal.name_ua}
-            entries={entries}
-          />
-        ))}
+        {mealTypes.map((meal) => {
+          const filteredEntries = entries.filter(
+            (entry) =>
+              entry.menu_day_id === activeDayId &&
+              entry.user_id === member.user_id &&
+              entry.meal_type_id === meal.meal_type_id,
+          );
+
+          return (
+            <MealBlock
+              key={meal.meal_type_id}
+              title={meal.name_ua}
+              entries={filteredEntries}
+            />
+          );
+        })}
       </div>
     </div>
   );
