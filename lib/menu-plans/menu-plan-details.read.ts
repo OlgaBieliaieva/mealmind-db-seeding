@@ -12,8 +12,14 @@ export type MenuPlanDetails = {
   family_id: string;
   start_date: string;
   end_date: string;
-  days: MenuDay[];
+  days: {
+    menu_day_id: string;
+    date: string;
+  }[];
   entries: MenuEntry[];
+
+  recipesMap: Record<string, string>;
+  productsMap: Record<string, string>;
 };
 
 export async function getMenuPlanDetails(
@@ -38,6 +44,58 @@ export async function getMenuPlanDetails(
   const entries = allEntries.filter((entry) =>
     days.some((d) => d.menu_day_id === entry.menu_day_id),
   );
+  // 🔹 Collect unique recipe/product ids
+  const recipeIds = new Set<string>();
+  const productIds = new Set<string>();
+
+  entries.forEach((entry) => {
+    if (entry.entry_type === "recipe") {
+      recipeIds.add(entry.entry_id);
+    }
+
+    if (entry.entry_type === "product") {
+      productIds.add(entry.entry_id);
+    }
+  });
+
+  const recipeRows = await readSheet("recipes!A2:C");
+  const productRows = await readSheet("products!A2:E");
+  const brandRows = await readSheet("brands!A2:C");
+  const recipesMap: Record<string, string> = {};
+  const productsMap: Record<string, string> = {};
+  const brandsMap: Record<string, string> = {};
+
+  recipeRows.forEach((row) => {
+    const recipe_id = row[0];
+    const title = row[1];
+
+    if (recipeIds.has(recipe_id)) {
+      recipesMap[recipe_id] = title;
+    }
+  });
+
+  brandRows.forEach((row) => {
+    const brand_id = row[0];
+    const name_ua = row[2];
+
+    brandsMap[brand_id] = name_ua;
+  });
+
+  productRows.forEach((row) => {
+    const product_id = row[0];
+    const name_ua = row[2];
+    const brand_id = row[4]; // колонка E
+
+    if (!productIds.has(product_id)) return;
+
+    let displayName = name_ua;
+
+    if (brand_id && brandsMap[brand_id]) {
+      displayName = `${name_ua} · ${brandsMap[brand_id]}`;
+    }
+
+    productsMap[product_id] = displayName;
+  });
 
   return {
     menu_plan_id: planRow[0],
@@ -46,5 +104,7 @@ export async function getMenuPlanDetails(
     end_date: planRow[3],
     days,
     entries,
+    recipesMap,
+    productsMap,
   };
 }

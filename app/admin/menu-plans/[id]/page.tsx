@@ -43,6 +43,8 @@ export default async function MenuPlanDetailsPage({ params }: Props) {
         entries={plan.entries}
         fullWeek={fullWeek}
         planDaysMap={planDaysMap}
+        recipesMap={plan.recipesMap}
+        productsMap={plan.productsMap}
       />
     </>
   );

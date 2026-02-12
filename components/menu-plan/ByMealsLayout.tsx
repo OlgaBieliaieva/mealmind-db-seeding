@@ -11,6 +11,8 @@ type Props = {
   mealTypes: MealType[];
   entries: MenuEntry[];
   activeDayId?: string;
+  recipesMap: Record<string, string>;
+  productsMap: Record<string, string>;
 };
 
 type AggregatedEntry = {
@@ -25,6 +27,8 @@ type AggregatedEntry = {
     portions: number; // кількість порцій цього user
     totalWeight: number; // сума ваг цього user
   }[];
+  // recipesMap: Record<string, string>;
+  // productsMap: Record<string, string>;
 };
 
 export default function ByMealsLayout({
@@ -32,6 +36,8 @@ export default function ByMealsLayout({
   mealTypes,
   entries,
   activeDayId,
+  recipesMap,
+  productsMap,
 }: Props) {
   return (
     <div className="space-y-4">
@@ -56,6 +62,8 @@ export default function ByMealsLayout({
               portions: 0,
               totalWeight: 0,
               users: [],
+              // recipesMap,
+              // productsMap,
             });
           }
 
@@ -108,6 +116,8 @@ export default function ByMealsLayout({
                     key={`${item.entry_type}-${item.entry_id}`}
                     item={item}
                     members={members}
+                    recipesMap={recipesMap}
+                    productsMap={productsMap}
                   />
                 ))
               )}
@@ -122,12 +132,15 @@ export default function ByMealsLayout({
 function AggregatedEntryBlock({
   item,
   members,
+  recipesMap,
+  productsMap,
 }: {
   item: AggregatedEntry;
   members: FamilyMember[];
+  recipesMap: Record<string, string>;
+  productsMap: Record<string, string>;
 }) {
   const [open, setOpen] = useState(false);
-  console.log(item);
 
   const amountLabel = [
     `${item.portions} порцій`,
@@ -136,6 +149,13 @@ function AggregatedEntryBlock({
     .filter(Boolean)
     .join(" · ");
 
+  const title =
+    item.entry_type === "recipe"
+      ? recipesMap[item.entry_id]
+      : productsMap[item.entry_id];
+
+  const icon = item.entry_type === "recipe" ? "🍳" : "🛒";
+
   return (
     <div className="border-t py-3">
       <button
@@ -143,20 +163,20 @@ function AggregatedEntryBlock({
         className="w-full flex justify-between items-start text-left"
       >
         <div className="flex-1">
-          {/* Title */}
-          <div className="text-sm font-medium text-gray-700">
-            {item.entry_type} — {item.entry_id}
+          {/* Title row with icon */}
+          <div className="flex items-center gap-2 text-sm font-medium text-gray-700">
+            <span>{icon}</span>
+            <span>{title ?? item.entry_id}</span>
           </div>
 
           {/* Aggregated info */}
           <div className="text-xs text-gray-400 mt-1">{amountLabel}</div>
 
-          {/* Avatars in header (ONLY when closed) */}
+          {/* Avatars (only when closed) */}
           {!open && (
             <div className="flex -space-x-2 mt-2">
               {item.users.map((user) => {
                 const member = members.find((m) => m.user_id === user.user_id);
-
                 if (!member) return null;
 
                 const defaultAvatar =
@@ -194,7 +214,6 @@ function AggregatedEntryBlock({
         <div className="mt-3 space-y-2 text-sm text-gray-600">
           {item.users.map((user) => {
             const member = members.find((m) => m.user_id === user.user_id);
-
             if (!member) return null;
 
             const defaultAvatar =
@@ -206,7 +225,6 @@ function AggregatedEntryBlock({
 
             return (
               <div key={user.user_id} className="flex items-center gap-2">
-                {/* Avatar */}
                 <div className="relative w-6 h-6 rounded-full overflow-hidden border bg-gray-200">
                   <Image
                     src={src}
@@ -217,7 +235,6 @@ function AggregatedEntryBlock({
                   />
                 </div>
 
-                {/* Name + amount */}
                 <span>
                   {member.first_name} — {user.portions} порцій ·{" "}
                   {user.totalWeight} г
