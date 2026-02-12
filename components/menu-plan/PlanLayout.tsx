@@ -15,6 +15,8 @@ type Props = {
   entries: MenuEntry[];
   fullWeek: string[];
   planDaysMap: Map<string, string>;
+  recipesMap: Record<string, string>;
+  productsMap: Record<string, string>;
 };
 
 export default function PlanLayout({
@@ -23,6 +25,8 @@ export default function PlanLayout({
   entries,
   fullWeek,
   planDaysMap,
+  recipesMap,
+  productsMap,
 }: Props) {
   const firstActiveDate =
     fullWeek.find((d) => planDaysMap.has(d)) ?? fullWeek[0];
@@ -50,6 +54,8 @@ export default function PlanLayout({
           mealTypes={mealTypes}
           entries={entries}
           activeDayId={activeDayId}
+          recipesMap={recipesMap}
+          productsMap={productsMap}
         />
       ) : (
         <ByMealsLayout
@@ -57,6 +63,8 @@ export default function PlanLayout({
           mealTypes={mealTypes}
           entries={entries}
           activeDayId={activeDayId}
+          recipesMap={recipesMap}
+          productsMap={productsMap}
         />
       )}
     </div>

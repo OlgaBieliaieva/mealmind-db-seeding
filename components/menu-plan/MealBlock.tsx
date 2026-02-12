@@ -6,10 +6,18 @@ import { MenuEntry } from "@/types/menu-entry";
 type Props = {
   title: string;
   entries: MenuEntry[];
+  recipesMap: Record<string, string>;
+  productsMap: Record<string, string>;
   onAdd?: () => void;
 };
 
-export default function MealBlock({ title, entries, onAdd }: Props) {
+export default function MealBlock({
+  title,
+  entries,
+  recipesMap,
+  productsMap,
+  onAdd,
+}: Props) {
   const [open, setOpen] = useState(false);
 
   const hasEntries = entries.length > 0;
@@ -18,7 +26,6 @@ export default function MealBlock({ title, entries, onAdd }: Props) {
     <div className="border-t">
       {/* Header */}
       <div className="w-full flex justify-between items-center py-3">
-        {/* Left side: title + count */}
         <button
           onClick={() => setOpen((prev) => !prev)}
           className="flex items-center gap-3 text-left"
@@ -32,7 +39,6 @@ export default function MealBlock({ title, entries, onAdd }: Props) {
           <span className="text-gray-400 text-sm">{open ? "▴" : "▾"}</span>
         </button>
 
-        {/* Right side: Add button */}
         {onAdd && (
           <button
             onClick={onAdd}
@@ -49,11 +55,31 @@ export default function MealBlock({ title, entries, onAdd }: Props) {
           {!hasEntries ? (
             <div className="text-sm text-gray-400">No meals added yet</div>
           ) : (
-            entries.map((entry) => (
-              <div key={entry.menu_entry_id} className="text-sm text-gray-600">
-                {entry.entry_type} — {entry.servings ?? entry.quantity ?? ""}
-              </div>
-            ))
+            entries.map((entry) => {
+              const icon = entry.entry_type === "recipe" ? "🍳" : "🛒";
+
+              const displayName =
+                entry.entry_type === "recipe"
+                  ? recipesMap[entry.entry_id]
+                  : productsMap[entry.entry_id];
+
+              const amount = entry.servings ?? entry.quantity ?? "";
+
+              return (
+                <div
+                  key={entry.menu_entry_id}
+                  className="flex items-center gap-2 text-sm text-gray-700"
+                >
+                  <span>{icon}</span>
+
+                  <span className="flex-1">
+                    {displayName ?? entry.entry_id}
+                  </span>
+
+                  <span className="text-gray-400">{amount}</span>
+                </div>
+              );
+            })
           )}
         </div>
       )}

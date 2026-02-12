@@ -9,14 +9,17 @@ type Props = {
   mealTypes: MealType[];
   entries: MenuEntry[];
   activeDayId?: string;
+  recipesMap: Record<string, string>;
+  productsMap: Record<string, string>;
 };
 
 export default function MemberCard({
   member,
-
   mealTypes,
   entries,
   activeDayId,
+  recipesMap,
+  productsMap,
 }: Props) {
   const defaultAvatar =
     member.sex === "female"
@@ -56,6 +59,8 @@ export default function MemberCard({
               key={meal.meal_type_id}
               title={meal.name_ua}
               entries={filteredEntries}
+              recipesMap={recipesMap}
+              productsMap={productsMap}
               onAdd={() => {
                 console.log("Add entry:", {
                   menu_day_id: activeDayId,
