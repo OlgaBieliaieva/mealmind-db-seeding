@@ -2,7 +2,7 @@ export const dynamic = "force-dynamic";
 
 import { getMenuPlanDetails } from "@/lib/menu-plans/menu-plan-details.read";
 import DaySelector from "@/components/menu-plan/DaySelector";
-import { getWeekRangeFromDate } from "@/lib/date/week";
+import { getWeekRangeFromDate, generateFullWeek } from "@/lib/date/week";
 import { formatDateDDMMYY } from "@/lib/date/format";
 
 type Props = {
@@ -20,7 +20,9 @@ export default async function MenuPlanDetailsPage({ params }: Props) {
   }
 
   const week = getWeekRangeFromDate(plan.start_date);
+  const fullWeek = generateFullWeek(week.start);
 
+  const planDaysMap = new Map(plan.days.map((d) => [d.date, d.menu_day_id]));
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -31,7 +33,7 @@ export default async function MenuPlanDetailsPage({ params }: Props) {
         </p>
       </div>
 
-      <DaySelector days={plan.days} />
+      <DaySelector fullWeek={fullWeek} planDaysMap={planDaysMap} />
     </div>
   );
 }
