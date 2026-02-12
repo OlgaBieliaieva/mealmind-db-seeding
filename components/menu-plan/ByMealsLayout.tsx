@@ -1,12 +1,18 @@
 import { FamilyMember } from "@/lib/families/family-members.read";
 import { MealType } from "@/lib/meal-types/meal-types.read";
+import { MenuEntry } from "@/types/menu-entry";
 
 type Props = {
   members: FamilyMember[];
   mealTypes: MealType[];
+  entries: MenuEntry[];
 };
 
-export default function ByMealsLayout({ members, mealTypes }: Props) {
+export default function ByMealsLayout({
+  members,
+  mealTypes,
+  // entries
+}: Props) {
   return (
     <div className="space-y-4">
       {mealTypes.map((meal) => (

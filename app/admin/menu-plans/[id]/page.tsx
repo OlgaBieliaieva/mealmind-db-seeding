@@ -40,7 +40,11 @@ export default async function MenuPlanDetailsPage({ params }: Props) {
 
         <DaySelector fullWeek={fullWeek} planDaysMap={planDaysMap} />
       </div>
-      <PlanLayout members={members} mealTypes={mealTypes} />
+      <PlanLayout
+        members={members}
+        mealTypes={mealTypes}
+        entries={plan.entries}
+      />
     </>
   );
 }
