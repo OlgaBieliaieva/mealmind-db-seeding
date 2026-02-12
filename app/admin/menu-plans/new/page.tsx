@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { createMenuPlan } from "../actions";
 import { readSheet } from "@/lib/sheets.read";
 
