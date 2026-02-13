@@ -2,7 +2,7 @@ export const dynamic = "force-dynamic";
 
 import { getMealTypes } from "@/lib/meal-types/meal-types.read";
 import { getFamilyMembers } from "@/lib/families/family-members.read";
-import EntryPickerHeader from "@/components/entry-picker/EntryPickerHeader";
+import EntryPickerClient from "@/components/entry-picker/EntryPickerClient";
 
 type Props = {
   params: { id: string };
@@ -42,14 +42,11 @@ export default async function AddEntryPage({ params, searchParams }: Props) {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <EntryPickerHeader
+      <EntryPickerClient
         mealName={mealType.name_ua}
         members={members}
         initialUserId={userId ?? null}
       />
-
-      {/* Temporary placeholder */}
-      <div className="p-4 text-sm text-gray-400">Entry list will be here</div>
     </div>
   );
 }
