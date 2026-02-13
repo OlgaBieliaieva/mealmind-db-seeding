@@ -26,7 +26,7 @@ export async function getAllRecipes(): Promise<RecipeListItem[]> {
   return rows.map((row) => ({
     recipe_id: row[0],
     title: row[1],
-    family_id: row[6],
+    family_id: row[8],
     visibility: row[7],
   }));
 }
