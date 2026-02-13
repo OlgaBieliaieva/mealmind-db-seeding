@@ -3,18 +3,27 @@
 import { useState } from "react";
 import EntryPickerHeader from "./EntryPickerHeader";
 import EntryTabs, { EntryTab } from "./EntryTabs";
+import EntryList from "./EntryList";
 import { FamilyMember } from "@/lib/families/family-members.read";
+import { RecipeListItem } from "@/lib/recipes.read";
+import { ProductListItem } from "@/lib/products.read";
 
 type Props = {
   mealName: string;
   members: FamilyMember[];
   initialUserId: string | null;
+  recipes: RecipeListItem[];
+  products: ProductListItem[];
+  familyId: string;
 };
 
 export default function EntryPickerClient({
   mealName,
   members,
   initialUserId,
+  recipes,
+  products,
+  familyId,
 }: Props) {
   const [activeTab, setActiveTab] = useState<EntryTab>("cookbook");
 
@@ -28,8 +37,12 @@ export default function EntryPickerClient({
 
       <EntryTabs activeTab={activeTab} onChange={setActiveTab} />
 
-      {/* Temporary content placeholder */}
-      <div className="p-4 text-sm text-gray-400">Active tab: {activeTab}</div>
+      <EntryList
+        activeTab={activeTab}
+        recipes={recipes}
+        products={products}
+        familyId={familyId}
+      />
     </div>
   );
 }

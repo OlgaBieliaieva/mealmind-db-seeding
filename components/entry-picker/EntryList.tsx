@@ -1,0 +1,67 @@
+"use client";
+
+import { EntryTab } from "@/components/entry-picker/EntryTabs";
+import EntryCard from "@/components/entry-picker/EntryCard";
+import { RecipeListItem } from "@/lib/recipes.read";
+import { ProductListItem } from "@/lib/products.read";
+import { PickerItem } from "@/types/entry-picker";
+
+type Props = {
+  activeTab: EntryTab;
+  recipes: RecipeListItem[];
+  products: ProductListItem[];
+  familyId: string;
+};
+
+export default function EntryList({
+  activeTab,
+  recipes,
+  products,
+  familyId,
+}: Props) {
+  let items: PickerItem[] = [];
+
+  if (activeTab === "cookbook") {
+    items = recipes
+      .filter((r) => r.family_id === familyId)
+      .map((r) => ({
+        type: "recipe",
+        id: r.recipe_id,
+        title: r.title,
+      }));
+  }
+
+  if (activeTab === "recipes") {
+    items = recipes
+      .filter((r) => r.visibility === "public")
+      .map((r) => ({
+        type: "recipe",
+        id: r.recipe_id,
+        title: r.title,
+      }));
+  }
+
+  if (activeTab === "products") {
+    items = products.map((p) => ({
+      type: "product",
+      id: p.product_id,
+      title: p.name_ua,
+    }));
+  }
+
+  if (activeTab === "favorites") {
+    items = [];
+  }
+
+  return (
+    <div className="p-4 space-y-3">
+      {items.length === 0 ? (
+        <div className="text-sm text-gray-400">Нічого не знайдено</div>
+      ) : (
+        items.map((item) => (
+          <EntryCard key={`${item.type}-${item.id}`} item={item} />
+        ))
+      )}
+    </div>
+  );
+}
