@@ -13,6 +13,7 @@ type Props = {
   recipes: RecipeListItem[];
   products: ProductListItem[];
   favorites: ProductFavorite[];
+  selectedUserId: string | null;
   familyId: string;
   selectedItems: SelectedEntry[];
   onToggle: (item: SelectedEntry) => void;
@@ -23,6 +24,7 @@ export default function EntryList({
   recipes,
   products,
   favorites,
+  selectedUserId,
   familyId,
   selectedItems,
   onToggle,
@@ -76,6 +78,9 @@ export default function EntryList({
           <EntryCard
             key={`${item.type}-${item.id}`}
             item={item}
+            favorites={favorites}
+            selectedUserId={selectedUserId}
+            familyId={familyId}
             checked={selectedItems.some(
               (i) => i.entry_id === item.id && i.entry_type === item.type,
             )}
