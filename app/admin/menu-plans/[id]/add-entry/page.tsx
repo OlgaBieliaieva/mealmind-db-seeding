@@ -2,6 +2,8 @@ export const dynamic = "force-dynamic";
 
 import { getMealTypes } from "@/lib/meal-types/meal-types.read";
 import { getFamilyMembers } from "@/lib/families/family-members.read";
+import { getAllRecipes } from "@/lib/recipes.read";
+import { getAllProducts } from "@/lib/products.read";
 import EntryPickerClient from "@/components/entry-picker/EntryPickerClient";
 
 type Props = {
@@ -39,6 +41,8 @@ export default async function AddEntryPage({ params, searchParams }: Props) {
   }
 
   const members = await getFamilyMembers(plan.family_id);
+  const recipes = await getAllRecipes();
+  const products = await getAllProducts();
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -46,6 +50,9 @@ export default async function AddEntryPage({ params, searchParams }: Props) {
         mealName={mealType.name_ua}
         members={members}
         initialUserId={userId ?? null}
+        recipes={recipes}
+        products={products}
+        familyId={plan.family_id}
       />
     </div>
   );
