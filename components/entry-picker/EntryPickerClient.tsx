@@ -9,8 +9,11 @@ import { FamilyMember } from "@/lib/families/family-members.read";
 import { RecipeListItem } from "@/lib/recipes.read";
 import { ProductListItem } from "@/lib/products.read";
 import { SelectedEntry } from "@/types/entry-picker";
+import { saveMenuEntries } from "@/app/admin/menu-plans/[id]/add-entry/action";
 
 type Props = {
+  dayId: string;
+  mealTypeId: number;
   mealName: string;
   members: FamilyMember[];
   initialUserId: string | null;
@@ -20,6 +23,8 @@ type Props = {
 };
 
 export default function EntryPickerClient({
+  dayId,
+  mealTypeId,
   mealName,
   members,
   initialUserId,
@@ -54,7 +59,7 @@ export default function EntryPickerClient({
     });
   };
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     if (selectedItems.length === 0) {
       router.back();
       return;
@@ -65,9 +70,11 @@ export default function EntryPickerClient({
       return;
     }
 
-    console.log("Ready to create:", {
-      userId: selectedUserId,
-      selectedItems,
+    await saveMenuEntries({
+      menu_day_id: dayId,
+      meal_type_id: mealTypeId,
+      user_id: selectedUserId,
+      items: selectedItems,
     });
 
     router.back();

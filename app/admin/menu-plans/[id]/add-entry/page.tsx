@@ -47,6 +47,8 @@ export default async function AddEntryPage({ params, searchParams }: Props) {
   return (
     <div className="min-h-screen bg-gray-50">
       <EntryPickerClient
+        dayId={dayId}
+        mealTypeId={Number(mealTypeId)}
         mealName={mealType.name_ua}
         members={members}
         initialUserId={userId ?? null}
