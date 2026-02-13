@@ -10,6 +10,7 @@ import { RecipeListItem } from "@/lib/recipes.read";
 import { ProductListItem } from "@/lib/products.read";
 import { SelectedEntry } from "@/types/entry-picker";
 import { saveMenuEntries } from "@/app/admin/menu-plans/[id]/add-entry/action";
+import { ProductFavorite } from "@/types/product-favorite.dto";
 
 type Props = {
   dayId: string;
@@ -19,6 +20,7 @@ type Props = {
   initialUserId: string | null;
   recipes: RecipeListItem[];
   products: ProductListItem[];
+  favorites: ProductFavorite[];
   familyId: string;
 };
 
@@ -30,6 +32,7 @@ export default function EntryPickerClient({
   initialUserId,
   recipes,
   products,
+  favorites,
   familyId,
 }: Props) {
   const router = useRouter();
@@ -97,6 +100,7 @@ export default function EntryPickerClient({
         activeTab={activeTab}
         recipes={recipes}
         products={products}
+        favorites={favorites}
         familyId={familyId}
         selectedItems={selectedItems}
         onToggle={toggleItem}

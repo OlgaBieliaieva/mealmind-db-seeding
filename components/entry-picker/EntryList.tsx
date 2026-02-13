@@ -6,11 +6,13 @@ import { SelectedEntry } from "@/types/entry-picker";
 import { RecipeListItem } from "@/lib/recipes.read";
 import { ProductListItem } from "@/lib/products.read";
 import { PickerItem } from "@/types/entry-picker";
+import { ProductFavorite } from "@/types/product-favorite.dto";
 
 type Props = {
   activeTab: EntryTab;
   recipes: RecipeListItem[];
   products: ProductListItem[];
+  favorites: ProductFavorite[];
   familyId: string;
   selectedItems: SelectedEntry[];
   onToggle: (item: SelectedEntry) => void;
@@ -20,6 +22,7 @@ export default function EntryList({
   activeTab,
   recipes,
   products,
+  favorites,
   familyId,
   selectedItems,
   onToggle,
@@ -55,7 +58,13 @@ export default function EntryList({
   }
 
   if (activeTab === "favorites") {
-    items = [];
+    items = products
+      .filter((p) => favorites.some((f) => f.product_id === p.product_id))
+      .map((p) => ({
+        type: "product",
+        id: p.product_id,
+        title: p.name_ua,
+      }));
   }
 
   return (
