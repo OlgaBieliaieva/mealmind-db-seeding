@@ -2,6 +2,7 @@
 
 import { EntryTab } from "@/components/entry-picker/EntryTabs";
 import EntryCard from "@/components/entry-picker/EntryCard";
+import { SelectedEntry } from "@/types/entry-picker";
 import { RecipeListItem } from "@/lib/recipes.read";
 import { ProductListItem } from "@/lib/products.read";
 import { PickerItem } from "@/types/entry-picker";
@@ -11,6 +12,8 @@ type Props = {
   recipes: RecipeListItem[];
   products: ProductListItem[];
   familyId: string;
+  selectedItems: SelectedEntry[];
+  onToggle: (item: SelectedEntry) => void;
 };
 
 export default function EntryList({
@@ -18,6 +21,8 @@ export default function EntryList({
   recipes,
   products,
   familyId,
+  selectedItems,
+  onToggle,
 }: Props) {
   let items: PickerItem[] = [];
 
@@ -59,7 +64,19 @@ export default function EntryList({
         <div className="text-sm text-gray-400">Нічого не знайдено</div>
       ) : (
         items.map((item) => (
-          <EntryCard key={`${item.type}-${item.id}`} item={item} />
+          <EntryCard
+            key={`${item.type}-${item.id}`}
+            item={item}
+            checked={selectedItems.some(
+              (i) => i.entry_id === item.id && i.entry_type === item.type,
+            )}
+            onToggle={() =>
+              onToggle({
+                entry_type: item.type,
+                entry_id: item.id,
+              })
+            }
+          />
         ))
       )}
     </div>

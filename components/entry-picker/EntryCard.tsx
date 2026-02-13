@@ -1,15 +1,14 @@
 "use client";
 
-import { useState } from "react";
 import { PickerItem } from "@/types/entry-picker";
 
 type Props = {
   item: PickerItem;
+  checked: boolean;
+  onToggle: () => void;
 };
 
-export default function EntryCard({ item }: Props) {
-  const [checked, setChecked] = useState(false);
-
+export default function EntryCard({ item, checked, onToggle }: Props) {
   return (
     <div className="bg-white rounded-2xl border p-4 flex items-center justify-between">
       <div className="flex-1">
@@ -25,7 +24,7 @@ export default function EntryCard({ item }: Props) {
       <input
         type="checkbox"
         checked={checked}
-        onChange={() => setChecked((p) => !p)}
+        onChange={onToggle}
         className="w-4 h-4"
       />
     </div>
