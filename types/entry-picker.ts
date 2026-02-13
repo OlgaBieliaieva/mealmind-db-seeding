@@ -10,4 +10,9 @@ export type PickerProductItem = {
   title: string;
 };
 
+export type SelectedEntry = {
+  entry_type: "recipe" | "product";
+  entry_id: string;
+};
+
 export type PickerItem = PickerRecipeItem | PickerProductItem;
