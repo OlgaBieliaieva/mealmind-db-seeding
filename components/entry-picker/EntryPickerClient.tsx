@@ -101,6 +101,7 @@ export default function EntryPickerClient({
         recipes={recipes}
         products={products}
         favorites={favorites}
+        selectedUserId={selectedUserId}
         familyId={familyId}
         selectedItems={selectedItems}
         onToggle={toggleItem}

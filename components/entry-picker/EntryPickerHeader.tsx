@@ -21,7 +21,6 @@ export default function EntryPickerHeader({
   onConfirm,
 }: Props) {
   const router = useRouter();
-  console.log(selectedCount);
 
   const isConfirmMode = selectedCount > 0;
 

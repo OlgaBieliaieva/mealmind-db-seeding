@@ -2,6 +2,7 @@
 
 import { createMenuEntry } from "@/lib/menu-entries/menu-entries.write";
 import { getAllProducts } from "@/lib/products.read";
+import { toggleProductFavorite } from "@/lib/product-favorites.write";
 
 type SaveEntriesInput = {
   menu_day_id: string;
@@ -51,4 +52,12 @@ export async function saveMenuEntries(input: SaveEntriesInput) {
       });
     }
   }
+}
+
+export async function toggleFavoriteAction(
+  productId: string,
+  userId: string,
+  familyId: string,
+) {
+  await toggleProductFavorite(productId, userId, familyId);
 }
