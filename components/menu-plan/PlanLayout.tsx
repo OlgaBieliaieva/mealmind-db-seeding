@@ -10,6 +10,7 @@ import { MealType } from "@/lib/meal-types/meal-types.read";
 import { MenuEntry } from "@/types/menu-entry";
 
 type Props = {
+  planId: string;
   members: FamilyMember[];
   mealTypes: MealType[];
   entries: MenuEntry[];
@@ -20,6 +21,7 @@ type Props = {
 };
 
 export default function PlanLayout({
+  planId,
   members,
   mealTypes,
   entries,
@@ -50,6 +52,7 @@ export default function PlanLayout({
 
       {mode === "members" ? (
         <ByMembersLayout
+          planId={planId}
           members={members}
           mealTypes={mealTypes}
           entries={entries}
@@ -59,6 +62,7 @@ export default function PlanLayout({
         />
       ) : (
         <ByMealsLayout
+          planId={planId}
           members={members}
           mealTypes={mealTypes}
           entries={entries}

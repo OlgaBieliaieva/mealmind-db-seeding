@@ -4,6 +4,7 @@ import { MealType } from "@/lib/meal-types/meal-types.read";
 import { MenuEntry } from "@/types/menu-entry";
 
 type Props = {
+  planId: string;
   members: FamilyMember[];
   mealTypes: MealType[];
   entries: MenuEntry[];
@@ -13,6 +14,7 @@ type Props = {
 };
 
 export default function ByMembersLayout({
+  planId,
   members,
   mealTypes,
   entries,
@@ -25,6 +27,7 @@ export default function ByMembersLayout({
       {members.map((member) => (
         <MemberCard
           key={member.user_id}
+          planId={planId}
           member={member}
           mealTypes={mealTypes}
           entries={entries}

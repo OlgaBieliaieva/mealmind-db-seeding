@@ -1,10 +1,12 @@
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { MealType } from "@/lib/meal-types/meal-types.read";
 import { FamilyMember } from "@/lib/families/family-members.read";
 import MealBlock from "./MealBlock";
 import { MenuEntry } from "@/types/menu-entry";
 
 type Props = {
+  planId: string;
   member: FamilyMember;
   mealTypes: MealType[];
   entries: MenuEntry[];
@@ -14,6 +16,7 @@ type Props = {
 };
 
 export default function MemberCard({
+  planId,
   member,
   mealTypes,
   entries,
@@ -21,6 +24,7 @@ export default function MemberCard({
   recipesMap,
   productsMap,
 }: Props) {
+  const router = useRouter();
   const defaultAvatar =
     member.sex === "female"
       ? "/avatars/default-female.jpg"
@@ -62,11 +66,11 @@ export default function MemberCard({
               recipesMap={recipesMap}
               productsMap={productsMap}
               onAdd={() => {
-                console.log("Add entry:", {
-                  menu_day_id: activeDayId,
-                  user_id: member.user_id,
-                  meal_type_id: meal.meal_type_id,
-                });
+                if (!activeDayId) return;
+
+                router.push(
+                  `/admin/menu-plans/${planId}/add-entry?dayId=${activeDayId}&mealTypeId=${meal.meal_type_id}&userId=${member.user_id}`,
+                );
               }}
             />
           );
