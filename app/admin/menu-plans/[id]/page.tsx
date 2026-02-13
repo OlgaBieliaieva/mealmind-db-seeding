@@ -38,6 +38,7 @@ export default async function MenuPlanDetailsPage({ params }: Props) {
         </div>
       </div>
       <PlanLayout
+        planId={plan.menu_plan_id}
         members={members}
         mealTypes={mealTypes}
         entries={plan.entries}

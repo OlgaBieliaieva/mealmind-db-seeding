@@ -2,11 +2,13 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { FamilyMember } from "@/lib/families/family-members.read";
 import { MealType } from "@/lib/meal-types/meal-types.read";
 import { MenuEntry } from "@/types/menu-entry";
 
 type Props = {
+  planId: string;
   members: FamilyMember[];
   mealTypes: MealType[];
   entries: MenuEntry[];
@@ -32,6 +34,7 @@ type AggregatedEntry = {
 };
 
 export default function ByMealsLayout({
+  planId,
   members,
   mealTypes,
   entries,
@@ -39,6 +42,7 @@ export default function ByMealsLayout({
   recipesMap,
   productsMap,
 }: Props) {
+  const router = useRouter();
   return (
     <div className="space-y-4">
       {mealTypes.map((meal) => {
@@ -101,8 +105,20 @@ export default function ByMealsLayout({
             className="rounded-2xl overflow-hidden border bg-white"
           >
             {/* Meal header */}
-            <div className="bg-green-200 px-4 py-3">
+            <div className="w-full flex justify-between items-center bg-green-200 px-4 py-3">
               <span className="font-medium text-gray-800">{meal.name_ua}</span>
+              <button
+                onClick={() => {
+                  if (!activeDayId) return;
+
+                  router.push(
+                    `/admin/menu-plans/${planId}/add-entry?dayId=${activeDayId}&mealTypeId=${meal.meal_type_id}`,
+                  );
+                }}
+                className="text-green-700 font-medium"
+              >
+                +
+              </button>
             </div>
 
             <div className="px-4">

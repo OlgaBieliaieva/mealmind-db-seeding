@@ -14,8 +14,8 @@ type Props = {
 };
 
 export default async function AddEntryPage({ params, searchParams }: Props) {
-  const { id: planId } = params;
-  const { dayId, mealTypeId, userId } = searchParams;
+  const { id: planId } = await params;
+  const { dayId, mealTypeId, userId } = await searchParams;
 
   if (!dayId || !mealTypeId) {
     return <div className="p-4">Invalid context</div>;
