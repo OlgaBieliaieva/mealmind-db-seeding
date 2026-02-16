@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useRecipeFavoritesMap } from "@/lib/hooks/useRecipeFavoritesMap";
+import { useProductFavoritesMap } from "@/lib/hooks/useProductFavoritesMap";
 import EntryPickerHeader from "./EntryPickerHeader";
 import EntryTabs, { EntryTab } from "./EntryTabs";
 import EntryList from "./EntryList";
@@ -10,7 +12,6 @@ import { RecipeListItem } from "@/lib/recipes.read";
 import { ProductListItem } from "@/lib/products.read";
 import { SelectedEntry } from "@/types/entry-picker";
 import { saveMenuEntries } from "@/app/admin/menu-plans/[id]/add-entry/action";
-import { ProductFavorite } from "@/types/product-favorite.dto";
 
 type Props = {
   dayId: string;
@@ -20,7 +21,7 @@ type Props = {
   initialUserId: string | null;
   recipes: RecipeListItem[];
   products: ProductListItem[];
-  favorites: ProductFavorite[];
+
   familyId: string;
 };
 
@@ -32,7 +33,7 @@ export default function EntryPickerClient({
   initialUserId,
   recipes,
   products,
-  favorites,
+
   familyId,
 }: Props) {
   const router = useRouter();
@@ -44,6 +45,16 @@ export default function EntryPickerClient({
   );
 
   const [selectedItems, setSelectedItems] = useState<SelectedEntry[]>([]);
+
+  const { map: recipeMap, toggle: toggleRecipe } = useRecipeFavoritesMap(
+    selectedUserId ?? "",
+    familyId,
+  );
+
+  const { map: productMap, toggle: toggleProduct } = useProductFavoritesMap(
+    selectedUserId ?? "",
+    familyId,
+  );
 
   const toggleItem = (item: SelectedEntry) => {
     setSelectedItems((prev) => {
@@ -100,7 +111,10 @@ export default function EntryPickerClient({
         activeTab={activeTab}
         recipes={recipes}
         products={products}
-        favorites={favorites}
+        recipeMap={recipeMap}
+        productMap={productMap}
+        toggleRecipe={toggleRecipe}
+        toggleProduct={toggleProduct}
         selectedUserId={selectedUserId}
         familyId={familyId}
         selectedItems={selectedItems}

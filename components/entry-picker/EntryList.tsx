@@ -6,24 +6,33 @@ import { SelectedEntry } from "@/types/entry-picker";
 import { RecipeListItem } from "@/lib/recipes.read";
 import { ProductListItem } from "@/lib/products.read";
 import { PickerItem } from "@/types/entry-picker";
-import { ProductFavorite } from "@/types/product-favorite.dto";
 
 type Props = {
   activeTab: EntryTab;
   recipes: RecipeListItem[];
   products: ProductListItem[];
-  favorites: ProductFavorite[];
-  selectedUserId: string | null;
-  familyId: string;
+
   selectedItems: SelectedEntry[];
   onToggle: (item: SelectedEntry) => void;
+
+  recipeMap: Record<string, boolean>;
+  productMap: Record<string, boolean>;
+
+  toggleRecipe: (id: string) => void;
+  toggleProduct: (id: string) => void;
+
+  selectedUserId: string | null;
+  familyId: string;
 };
 
 export default function EntryList({
   activeTab,
   recipes,
   products,
-  favorites,
+  productMap,
+  recipeMap,
+  toggleRecipe,
+  toggleProduct,
   selectedUserId,
   familyId,
   selectedItems,
@@ -32,13 +41,27 @@ export default function EntryList({
   let items: PickerItem[] = [];
 
   if (activeTab === "cookbook") {
-    items = recipes
-      .filter((r) => r.family_id === familyId)
-      .map((r) => ({
-        type: "recipe",
-        id: r.recipe_id,
-        title: r.title,
-      }));
+    const familyRecipes = recipes.filter((r) => r.family_id === familyId);
+
+    const favoritePublicRecipes = recipes.filter(
+      (r) =>
+        r.visibility === "public" &&
+        recipeMap[r.recipe_id] &&
+        r.family_id !== familyId,
+    );
+
+    const combined = [...familyRecipes, ...favoritePublicRecipes];
+
+    // Уникнення дублікатів
+    const unique = Array.from(
+      new Map(combined.map((r) => [r.recipe_id, r])).values(),
+    );
+
+    items = unique.map((r) => ({
+      type: "recipe",
+      id: r.recipe_id,
+      title: r.title,
+    }));
   }
 
   if (activeTab === "recipes") {
@@ -61,7 +84,7 @@ export default function EntryList({
 
   if (activeTab === "favorites") {
     items = products
-      .filter((p) => favorites.some((f) => f.product_id === p.product_id))
+      .filter((p) => productMap[p.product_id])
       .map((p) => ({
         type: "product",
         id: p.product_id,
@@ -78,9 +101,11 @@ export default function EntryList({
           <EntryCard
             key={`${item.type}-${item.id}`}
             item={item}
-            favorites={favorites}
             selectedUserId={selectedUserId}
-            familyId={familyId}
+            recipeMap={recipeMap}
+            productMap={productMap}
+            toggleRecipe={toggleRecipe}
+            toggleProduct={toggleProduct}
             checked={selectedItems.some(
               (i) => i.entry_id === item.id && i.entry_type === item.type,
             )}
