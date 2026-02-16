@@ -5,7 +5,6 @@ import { getFamilyMembers } from "@/lib/families/family-members.read";
 import { getAllRecipes } from "@/lib/recipes.read";
 import { getAllProducts } from "@/lib/products.read";
 import EntryPickerClient from "@/components/entry-picker/EntryPickerClient";
-import { getProductFavorites } from "@/lib/product-favorites.read";
 
 type Props = {
   params: { id: string };
@@ -44,9 +43,6 @@ export default async function AddEntryPage({ params, searchParams }: Props) {
   const members = await getFamilyMembers(plan.family_id);
   const recipes = await getAllRecipes();
   const products = await getAllProducts();
-  const favorites = userId
-    ? await getProductFavorites(plan.family_id, userId)
-    : [];
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -58,7 +54,6 @@ export default async function AddEntryPage({ params, searchParams }: Props) {
         initialUserId={userId ?? null}
         recipes={recipes}
         products={products}
-        favorites={favorites}
         familyId={plan.family_id}
       />
     </div>

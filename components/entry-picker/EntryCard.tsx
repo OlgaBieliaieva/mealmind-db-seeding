@@ -1,55 +1,64 @@
 "use client";
 
-import { useTransition, useState } from "react";
-import { toggleFavoriteAction } from "@/app/admin/menu-plans/[id]/add-entry/action";
 import { PickerItem } from "@/types/entry-picker";
-import { ProductFavorite } from "@/types/product-favorite.dto";
 
 type Props = {
   item: PickerItem;
   checked: boolean;
   onToggle: () => void;
-  favorites: ProductFavorite[];
+
+  recipeMap: Record<string, boolean>;
+  productMap: Record<string, boolean>;
+
+  toggleRecipe: (id: string) => void;
+  toggleProduct: (id: string) => void;
+
   selectedUserId: string | null;
-  familyId: string;
 };
 
 export default function EntryCard({
   item,
   checked,
   onToggle,
-  favorites,
+  recipeMap,
+  productMap,
+  toggleRecipe,
+  toggleProduct,
   selectedUserId,
-  familyId,
 }: Props) {
+  // ⭐ Визначаємо чи улюблений
   const isFavorite =
-    item.type === "product" && favorites.some((f) => f.product_id === item.id);
+    item.type === "recipe"
+      ? Boolean(recipeMap[item.id])
+      : Boolean(productMap[item.id]);
 
-  const [optimisticFavorite, setOptimisticFavorite] = useState(isFavorite);
-
-  const [isPending, startTransition] = useTransition();
-
+  // ⭐ Toggle handler
   const handleToggleFavorite = () => {
-    if (!selectedUserId || item.type !== "product") return;
+    if (!selectedUserId) return;
 
-    startTransition(async () => {
-      setOptimisticFavorite((prev) => !prev);
-
-      await toggleFavoriteAction(item.id, selectedUserId, familyId);
-    });
+    if (item.type === "recipe") {
+      toggleRecipe(item.id);
+    } else {
+      toggleProduct(item.id);
+    }
   };
+
   return (
     <div className="bg-white rounded-2xl border p-4 flex items-center justify-between">
+      {/* ⭐ Star */}
       <button
+        type="button"
         onClick={handleToggleFavorite}
+        disabled={!selectedUserId}
         className={`text-lg ${
-          optimisticFavorite ? "text-yellow-500" : "text-gray-300"
+          isFavorite ? "text-yellow-500" : "text-gray-300"
         }`}
-        disabled={isPending}
       >
-        {optimisticFavorite ? "★" : "☆"}
+        {isFavorite ? "★" : "☆"}
       </button>
-      <div className="flex-1">
+
+      {/* Info */}
+      <div className="flex-1 px-3">
         <div className="text-xs text-gray-400 mb-1">
           {item.type === "recipe" ? "Рецепт" : "Продукт"}
         </div>
@@ -59,6 +68,7 @@ export default function EntryCard({
         <div className="text-xs text-gray-400 mt-1">0 ккал / 100г</div>
       </div>
 
+      {/* Checkbox */}
       <input
         type="checkbox"
         checked={checked}
