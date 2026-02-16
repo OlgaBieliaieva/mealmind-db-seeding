@@ -6,16 +6,14 @@ const weekdays = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Нд"];
 
 type Props = {
   fullWeek: string[];
-  planDaysMap: Map<string, string>;
+  activeDate: string;
 };
 
-export default function DaySelector({ fullWeek, planDaysMap }: Props) {
+export default function DaySelector({ fullWeek, activeDate }: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const activeDate = searchParams.get("date") ?? fullWeek[0];
-
-  function changeDate(date: string) {
+  function setDate(date: string) {
     const params = new URLSearchParams(searchParams.toString());
     params.set("date", date);
 
@@ -25,33 +23,20 @@ export default function DaySelector({ fullWeek, planDaysMap }: Props) {
   return (
     <div className="flex gap-3 overflow-x-auto pb-2">
       {fullWeek.map((dateString, index) => {
-        const isInPlan = planDaysMap.has(dateString);
-        const isActive = activeDate === dateString;
-
+        const isActive = dateString === activeDate;
         const date = new Date(dateString);
 
         return (
           <button
             key={dateString}
-            disabled={!isInPlan}
-            onClick={() => isInPlan && changeDate(dateString)}
+            onClick={() => setDate(dateString)}
             className="flex flex-col items-center gap-1"
           >
-            <span
-              className={`text-xs ${
-                isInPlan ? "text-gray-500" : "text-gray-300"
-              }`}
-            >
-              {weekdays[index]}
-            </span>
+            <span className="text-xs text-gray-500">{weekdays[index]}</span>
 
             <div
-              className={`w-9 h-9 rounded-full flex items-center justify-center text-sm border ${
-                !isInPlan
-                  ? "bg-gray-100 text-gray-300 border-gray-200"
-                  : isActive
-                    ? "bg-black text-white"
-                    : "bg-white text-gray-800"
+              className={`w-9 h-9 rounded-full flex items-center justify-center text-sm border transition ${
+                isActive ? "bg-black text-white" : "bg-white text-gray-800"
               }`}
             >
               {date.getDate()}
