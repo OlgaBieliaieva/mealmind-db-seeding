@@ -1,25 +1,39 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { getWeekRange, formatDDMMYY } from "./WeekUtils";
+import DaySelector from "./DaySelector";
+import { formatDateDDMMYY } from "@/lib/date/format";
 
 type Props = {
   familyName: string;
+  fullWeek: string[];
+  activeDate: string;
 };
 
-export default function PlanHeader({ familyName }: Props) {
+export default function PlanHeader({
+  familyName,
+  fullWeek,
+  activeDate,
+}: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const selectedDate =
-    searchParams.get("date") ?? new Date().toISOString().split("T")[0];
+  const weekLabel = `${formatDateDDMMYY(fullWeek[0])} — ${formatDateDDMMYY(
+    fullWeek[6],
+  )}`;
 
-  const { start, end } = getWeekRange(selectedDate);
+  function goToToday() {
+    const today = new Date().toISOString().split("T")[0];
 
-  const weekLabel = `${formatDDMMYY(start)} — ${formatDDMMYY(end)}`;
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("date", today);
+
+    router.replace(`?${params.toString()}`);
+  }
 
   return (
-    <div className="sticky top-0 z-20 bg-white border-b">
+    <div className="bg-white border-b">
+      {/* Top row */}
       <div className="px-4 py-3 flex items-center justify-between">
         {/* Left */}
         <div>
@@ -31,20 +45,17 @@ export default function PlanHeader({ familyName }: Props) {
 
         {/* Right icons */}
         <div className="flex items-center gap-4">
-          {/* Notifications placeholder */}
           <button className="text-gray-500 text-xl">🔔</button>
 
-          {/* Calendar placeholder */}
-          <button
-            onClick={() => {
-              const today = new Date().toISOString().split("T")[0];
-              router.push(`?date=${today}`);
-            }}
-            className="text-gray-500 text-xl"
-          >
+          <button onClick={goToToday} className="text-gray-500 text-xl">
             📅
           </button>
         </div>
+      </div>
+
+      {/* Day selector */}
+      <div className="px-4 pb-3">
+        <DaySelector fullWeek={fullWeek} activeDate={activeDate} />
       </div>
     </div>
   );
