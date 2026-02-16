@@ -1,11 +1,11 @@
 export const dynamic = "force-dynamic";
 
 import { getMenuPlanDetails } from "@/lib/menu-plans/menu-plan-details.read";
+import { getFamilyMembers } from "@/lib/families/family-members.read";
 import { getWeekRangeFromDate, generateFullWeek } from "@/lib/date/week";
-import { formatDateDDMMYY } from "@/lib/date/format";
 import { getMealTypes } from "@/lib/meal-types/meal-types.read";
 import PlanLayout from "@/components/menu-plan/PlanLayout";
-import { getFamilyMembers } from "@/lib/families/family-members.read";
+import PlanHeader from "@/components/menu-plan/PlanHeader";
 
 type Props = {
   params: {
@@ -30,12 +30,7 @@ export default async function MenuPlanDetailsPage({ params }: Props) {
     <>
       <div className="space-y-6">
         {/* Header */}
-        <div className="space-y-1">
-          <h1 className="text-lg font-semibold text-gray-900">Menu planning</h1>
-          <p className="text-sm text-gray-500">
-            {formatDateDDMMYY(week.start)} — {formatDateDDMMYY(week.end)}
-          </p>
-        </div>
+        <PlanHeader familyName="Родина Шаповал" />
       </div>
       <PlanLayout
         planId={plan.menu_plan_id}
