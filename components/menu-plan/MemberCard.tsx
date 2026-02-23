@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { MealType } from "@/lib/meal-types/meal-types.read";
 import { FamilyMember } from "@/lib/families/family-members.read";
 import MealBlock from "./MealBlock";
@@ -13,6 +13,8 @@ type Props = {
   activeDayId?: string;
   recipesMap: Record<string, string>;
   productsMap: Record<string, string>;
+  recipeWeightMap: Record<string, number>;
+  productUnitMap: Record<string, string>;
 };
 
 export default function MemberCard({
@@ -23,6 +25,8 @@ export default function MemberCard({
   activeDayId,
   recipesMap,
   productsMap,
+  recipeWeightMap,
+  productUnitMap,
 }: Props) {
   const router = useRouter();
   const defaultAvatar =
@@ -31,6 +35,9 @@ export default function MemberCard({
       : "/avatars/default-male.jpg";
 
   const src = member.avatar_url || defaultAvatar;
+
+  const searchParams = useSearchParams();
+  const view = searchParams.get("view") ?? "members";
 
   return (
     <div className="rounded-2xl overflow-hidden border bg-white">
@@ -53,7 +60,7 @@ export default function MemberCard({
         {mealTypes.map((meal) => {
           const filteredEntries = entries.filter(
             (entry) =>
-              entry.menu_day_id === activeDayId &&
+              entry.date === activeDayId &&
               entry.user_id === member.user_id &&
               entry.meal_type_id === meal.meal_type_id,
           );
@@ -65,11 +72,13 @@ export default function MemberCard({
               entries={filteredEntries}
               recipesMap={recipesMap}
               productsMap={productsMap}
+              recipeWeightMap={recipeWeightMap}
+              productUnitMap={productUnitMap}
               onAdd={() => {
                 if (!activeDayId) return;
 
                 router.push(
-                  `/admin/menu-plans/${planId}/add-entry?dayId=${activeDayId}&mealTypeId=${meal.meal_type_id}&userId=${member.user_id}`,
+                  `/admin/menu-plans/${planId}/add-entry?date=${activeDayId}&mealTypeId=${meal.meal_type_id}&userId=${member.user_id}&view=${view}`,
                 );
               }}
             />

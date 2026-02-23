@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { FamilyMember } from "@/lib/families/family-members.read";
 import { MealType } from "@/lib/meal-types/meal-types.read";
 import { MenuEntry } from "@/types/menu-entry";
@@ -15,6 +15,8 @@ type Props = {
   activeDayId?: string;
   recipesMap: Record<string, string>;
   productsMap: Record<string, string>;
+  recipeWeightMap: Record<string, number>;
+  productUnitMap: Record<string, string>;
 };
 
 type AggregatedEntry = {
@@ -23,14 +25,12 @@ type AggregatedEntry = {
 
   portions: number; // загальна кількість menu_entries
   totalWeight: number; // загальна вага
-
+  unit?: string;
   users: {
     user_id: string;
     portions: number; // кількість порцій цього user
     totalWeight: number; // сума ваг цього user
   }[];
-  // recipesMap: Record<string, string>;
-  // productsMap: Record<string, string>;
 };
 
 export default function ByMealsLayout({
@@ -41,15 +41,19 @@ export default function ByMealsLayout({
   activeDayId,
   recipesMap,
   productsMap,
+  recipeWeightMap,
+  productUnitMap,
 }: Props) {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const view = searchParams.get("view") ?? "members";
   return (
     <div className="space-y-4">
       {mealTypes.map((meal) => {
         // 1️⃣ Filter entries for this meal + active day
         const mealEntries = entries.filter(
           (entry) =>
-            entry.menu_day_id === activeDayId &&
+            entry.date === activeDayId &&
             entry.meal_type_id === meal.meal_type_id,
         );
 
@@ -65,9 +69,11 @@ export default function ByMealsLayout({
               entry_id: entry.entry_id,
               portions: 0,
               totalWeight: 0,
+              unit:
+                entry.entry_type === "product"
+                  ? (productUnitMap[entry.entry_id] ?? "г")
+                  : "г",
               users: [],
-              // recipesMap,
-              // productsMap,
             });
           }
 
@@ -76,7 +82,17 @@ export default function ByMealsLayout({
           // 1️⃣ Загальна кількість порцій
           group.portions += 1;
 
-          const weight = entry.servings ?? entry.quantity ?? 0;
+          let weight = 0;
+
+          if (entry.entry_type === "recipe") {
+            const weightPerServing = recipeWeightMap[entry.entry_id] ?? 0;
+
+            weight = (entry.servings ?? 0) * weightPerServing;
+          }
+
+          if (entry.entry_type === "product") {
+            weight = entry.quantity ?? 0;
+          }
 
           group.totalWeight += weight;
 
@@ -112,7 +128,7 @@ export default function ByMealsLayout({
                   if (!activeDayId) return;
 
                   router.push(
-                    `/admin/menu-plans/${planId}/add-entry?dayId=${activeDayId}&mealTypeId=${meal.meal_type_id}`,
+                    `/admin/menu-plans/${planId}/add-entry?date=${activeDayId}&mealTypeId=${meal.meal_type_id}&view=${view}`,
                   );
                 }}
                 className="text-green-700 font-medium"
@@ -158,9 +174,11 @@ function AggregatedEntryBlock({
 }) {
   const [open, setOpen] = useState(false);
 
+  const unit = item.unit ?? "г";
+
   const amountLabel = [
     `${item.portions} порцій`,
-    item.totalWeight > 0 ? `${item.totalWeight} г` : null,
+    item.totalWeight > 0 ? `${Math.round(item.totalWeight)} ${unit}` : null,
   ]
     .filter(Boolean)
     .join(" · ");
@@ -253,7 +271,7 @@ function AggregatedEntryBlock({
 
                 <span>
                   {member.first_name} — {user.portions} порцій ·{" "}
-                  {user.totalWeight} г
+                  {Math.round(user.totalWeight)} {item.unit ?? "г"}
                 </span>
               </div>
             );

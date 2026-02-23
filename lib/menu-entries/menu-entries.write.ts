@@ -1,8 +1,9 @@
 import { appendRow } from "@/lib/sheets.helpers";
-import { generateUUID } from "../uuid";
+import { generateUUID } from "@/lib/uuid";
 
 type CreateMenuEntryInput = {
-  menu_day_id: string;
+  menu_plan_id: string;
+  date: string;
   user_id: string;
   meal_type_id: number;
   entry_type: "recipe" | "product";
@@ -13,8 +14,9 @@ type CreateMenuEntryInput = {
 
 export async function createMenuEntry(input: CreateMenuEntryInput) {
   await appendRow("menu_entries", [
-    generateUUID(), // menu_entry_id
-    input.menu_day_id,
+    generateUUID(),
+    input.menu_plan_id,
+    input.date,
     input.user_id,
     input.meal_type_id,
     input.entry_type,
