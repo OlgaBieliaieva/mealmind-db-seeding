@@ -9,7 +9,7 @@ import EntryPickerClient from "@/components/entry-picker/EntryPickerClient";
 type Props = {
   params: { id: string };
   searchParams: {
-    dayId?: string;
+    date?: string;
     mealTypeId?: string;
     userId?: string;
   };
@@ -17,9 +17,9 @@ type Props = {
 
 export default async function AddEntryPage({ params, searchParams }: Props) {
   const { id: planId } = await params;
-  const { dayId, mealTypeId, userId } = await searchParams;
+  const { date, mealTypeId, userId } = await searchParams;
 
-  if (!dayId || !mealTypeId) {
+  if (!date || !mealTypeId) {
     return <div className="p-4">Invalid context</div>;
   }
 
@@ -47,7 +47,8 @@ export default async function AddEntryPage({ params, searchParams }: Props) {
   return (
     <div className="min-h-screen bg-gray-50">
       <EntryPickerClient
-        dayId={dayId}
+        planId={planId}
+        date={date}
         mealTypeId={Number(mealTypeId)}
         mealName={mealType.name_ua}
         members={members}

@@ -18,6 +18,10 @@ export default function PlanHeader({
   const router = useRouter();
   const searchParams = useSearchParams();
 
+  if (!fullWeek || fullWeek.length === 0) {
+    return null;
+  }
+
   const weekLabel = `${formatDateDDMMYY(fullWeek[0])} — ${formatDateDDMMYY(
     fullWeek[6],
   )}`;

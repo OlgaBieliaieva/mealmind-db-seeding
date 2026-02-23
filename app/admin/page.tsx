@@ -33,7 +33,7 @@ export default function AdminHomePage() {
         </Link>
 
         <Link
-          href="/admin/menu-plans"
+          href="/plan"
           className="block rounded-xl border bg-white p-4 hover:bg-gray-50"
         >
           <div className="text-lg font-medium">📅 Menu plans</div>

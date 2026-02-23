@@ -1,11 +1,13 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { createMenuEntry } from "@/lib/menu-entries/menu-entries.write";
 import { getAllProducts } from "@/lib/products.read";
 import { toggleProductFavorite } from "@/lib/product-favorites.write";
 
 type SaveEntriesInput = {
-  menu_day_id: string;
+  menu_plan_id: string;
+  date: string;
   meal_type_id: number;
   user_id: string;
   items: {
@@ -20,10 +22,11 @@ export async function saveMenuEntries(input: SaveEntriesInput) {
   for (const item of input.items) {
     if (item.entry_type === "recipe") {
       await createMenuEntry({
-        menu_day_id: input.menu_day_id,
+        menu_plan_id: input.menu_plan_id,
+        date: input.date,
         user_id: input.user_id,
         meal_type_id: input.meal_type_id,
-        entry_type: "recipe",
+        entry_type: item.entry_type,
         entry_id: item.entry_id,
         servings: 1,
         quantity: null,
@@ -42,16 +45,19 @@ export async function saveMenuEntries(input: SaveEntriesInput) {
       }
 
       await createMenuEntry({
-        menu_day_id: input.menu_day_id,
+        menu_plan_id: input.menu_plan_id,
+        date: input.date,
         user_id: input.user_id,
         meal_type_id: input.meal_type_id,
-        entry_type: "product",
+        entry_type: item.entry_type,
         entry_id: item.entry_id,
-        servings: null,
+        servings: 1,
         quantity,
       });
     }
   }
+
+  revalidatePath("/plan");
 }
 
 export async function toggleFavoriteAction(

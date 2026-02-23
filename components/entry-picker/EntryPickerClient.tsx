@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useRecipeFavoritesMap } from "@/lib/hooks/useRecipeFavoritesMap";
 import { useProductFavoritesMap } from "@/lib/hooks/useProductFavoritesMap";
 import EntryPickerHeader from "./EntryPickerHeader";
@@ -14,29 +14,30 @@ import { SelectedEntry } from "@/types/entry-picker";
 import { saveMenuEntries } from "@/app/admin/menu-plans/[id]/add-entry/action";
 
 type Props = {
-  dayId: string;
+  planId: string;
+  date: string;
   mealTypeId: number;
   mealName: string;
   members: FamilyMember[];
   initialUserId: string | null;
   recipes: RecipeListItem[];
   products: ProductListItem[];
-
   familyId: string;
 };
 
 export default function EntryPickerClient({
-  dayId,
+  planId,
+  date,
   mealTypeId,
   mealName,
   members,
   initialUserId,
   recipes,
   products,
-
   familyId,
 }: Props) {
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const [activeTab, setActiveTab] = useState<EntryTab>("cookbook");
 
@@ -85,13 +86,15 @@ export default function EntryPickerClient({
     }
 
     await saveMenuEntries({
-      menu_day_id: dayId,
+      menu_plan_id: planId,
+      date: date,
       meal_type_id: mealTypeId,
       user_id: selectedUserId,
       items: selectedItems,
     });
 
-    router.back();
+    const params = new URLSearchParams(searchParams.toString());
+    router.replace(`/plan?${params.toString()}`);
   };
 
   return (

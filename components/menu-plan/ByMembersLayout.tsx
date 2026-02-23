@@ -11,6 +11,8 @@ type Props = {
   activeDayId?: string;
   recipesMap: Record<string, string>;
   productsMap: Record<string, string>;
+  recipeWeightMap: Record<string, number>;
+  productUnitMap: Record<string, string>;
 };
 
 export default function ByMembersLayout({
@@ -21,6 +23,8 @@ export default function ByMembersLayout({
   activeDayId,
   recipesMap,
   productsMap,
+  recipeWeightMap,
+  productUnitMap,
 }: Props) {
   return (
     <div className="space-y-4">
@@ -34,6 +38,8 @@ export default function ByMembersLayout({
           activeDayId={activeDayId}
           recipesMap={recipesMap}
           productsMap={productsMap}
+          recipeWeightMap={recipeWeightMap}
+          productUnitMap={productUnitMap}
         />
       ))}
     </div>

@@ -10,12 +10,7 @@ export type MenuDay = {
 export type MenuPlanDetails = {
   menu_plan_id: string;
   family_id: string;
-  start_date: string;
-  end_date: string;
-  days: {
-    menu_day_id: string;
-    date: string;
-  }[];
+
   entries: MenuEntry[];
 
   recipesMap: Record<string, string>;
@@ -24,26 +19,17 @@ export type MenuPlanDetails = {
 
 export async function getMenuPlanDetails(
   planId: string,
+  date?: string,
 ): Promise<MenuPlanDetails | null> {
-  const planRows = await readSheet("menu_plans!A2:H");
-  const dayRows = await readSheet("menu_days!A2:D");
+  const planRows = await readSheet("menu_plans!A2:F");
 
   const planRow = planRows.find((row) => row[0] === planId);
 
   if (!planRow) return null;
 
-  const days = dayRows
-    .filter((row) => row[1] === planId)
-    .map((row) => ({
-      menu_day_id: row[0],
-      date: row[2],
-    }))
-    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
-
   const allEntries = await getMenuEntries();
-  const entries = allEntries.filter((entry) =>
-    days.some((d) => d.menu_day_id === entry.menu_day_id),
-  );
+  const entries = allEntries.filter((entry) => entry.date === date);
+
   // 🔹 Collect unique recipe/product ids
   const recipeIds = new Set<string>();
   const productIds = new Set<string>();
@@ -100,9 +86,6 @@ export async function getMenuPlanDetails(
   return {
     menu_plan_id: planRow[0],
     family_id: planRow[1],
-    start_date: planRow[2],
-    end_date: planRow[3],
-    days,
     entries,
     recipesMap,
     productsMap,

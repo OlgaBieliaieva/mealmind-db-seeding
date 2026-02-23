@@ -8,6 +8,8 @@ type Props = {
   entries: MenuEntry[];
   recipesMap: Record<string, string>;
   productsMap: Record<string, string>;
+  recipeWeightMap: Record<string, number>;
+  productUnitMap: Record<string, string>;
   onAdd?: () => void;
 };
 
@@ -16,6 +18,8 @@ export default function MealBlock({
   entries,
   recipesMap,
   productsMap,
+  recipeWeightMap,
+  productUnitMap,
   onAdd,
 }: Props) {
   const [open, setOpen] = useState(false);
@@ -63,7 +67,20 @@ export default function MealBlock({
                   ? recipesMap[entry.entry_id]
                   : productsMap[entry.entry_id];
 
-              const amount = entry.servings ?? entry.quantity ?? "";
+              let amountLabel = "";
+
+              if (entry.entry_type === "recipe") {
+                const weightPerServing = recipeWeightMap[entry.entry_id] ?? 0;
+
+                const totalWeight = (entry.servings ?? 0) * weightPerServing;
+
+                amountLabel = `${entry.servings} порц · ${Math.round(totalWeight)} г`;
+              }
+
+              if (entry.entry_type === "product") {
+                const unit = productUnitMap[entry.entry_id] ?? "г";
+                amountLabel = `${entry.quantity} ${unit}`;
+              }
 
               return (
                 <div
@@ -76,7 +93,7 @@ export default function MealBlock({
                     {displayName ?? entry.entry_id}
                   </span>
 
-                  <span className="text-gray-400">{amount}</span>
+                  <span className="text-gray-400">{amountLabel}</span>
                 </div>
               );
             })
