@@ -9,16 +9,19 @@ export function mapNutrientsToRows(
 
   const now = new Date().toISOString();
 
-  return Object.entries(nutrients).map(([nutrientCode, data]) => [
-    generateUUID(), // product_nutrient_id
-    productId, // product_id
-    nutrientCode, // nutrient_id (тимчасово code)
-    data.value, // value_per_100g
-    null, // value_per_serving
-    data.unit ?? null, // unit
-    "manual", // source
-    false, // is_estimated
-    now, // created_at
-    now, // updated_at
-  ]);
+  return Object.entries(nutrients).map(([nutrientCode, data]) => {
+    const safeUnit = data.unit ?? "";
+    return [
+      generateUUID(), // product_nutrient_id
+      productId, // product_id
+      nutrientCode, // nutrient_id (тимчасово code)
+      data.value, // value_per_100g
+      null, // value_per_serving
+      safeUnit, // unit
+      "manual", // source
+      false, // is_estimated
+      now, // created_at
+      now, // updated_at
+    ];
+  });
 }

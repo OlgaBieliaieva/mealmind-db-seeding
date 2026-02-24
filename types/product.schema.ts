@@ -11,7 +11,7 @@ export const PhotoTypeEnum = z.enum(["packaging", "ingredients", "other"]);
 
 export const NutrientValueSchema = z.object({
   value: z.number().min(0),
-  unit: z.string().optional(),
+  unit: z.string(),
 });
 
 export const NutrientsSchema = z.record(z.string(), NutrientValueSchema);
