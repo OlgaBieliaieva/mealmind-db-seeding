@@ -19,7 +19,7 @@ export async function POST(req: Request) {
     const productId = row[1];
     const nutrientId = row[2];
     const value = parseSheetNumber(row[3]);
-    const unit = row[5] || undefined;
+    const unit = row[5] ?? "";
 
     if (!product_ids.includes(productId)) continue;
     if (value === null) continue;

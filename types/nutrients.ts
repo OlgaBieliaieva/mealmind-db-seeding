@@ -1,6 +1,6 @@
 export type NutrientValue = {
   value: number;
-  unit?: string; // якщо відрізняється від default
+  unit: string;
 };
 
 export type NutrientsMap = Record<string, NutrientValue>;

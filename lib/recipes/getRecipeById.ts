@@ -135,7 +135,7 @@ export async function getRecipeById(
     const value = Number(
       typeof row[3] === "string" ? row[3].replace(",", ".") : row[3],
     );
-    const unit = row[5] || undefined;
+    const unit = row[5];
 
     if (!Number.isFinite(value)) continue;
 
