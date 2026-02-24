@@ -2,44 +2,83 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 
-const weekdays = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Нд"];
-
 type Props = {
   fullWeek: string[];
   activeDate: string;
+  selectedDays: string[];
+  isMulti: boolean;
 };
 
-export default function DaySelector({ fullWeek, activeDate }: Props) {
+export default function DaySelector({
+  fullWeek,
+  activeDate,
+  selectedDays,
+  isMulti,
+}: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  function setDate(date: string) {
+  function handleClick(day: string) {
     const params = new URLSearchParams(searchParams.toString());
-    params.set("date", date);
+
+    if (!isMulti) {
+      params.set("date", day);
+      params.delete("days");
+      router.replace(`?${params.toString()}`);
+      return;
+    }
+
+    const current = params.get("days");
+    let selected = current ? current.split(",") : [];
+
+    if (selected.includes(day)) {
+      selected = selected.filter((d) => d !== day);
+    } else {
+      selected.push(day);
+    }
+
+    if (selected.length === 0) {
+      params.delete("days");
+    } else {
+      params.set("days", selected.sort().join(","));
+    }
 
     router.replace(`?${params.toString()}`);
   }
 
   return (
-    <div className="flex gap-3 overflow-x-auto pb-2">
-      {fullWeek.map((dateString, index) => {
-        const isActive = dateString === activeDate;
-        const date = new Date(dateString);
+    <div className="flex gap-2">
+      {fullWeek.map((day) => {
+        const isActive = day === activeDate;
+        const isSelected = selectedDays.includes(day);
+
+        // 🔥 логіка стилів
+        let dayClass = "bg-gray-100 text-gray-800";
+
+        if (!isMulti && isActive) {
+          dayClass = "bg-black text-white";
+        }
+
+        if (isMulti && isSelected) {
+          dayClass = "bg-black text-white";
+        }
 
         return (
           <button
-            key={dateString}
-            onClick={() => setDate(dateString)}
-            className="flex flex-col items-center gap-1"
+            key={day}
+            onClick={() => handleClick(day)}
+            className="flex flex-col items-center"
           >
-            <span className="text-xs text-gray-500">{weekdays[index]}</span>
-
             <div
-              className={`w-9 h-9 rounded-full flex items-center justify-center text-sm border transition ${
-                isActive ? "bg-black text-white" : "bg-white text-gray-800"
-              }`}
+              className={`
+                w-10 h-10
+                flex items-center justify-center
+                rounded-full
+                transition-colors
+                ${dayClass}
+              `}
             >
-              {date.getDate()}
+              {new Date(day + "T00:00:00").getDate()}
             </div>
           </button>
         );
@@ -47,65 +86,3 @@ export default function DaySelector({ fullWeek, activeDate }: Props) {
     </div>
   );
 }
-
-// "use client";
-
-// const weekdays = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Нд"];
-
-// type Props = {
-//   fullWeek: string[];
-//   planDaysMap: Map<string, string>;
-//   activeDate: string;
-//   onDayChange: (date: string) => void;
-// };
-
-// export default function DaySelector({
-//   fullWeek,
-//   planDaysMap,
-//   activeDate,
-//   onDayChange,
-// }: Props) {
-//   return (
-//     <div className="space-y-4">
-//       <div className="flex gap-3 overflow-x-auto pb-2">
-//         {fullWeek.map((dateString, index) => {
-//           const isInPlan = planDaysMap.has(dateString);
-//           const isActive = activeDate === dateString;
-
-//           const date = new Date(dateString);
-
-//           return (
-//             <button
-//               key={dateString}
-//               disabled={!isInPlan}
-//               onClick={() => {
-//                 if (isInPlan) onDayChange(dateString);
-//               }}
-//               className="flex flex-col items-center gap-1"
-//             >
-//               <span
-//                 className={`text-xs ${
-//                   isInPlan ? "text-gray-500" : "text-gray-300"
-//                 }`}
-//               >
-//                 {weekdays[index]}
-//               </span>
-
-//               <div
-//                 className={`w-9 h-9 rounded-full flex items-center justify-center text-sm border ${
-//                   !isInPlan
-//                     ? "bg-gray-100 text-gray-300 border-gray-200"
-//                     : isActive
-//                       ? "bg-black text-white"
-//                       : "bg-white text-gray-800"
-//                 }`}
-//               >
-//                 {date.getDate()}
-//               </div>
-//             </button>
-//           );
-//         })}
-//       </div>
-//     </div>
-//   );
-// }
