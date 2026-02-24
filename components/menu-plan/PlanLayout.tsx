@@ -16,6 +16,7 @@ type Props = {
   mealTypes: MealType[];
   entries: MenuEntry[];
   activeDate: string;
+  selectedDays: string[];
   recipesMap: Record<string, string>;
   productsMap: Record<string, string>;
   recipeWeightMap: Record<string, number>;
