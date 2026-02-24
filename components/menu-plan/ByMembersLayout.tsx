@@ -9,6 +9,8 @@ type Props = {
   mealTypes: MealType[];
   entries: MenuEntry[];
   activeDayId?: string;
+  selectedDays: string[];
+  isMultiMode: boolean;
   recipesMap: Record<string, string>;
   productsMap: Record<string, string>;
   recipeWeightMap: Record<string, number>;
@@ -21,6 +23,8 @@ export default function ByMembersLayout({
   mealTypes,
   entries,
   activeDayId,
+  selectedDays,
+  isMultiMode,
   recipesMap,
   productsMap,
   recipeWeightMap,
@@ -36,6 +40,8 @@ export default function ByMembersLayout({
           mealTypes={mealTypes}
           entries={entries}
           activeDayId={activeDayId}
+          selectedDays={selectedDays}
+          isMultiMode={isMultiMode}
           recipesMap={recipesMap}
           productsMap={productsMap}
           recipeWeightMap={recipeWeightMap}

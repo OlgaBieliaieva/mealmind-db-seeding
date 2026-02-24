@@ -13,6 +13,8 @@ type Props = {
   mealTypes: MealType[];
   entries: MenuEntry[];
   activeDayId?: string;
+  selectedDays: string[];
+  isMultiMode: boolean;
   recipesMap: Record<string, string>;
   productsMap: Record<string, string>;
   recipeWeightMap: Record<string, number>;
@@ -39,6 +41,8 @@ export default function ByMealsLayout({
   mealTypes,
   entries,
   activeDayId,
+  selectedDays,
+  isMultiMode,
   recipesMap,
   productsMap,
   recipeWeightMap,
@@ -51,11 +55,13 @@ export default function ByMealsLayout({
     <div className="space-y-4">
       {mealTypes.map((meal) => {
         // 1️⃣ Filter entries for this meal + active day
-        const mealEntries = entries.filter(
-          (entry) =>
-            entry.date === activeDayId &&
-            entry.meal_type_id === meal.meal_type_id,
-        );
+        const mealEntries = entries.filter((entry) => {
+          const isDateMatch = isMultiMode
+            ? selectedDays.includes(entry.date)
+            : entry.date === activeDayId;
+
+          return isDateMatch && entry.meal_type_id === meal.meal_type_id;
+        });
 
         // 2️⃣ Group by entry_id + entry_type
         const groupedMap = new Map<string, AggregatedEntry>();

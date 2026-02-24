@@ -11,6 +11,8 @@ type Props = {
   mealTypes: MealType[];
   entries: MenuEntry[];
   activeDayId?: string;
+  selectedDays: string[];
+  isMultiMode: boolean;
   recipesMap: Record<string, string>;
   productsMap: Record<string, string>;
   recipeWeightMap: Record<string, number>;
@@ -23,6 +25,8 @@ export default function MemberCard({
   mealTypes,
   entries,
   activeDayId,
+  selectedDays,
+  isMultiMode,
   recipesMap,
   productsMap,
   recipeWeightMap,
@@ -58,12 +62,17 @@ export default function MemberCard({
       {/* Meals */}
       <div className="px-4">
         {mealTypes.map((meal) => {
-          const filteredEntries = entries.filter(
-            (entry) =>
-              entry.date === activeDayId &&
+          const filteredEntries = entries.filter((entry) => {
+            const isDateMatch = isMultiMode
+              ? selectedDays.includes(entry.date)
+              : entry.date === activeDayId;
+
+            return (
+              isDateMatch &&
               entry.user_id === member.user_id &&
-              entry.meal_type_id === meal.meal_type_id,
-          );
+              entry.meal_type_id === meal.meal_type_id
+            );
+          });
 
           return (
             <MealBlock

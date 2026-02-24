@@ -29,6 +29,7 @@ export default function PlanLayout({
   mealTypes,
   entries,
   activeDate,
+  selectedDays,
   recipesMap,
   productsMap,
   recipeWeightMap,
@@ -36,6 +37,7 @@ export default function PlanLayout({
 }: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const isMultiMode = searchParams.get("days") !== null;
 
   const rawView = searchParams.get("view");
 
@@ -59,6 +61,8 @@ export default function PlanLayout({
           mealTypes={mealTypes}
           entries={entries}
           activeDayId={activeDate}
+          selectedDays={selectedDays}
+          isMultiMode={isMultiMode}
           recipesMap={recipesMap}
           productsMap={productsMap}
           recipeWeightMap={recipeWeightMap}
@@ -71,6 +75,8 @@ export default function PlanLayout({
           mealTypes={mealTypes}
           entries={entries}
           activeDayId={activeDate}
+          selectedDays={selectedDays}
+          isMultiMode={isMultiMode}
           recipesMap={recipesMap}
           productsMap={productsMap}
           recipeWeightMap={recipeWeightMap}
