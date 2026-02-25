@@ -4,6 +4,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { FamilyMember } from "@/lib/families/family-members.read";
 import { MealType } from "@/lib/meal-types/meal-types.read";
 import { MenuEntry } from "@/types/menu-entry";
+import { NutritionDisplayItem } from "@/lib/nutrition/nutrition.adapter";
+import { BalanceResult } from "@/types/nutrition-balance";
 import ByMembersLayout from "./ByMembersLayout";
 import ByMealsLayout from "./ByMealsLayout";
 import ViewToggle from "./ViewToggle";
@@ -21,6 +23,10 @@ type Props = {
   productsMap: Record<string, string>;
   recipeWeightMap: Record<string, number>;
   productUnitMap: Record<string, string>;
+  planNutrition: NutritionDisplayItem[];
+  memberNutritionMap: Record<string, NutritionDisplayItem[]>;
+  mealNutritionMap: Record<number, NutritionDisplayItem[]>;
+  memberBalanceMap: Record<string, BalanceResult>;
 };
 
 export default function PlanLayout({
@@ -34,6 +40,7 @@ export default function PlanLayout({
   productsMap,
   recipeWeightMap,
   productUnitMap,
+  memberBalanceMap,
 }: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -67,6 +74,7 @@ export default function PlanLayout({
           productsMap={productsMap}
           recipeWeightMap={recipeWeightMap}
           productUnitMap={productUnitMap}
+          memberBalanceMap={memberBalanceMap}
         />
       ) : (
         <ByMealsLayout
