@@ -1,35 +1,48 @@
-import {
-  UserProfileForTargets,
-  UserNutritionTargets,
-  ActivityLevel,
-  Goal,
-} from "@/types/user-targets";
+import { differenceInYears } from "date-fns";
 
-function calculateAge(birthDate: string): number {
-  const today = new Date();
-  const birth = new Date(birthDate);
-  let age = today.getFullYear() - birth.getFullYear();
-  const m = today.getMonth() - birth.getMonth();
+type Sex = "male" | "female";
+type ActivityLevel =
+  | "sedentary"
+  | "light"
+  | "moderate"
+  | "active"
+  | "very_active";
 
-  if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) {
-    age--;
-  }
+type Goal = "maintain" | "lose" | "gain";
 
-  return age;
-}
+export type UserProfileForTargets = {
+  user_id: string;
+  sex: Sex;
+  birth_date: string; // ISO format: YYYY-MM-DD
+  height_cm: number;
+  weight_kg: number;
+  activity_level: ActivityLevel;
+  goal: Goal;
+};
 
-function calculateBMR(profile: UserProfileForTargets): number {
-  const age = calculateAge(profile.birth_date);
+export function calculateDefaultTargets(
+  profile: UserProfileForTargets,
+): Record<string, number> {
+  const { sex, birth_date, height_cm, weight_kg, activity_level, goal } =
+    profile;
 
-  if (profile.sex === "male") {
-    return 10 * profile.weight_kg + 6.25 * profile.height_cm - 5 * age + 5;
-  }
+  // =========================
+  // 🔹 AGE
+  // =========================
+  const age = differenceInYears(new Date(), new Date(birth_date));
 
-  return 10 * profile.weight_kg + 6.25 * profile.height_cm - 5 * age - 161;
-}
+  // =========================
+  // 🔹 BMR — Mifflin-St Jeor
+  // =========================
+  const bmr =
+    sex === "male"
+      ? 10 * weight_kg + 6.25 * height_cm - 5 * age + 5
+      : 10 * weight_kg + 6.25 * height_cm - 5 * age - 161;
 
-function getActivityMultiplier(level: ActivityLevel): number {
-  const map: Record<ActivityLevel, number> = {
+  // =========================
+  // 🔹 Activity multiplier
+  // =========================
+  const activityFactors: Record<ActivityLevel, number> = {
     sedentary: 1.2,
     light: 1.375,
     moderate: 1.55,
@@ -37,42 +50,73 @@ function getActivityMultiplier(level: ActivityLevel): number {
     very_active: 1.9,
   };
 
-  return map[level];
-}
+  let tdee = bmr * activityFactors[activity_level];
 
-function applyGoalAdjustment(calories: number, goal: Goal): number {
-  if (goal === "lose") return calories - 300;
-  if (goal === "gain") return calories + 300;
-  return calories;
-}
+  // =========================
+  // 🔹 Goal adjustment
+  // =========================
+  if (goal === "lose") {
+    tdee *= 0.85; // -15%
+  }
 
-export function calculateDefaultTargets(
-  profile: UserProfileForTargets,
-): UserNutritionTargets {
-  const bmr = calculateBMR(profile);
-  const tdee = bmr * getActivityMultiplier(profile.activity_level);
-  const adjustedCalories = applyGoalAdjustment(tdee, profile.goal);
+  if (goal === "gain") {
+    tdee *= 1.12; // +12%
+  }
 
-  const totalCalories = Math.round(adjustedCalories);
+  const energy_kcal = Math.round(tdee);
 
-  const proteinPerKg = profile.goal === "maintain" ? 1.6 : 2.0;
+  // =========================
+  // 🔹 Protein
+  // =========================
+  let proteinPerKg = 1.4;
 
-  const protein = Math.round(profile.weight_kg * proteinPerKg);
-  const fat = Math.round(profile.weight_kg * 0.8);
+  if (goal === "lose") proteinPerKg = 1.8;
+  if (goal === "gain") proteinPerKg = 1.6;
 
+  const protein = Math.round(weight_kg * proteinPerKg);
+
+  // =========================
+  // 🔹 Fat — 30% kcal
+  // =========================
+  const fat = Math.round((energy_kcal * 0.3) / 9);
+
+  // =========================
+  // 🔹 Carbs — remaining kcal
+  // =========================
   const proteinKcal = protein * 4;
   const fatKcal = fat * 9;
+  const carbsKcal = energy_kcal - (proteinKcal + fatKcal);
 
-  const remainingKcal = totalCalories - proteinKcal - fatKcal;
-  const carbs = Math.max(0, Math.round(remainingKcal / 4));
+  const carbohydrates = Math.round(carbsKcal / 4);
 
-  const fiber = Math.round((totalCalories / 1000) * 14);
+  // =========================
+  // 🔹 Sugar — max 10% kcal
+  // =========================
+  const sugar = Math.round((energy_kcal * 0.1) / 4);
+
+  // =========================
+  // 🔹 Fiber — 14g per 1000 kcal
+  // =========================
+  const fiber = Math.round((energy_kcal / 1000) * 14);
+
+  // =========================
+  // 🔹 Sodium — 2000 mg (WHO)
+  // =========================
+  const sodium = 2000;
+
+  // =========================
+  // 🔹 Cholesterol — 300 mg
+  // =========================
+  const cholesterol = 300;
 
   return {
-    calories: totalCalories,
-    protein_g: protein,
-    fat_g: fat,
-    carbs_g: carbs,
-    fiber_g: fiber,
+    energy_kcal,
+    protein,
+    fat,
+    carbohydrates,
+    sugar,
+    fiber,
+    sodium,
+    cholesterol,
   };
 }

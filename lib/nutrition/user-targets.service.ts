@@ -2,11 +2,45 @@ import { getUserTargets } from "./user-targets.read";
 import { createUserTargets } from "./user-targets.write";
 import { calculateDefaultTargets } from "./targets.service";
 import { readSheet } from "@/lib/sheets.read";
-import {
-  ActivityLevel,
-  Goal,
-  UserProfileForTargets,
-} from "@/types/user-targets";
+import { UserProfileForTargets } from "./targets.service";
+
+type Sex = "male" | "female";
+type ActivityLevel =
+  | "sedentary"
+  | "light"
+  | "moderate"
+  | "active"
+  | "very_active";
+type Goal = "maintain" | "lose" | "gain";
+
+function assertSex(value: string): Sex {
+  if (value === "male" || value === "female") return value;
+  throw new Error(`Invalid sex value: ${value}`);
+}
+
+function assertActivityLevel(value: string): ActivityLevel {
+  const allowed: ActivityLevel[] = [
+    "sedentary",
+    "light",
+    "moderate",
+    "active",
+    "very_active",
+  ];
+
+  if (allowed.includes(value as ActivityLevel)) {
+    return value as ActivityLevel;
+  }
+
+  throw new Error(`Invalid activity_level value: ${value}`);
+}
+
+function assertGoal(value: string): Goal {
+  if (value === "maintain" || value === "lose" || value === "gain") {
+    return value;
+  }
+
+  throw new Error(`Invalid goal value: ${value}`);
+}
 
 export async function getOrCreateUserTargets(userId: string) {
   const existing = await getUserTargets(userId);
@@ -22,44 +56,18 @@ export async function getOrCreateUserTargets(userId: string) {
     throw new Error("User profile incomplete");
   }
 
-  // 🔥 Runtime type narrowing
-
-  const sex = user[4];
-  if (sex !== "male" && sex !== "female") {
-    throw new Error(`Invalid sex value: ${sex}`);
-  }
-
-  const activity = metrics[3] as string;
-  const validActivities: ActivityLevel[] = [
-    "sedentary",
-    "light",
-    "moderate",
-    "active",
-    "very_active",
-  ];
-
-  if (!validActivities.includes(activity as ActivityLevel)) {
-    throw new Error(`Invalid activity_level: ${activity}`);
-  }
-
-  const goal = metrics[4] as string;
-  const validGoals: Goal[] = ["maintain", "lose", "gain"];
-
-  if (!validGoals.includes(goal as Goal)) {
-    throw new Error(`Invalid goal: ${goal}`);
-  }
-
   const profile: UserProfileForTargets = {
     user_id: userId,
-    sex,
-    birth_date: user[5],
-    height_cm: Number(user[6]),
+    sex: assertSex(user[5]),
+    birth_date: user[6], // має бути ISO
+    height_cm: Number(user[7]),
     weight_kg: Number(metrics[2]),
-    activity_level: activity as ActivityLevel,
-    goal: goal as Goal,
+    activity_level: assertActivityLevel(metrics[3]),
+    goal: assertGoal(metrics[4]),
   };
 
   const targets = calculateDefaultTargets(profile);
+
   await createUserTargets(userId, targets);
 
   return targets;

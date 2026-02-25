@@ -1,19 +1,41 @@
 import { readSheet } from "@/lib/sheets.read";
-import { UserNutritionTargets } from "@/types/user-targets";
+import { UserNutrientTargetsMap } from "@/types/user-nutrient-targets";
 
 export async function getUserTargets(
   userId: string,
-): Promise<UserNutritionTargets | null> {
-  const rows = await readSheet("user_nutrition_targets!A2:H");
+): Promise<UserNutrientTargetsMap | null> {
+  // 🔹 читаємо всі таргети
+  const targetRows = await readSheet("user_nutrient_targets!A2:H");
 
-  const row = rows.find((r) => r[1] === userId);
-  if (!row) return null;
+  // 🔹 фільтруємо по user
+  const userRows = targetRows.filter((r) => r[1] === userId);
+  if (userRows.length === 0) return null;
 
-  return {
-    calories: Number(row[2]),
-    protein_g: Number(row[3]),
-    fat_g: Number(row[4]),
-    carbs_g: Number(row[5]),
-    fiber_g: Number(row[6]),
-  };
+  // 🔹 читаємо довідник нутрієнтів
+  const refRows = await readSheet("nutrients_reference!A2:L");
+
+  // 🔹 будуємо map nutrient_id → code
+  const nutrientIdToCodeMap: Record<string, string> = {};
+
+  refRows.forEach((row) => {
+    const nutrientId = row[0];
+    const code = row[1];
+
+    nutrientIdToCodeMap[nutrientId] = code;
+  });
+
+  // 🔹 будуємо фінальний map<code, value>
+  const map: UserNutrientTargetsMap = {};
+
+  userRows.forEach((row) => {
+    const nutrientId = row[2];
+    const value = Number(row[3]);
+
+    const code = nutrientIdToCodeMap[nutrientId];
+    if (!code) return; // safety
+
+    map[code] = value;
+  });
+
+  return map;
 }

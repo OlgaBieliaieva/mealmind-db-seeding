@@ -19,7 +19,7 @@ import {
 import PlanLayout from "@/components/menu-plan/PlanLayout";
 import PlanHeader from "@/components/menu-plan/PlanHeader";
 import { evaluateUserBalance } from "@/lib/nutrition/balance.service";
-import { UserBalanceResult } from "@/types/nutrition-balance";
+import { BalanceResult } from "@/types/nutrition-balance";
 
 type Props = {
   searchParams: Promise<{
@@ -133,7 +133,7 @@ export default async function PlanPage({ searchParams }: Props) {
         ua: row[3],
       },
       default_unit: row[4],
-      nutrient_group: group, // тепер TS знає, що це union type
+      nutrient_group: group,
       sort_order: Number(row[6]),
       rda_value: row[7] ? Number(row[7]) : undefined,
       rda_unit: row[8] || undefined,
@@ -169,7 +169,7 @@ export default async function PlanPage({ searchParams }: Props) {
 
   const periodDays = selectedDays.length;
 
-  const memberBalanceMap: Record<string, UserBalanceResult> = {};
+  const memberBalanceMap: Record<string, BalanceResult> = {};
 
   for (const member of members) {
     const nutrition = memberNutritionDisplayMap[member.user_id];

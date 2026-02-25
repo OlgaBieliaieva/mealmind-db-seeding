@@ -2,6 +2,7 @@ import MemberCard from "./MemberCard";
 import { FamilyMember } from "@/lib/families/family-members.read";
 import { MealType } from "@/lib/meal-types/meal-types.read";
 import { MenuEntry } from "@/types/menu-entry";
+import { BalanceResult } from "@/types/nutrition-balance";
 
 type Props = {
   planId: string;
@@ -15,6 +16,7 @@ type Props = {
   productsMap: Record<string, string>;
   recipeWeightMap: Record<string, number>;
   productUnitMap: Record<string, string>;
+  memberBalanceMap: Record<string, BalanceResult>;
 };
 
 export default function ByMembersLayout({
@@ -29,6 +31,7 @@ export default function ByMembersLayout({
   productsMap,
   recipeWeightMap,
   productUnitMap,
+  memberBalanceMap,
 }: Props) {
   return (
     <div className="space-y-4">
@@ -46,6 +49,7 @@ export default function ByMembersLayout({
           productsMap={productsMap}
           recipeWeightMap={recipeWeightMap}
           productUnitMap={productUnitMap}
+          balance={memberBalanceMap[member.user_id]}
         />
       ))}
     </div>
