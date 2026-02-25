@@ -1,6 +1,8 @@
 export const dynamic = "force-dynamic";
 
 import { redirect } from "next/navigation";
+import { readSheet } from "@/lib/sheets.read";
+import { getOrCreateUserTargets } from "@/lib/nutrition/user-targets.service";
 import { getOrCreateMenuPlan } from "@/lib/menu-plans/menu-plan.service";
 import { getFamilyMembers } from "@/lib/families/family-members.read";
 import { getMealTypes } from "@/lib/meal-types/meal-types.read";
@@ -9,8 +11,15 @@ import { generateFullWeek } from "@/lib/date/week";
 import { getMenuPlanFullData } from "@/lib/menu-plans/menu-plans.read";
 import { buildPlanNutrition } from "@/lib/nutrition/nutrition.service";
 import { AggregatedNutrients } from "@/types/nutrition-aggregation";
+import { NutrientReference } from "@/types/nutrient.dto";
+import {
+  mapNutritionToDisplay,
+  NutritionDisplayItem,
+} from "@/lib/nutrition/nutrition.adapter";
 import PlanLayout from "@/components/menu-plan/PlanLayout";
 import PlanHeader from "@/components/menu-plan/PlanHeader";
+import { evaluateUserBalance } from "@/lib/nutrition/balance.service";
+import { UserBalanceResult } from "@/types/nutrition-balance";
 
 type Props = {
   searchParams: Promise<{
@@ -37,12 +46,13 @@ export default async function PlanPage({ searchParams }: Props) {
 
   const familyId = "c1d8e7f4-3b29-4a6c-8e15-7f0a2b9d6e33";
 
+  // 🔹 Plan + data
   const plan = await getOrCreateMenuPlan(familyId, activeDate);
   const fullData = await getMenuPlanFullData(familyId, activeDate);
 
   const entries = fullData?.entries ?? [];
 
-  // 🔹 Фільтруємо по selectedDays один раз
+  // 🔹 Filter once by selected days
   const filteredEntries = entries.filter((entry) =>
     selectedDays.includes(entry.date),
   );
@@ -50,16 +60,19 @@ export default async function PlanPage({ searchParams }: Props) {
   const members = await getFamilyMembers(familyId);
   const mealTypes = await getMealTypes();
 
-  // 🔹 Загальна агрегація
+  // =========================
+  // 🔥 PHASE 1 — AGGREGATION
+  // =========================
+
   const planNutritionResult = await buildPlanNutrition({
     entries: filteredEntries,
     recipeWeightMap: fullData?.recipeWeightMap ?? {},
-    recipeNutrientsMap: {}, // рецепти поки що не підключені
+    recipeNutrientsMap: {},
   });
 
   const planNutrition: AggregatedNutrients = planNutritionResult.aggregated;
 
-  // 🔹 Per-member агрегація
+  // Per-member
   const memberNutritionMap: Record<string, AggregatedNutrients> = {};
 
   for (const member of members) {
@@ -76,7 +89,7 @@ export default async function PlanPage({ searchParams }: Props) {
     memberNutritionMap[member.user_id] = result.aggregated;
   }
 
-  // 🔹 Per-meal агрегація
+  // Per-meal
   const mealNutritionMap: Record<number, AggregatedNutrients> = {};
 
   for (const meal of mealTypes) {
@@ -92,6 +105,89 @@ export default async function PlanPage({ searchParams }: Props) {
 
     mealNutritionMap[meal.meal_type_id] = result.aggregated;
   }
+
+  // =========================
+  // 🔥 PHASE 2 — READ REFERENCES
+  // =========================
+
+  const nutrientRefRows = await readSheet("nutrients_reference!A2:L");
+
+  const nutrientRefs: NutrientReference[] = nutrientRefRows.map((row) => {
+    const group = row[5];
+
+    // 🔥 Runtime safety
+    if (
+      group !== "macro" &&
+      group !== "vitamin" &&
+      group !== "mineral" &&
+      group !== "other"
+    ) {
+      throw new Error(`Invalid nutrient_group value: ${group}`);
+    }
+
+    return {
+      nutrient_id: row[0],
+      code: row[1],
+      name: {
+        en: row[2],
+        ua: row[3],
+      },
+      default_unit: row[4],
+      nutrient_group: group, // тепер TS знає, що це union type
+      sort_order: Number(row[6]),
+      rda_value: row[7] ? Number(row[7]) : undefined,
+      rda_unit: row[8] || undefined,
+    };
+  });
+
+  // =========================
+  // 🔥 PHASE 3 — ADAPT FOR UI
+  // =========================
+
+  const planNutritionDisplay: NutritionDisplayItem[] = mapNutritionToDisplay(
+    planNutrition,
+    nutrientRefs,
+  );
+
+  const memberNutritionDisplayMap: Record<string, NutritionDisplayItem[]> = {};
+
+  for (const member of members) {
+    memberNutritionDisplayMap[member.user_id] = mapNutritionToDisplay(
+      memberNutritionMap[member.user_id],
+      nutrientRefs,
+    );
+  }
+
+  const mealNutritionDisplayMap: Record<number, NutritionDisplayItem[]> = {};
+
+  for (const meal of mealTypes) {
+    mealNutritionDisplayMap[meal.meal_type_id] = mapNutritionToDisplay(
+      mealNutritionMap[meal.meal_type_id],
+      nutrientRefs,
+    );
+  }
+
+  const periodDays = selectedDays.length;
+
+  const memberBalanceMap: Record<string, UserBalanceResult> = {};
+
+  for (const member of members) {
+    const nutrition = memberNutritionDisplayMap[member.user_id];
+
+    const targets = await getOrCreateUserTargets(member.user_id);
+
+    const balance = evaluateUserBalance({
+      nutrition,
+      targets,
+      periodDays,
+    });
+
+    memberBalanceMap[member.user_id] = balance;
+  }
+
+  // =========================
+  // 🔥 RENDER
+  // =========================
 
   return (
     <>
@@ -113,9 +209,10 @@ export default async function PlanPage({ searchParams }: Props) {
         productsMap={fullData?.productsMap ?? {}}
         recipeWeightMap={fullData?.recipeWeightMap ?? {}}
         productUnitMap={fullData?.productUnitMap ?? {}}
-        planNutrition={planNutrition}
-        memberNutritionMap={memberNutritionMap}
-        mealNutritionMap={mealNutritionMap}
+        planNutrition={planNutritionDisplay}
+        memberNutritionMap={memberNutritionDisplayMap}
+        mealNutritionMap={mealNutritionDisplayMap}
+        memberBalanceMap={memberBalanceMap}
       />
     </>
   );

@@ -10,4 +10,6 @@ export type NutrientReference = {
   default_unit: string;
   nutrient_group: "macro" | "vitamin" | "mineral" | "other";
   sort_order: number;
+  rda_value?: number;
+  rda_unit?: string;
 };
