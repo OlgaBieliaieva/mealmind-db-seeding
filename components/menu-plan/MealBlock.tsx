@@ -2,6 +2,9 @@
 
 import { useState } from "react";
 import { MenuEntry } from "@/types/menu-entry";
+import { NutritionDisplayItem } from "@/lib/nutrition/nutrition.adapter";
+import MacroSnapshot from "../nutrition/MacroSnapshot";
+import DishBlock from "./DishBlock";
 
 type Props = {
   title: string;
@@ -10,6 +13,13 @@ type Props = {
   productsMap: Record<string, string>;
   recipeWeightMap: Record<string, number>;
   productUnitMap: Record<string, string>;
+  macro?: {
+    energy: number;
+    proteinPercent: number;
+    fatPercent: number;
+    carbsPercent: number;
+  };
+  dishNutritionMap: Record<string, NutritionDisplayItem[]>;
   onAdd?: () => void;
 };
 
@@ -20,6 +30,8 @@ export default function MealBlock({
   productsMap,
   recipeWeightMap,
   productUnitMap,
+  macro,
+  dishNutritionMap,
   onAdd,
 }: Props) {
   const [open, setOpen] = useState(false);
@@ -28,7 +40,7 @@ export default function MealBlock({
 
   return (
     <div className="border-t">
-      {/* Header */}
+      {/* HEADER */}
       <div className="w-full flex justify-between items-center py-3">
         <button
           onClick={() => setOpen((prev) => !prev)}
@@ -53,15 +65,29 @@ export default function MealBlock({
         )}
       </div>
 
-      {/* Content */}
+      {/* MACRO SNAPSHOT */}
+      {macro && macro.energy > 0 && (
+        <div className="flex items-center gap-3 mb-2">
+          <span className="text-xs text-gray-500">
+            {Math.round(macro.energy)} kcal
+          </span>
+
+          <MacroSnapshot
+            protein={macro.proteinPercent}
+            fat={macro.fatPercent}
+            carbs={macro.carbsPercent}
+          />
+        </div>
+      )}
+
+      {/* CONTENT */}
+
       {open && (
-        <div className="pb-3 space-y-2">
+        <div className="pb-3 space-y-3">
           {!hasEntries ? (
             <div className="text-sm text-gray-400">No meals added yet</div>
           ) : (
             entries.map((entry) => {
-              const icon = entry.entry_type === "recipe" ? "🍳" : "🛒";
-
               const displayName =
                 entry.entry_type === "recipe"
                   ? recipesMap[entry.entry_id]
@@ -74,27 +100,25 @@ export default function MealBlock({
 
                 const totalWeight = (entry.servings ?? 0) * weightPerServing;
 
-                amountLabel = `${entry.servings} порц · ${Math.round(totalWeight)} г`;
+                amountLabel = `${entry.servings} порц · ${Math.round(
+                  totalWeight,
+                )} г`;
               }
 
               if (entry.entry_type === "product") {
                 const unit = productUnitMap[entry.entry_id] ?? "г";
+
                 amountLabel = `${entry.quantity} ${unit}`;
               }
 
               return (
-                <div
+                <DishBlock
                   key={entry.menu_entry_id}
-                  className="flex items-center gap-2 text-sm text-gray-700"
-                >
-                  <span>{icon}</span>
-
-                  <span className="flex-1">
-                    {displayName ?? entry.entry_id}
-                  </span>
-
-                  <span className="text-gray-400">{amountLabel}</span>
-                </div>
+                  entry={entry}
+                  name={displayName ?? entry.entry_id}
+                  amountLabel={amountLabel}
+                  nutrition={dishNutritionMap[entry.menu_entry_id]}
+                />
               );
             })
           )}

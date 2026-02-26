@@ -129,18 +129,20 @@ export default function ByMealsLayout({
             {/* Meal header */}
             <div className="w-full flex justify-between items-center bg-green-200 px-4 py-3">
               <span className="font-medium text-gray-800">{meal.name_ua}</span>
-              <button
-                onClick={() => {
-                  if (!activeDayId) return;
+              {!isMultiMode && (
+                <button
+                  onClick={() => {
+                    if (!activeDayId) return;
 
-                  router.push(
-                    `/admin/menu-plans/${planId}/add-entry?date=${activeDayId}&mealTypeId=${meal.meal_type_id}&view=${view}`,
-                  );
-                }}
-                className="text-green-700 font-medium"
-              >
-                +
-              </button>
+                    router.push(
+                      `/admin/menu-plans/${planId}/add-entry?date=${activeDayId}&mealTypeId=${meal.meal_type_id}&view=${view}`,
+                    );
+                  }}
+                  className="text-green-700 font-medium"
+                >
+                  +
+                </button>
+              )}
             </div>
 
             <div className="px-4">

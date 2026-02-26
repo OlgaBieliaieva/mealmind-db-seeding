@@ -25,8 +25,16 @@ type Props = {
   productUnitMap: Record<string, string>;
   planNutrition: NutritionDisplayItem[];
   memberNutritionMap: Record<string, NutritionDisplayItem[]>;
-  mealNutritionMap: Record<number, NutritionDisplayItem[]>;
   memberBalanceMap: Record<string, BalanceResult>;
+  memberTargetsMap: Record<string, Record<string, number>>;
+  memberMealNutritionMap: Record<
+    string,
+    Record<number, NutritionDisplayItem[]>
+  >;
+  memberDishNutritionMap: Record<
+    string,
+    Record<string, NutritionDisplayItem[]>
+  >;
 };
 
 export default function PlanLayout({
@@ -41,6 +49,10 @@ export default function PlanLayout({
   recipeWeightMap,
   productUnitMap,
   memberBalanceMap,
+  memberNutritionMap,
+  memberTargetsMap,
+  memberMealNutritionMap,
+  memberDishNutritionMap,
 }: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -75,6 +87,10 @@ export default function PlanLayout({
           recipeWeightMap={recipeWeightMap}
           productUnitMap={productUnitMap}
           memberBalanceMap={memberBalanceMap}
+          memberNutritionMap={memberNutritionMap}
+          memberTargetsMap={memberTargetsMap}
+          memberMealNutritionMap={memberMealNutritionMap}
+          memberDishNutritionMap={memberDishNutritionMap}
         />
       ) : (
         <ByMealsLayout
