@@ -10,6 +10,7 @@ import { getWeekStart } from "@/lib/date/getWeekStart";
 import { generateFullWeek } from "@/lib/date/week";
 import { getMenuPlanFullData } from "@/lib/menu-plans/menu-plans.read";
 import { buildPlanNutrition } from "@/lib/nutrition/nutrition.service";
+import { aggregateSingleEntryNutrients } from "@/lib/nutrition/nutrition.aggregate";
 import { AggregatedNutrients } from "@/types/nutrition-aggregation";
 import { NutrientReference } from "@/types/nutrient.dto";
 import {
@@ -40,19 +41,22 @@ export default async function PlanPage({ searchParams }: Props) {
 
   const activeDate = date;
   const selectedDays = days ? days.split(",").sort() : [activeDate];
+  const periodDays = selectedDays.length;
 
   const weekStart = getWeekStart(activeDate);
   const fullWeek = generateFullWeek(weekStart);
 
   const familyId = "c1d8e7f4-3b29-4a6c-8e15-7f0a2b9d6e33";
 
-  // 🔹 Plan + data
+  // =========================
+  // 🔹 PLAN + DATA
+  // =========================
+
   const plan = await getOrCreateMenuPlan(familyId, activeDate);
   const fullData = await getMenuPlanFullData(familyId, activeDate);
 
   const entries = fullData?.entries ?? [];
 
-  // 🔹 Filter once by selected days
   const filteredEntries = entries.filter((entry) =>
     selectedDays.includes(entry.date),
   );
@@ -61,7 +65,7 @@ export default async function PlanPage({ searchParams }: Props) {
   const mealTypes = await getMealTypes();
 
   // =========================
-  // 🔥 PHASE 1 — AGGREGATION
+  // 🔥 PHASE 1 — PLAN AGGREGATION
   // =========================
 
   const planNutritionResult = await buildPlanNutrition({
@@ -72,7 +76,12 @@ export default async function PlanPage({ searchParams }: Props) {
 
   const planNutrition: AggregatedNutrients = planNutritionResult.aggregated;
 
-  // Per-member
+  const productNutrientsMap = planNutritionResult.productNutrientsMap;
+
+  // =========================
+  // 🔥 PHASE 2 — MEMBER AGGREGATION
+  // =========================
+
   const memberNutritionMap: Record<string, AggregatedNutrients> = {};
 
   for (const member of members) {
@@ -89,33 +98,52 @@ export default async function PlanPage({ searchParams }: Props) {
     memberNutritionMap[member.user_id] = result.aggregated;
   }
 
-  // Per-meal
-  const mealNutritionMap: Record<number, AggregatedNutrients> = {};
+  // =========================
+  // 🔥 PHASE 3 — MEMBER / MEAL AGGREGATION
+  // =========================
 
-  for (const meal of mealTypes) {
-    const mealEntries = filteredEntries.filter(
-      (e) => e.meal_type_id === meal.meal_type_id,
-    );
+  const memberMealNutritionMap: Record<
+    string,
+    Record<number, AggregatedNutrients>
+  > = {};
 
-    const result = await buildPlanNutrition({
-      entries: mealEntries,
-      recipeWeightMap: fullData?.recipeWeightMap ?? {},
-      recipeNutrientsMap: {},
-    });
+  for (const member of members) {
+    const mealMap: Record<number, AggregatedNutrients> = {};
 
-    mealNutritionMap[meal.meal_type_id] = result.aggregated;
+    for (const meal of mealTypes) {
+      const mealEntries = filteredEntries.filter(
+        (e) =>
+          e.user_id === member.user_id && e.meal_type_id === meal.meal_type_id,
+      );
+
+      const result = await buildPlanNutrition({
+        entries: mealEntries,
+        recipeWeightMap: fullData?.recipeWeightMap ?? {},
+        recipeNutrientsMap: {},
+      });
+
+      mealMap[meal.meal_type_id] = result.aggregated;
+    }
+
+    memberMealNutritionMap[member.user_id] = mealMap;
   }
 
   // =========================
-  // 🔥 PHASE 2 — READ REFERENCES
+  // 🔥 PHASE 4 — DISH-LEVEL AGGREGATION
   // =========================
+
+  const memberDishNutritionMap: Record<
+    string,
+    Record<string, NutritionDisplayItem[]>
+  > = {};
+
+  // Потрібні nutrientRefs для map → тому читаємо їх раніше
 
   const nutrientRefRows = await readSheet("nutrients_reference!A2:L");
 
   const nutrientRefs: NutrientReference[] = nutrientRefRows.map((row) => {
     const group = row[5];
 
-    // 🔥 Runtime safety
     if (
       group !== "macro" &&
       group !== "vitamin" &&
@@ -140,36 +168,70 @@ export default async function PlanPage({ searchParams }: Props) {
     };
   });
 
+  for (const member of members) {
+    const dishMap: Record<string, NutritionDisplayItem[]> = {};
+
+    const memberEntries = filteredEntries.filter(
+      (e) => e.user_id === member.user_id,
+    );
+
+    for (const entry of memberEntries) {
+      const aggregated = aggregateSingleEntryNutrients(entry, {
+        recipeWeightMap: fullData?.recipeWeightMap ?? {},
+        recipeNutrientsMap: {},
+        productNutrientsMap,
+      });
+
+      dishMap[entry.menu_entry_id] = mapNutritionToDisplay(
+        aggregated,
+        nutrientRefs,
+      );
+    }
+
+    memberDishNutritionMap[member.user_id] = dishMap;
+  }
+
   // =========================
-  // 🔥 PHASE 3 — ADAPT FOR UI
+  // 🔥 PHASE 5 — DISPLAY MAPS
   // =========================
 
-  const planNutritionDisplay: NutritionDisplayItem[] = mapNutritionToDisplay(
+  const planNutritionDisplay = mapNutritionToDisplay(
     planNutrition,
     nutrientRefs,
   );
 
   const memberNutritionDisplayMap: Record<string, NutritionDisplayItem[]> = {};
 
+  const memberMealNutritionDisplayMap: Record<
+    string,
+    Record<number, NutritionDisplayItem[]>
+  > = {};
+
   for (const member of members) {
     memberNutritionDisplayMap[member.user_id] = mapNutritionToDisplay(
       memberNutritionMap[member.user_id],
       nutrientRefs,
     );
+
+    const mealDisplayMap: Record<number, NutritionDisplayItem[]> = {};
+
+    for (const meal of mealTypes) {
+      mealDisplayMap[meal.meal_type_id] = mapNutritionToDisplay(
+        memberMealNutritionMap[member.user_id][meal.meal_type_id],
+        nutrientRefs,
+      );
+    }
+
+    memberMealNutritionDisplayMap[member.user_id] = mealDisplayMap;
   }
 
-  const mealNutritionDisplayMap: Record<number, NutritionDisplayItem[]> = {};
-
-  for (const meal of mealTypes) {
-    mealNutritionDisplayMap[meal.meal_type_id] = mapNutritionToDisplay(
-      mealNutritionMap[meal.meal_type_id],
-      nutrientRefs,
-    );
-  }
-
-  const periodDays = selectedDays.length;
+  // =========================
+  // 🔥 PHASE 6 — BALANCE
+  // =========================
 
   const memberBalanceMap: Record<string, BalanceResult> = {};
+
+  const memberTargetsMap: Record<string, Record<string, number>> = {};
 
   for (const member of members) {
     const nutrition = memberNutritionDisplayMap[member.user_id];
@@ -183,6 +245,8 @@ export default async function PlanPage({ searchParams }: Props) {
     });
 
     memberBalanceMap[member.user_id] = balance;
+
+    memberTargetsMap[member.user_id] = targets;
   }
 
   // =========================
@@ -211,8 +275,10 @@ export default async function PlanPage({ searchParams }: Props) {
         productUnitMap={fullData?.productUnitMap ?? {}}
         planNutrition={planNutritionDisplay}
         memberNutritionMap={memberNutritionDisplayMap}
-        mealNutritionMap={mealNutritionDisplayMap}
+        memberMealNutritionMap={memberMealNutritionDisplayMap}
+        memberDishNutritionMap={memberDishNutritionMap}
         memberBalanceMap={memberBalanceMap}
+        memberTargetsMap={memberTargetsMap}
       />
     </>
   );

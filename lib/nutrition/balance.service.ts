@@ -14,6 +14,7 @@ export function evaluateUserBalance({
   periodDays,
 }: Props): BalanceResult {
   // 🔹 перетворюємо display[] → map<code, value>
+
   const nutritionMap: Record<string, number> = {};
 
   nutrition.forEach((item) => {
