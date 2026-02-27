@@ -18,7 +18,7 @@ export function mapNutritionToDisplay(
 ): NutritionDisplayItem[] {
   return refs
     .map((ref) => {
-      const value = aggregated[ref.code] ?? 0;
+      const value = aggregated[ref.nutrient_id] ?? 0;
 
       return {
         code: ref.code,

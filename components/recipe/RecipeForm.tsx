@@ -10,7 +10,6 @@ import { useRecipeTypes } from "@/lib/hooks/useRecipeTypes";
 import { useCuisines } from "@/lib/hooks/useCuisines";
 import { useDietaryTags } from "@/lib/hooks/useDietaryTags";
 import { useRecipeAuthors } from "@/lib/hooks/useRecipeAuthors";
-
 import { RecipeCreatePayload } from "@/types/recipe";
 import { RecipeFull } from "@/types/recipe-views";
 import { RecipeIngredientDraft } from "@/types/recipe-ingredient";
@@ -232,11 +231,6 @@ export function RecipeForm({ mode, initialData }: Props) {
     [ingredients],
   );
 
-  // const effectiveOutputWeight =
-  //   form.base_output_weight_g > 0
-  //     ? form.base_output_weight_g
-  //     : calculatedWeight;
-
   const effectiveOutputWeight = useMemo(() => {
     // 1. Беремо базову вагу (якщо введена) або суму інгредієнтів
     const rawWeight =
@@ -278,6 +272,9 @@ export function RecipeForm({ mode, initialData }: Props) {
       }
 
       await saveChildren(recipeId);
+      await fetch(`/api/recipes/${recipeId}/recalculate-nutrients`, {
+        method: "POST",
+      });
 
       setSaveSuccess(
         isEdit ? "Рецепт успішно оновлено" : "Рецепт успішно створено",

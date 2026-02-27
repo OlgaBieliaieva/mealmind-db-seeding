@@ -10,7 +10,7 @@ export default function MacroDonutChart({ balance }: Props) {
   const { protein, fat, carbs } = balance.macroPercents;
 
   const radius = 50;
-  const stroke = 14;
+  const stroke = 20;
   const normalizedRadius = radius - stroke;
   const circumference = 2 * Math.PI * normalizedRadius;
 

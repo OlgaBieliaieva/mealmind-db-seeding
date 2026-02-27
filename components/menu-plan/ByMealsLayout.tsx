@@ -93,11 +93,11 @@ export default function ByMealsLayout({
           if (entry.entry_type === "recipe") {
             const weightPerServing = recipeWeightMap[entry.entry_id] ?? 0;
 
-            weight = (entry.servings ?? 0) * weightPerServing;
+            weight = (entry.planned_weight_g ?? 0) * weightPerServing;
           }
 
           if (entry.entry_type === "product") {
-            weight = entry.quantity ?? 0;
+            weight = entry.quantity_g ?? 0;
           }
 
           group.totalWeight += weight;

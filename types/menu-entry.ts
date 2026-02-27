@@ -6,7 +6,7 @@ export type MenuEntry = {
   meal_type_id: number;
   entry_type: "recipe" | "product";
   entry_id: string;
-  servings: number | null;
-  quantity: number | null;
+  planned_weight_g: number | null;
+  quantity_g: number | null;
   created_at: string;
 };

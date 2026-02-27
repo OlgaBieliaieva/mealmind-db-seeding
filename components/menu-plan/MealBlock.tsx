@@ -98,9 +98,10 @@ export default function MealBlock({
               if (entry.entry_type === "recipe") {
                 const weightPerServing = recipeWeightMap[entry.entry_id] ?? 0;
 
-                const totalWeight = (entry.servings ?? 0) * weightPerServing;
+                const totalWeight =
+                  (entry.planned_weight_g ?? 0) * weightPerServing;
 
-                amountLabel = `${entry.servings} порц · ${Math.round(
+                amountLabel = `${entry.planned_weight_g} порц · ${Math.round(
                   totalWeight,
                 )} г`;
               }
@@ -108,7 +109,7 @@ export default function MealBlock({
               if (entry.entry_type === "product") {
                 const unit = productUnitMap[entry.entry_id] ?? "г";
 
-                amountLabel = `${entry.quantity} ${unit}`;
+                amountLabel = `${entry.quantity_g} ${unit}`;
               }
 
               return (
