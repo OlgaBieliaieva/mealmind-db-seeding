@@ -39,7 +39,7 @@ export default async function PlanPage({ searchParams }: Props) {
     redirect(`/plan?date=${today}&view=members`);
   }
 
-  const activeDate = date;
+  const activeDate = date!;
   const selectedDays = days ? days.split(",").sort() : [activeDate];
   const periodDays = selectedDays.length;
 
@@ -64,19 +64,21 @@ export default async function PlanPage({ searchParams }: Props) {
   const members = await getFamilyMembers(familyId);
   const mealTypes = await getMealTypes();
 
+  const recipeWeightMap = fullData?.recipeWeightMap ?? {};
+
   // =========================
   // 🔥 PHASE 1 — PLAN AGGREGATION
   // =========================
 
   const planNutritionResult = await buildPlanNutrition({
     entries: filteredEntries,
-    recipeWeightMap: fullData?.recipeWeightMap ?? {},
-    recipeNutrientsMap: {},
+    recipeWeightMap,
   });
 
-  const planNutrition: AggregatedNutrients = planNutritionResult.aggregated;
+  const planNutrition = planNutritionResult.aggregated;
 
   const productNutrientsMap = planNutritionResult.productNutrientsMap;
+  const recipeNutrientsMap = planNutritionResult.recipeNutrientsMap;
 
   // =========================
   // 🔥 PHASE 2 — MEMBER AGGREGATION
@@ -91,8 +93,7 @@ export default async function PlanPage({ searchParams }: Props) {
 
     const result = await buildPlanNutrition({
       entries: memberEntries,
-      recipeWeightMap: fullData?.recipeWeightMap ?? {},
-      recipeNutrientsMap: {},
+      recipeWeightMap,
     });
 
     memberNutritionMap[member.user_id] = result.aggregated;
@@ -118,8 +119,7 @@ export default async function PlanPage({ searchParams }: Props) {
 
       const result = await buildPlanNutrition({
         entries: mealEntries,
-        recipeWeightMap: fullData?.recipeWeightMap ?? {},
-        recipeNutrientsMap: {},
+        recipeWeightMap,
       });
 
       mealMap[meal.meal_type_id] = result.aggregated;
@@ -129,15 +129,8 @@ export default async function PlanPage({ searchParams }: Props) {
   }
 
   // =========================
-  // 🔥 PHASE 4 — DISH-LEVEL AGGREGATION
+  // 🔥 PHASE 4 — DISH LEVEL
   // =========================
-
-  const memberDishNutritionMap: Record<
-    string,
-    Record<string, NutritionDisplayItem[]>
-  > = {};
-
-  // Потрібні nutrientRefs для map → тому читаємо їх раніше
 
   const nutrientRefRows = await readSheet("nutrients_reference!A2:L");
 
@@ -168,6 +161,11 @@ export default async function PlanPage({ searchParams }: Props) {
     };
   });
 
+  const memberDishNutritionMap: Record<
+    string,
+    Record<string, NutritionDisplayItem[]>
+  > = {};
+
   for (const member of members) {
     const dishMap: Record<string, NutritionDisplayItem[]> = {};
 
@@ -177,8 +175,8 @@ export default async function PlanPage({ searchParams }: Props) {
 
     for (const entry of memberEntries) {
       const aggregated = aggregateSingleEntryNutrients(entry, {
-        recipeWeightMap: fullData?.recipeWeightMap ?? {},
-        recipeNutrientsMap: {},
+        recipeWeightMap,
+        recipeNutrientsMap,
         productNutrientsMap,
       });
 
@@ -230,12 +228,10 @@ export default async function PlanPage({ searchParams }: Props) {
   // =========================
 
   const memberBalanceMap: Record<string, BalanceResult> = {};
-
   const memberTargetsMap: Record<string, Record<string, number>> = {};
 
   for (const member of members) {
     const nutrition = memberNutritionDisplayMap[member.user_id];
-
     const targets = await getOrCreateUserTargets(member.user_id);
 
     const balance = evaluateUserBalance({
@@ -245,7 +241,6 @@ export default async function PlanPage({ searchParams }: Props) {
     });
 
     memberBalanceMap[member.user_id] = balance;
-
     memberTargetsMap[member.user_id] = targets;
   }
 
@@ -271,7 +266,7 @@ export default async function PlanPage({ searchParams }: Props) {
         selectedDays={selectedDays}
         recipesMap={fullData?.recipesMap ?? {}}
         productsMap={fullData?.productsMap ?? {}}
-        recipeWeightMap={fullData?.recipeWeightMap ?? {}}
+        recipeWeightMap={recipeWeightMap}
         productUnitMap={fullData?.productUnitMap ?? {}}
         planNutrition={planNutritionDisplay}
         memberNutritionMap={memberNutritionDisplayMap}

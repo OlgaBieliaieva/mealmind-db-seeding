@@ -3,11 +3,14 @@ import { NutrientsMap } from "@/types/nutrients";
 import { AggregatedNutrients } from "@/types/nutrition-aggregation";
 
 type Maps = {
-  recipeWeightMap: Record<string, number>;
-  recipeNutrientsMap: Record<string, NutrientsMap>;
+  recipeWeightMap: Record<string, number>; // base_output_weight_g
+  recipeNutrientsMap: Record<string, NutrientsMap>; // cached totals
   productNutrientsMap: Record<string, NutrientsMap>;
 };
 
+/**
+ * 🔥 Агрегація списку entries (план, meal, member)
+ */
 export function aggregateEntriesNutrients(
   entries: MenuEntry[],
   maps: Maps,
@@ -15,80 +18,86 @@ export function aggregateEntriesNutrients(
   const result: AggregatedNutrients = {};
 
   for (const entry of entries) {
-    let weight = 0;
-    let nutrients: NutrientsMap | undefined;
+    const single = aggregateSingleEntryNutrients(entry, maps);
 
-    if (entry.entry_type === "recipe") {
-      const weightPerServing =
-        Number(maps.recipeWeightMap[entry.entry_id]) || 0;
-
-      const servings = Number(entry.servings) || 0;
-
-      weight = servings * weightPerServing;
-      nutrients = maps.recipeNutrientsMap[entry.entry_id];
-    }
-
-    if (entry.entry_type === "product") {
-      weight = Number(entry.quantity) || 0;
-      nutrients = maps.productNutrientsMap[entry.entry_id];
-    }
-
-    if (!nutrients || weight <= 0) continue;
-
-    const multiplier = weight / 100;
-
-    for (const [code, data] of Object.entries(nutrients)) {
-      const valuePer100g = Number(data?.value);
-
-      if (!Number.isFinite(valuePer100g)) continue;
-
-      if (!Number.isFinite(multiplier)) continue;
-
-      if (!Number.isFinite(result[code])) {
-        result[code] = 0;
-      }
-
-      result[code] += valuePer100g * multiplier;
+    for (const [code, value] of Object.entries(single)) {
+      result[code] = (result[code] ?? 0) + value;
     }
   }
 
   return result;
 }
 
+/**
+ * 🔥 Агрегація одного entry
+ */
 export function aggregateSingleEntryNutrients(
   entry: MenuEntry,
   maps: Maps,
 ): AggregatedNutrients {
   const result: AggregatedNutrients = {};
 
-  let weight = 0;
-  let nutrients: NutrientsMap | undefined;
-
+  // =========================
+  // 🥗 RECIPE
+  // =========================
   if (entry.entry_type === "recipe") {
-    const weightPerServing = Number(maps.recipeWeightMap[entry.entry_id]) || 0;
+    const baseWeight = Number(maps.recipeWeightMap[entry.entry_id]) || 0;
 
-    const servings = Number(entry.servings) || 0;
+    const plannedWeight = Number(entry.planned_weight_g) || 0;
 
-    weight = servings * weightPerServing;
-    nutrients = maps.recipeNutrientsMap[entry.entry_id];
+    if (!baseWeight || !plannedWeight) {
+      return result;
+    }
+
+    const nutrients = maps.recipeNutrientsMap[entry.entry_id];
+
+    if (!nutrients) {
+      return result;
+    }
+
+    const scale = plannedWeight / baseWeight;
+
+    for (const [nutrientId, data] of Object.entries(nutrients)) {
+      const raw = String(data?.value ?? "0");
+      const value = Number(raw.replace(",", "."));
+
+      if (!Number.isFinite(value)) continue;
+
+      result[nutrientId] = (result[nutrientId] ?? 0) + value * scale;
+    }
+
+    return result;
   }
 
+  // =========================
+  // 🛒 PRODUCT
+  // =========================
   if (entry.entry_type === "product") {
-    weight = Number(entry.quantity) || 0;
-    nutrients = maps.productNutrientsMap[entry.entry_id];
-  }
+    const weight = Number(entry.quantity_g) || 0;
 
-  if (!nutrients || weight <= 0) return result;
+    if (!weight) {
+      return result;
+    }
 
-  const multiplier = weight / 100;
+    const nutrients = maps.productNutrientsMap[entry.entry_id];
 
-  for (const [code, data] of Object.entries(nutrients)) {
-    const valuePer100g = Number(data?.value);
+    if (!nutrients) {
+      return result;
+    }
 
-    if (!Number.isFinite(valuePer100g)) continue;
-    if (!Number.isFinite(multiplier)) continue;
+    const multiplier = weight / 100;
 
-    result[code] = (result[code] ?? 0) + valuePer100g * multiplier;
+    for (const [nutrientId, data] of Object.entries(nutrients)) {
+      const raw = String(data?.value ?? "0");
+      const valuePer100g = Number(raw.replace(",", "."));
+
+      if (!Number.isFinite(valuePer100g)) continue;
+
+      result[nutrientId] =
+        (result[nutrientId] ?? 0) + valuePer100g * multiplier;
+    }
+
+    return result;
   }
 
   return result;

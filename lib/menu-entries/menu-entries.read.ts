@@ -12,8 +12,8 @@ export async function getMenuEntries(): Promise<MenuEntry[]> {
     meal_type_id: Number(row[4]),
     entry_type: row[5] as "recipe" | "product",
     entry_id: row[6],
-    servings: row[7] ? Number(row[7]) : null,
-    quantity: row[8] ? Number(row[8]) : null,
+    planned_weight_g: row[7] ? Number(row[7]) : null,
+    quantity_g: row[8] ? Number(row[8]) : null,
     created_at: row[9],
   }));
 }
