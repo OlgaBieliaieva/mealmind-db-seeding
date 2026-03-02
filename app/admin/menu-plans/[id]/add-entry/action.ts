@@ -26,10 +26,10 @@ export async function saveMenuEntries(input: SaveEntriesInput) {
         date: input.date,
         user_id: input.user_id,
         meal_type_id: input.meal_type_id,
-        entry_type: item.entry_type,
+        entry_type: "recipe",
         entry_id: item.entry_id,
-        servings: 1,
-        quantity: null,
+        planned_weight_g: 100, // тимчасовий дефолт
+        quantity_g: null,
       });
     }
 
@@ -49,10 +49,10 @@ export async function saveMenuEntries(input: SaveEntriesInput) {
         date: input.date,
         user_id: input.user_id,
         meal_type_id: input.meal_type_id,
-        entry_type: item.entry_type,
+        entry_type: "product",
         entry_id: item.entry_id,
-        servings: 1,
-        quantity,
+        planned_weight_g: null,
+        quantity_g: quantity,
       });
     }
   }

@@ -8,8 +8,8 @@ type CreateMenuEntryInput = {
   meal_type_id: number;
   entry_type: "recipe" | "product";
   entry_id: string;
-  servings: number | null;
-  quantity: number | null;
+  planned_weight_g: number | null;
+  quantity_g: number | null;
 };
 
 export async function createMenuEntry(input: CreateMenuEntryInput) {
@@ -21,8 +21,8 @@ export async function createMenuEntry(input: CreateMenuEntryInput) {
     input.meal_type_id,
     input.entry_type,
     input.entry_id,
-    input.servings,
-    input.quantity,
+    input.planned_weight_g,
+    input.quantity_g,
     new Date().toISOString(),
   ]);
 }
