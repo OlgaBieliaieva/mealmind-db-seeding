@@ -95,14 +95,14 @@ export async function getMenuPlanFullData(familyId: string, date: string) {
     const recipe_id = row[0];
     const title = row[1];
     const base_output_weight_g = Number(row[11]);
-    const base_servings = Number(row[10]);
+    // const base_servings = Number(row[10]);
 
     if (recipeIds.has(recipe_id)) {
       recipesMap[recipe_id] = title;
     }
 
-    if (recipeIds.has(recipe_id) && base_servings > 0) {
-      recipeWeightMap[recipe_id] = base_output_weight_g / base_servings;
+    if (recipeIds.has(recipe_id)) {
+      recipeWeightMap[recipe_id] = base_output_weight_g;
     }
   });
 
