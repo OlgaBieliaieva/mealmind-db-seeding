@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { createRecipeEntry } from "@/app/plan/actions/create-recipe-entry";
 import { RecipeFull } from "@/types/recipe-views";
 
@@ -87,10 +88,14 @@ export default function RecipeEntryDetailsClient({
             <h1 className="text-xl font-semibold mb-2">{recipe.title}</h1>
 
             {recipe.photo_url && (
-              <img
+              <Image
                 src={recipe.photo_url}
                 alt={recipe.title}
+                width={800}
+                height={600}
                 className="rounded-xl w-full object-cover"
+                sizes="100vw"
+                priority
               />
             )}
           </div>
