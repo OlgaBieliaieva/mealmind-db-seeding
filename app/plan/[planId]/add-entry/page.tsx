@@ -7,7 +7,7 @@ import { getAllProducts } from "@/lib/products.read";
 import EntryPickerClient from "@/components/entry-picker/EntryPickerClient";
 
 type Props = {
-  params: { id: string };
+  params: { planId: string };
   searchParams: {
     date?: string;
     mealTypeId?: string;
@@ -16,7 +16,7 @@ type Props = {
 };
 
 export default async function AddEntryPage({ params, searchParams }: Props) {
-  const { id: planId } = await params;
+  const { planId } = await params;
   const { date, mealTypeId, userId } = await searchParams;
 
   if (!date || !mealTypeId) {

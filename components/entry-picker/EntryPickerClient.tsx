@@ -11,7 +11,7 @@ import { FamilyMember } from "@/lib/families/family-members.read";
 import { RecipeListItem } from "@/lib/recipes.read";
 import { ProductListItem } from "@/lib/products.read";
 import { SelectedEntry } from "@/types/entry-picker";
-import { saveMenuEntries } from "@/app/admin/menu-plans/[id]/add-entry/action";
+import { saveMenuEntries } from "@/app/plan/actions/save-menu-entry";
 
 type Props = {
   planId: string;

@@ -193,7 +193,7 @@ export default function MemberCard({
                       if (!activeDayId) return;
 
                       router.push(
-                        `/admin/menu-plans/${planId}/add-entry?date=${activeDayId}&mealTypeId=${meal.meal_type_id}&userId=${member.user_id}&view=${view}`,
+                        `/plan/${planId}/add-entry?date=${activeDayId}&mealTypeId=${meal.meal_type_id}&userId=${member.user_id}&view=${view}`,
                       );
                     }
               }
