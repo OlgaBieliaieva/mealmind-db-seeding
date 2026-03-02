@@ -28,7 +28,6 @@ export default function MealBlock({
   entries,
   recipesMap,
   productsMap,
-  recipeWeightMap,
   productUnitMap,
   macro,
   dishNutritionMap,
@@ -96,14 +95,25 @@ export default function MealBlock({
               let amountLabel = "";
 
               if (entry.entry_type === "recipe") {
-                const weightPerServing = recipeWeightMap[entry.entry_id] ?? 0;
+                const plannedWeight = entry.planned_weight_g ?? 0;
 
-                const totalWeight =
-                  (entry.planned_weight_g ?? 0) * weightPerServing;
+                // const baseWeight = recipeWeightMap[entry.entry_id] ?? 0;
 
-                amountLabel = `${entry.planned_weight_g} порц · ${Math.round(
-                  totalWeight,
-                )} г`;
+                const portionInfo = "";
+
+                // if (baseWeight > 0) {
+                //   const ratio = plannedWeight / baseWeight;
+
+                //   // якщо хочеш показувати частку базового рецепта
+                //   portionInfo =
+                //     ratio >= 1
+                //       ? `${ratio.toFixed(2)}× базовий рецепт`
+                //       : `${(ratio * 100).toFixed(0)}% рецепта`;
+                // }
+
+                amountLabel = `${Math.round(plannedWeight)} g
+                ${portionInfo ? ` · ${portionInfo}` : ""}
+                `;
               }
 
               if (entry.entry_type === "product") {

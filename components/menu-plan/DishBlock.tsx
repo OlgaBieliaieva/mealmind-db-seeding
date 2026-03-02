@@ -22,6 +22,7 @@ export default function DishBlock({
   const protein = getMacro("protein");
   const fat = getMacro("fat");
   const carbs = getMacro("carbohydrates");
+  const energy = getMacro("energy_kcal");
 
   return (
     <div className="flex flex-col text-sm text-gray-700 gap-1 border-t">
@@ -34,10 +35,18 @@ export default function DishBlock({
       </div>
 
       {/* Dish macro snapshot in grams */}
+
       {nutrition && (
-        <div className="text-xs text-gray-500 pl-6">
-          🥩 {protein.toFixed(1)}g · 🧈 {fat.toFixed(1)}g · 🍞{" "}
-          {carbs.toFixed(1)}g
+        <div className="text-xs text-gray-500 pl-6 flex items-center gap-3">
+          {energy && (
+            <span className="text-xs text-gray-500">
+              {Math.round(energy)} kcal
+            </span>
+          )}
+          <span>
+            🥩 {protein.toFixed(1)}g · 🧈 {fat.toFixed(1)}g · 🍞{" "}
+            {carbs.toFixed(1)}g
+          </span>
         </div>
       )}
     </div>
