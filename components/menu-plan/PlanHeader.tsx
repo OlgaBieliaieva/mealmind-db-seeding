@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import DatePicker from "./DatePicker";
-import DaySelector from "./DaySelector";
+import PlanDaySelector from "./PlanDaySelector";
 import { formatDateDDMMYY } from "@/lib/date/format";
 
 type Props = {
@@ -37,7 +37,7 @@ export default function PlanHeader({
 
     const params = new URLSearchParams(searchParams.toString());
     params.set("date", today);
-    params.delete("days"); // 🔥 важливо
+    params.delete("days");
 
     router.replace(`?${params.toString()}`);
   }
@@ -45,9 +45,9 @@ export default function PlanHeader({
     const params = new URLSearchParams(searchParams.toString());
 
     if (!enabled) {
-      params.delete("days"); // 🔥 повертаємося в single
+      params.delete("days");
     } else {
-      params.set("days", activeDate); // починаємо з активного
+      params.set("days", activeDate);
     }
 
     router.replace(`?${params.toString()}`);
@@ -91,7 +91,7 @@ export default function PlanHeader({
 
       {/* Day selector */}
       <div className="px-4 pb-3">
-        <DaySelector
+        <PlanDaySelector
           fullWeek={fullWeek}
           activeDate={activeDate}
           selectedDays={selectedDays}

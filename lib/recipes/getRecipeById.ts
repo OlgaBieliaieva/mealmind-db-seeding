@@ -16,7 +16,7 @@ export async function getRecipeById(
   // ===============================
   // 1️⃣ Recipe
   // ===============================
-  const recipeRows = await readSheet("recipes!A2:R");
+  const recipeRows = await readSheet("recipes!A2:S");
   const recipeRow = recipeRows.find((r) => r[0] === recipeId);
 
   if (!recipeRow) return null;

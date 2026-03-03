@@ -1,9 +1,11 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { MenuEntry } from "@/types/menu-entry";
 import { NutritionDisplayItem } from "@/lib/nutrition/nutrition.adapter";
 
 type Props = {
+  planId: string;
   entry: MenuEntry;
   name: string;
   amountLabel: string;
@@ -11,11 +13,14 @@ type Props = {
 };
 
 export default function DishBlock({
+  planId,
   entry,
   name,
   amountLabel,
   nutrition,
 }: Props) {
+  const router = useRouter();
+
   const getMacro = (code: string) =>
     nutrition?.find((n) => n.code === code)?.value ?? 0;
 
@@ -24,8 +29,15 @@ export default function DishBlock({
   const carbs = getMacro("carbohydrates");
   const energy = getMacro("energy_kcal");
 
+  const handleClick = () => {
+    router.push(`/plan/${planId}/entry/edit/${entry.menu_entry_id}`);
+  };
+
   return (
-    <div className="flex flex-col text-sm text-gray-700 gap-1 border-t">
+    <div
+      onClick={handleClick}
+      className="flex flex-col text-sm text-gray-700 gap-1 border-t cursor-pointer hover:bg-gray-50 transition-colors"
+    >
       <div className="flex items-center gap-2">
         <span>{entry.entry_type === "recipe" ? "🍳" : "🛒"}</span>
 
@@ -34,15 +46,9 @@ export default function DishBlock({
         <span className="text-gray-400">{amountLabel}</span>
       </div>
 
-      {/* Dish macro snapshot in grams */}
-
       {nutrition && (
         <div className="text-xs text-gray-500 pl-6 flex items-center gap-3">
-          {energy && (
-            <span className="text-xs text-gray-500">
-              {Math.round(energy)} kcal
-            </span>
-          )}
+          {energy > 0 && <span>{Math.round(energy)} kcal</span>}
           <span>
             🥩 {protein.toFixed(1)}g · 🧈 {fat.toFixed(1)}g · 🍞{" "}
             {carbs.toFixed(1)}g

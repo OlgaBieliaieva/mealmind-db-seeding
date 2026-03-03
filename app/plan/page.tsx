@@ -139,6 +139,7 @@ export default async function PlanPage({ searchParams }: Props) {
 
     if (
       group !== "macro" &&
+      group !== "micro" &&
       group !== "vitamin" &&
       group !== "mineral" &&
       group !== "other"
