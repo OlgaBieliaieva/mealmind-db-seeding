@@ -122,6 +122,9 @@ export default function EntryPickerClient({
         familyId={familyId}
         selectedItems={selectedItems}
         onToggle={toggleItem}
+        planId={planId}
+        date={date}
+        mealTypeId={mealTypeId}
       />
     </div>
   );

@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { PickerItem } from "@/types/entry-picker";
 
 type Props = {
@@ -14,6 +15,9 @@ type Props = {
   toggleProduct: (id: string) => void;
 
   selectedUserId: string | null;
+  planId: string;
+  date: string;
+  mealTypeId: number;
 };
 
 export default function EntryCard({
@@ -25,7 +29,11 @@ export default function EntryCard({
   toggleRecipe,
   toggleProduct,
   selectedUserId,
+  planId,
+  date,
+  mealTypeId,
 }: Props) {
+  const router = useRouter();
   // ⭐ Визначаємо чи улюблений
   const isFavorite =
     item.type === "recipe"
@@ -43,6 +51,22 @@ export default function EntryCard({
     }
   };
 
+  const handleOpenDetails = () => {
+    if (!selectedUserId) return;
+
+    if (item.type === "recipe") {
+      router.push(
+        `/plan/${planId}/entry/recipe/${item.id}?date=${date}&mealTypeId=${mealTypeId}`,
+      );
+    }
+
+    if (item.type === "product") {
+      router.push(
+        `/plan/${planId}/entry/product/${item.id}?date=${date}&mealTypeId=${mealTypeId}`,
+      );
+    }
+  };
+
   return (
     <div className="bg-white rounded-2xl border p-4 flex items-center justify-between">
       {/* ⭐ Star */}
@@ -57,8 +81,8 @@ export default function EntryCard({
         {isFavorite ? "★" : "☆"}
       </button>
 
-      {/* Info */}
-      <div className="flex-1 px-3">
+      {/* CLICKABLE INFO AREA */}
+      <div onClick={handleOpenDetails} className="flex-1 px-3 cursor-pointer">
         <div className="text-xs text-gray-400 mb-1">
           {item.type === "recipe" ? "Рецепт" : "Продукт"}
         </div>

@@ -173,6 +173,7 @@ export default function MemberCard({
           return (
             <MealBlock
               key={meal.meal_type_id}
+              planId={planId}
               title={meal.name_ua}
               entries={filteredEntries}
               recipesMap={recipesMap}

@@ -23,6 +23,9 @@ type Props = {
 
   selectedUserId: string | null;
   familyId: string;
+  planId: string;
+  date: string;
+  mealTypeId: number;
 };
 
 export default function EntryList({
@@ -37,6 +40,9 @@ export default function EntryList({
   familyId,
   selectedItems,
   onToggle,
+  planId,
+  date,
+  mealTypeId,
 }: Props) {
   let items: PickerItem[] = [];
 
@@ -104,6 +110,9 @@ export default function EntryList({
             selectedUserId={selectedUserId}
             recipeMap={recipeMap}
             productMap={productMap}
+            planId={planId}
+            date={date}
+            mealTypeId={mealTypeId}
             toggleRecipe={toggleRecipe}
             toggleProduct={toggleProduct}
             checked={selectedItems.some(

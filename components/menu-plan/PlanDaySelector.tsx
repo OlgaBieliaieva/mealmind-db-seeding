@@ -9,7 +9,7 @@ type Props = {
   isMulti: boolean;
 };
 
-export default function DaySelector({
+export default function PlanDaySelector({
   fullWeek,
   activeDate,
   selectedDays,

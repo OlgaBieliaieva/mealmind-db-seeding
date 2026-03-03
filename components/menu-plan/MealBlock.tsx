@@ -7,6 +7,7 @@ import MacroSnapshot from "../nutrition/MacroSnapshot";
 import DishBlock from "./DishBlock";
 
 type Props = {
+  planId: string;
   title: string;
   entries: MenuEntry[];
   recipesMap: Record<string, string>;
@@ -24,6 +25,7 @@ type Props = {
 };
 
 export default function MealBlock({
+  planId,
   title,
   entries,
   recipesMap,
@@ -125,6 +127,7 @@ export default function MealBlock({
               return (
                 <DishBlock
                   key={entry.menu_entry_id}
+                  planId={planId}
                   entry={entry}
                   name={displayName ?? entry.entry_id}
                   amountLabel={amountLabel}
