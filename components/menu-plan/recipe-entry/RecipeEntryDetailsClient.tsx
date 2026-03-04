@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRecipeFavoritesMap } from "@/lib/hooks/useRecipeFavoritesMap";
 import { RecipeFull } from "@/types/recipe-views";
 import { MenuEntry } from "@/types/menu-entry";
-import RecipeEntryHeader from "./RecipeEntryHeader";
+import EntryHeader from "./EntryHeader";
 import RecipeEntryTabs from "./RecipeEntryTabs";
 import RecipeInfoBlock from "./RecipeInfoBlock";
 import PlanningForm from "./PlanningForm";
@@ -21,7 +21,7 @@ type Props = {
   }[];
 
   initialMealTypeId: number;
-  mealName: string;
+  // mealName: string;
   weekLabel: string;
 
   members: { user_id: string; first_name: string }[];
@@ -64,7 +64,7 @@ export default function RecipeEntryDetailsClient({
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <RecipeEntryHeader
+      <EntryHeader
         weekLabel={weekLabel}
         mealTypes={mealTypes}
         selectedMealTypeId={selectedMealTypeId}
@@ -90,6 +90,7 @@ export default function RecipeEntryDetailsClient({
           defaultWeight={defaultPortion}
           baseWeight={recipeFull.recipe.base_output_weight_g}
           nutrients={recipeFull.nutrients}
+          unit="g"
           fullWeek={fullWeek}
           date={date}
           existingEntry={existingEntry}

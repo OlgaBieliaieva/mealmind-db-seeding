@@ -39,7 +39,7 @@ const BaseProductSchema = z.object({
   // NOTE:
   // product_id is a string for now due to legacy Google Sheets IDs.
   // Will be migrated to UUID in SQL phase.
-  product_id: z.string().optional(),
+  product_id: z.string(),
 
   type: ProductTypeEnum,
 
