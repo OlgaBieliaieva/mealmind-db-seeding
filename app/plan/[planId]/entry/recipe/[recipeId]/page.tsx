@@ -43,9 +43,9 @@ export default async function RecipeEntryDetailsPage({
     ? Number(mealTypeId)
     : (mealTypes[0]?.meal_type_id ?? 1);
 
-  const mealType = mealTypes.find((m) => m.meal_type_id === initialMealTypeId);
+  // const mealType = mealTypes.find((m) => m.meal_type_id === initialMealTypeId);
 
-  const mealName = mealType?.name_ua ?? "Прийом їжі";
+  // const mealName = mealType?.name_ua ?? "Прийом їжі";
 
   // 🟣 Plan → family → members
   const plan = await getMenuPlanDetails(planId);
@@ -67,7 +67,7 @@ export default async function RecipeEntryDetailsPage({
       date={date}
       mealTypes={mealTypes}
       initialMealTypeId={initialMealTypeId}
-      mealName={mealName}
+      // mealName={mealName}
       weekLabel={`${formatDateDDMMYY(start)} – ${formatDateDDMMYY(end)}`}
       members={members}
       fullWeek={fullWeek}

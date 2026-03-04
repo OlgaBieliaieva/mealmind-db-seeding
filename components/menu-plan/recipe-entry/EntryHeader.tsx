@@ -15,7 +15,7 @@ type Props = {
   onMealTypeChange: (id: number) => void;
 };
 
-export default function RecipeEntryHeader({
+export default function EntryHeader({
   weekLabel,
   mealTypes,
   selectedMealTypeId,

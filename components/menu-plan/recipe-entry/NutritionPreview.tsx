@@ -93,7 +93,7 @@ export default function NutritionPreview({
           </button>
 
           {expanded && (
-            <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
+            <div className="flex flex-col gap-3 text-sm">
               {micros.map((n) => (
                 <div key={n.id} className="flex justify-between">
                   <span className="text-gray-500">{n.name}</span>
