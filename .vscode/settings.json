@@ -1,0 +1,115 @@
+{
+  "better-comments.tags": [
+    {
+      "tag": "!",
+      "color": "#FF5555",
+      "bold": true
+    },
+    {
+      "tag": "FIXME",
+      "color": "#FF6E6E",
+      "bold": true
+    },
+    {
+      "tag": "HACK",
+      "color": "#FF79C6",
+      "bold": true
+    },
+    {
+      "tag": "TODO",
+      "color": "#F1FA8C",
+      "bold": true
+    },
+    {
+      "tag": "NEXT",
+      "color": "#8BE9FD"
+    },
+    {
+      "tag": "IDEA",
+      "color": "#BD93F9",
+      "italic": true
+    },
+    {
+      "tag": "NOTE",
+      "color": "#50FA7B"
+    },
+    {
+      "tag": "WHY",
+      "color": "#8BE9FD",
+      "italic": true
+    },
+    {
+      "tag": "API",
+      "color": "#FFB86C"
+    },
+    {
+      "tag": "DB",
+      "color": "#50FA7B"
+    },
+    {
+      "tag": "CONFIG",
+      "color": "#BD93F9"
+    },
+    {
+      "tag": "REFACTOR",
+      "color": "#FFB86C",
+      "bold": true
+    },
+    {
+      "tag": "SECTION",
+      "color": "#BD93F9",
+      "bold": true,
+      "underline": true
+    },
+
+    {
+      "tag": "CONTRACT",
+      "color": "#8BE9FD",
+      "bold": true
+    },
+    {
+      "tag": "DATAFLOW",
+      "color": "#50FA7B",
+      "italic": true
+    },
+    {
+      "tag": "DANGER",
+      "color": "#FF5555",
+      "bold": true,
+      "underline": true
+    }
+  ],
+
+  "better-comments.highlightPlainText": true,
+
+  "todo-tree.highlights.customHighlight": {
+    "BUG": {
+      "icon": "bug"
+    },
+    "HACK": {
+      "icon": "tools"
+    },
+    "FIXME": {
+      "icon": "flame"
+    },
+    "XXX": {
+      "icon": "x"
+    },
+    "[ ]": {
+      "icon": "issue-draft"
+    },
+    "[x]": {
+      "icon": "issue-closed"
+    },
+
+    "CONTRACT": {
+      "icon": "book"
+    },
+    "DATAFLOW": {
+      "icon": "git-branch"
+    },
+    "DANGER": {
+      "icon": "alert"
+    }
+  }
+}
