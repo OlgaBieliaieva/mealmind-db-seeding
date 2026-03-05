@@ -4,8 +4,8 @@ import {
   createMenuEntry,
   updateMenuEntry,
   deleteMenuEntry,
-} from "@/lib/menu-entries/menu-entries.write";
-import { getMenuEntriesByContext } from "@/lib/menu-entries/menu-entries.read";
+} from "@/lib/v1/menu-entries/menu-entries.write";
+import { getMenuEntriesByContext } from "@/lib/v1/menu-entries/menu-entries.read";
 
 /**
  * CREATE

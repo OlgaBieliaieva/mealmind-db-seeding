@@ -9,20 +9,20 @@ import {
   ProductFormValues,
 } from "@/types/product-form.schema";
 
-import { mapProductFormToProductInput } from "@/lib/mappers/productFormToProductInput.mapper";
-import { useBrands } from "@/lib/hooks/useBrands";
-import { useCategories } from "@/lib/hooks/useCategories";
+import { mapProductFormToProductInput } from "@/lib/v1/mappers/productFormToProductInput.mapper";
+import { useBrands } from "@/lib/v1/hooks/useBrands";
+import { useCategories } from "@/lib/v1/hooks/useCategories";
 
 import { CategorySelect } from "@/components/CategorySelect";
 import { SubcategorySelect } from "@/components/SubcategorySelect";
-import { findCategoryById } from "@/lib/categories.find";
+import { findCategoryById } from "@/lib/v1/categories.find";
 import { GenericProductSearch } from "@/components/GenericProductSearch";
 import { BarcodeInput } from "@/components/BarcodeInput";
 import { ProductPhotoUploader } from "@/components/ProductPhotoUploader";
 
 import { Brand } from "@/types/brand";
 import { GenericProduct } from "@/types/generic-product";
-import { useNutrientsReference } from "@/lib/hooks/useNutrientsReference";
+import { useNutrientsReference } from "@/lib/v1/hooks/useNutrientsReference";
 import { NutrientsEditor } from "@/components/NutrientsEditor";
 
 const defaultProductFormValues: ProductFormValues = {

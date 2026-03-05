@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { createMenuEntry } from "@/lib/menu-entries/menu-entries.write";
+import { createMenuEntry } from "@/lib/v1/menu-entries/menu-entries.write";
 
 type Input = {
   planId: string;

@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { NutrientsMap } from "@/types/nutrients";
-import { useNutrientsReference } from "@/lib/hooks/useNutrientsReference";
+import { useNutrientsReference } from "@/lib/v1/hooks/useNutrientsReference";
 
 type Props = {
   nutrients: NutrientsMap;

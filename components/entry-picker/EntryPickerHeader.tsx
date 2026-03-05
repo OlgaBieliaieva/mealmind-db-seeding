@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { FamilyMember } from "@/lib/families/family-members.read";
+import { FamilyMember } from "@/lib/v1/families/family-members.read";
 
 type Props = {
   mealName: string;

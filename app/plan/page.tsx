@@ -1,25 +1,25 @@
 export const dynamic = "force-dynamic";
 
 import { redirect } from "next/navigation";
-import { readSheet } from "@/lib/sheets.read";
-import { getOrCreateUserTargets } from "@/lib/nutrition/user-targets.service";
-import { getOrCreateMenuPlan } from "@/lib/menu-plans/menu-plan.service";
-import { getFamilyMembers } from "@/lib/families/family-members.read";
-import { getMealTypes } from "@/lib/meal-types/meal-types.read";
-import { getWeekStart } from "@/lib/date/getWeekStart";
-import { generateFullWeek } from "@/lib/date/week";
-import { getMenuPlanFullData } from "@/lib/menu-plans/menu-plans.read";
-import { buildPlanNutrition } from "@/lib/nutrition/nutrition.service";
-import { aggregateSingleEntryNutrients } from "@/lib/nutrition/nutrition.aggregate";
+import { readSheet } from "@/lib/v1/sheets.read";
+import { getOrCreateUserTargets } from "@/lib/v1/nutrition/user-targets.service";
+import { getOrCreateMenuPlan } from "@/lib/v1/menu-plans/menu-plan.service";
+import { getFamilyMembers } from "@/lib/v1/families/family-members.read";
+import { getMealTypes } from "@/lib/v1/meal-types/meal-types.read";
+import { getWeekStart } from "@/lib/v1/date/getWeekStart";
+import { generateFullWeek } from "@/lib/v1/date/week";
+import { getMenuPlanFullData } from "@/lib/v1/menu-plans/menu-plans.read";
+import { buildPlanNutrition } from "@/lib/v1/nutrition/nutrition.service";
+import { aggregateSingleEntryNutrients } from "@/lib/v1/nutrition/nutrition.aggregate";
 import { AggregatedNutrients } from "@/types/nutrition-aggregation";
 import { NutrientReference } from "@/types/nutrient.dto";
 import {
   mapNutritionToDisplay,
   NutritionDisplayItem,
-} from "@/lib/nutrition/nutrition.adapter";
+} from "@/lib/v1/nutrition/nutrition.adapter";
 import PlanLayout from "@/components/menu-plan/PlanLayout";
 import PlanHeader from "@/components/menu-plan/PlanHeader";
-import { evaluateUserBalance } from "@/lib/nutrition/balance.service";
+import { evaluateUserBalance } from "@/lib/v1/nutrition/balance.service";
 import { BalanceResult } from "@/types/nutrition-balance";
 
 type Props = {

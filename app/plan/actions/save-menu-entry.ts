@@ -1,9 +1,9 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { createMenuEntry } from "@/lib/menu-entries/menu-entries.write";
-import { getAllProducts } from "@/lib/products.read";
-import { toggleProductFavorite } from "@/lib/product-favorites.write";
+import { createMenuEntry } from "@/lib/v1/menu-entries/menu-entries.write";
+import { getAllProducts } from "@/lib/v1/products.read";
+import { toggleProductFavorite } from "@/lib/v1/product-favorites.write";
 
 type SaveEntriesInput = {
   menu_plan_id: string;

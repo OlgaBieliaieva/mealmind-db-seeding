@@ -1,4 +1,4 @@
-import { readSheet } from "@/lib/sheets.read";
+import { readSheet } from "@/lib/v1/sheets.read";
 import RecipesList from "@/components/recipe/RecipesList";
 
 export const dynamic = "force-dynamic";

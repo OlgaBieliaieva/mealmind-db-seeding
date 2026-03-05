@@ -1,7 +1,7 @@
 export const dynamic = "force-dynamic";
 
 import { createMenuPlan } from "../actions";
-import { readSheet } from "@/lib/sheets.read";
+import { readSheet } from "@/lib/v1/sheets.read";
 
 export default async function NewMenuPlanPage() {
   const rows = await readSheet("families!A2:D");

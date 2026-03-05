@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { MenuEntry } from "@/types/menu-entry";
-import { NutritionDisplayItem } from "@/lib/nutrition/nutrition.adapter";
+import { NutritionDisplayItem } from "@/lib/v1/nutrition/nutrition.adapter";
 import MacroSnapshot from "../nutrition/MacroSnapshot";
 import DishBlock from "./DishBlock";
 

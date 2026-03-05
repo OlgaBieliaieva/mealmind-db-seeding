@@ -1,10 +1,10 @@
 export const dynamic = "force-dynamic";
 
-import { getProductById } from "@/lib/products.read";
-import { getMealTypes } from "@/lib/meal-types/meal-types.read";
-import { getFamilyMembers } from "@/lib/families/family-members.read";
-import { getMenuPlanDetails } from "@/lib/menu-plans/menu-plan-details.read";
-import { generateFullWeek, getWeekRangeFromDate } from "@/lib/date/week";
+import { getProductById } from "@/lib/v1/products.read";
+import { getMealTypes } from "@/lib/v1/meal-types/meal-types.read";
+import { getFamilyMembers } from "@/lib/v1/families/family-members.read";
+import { getMenuPlanDetails } from "@/lib/v1/menu-plans/menu-plan-details.read";
+import { generateFullWeek, getWeekRangeFromDate } from "@/lib/v1/date/week";
 import ProductEntryDetailsClient from "@/components/menu-plan/recipe-entry/ProductEntryDetailsClient";
 
 type Props = {

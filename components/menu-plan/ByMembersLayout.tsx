@@ -1,9 +1,9 @@
 import MemberCard from "./MemberCard";
-import { FamilyMember } from "@/lib/families/family-members.read";
-import { MealType } from "@/lib/meal-types/meal-types.read";
+import { FamilyMember } from "@/lib/v1/families/family-members.read";
+import { MealType } from "@/lib/v1/meal-types/meal-types.read";
 import { MenuEntry } from "@/types/menu-entry";
 import { BalanceResult } from "@/types/nutrition-balance";
-import { NutritionDisplayItem } from "@/lib/nutrition/nutrition.adapter";
+import { NutritionDisplayItem } from "@/lib/v1/nutrition/nutrition.adapter";
 
 type Props = {
   planId: string;

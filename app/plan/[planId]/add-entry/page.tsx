@@ -1,9 +1,9 @@
 export const dynamic = "force-dynamic";
 
-import { getMealTypes } from "@/lib/meal-types/meal-types.read";
-import { getFamilyMembers } from "@/lib/families/family-members.read";
-import { getAllRecipes } from "@/lib/recipes.read";
-import { getAllProducts } from "@/lib/products.read";
+import { getMealTypes } from "@/lib/v1/meal-types/meal-types.read";
+import { getFamilyMembers } from "@/lib/v1/families/family-members.read";
+import { getAllRecipes } from "@/lib/v1/recipes.read";
+import { getAllProducts } from "@/lib/v1/products.read";
 import EntryPickerClient from "@/components/entry-picker/EntryPickerClient";
 
 type Props = {
@@ -32,7 +32,7 @@ export default async function AddEntryPage({ params, searchParams }: Props) {
 
   // Нам потрібно family_id → дістаємо з плану
   const { getMenuPlanDetails } =
-    await import("@/lib/menu-plans/menu-plan-details.read");
+    await import("@/lib/v1/menu-plans/menu-plan-details.read");
 
   const plan = await getMenuPlanDetails(planId);
 

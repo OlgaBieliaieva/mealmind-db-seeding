@@ -1,4 +1,4 @@
-import { getRecipeById } from "@/lib/recipes/getRecipeById";
+import { getRecipeById } from "@/lib/v1/recipes/getRecipeById";
 import { RecipeForm } from "@/components/recipe/RecipeForm";
 
 type Props = {

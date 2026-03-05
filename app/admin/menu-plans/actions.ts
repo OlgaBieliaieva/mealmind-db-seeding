@@ -1,9 +1,9 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { appendMenuPlan } from "@/lib/menu-plans.write";
-import { appendMenuDay } from "@/lib/menu-days.write";
-import { generateDateRange } from "@/lib/menu-plans/days.generate";
+import { appendMenuPlan } from "@/lib/v1/menu-plans.write";
+import { appendMenuDay } from "@/lib/v1/menu-days.write";
+import { generateDateRange } from "@/lib/v1/menu-plans/days.generate";
 
 export async function createMenuPlan(formData: FormData) {
   const family_id = formData.get("family_id") as string;

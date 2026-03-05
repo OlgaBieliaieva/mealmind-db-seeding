@@ -1,0 +1,86 @@
+import { NextRequest, NextResponse } from "next/server";
+import { readSheet } from "@/lib/v1/sheets.read";
+import { updateRow } from "@/lib/v1/sheets.helpers";
+import { mapRecipeToRowForUpdate } from "@/lib/v1/mappers/recipe.mapper";
+import { z } from "zod";
+
+const ParamsSchema = z.object({
+  id: z.string().uuid(),
+});
+
+export async function GET(
+  _req: NextRequest,
+  context: { params: Promise<{ id: string }> },
+) {
+  // 🔑 IMPORTANT: unwrap async params
+  const rawParams = await context.params;
+  const { id } = ParamsSchema.parse(rawParams);
+
+  const [recipes, ingredients, steps, cuisines] = await Promise.all([
+    readSheet("recipes!A2:S"),
+    readSheet("recipe_ingredients!A2:F"),
+    readSheet("recipe_steps!A2:E"),
+    readSheet("recipe_cuisines!A2:C"),
+  ]);
+
+  const recipe = recipes.find((r) => r[0] === id);
+
+  if (!recipe) {
+    return Response.json({ error: "Not found" }, { status: 404 });
+  }
+
+  return Response.json({
+    recipe: {
+      recipe_id: recipe[0],
+      title: recipe[1],
+      description: recipe[2],
+      recipe_type_id: recipe[3] ? Number(recipe[3]) : null,
+      author_type: recipe[4] ?? null,
+      visibility: recipe[7],
+      status: recipe[9],
+      base_servings: Number(recipe[10] || 0),
+      base_output_weight_g: Number(recipe[11] || 0),
+      prep_time_min: recipe[13] ? Number(recipe[13]) : null,
+      cook_time_min: recipe[14] ? Number(recipe[14]) : null,
+      difficulty: recipe[15] ?? null,
+      photo_url: recipe[16] || null,
+    },
+
+    ingredients: ingredients
+      .filter((i) => i[1] === id)
+      .map((i) => ({
+        product_id: i[2],
+        quantity_g: Number(i[3] || 0),
+        is_optional: i[4] === "TRUE",
+        order_index: Number(i[5] || 0),
+      }))
+      .sort((a, b) => a.order_index - b.order_index),
+
+    steps: steps
+      .filter((s) => s[1] === id)
+      .map((s) => ({
+        step_number: Number(s[2]),
+        instruction: s[3],
+        timer_sec: s[4] ? Number(s[4]) : null,
+      }))
+      .sort((a, b) => a.step_number - b.step_number),
+
+    cuisines: cuisines.filter((c) => c[0] === id).map((c) => Number(c[1])),
+  });
+}
+
+export async function PUT(
+  req: NextRequest,
+  context: { params: Promise<{ id: string }> },
+) {
+  const rawParams = await context.params;
+  const { id } = ParamsSchema.parse(rawParams);
+
+  const body = await req.json();
+
+  const updatedRow = mapRecipeToRowForUpdate(id, body);
+
+  await updateRow("recipes", id, updatedRow, 0);
+
+  return NextResponse.json({ ok: true });
+}

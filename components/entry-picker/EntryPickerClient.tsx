@@ -2,14 +2,14 @@
 
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useRecipeFavoritesMap } from "@/lib/hooks/useRecipeFavoritesMap";
-import { useProductFavoritesMap } from "@/lib/hooks/useProductFavoritesMap";
+import { useRecipeFavoritesMap } from "@/lib/v1/hooks/useRecipeFavoritesMap";
+import { useProductFavoritesMap } from "@/lib/v1/hooks/useProductFavoritesMap";
 import EntryPickerHeader from "./EntryPickerHeader";
 import EntryTabs, { EntryTab } from "./EntryTabs";
 import EntryList from "./EntryList";
-import { FamilyMember } from "@/lib/families/family-members.read";
-import { RecipeListItem } from "@/lib/recipes.read";
-import { ProductListItem } from "@/lib/products.read";
+import { FamilyMember } from "@/lib/v1/families/family-members.read";
+import { RecipeListItem } from "@/lib/v1/recipes.read";
+import { ProductListItem } from "@/lib/v1/products.read";
 import { SelectedEntry } from "@/types/entry-picker";
 import { saveMenuEntries } from "@/app/plan/actions/save-menu-entry";
 

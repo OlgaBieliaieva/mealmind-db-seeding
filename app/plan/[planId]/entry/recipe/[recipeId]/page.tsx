@@ -1,11 +1,11 @@
 export const dynamic = "force-dynamic";
 
-import { getRecipeById } from "@/lib/recipes/getRecipeById";
-import { getMealTypes } from "@/lib/meal-types/meal-types.read";
-import { getFamilyMembers } from "@/lib/families/family-members.read";
-import { getMenuPlanDetails } from "@/lib/menu-plans/menu-plan-details.read";
-import { formatDateDDMMYY } from "@/lib/date/format";
-import { getWeekRangeFromDate, generateFullWeek } from "@/lib/date/week";
+import { getRecipeById } from "@/lib/v1/recipes/getRecipeById";
+import { getMealTypes } from "@/lib/v1/meal-types/meal-types.read";
+import { getFamilyMembers } from "@/lib/v1/families/family-members.read";
+import { getMenuPlanDetails } from "@/lib/v1/menu-plans/menu-plan-details.read";
+import { formatDateDDMMYY } from "@/lib/v1/date/format";
+import { getWeekRangeFromDate, generateFullWeek } from "@/lib/v1/date/week";
 
 import RecipeEntryDetailsClient from "@/components/menu-plan/recipe-entry/RecipeEntryDetailsClient";
 

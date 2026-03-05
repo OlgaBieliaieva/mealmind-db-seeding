@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useProductFavoritesMap } from "@/lib/hooks/useProductFavoritesMap";
+import { useProductFavoritesMap } from "@/lib/v1/hooks/useProductFavoritesMap";
 import { ProductInput } from "@/types/product.schema";
 import { MenuEntry } from "@/types/menu-entry";
 import EntryHeader from "./EntryHeader";

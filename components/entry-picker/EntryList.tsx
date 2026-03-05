@@ -3,8 +3,8 @@
 import { EntryTab } from "@/components/entry-picker/EntryTabs";
 import EntryCard from "@/components/entry-picker/EntryCard";
 import { SelectedEntry } from "@/types/entry-picker";
-import { RecipeListItem } from "@/lib/recipes.read";
-import { ProductListItem } from "@/lib/products.read";
+import { RecipeListItem } from "@/lib/v1/recipes.read";
+import { ProductListItem } from "@/lib/v1/products.read";
 import { PickerItem } from "@/types/entry-picker";
 
 type Props = {

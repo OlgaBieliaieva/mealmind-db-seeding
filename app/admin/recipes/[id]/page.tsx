@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { getRecipeById } from "@/lib/recipes/getRecipeById";
+import { getRecipeById } from "@/lib/v1/recipes/getRecipeById";
 import RecipePageClient from "@/components/recipe/RecipePage";
 
 type Props = {

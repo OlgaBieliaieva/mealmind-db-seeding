@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { BalanceResult } from "@/types/nutrition-balance";
-import { NutritionDisplayItem } from "@/lib/nutrition/nutrition.adapter";
+import { NutritionDisplayItem } from "@/lib/v1/nutrition/nutrition.adapter";
 import MacroDonutChart from "./MacroDonutChart";
 import NutrientDetailsList from "./NutrientDetailsList";
 

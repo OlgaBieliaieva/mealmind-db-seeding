@@ -1,13 +1,13 @@
 export const dynamic = "force-dynamic";
 
-import { getMenuEntryById } from "@/lib/menu-entries/menu-entries.read";
-import { getRecipeById } from "@/lib/recipes/getRecipeById";
-import { getProductById } from "@/lib/products.read";
-import { getMealTypes } from "@/lib/meal-types/meal-types.read";
-import { getFamilyMembers } from "@/lib/families/family-members.read";
-import { getMenuPlanDetails } from "@/lib/menu-plans/menu-plan-details.read";
-import { generateFullWeek, getWeekRangeFromDate } from "@/lib/date/week";
-import { formatDateDDMMYY } from "@/lib/date/format";
+import { getMenuEntryById } from "@/lib/v1/menu-entries/menu-entries.read";
+import { getRecipeById } from "@/lib/v1/recipes/getRecipeById";
+import { getProductById } from "@/lib/v1/products.read";
+import { getMealTypes } from "@/lib/v1/meal-types/meal-types.read";
+import { getFamilyMembers } from "@/lib/v1/families/family-members.read";
+import { getMenuPlanDetails } from "@/lib/v1/menu-plans/menu-plan-details.read";
+import { generateFullWeek, getWeekRangeFromDate } from "@/lib/v1/date/week";
+import { formatDateDDMMYY } from "@/lib/v1/date/format";
 
 import RecipeEntryDetailsClient from "@/components/menu-plan/recipe-entry/RecipeEntryDetailsClient";
 import ProductEntryDetailsClient from "@/components/menu-plan/recipe-entry/ProductEntryDetailsClient";
