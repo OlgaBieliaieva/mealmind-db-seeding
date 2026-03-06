@@ -111,5 +111,7 @@
     "DANGER": {
       "icon": "alert"
     }
-  }
+  },
+  "files.autoSave": "afterDelay",
+  "editor.formatOnSave": true
 }

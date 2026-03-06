@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import DatePicker from "./DatePicker";
 import PlanDaySelector from "./PlanDaySelector";
-import { formatDateDDMMYY } from "@/lib/date/format";
+import { formatDateDDMMYY } from "@/lib/v1/date/format";
 
 type Props = {
   familyName: string;

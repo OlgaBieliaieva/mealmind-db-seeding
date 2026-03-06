@@ -1,7 +1,7 @@
 "use client";
 
-import { useNutrientsReference } from "@/lib/hooks/useNutrientsReference";
-import { useRecipeFavoritesMap } from "@/lib/hooks/useRecipeFavoritesMap";
+import { useNutrientsReference } from "@/lib/v1/hooks/useNutrientsReference";
+import { useRecipeFavoritesMap } from "@/lib/v1/hooks/useRecipeFavoritesMap";
 import { RecipeFull } from "@/types/recipe-views";
 import RecipeView from "@/components/recipe/RecipeView";
 

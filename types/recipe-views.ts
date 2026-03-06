@@ -1,7 +1,7 @@
 import { RecipeIngredientView } from "@/types/recipe-ingredient";
 import { RecipeStepDraft } from "@/types/recipe-step";
 import { RecipeVideo } from "@/types/recipe-video";
-import { NutrientsMap } from "./nutrients";
+import { NutrientsMap } from "../domains/nutrition/types/nutrient-value.types";
 
 export type RecipeViewRecipe = {
   recipe_id: string;

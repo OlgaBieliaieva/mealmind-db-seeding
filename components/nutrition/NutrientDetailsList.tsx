@@ -1,6 +1,6 @@
 "use client";
 
-import { NutritionDisplayItem } from "@/lib/nutrition/nutrition.adapter";
+import { NutritionDisplayItem } from "@/lib/v1/nutrition/nutrition.adapter";
 import NutrientProgressRow from "./NutrientProgressRow";
 
 type Props = {

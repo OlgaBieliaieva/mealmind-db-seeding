@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { useProductFavoritesMap } from "@/lib/hooks/useProductFavoritesMap";
-import { ProductInput } from "@/types/product.schema";
+import { useProductFavoritesMap } from "@/lib/v1/hooks/useProductFavoritesMap";
+import { ProductInput } from "@/domains/product/schemas/product.schema";
 import { MenuEntry } from "@/types/menu-entry";
 import EntryHeader from "./EntryHeader";
 import ProductInfoBlock from "./ProductInfoBlock";
@@ -43,7 +43,9 @@ export default function ProductEntryDetailsClient({
     ADMIN_USER_ID,
     ADMIN_FAMILY_ID,
   );
-  const isFavorite = Boolean(map[product.product_id]);
+  const isFavorite = product.product_id
+    ? Boolean(map[product.product_id])
+    : false;
 
   const baseWeight = product.unit === "pcs" ? 1 : 100;
 
@@ -58,7 +60,7 @@ export default function ProductEntryDetailsClient({
       <ProductInfoBlock
         product={product}
         isFavorite={isFavorite}
-        onToggleFavorite={() => toggle(product.product_id)}
+        onToggleFavorite={() => toggle(product.product_id ?? "")}
       />
       <PlanningForm
         formMode={formMode}

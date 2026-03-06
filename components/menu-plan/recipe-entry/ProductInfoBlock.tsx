@@ -1,6 +1,6 @@
 "use client";
 
-import { ProductInput } from "@/types/product.schema";
+import { ProductInput } from "@/domains/product/schemas/product.schema";
 
 type Props = {
   product: ProductInput;

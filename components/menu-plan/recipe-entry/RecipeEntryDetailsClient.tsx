@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRecipeFavoritesMap } from "@/lib/hooks/useRecipeFavoritesMap";
+import { useRecipeFavoritesMap } from "@/lib/v1/hooks/useRecipeFavoritesMap";
 import { RecipeFull } from "@/types/recipe-views";
 import { MenuEntry } from "@/types/menu-entry";
 import EntryHeader from "./EntryHeader";

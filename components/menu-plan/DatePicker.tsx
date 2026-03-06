@@ -3,7 +3,7 @@
 import { DayPicker } from "react-day-picker";
 import { uk } from "date-fns/locale";
 import { useRouter, useSearchParams } from "next/navigation";
-import { formatLocalDate } from "@/lib/date/format";
+import { formatLocalDate } from "@/lib/v1/date/format";
 import "react-day-picker/dist/style.css";
 
 type Props = {

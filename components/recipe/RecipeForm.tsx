@@ -1,24 +1,24 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
-import { generateUUID } from "@/lib/uuid";
+import { generateUUID } from "@/domains/shared/utils/uuid";
 import { nanoid } from "nanoid";
 
-import { useProductNutrients } from "@/lib/hooks/useProductNutrients";
-import { useNutrientsReference } from "@/lib/hooks/useNutrientsReference";
-import { useRecipeTypes } from "@/lib/hooks/useRecipeTypes";
-import { useCuisines } from "@/lib/hooks/useCuisines";
-import { useDietaryTags } from "@/lib/hooks/useDietaryTags";
-import { useRecipeAuthors } from "@/lib/hooks/useRecipeAuthors";
+import { useProductNutrients } from "@/lib/v1/hooks/useProductNutrients";
+import { useNutrientsReference } from "@/lib/v1/hooks/useNutrientsReference";
+import { useRecipeTypes } from "@/lib/v1/hooks/useRecipeTypes";
+import { useCuisines } from "@/lib/v1/hooks/useCuisines";
+import { useDietaryTags } from "@/lib/v1/hooks/useDietaryTags";
+import { useRecipeAuthors } from "@/lib/v1/hooks/useRecipeAuthors";
 import { RecipeCreatePayload } from "@/types/recipe";
 import { RecipeFull } from "@/types/recipe-views";
 import { RecipeIngredientDraft } from "@/types/recipe-ingredient";
 import { IngredientRow } from "@/components/recipe/IngredientRow";
 import { RecipeStepDraft } from "@/types/recipe-step";
 import { StepRow } from "@/components/recipe/StepRow";
-import { aggregateRecipeNutrients } from "@/lib/recipe-nutrients.aggregate";
+import { aggregateRecipeNutrients } from "@/lib/v1/recipe-nutrients.aggregate";
 import { RecipePreview } from "@/components/recipe/RecipePreview";
-import { validateRecipeForPublish } from "@/lib/recipe-validation";
+import { validateRecipeForPublish } from "@/lib/v1/recipe-validation";
 import { RecipePhotoUploader } from "@/components/recipe/RecipePhotoUploader";
 import { CuisineSelector } from "@/components/recipe/CuisineSelector";
 import { DietaryTagSelector } from "@/components/recipe/DietaryTagSelector";
