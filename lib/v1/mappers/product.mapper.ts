@@ -1,5 +1,5 @@
-import { ProductInput } from "@/types/product.schema";
-import { generateUUID } from "@/lib/v1/uuid";
+import { ProductInput } from "@/domains/product/schemas/product.schema";
+import { generateUUID } from "@/domains/shared/utils/uuid";
 
 function normalizeRow(
   row: (string | number | boolean | null | undefined)[],
@@ -16,11 +16,11 @@ export function mapProductToRow(product: ProductInput) {
     product.name.en, // name_en
     product.name.ua, // name_ua
     product.type, // type
-    product.type === "branded" ? product.brand.id : null, // brand
+    // product.type === "branded" ? product.brand.id : null, // brand
     product.type === "branded" ? (product.parent_product_id ?? null) : null, // parent_product_id
     product.type === "branded" ? product.barcode : null, // barcode
     product.category_id, // category
-    product.subcategory_id ?? null, // subcategory
+    // product.subcategory_id ?? null, // subcategory
     product.unit, // unit
     product.type === "generic" ? (product.edible_part_pct ?? null) : null, // edible_part_pct
     product.type === "generic" ? (product.yield_factor ?? null) : null, // yield_factor

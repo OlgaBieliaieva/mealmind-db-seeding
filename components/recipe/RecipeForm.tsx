@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
-import { generateUUID } from "@/lib/v1/uuid";
+import { generateUUID } from "@/domains/shared/utils/uuid";
 import { nanoid } from "nanoid";
 
 import { useProductNutrients } from "@/lib/v1/hooks/useProductNutrients";

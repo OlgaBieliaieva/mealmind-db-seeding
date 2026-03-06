@@ -1,6 +1,6 @@
 import { RecipeDraftInput } from "@/types/recipe-create.dto";
 import { RecipeCreatePayload } from "@/types/recipe";
-import { generateUUID } from "@/lib/v1/uuid";
+import { generateUUID } from "@/domains/shared/utils/uuid";
 
 const now = new Date().toISOString();
 

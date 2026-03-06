@@ -1,7 +1,7 @@
 "use client";
 
 import { RecipeIngredientDraft } from "@/types/recipe-ingredient";
-import { ProductSearch } from "../ProductSearch";
+import { ProductSearch } from "../../domains/product/components/ProductSearch";
 
 type Props = {
   ingredient: RecipeIngredientDraft;

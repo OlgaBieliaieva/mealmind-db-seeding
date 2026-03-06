@@ -1,4 +1,4 @@
-import { generateUUID } from "@/lib/v1/uuid";
+import { generateUUID } from "@/domains/shared/utils/uuid";
 
 type Input = {
   recipe_id: string;

@@ -1,5 +1,5 @@
 import { readSheet } from "@/lib/v1/sheets.read";
-import { ProductFavorite } from "@/types/product-favorite.dto";
+import { ProductFavorite } from "@/domains/product/types/product-favorite.dto";
 
 export async function getProductFavorites(
   familyId: string,

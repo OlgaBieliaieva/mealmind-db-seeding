@@ -1,7 +1,7 @@
 "use client";
 
-import { NutrientsMap } from "@/types/nutrients";
-import { NutrientReference } from "@/types/nutrient.dto";
+import { NutrientsMap } from "@/domains/nutrition/types/nutrient-value.types";
+import { NutrientReference } from "@/domains/shared/types/nutrient.types";
 
 type Props = {
   servings: number;

@@ -1,4 +1,4 @@
-import { NutrientsMap } from "@/types/nutrients";
+import { NutrientsMap } from "@/domains/nutrition/types/nutrient-value.types";
 import { IngredientForNutrition } from "@/types/recipe-ingredient";
 
 /**

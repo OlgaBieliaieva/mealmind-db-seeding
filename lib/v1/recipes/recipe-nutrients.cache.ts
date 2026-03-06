@@ -1,4 +1,4 @@
-import { generateUUID } from "@/lib/v1/uuid";
+import { generateUUID } from "@/domains/shared/utils/uuid";
 import { appendRows, deleteRowsRecipeId } from "@/lib/v1/sheets.helpers";
 import { getRecipeIngredients } from "@/lib/v1/recipes/recipe-ingredients.read";
 import { getProductNutrientsMap } from "@/lib/v1/nutrition/nutrition.read";

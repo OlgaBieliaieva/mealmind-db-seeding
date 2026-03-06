@@ -2,7 +2,7 @@ import { z } from "zod";
 import { appendRow } from "@/lib/v1/sheets.helpers";
 import { deleteRecipeFavorite } from "@/lib/v1/sheets.helpers";
 import { readSheet } from "@/lib/v1/sheets.read";
-import { generateUUID } from "@/lib/v1/uuid";
+import { generateUUID } from "@/domains/shared/utils/uuid";
 
 const Schema = z.object({
   recipe_id: z.string().uuid(),

@@ -5,7 +5,7 @@ import { RecipeFull } from "@/types/recipe-views";
 import { parseSheetBoolean } from "@/lib/v1/utils/sheetBoolean";
 import { parseRecipeAuthorType } from "../parsers/recipeAuthorType";
 import { getRecipeVideos } from "./getRecipeVideos";
-import { NutrientsMap } from "@/types/nutrients";
+import { NutrientsMap } from "@/domains/nutrition/types/nutrient-value.types";
 import { aggregateRecipeNutrients } from "../recipe-nutrients.aggregate";
 
 export async function getRecipeById(

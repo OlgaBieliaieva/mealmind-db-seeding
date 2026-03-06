@@ -1,5 +1,5 @@
-import { BrandInput } from "@/types/brand.schema";
-import { generateUUID } from "@/lib/v1/uuid";
+import { BrandInput } from "@/domains/product/schemas/brand.schema";
+import { generateUUID } from "@/domains/shared/utils/uuid";
 
 export function mapBrandToRow(brand: BrandInput) {
   const brandId = brand.brand_id ?? generateUUID();

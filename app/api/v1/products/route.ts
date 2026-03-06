@@ -1,4 +1,4 @@
-import { ProductSchema } from "@/types/product.schema";
+import { ProductSchema } from "@/domains/product/schemas/product.schema";
 import { appendRow } from "@/lib/v1/sheets.helpers";
 import { mapProductToRow } from "@/lib/v1/mappers/product.mapper";
 import { mapNutrientsToRows } from "@/lib/v1/mappers/nutrients.mapper";

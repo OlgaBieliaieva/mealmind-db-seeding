@@ -1,6 +1,6 @@
 import { readSheet } from "@/lib/v1/sheets.read";
 import { readBrandsMap } from "@/lib/v1/brands.read";
-import { ProductSearchItem } from "@/types/product-search";
+import { ProductSearchItem } from "@/domains/product/types/product-search.dto";
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);

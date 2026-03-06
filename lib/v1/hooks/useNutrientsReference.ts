@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { NutrientReference } from "@/types/nutrient.dto";
+import { NutrientReference } from "@/domains/shared/types/nutrient.types";
 
 export function useNutrientsReference() {
   const [items, setItems] = useState<NutrientReference[]>([]);

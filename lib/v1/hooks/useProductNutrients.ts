@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { NutrientsMap } from "@/types/nutrients";
+import { NutrientsMap } from "@/domains/nutrition/types/nutrient-value.types";
 
 export function useProductNutrients(productIds: string[]) {
   const [map, setMap] = useState<Record<string, NutrientsMap>>({});

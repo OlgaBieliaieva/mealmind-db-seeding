@@ -1,5 +1,5 @@
 import { MenuEntry } from "@/types/menu-entry";
-import { NutrientsMap } from "@/types/nutrients";
+import { NutrientsMap } from "@/domains/nutrition/types/nutrient-value.types";
 import { AggregatedNutrients } from "@/types/nutrition-aggregation";
 
 type Maps = {

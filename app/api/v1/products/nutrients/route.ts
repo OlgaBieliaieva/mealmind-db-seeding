@@ -1,6 +1,6 @@
 import { readSheet } from "@/lib/v1/sheets.read";
 import { z } from "zod";
-import { NutrientsMap } from "@/types/nutrients";
+import { NutrientsMap } from "@/domains/nutrition/types/nutrient-value.types";
 import { parseSheetNumber } from "@/lib/v1/utils/sheetNumber";
 
 const Schema = z.object({

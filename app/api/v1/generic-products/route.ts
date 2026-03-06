@@ -1,5 +1,5 @@
 import { readSheet } from "@/lib/v1/sheets.read";
-import { GenericProductListItem } from "@/types/generic-product.dto";
+import { GenericProductListItem } from "@/domains/product/types/generic-product.dto";
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);

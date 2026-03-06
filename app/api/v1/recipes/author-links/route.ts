@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { appendRow, deleteRowsByRecipeId } from "@/lib/v1/sheets.helpers";
-import { generateUUID } from "@/lib/v1/uuid";
+import { generateUUID } from "@/domains/shared/utils/uuid";
 
 const Schema = z.object({
   recipe_id: z.string().uuid(),

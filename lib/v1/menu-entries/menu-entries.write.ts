@@ -1,6 +1,6 @@
 import { appendRow, updateRow } from "@/lib/v1/sheets.helpers";
 import { readSheet } from "../sheets.read";
-import { generateUUID } from "@/lib/v1/uuid";
+import { generateUUID } from "@/domains/shared/utils/uuid";
 import { MenuEntry } from "@/types/menu-entry";
 
 /**

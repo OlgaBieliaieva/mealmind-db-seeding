@@ -1,5 +1,5 @@
 import { AggregatedNutrients } from "@/types/nutrition-aggregation";
-import { NutrientReference } from "@/types/nutrient.dto";
+import { NutrientReference } from "@/domains/shared/types/nutrient.types";
 
 export type NutritionDisplayItem = {
   code: string;

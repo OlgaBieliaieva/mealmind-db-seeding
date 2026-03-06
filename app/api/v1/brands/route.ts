@@ -1,4 +1,4 @@
-import { BrandSchema } from "@/types/brand.schema";
+import { BrandSchema } from "@/domains/product/schemas/brand.schema";
 import { appendRow } from "@/lib/v1/sheets.helpers";
 import { mapBrandToRow } from "@/lib/v1/mappers/brand.mapper";
 import { getSheetsClient } from "@/lib/v1/sheets";

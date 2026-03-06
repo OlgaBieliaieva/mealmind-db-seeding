@@ -1,5 +1,5 @@
 import { RecipeStepInput } from "@/types/recipe-steps.dto";
-import { generateUUID } from "@/lib/v1/uuid";
+import { generateUUID } from "@/domains/shared/utils/uuid";
 
 export function mapRecipeStepToRow(recipeId: string, step: RecipeStepInput) {
   return [

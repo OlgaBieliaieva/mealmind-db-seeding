@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { MenuEntry } from "@/types/menu-entry";
-import { NutrientsMap } from "@/types/nutrients";
+import { NutrientsMap } from "@/domains/nutrition/types/nutrient-value.types";
 import MemberSelector from "./MemberSelector";
 import DaySelector from "./DaySelector";
 import NutritionPreview from "./NutritionPreview";
@@ -11,7 +11,7 @@ import {
   createEntryAction,
   updateEntryAction,
   deleteEntryAction,
-} from "@/app/plan/actions/menu-entry.actions";
+} from "@/app/(pages)/(user)/plan/actions/menu-entry.actions";
 
 type Props = {
   formMode: "create" | "edit";

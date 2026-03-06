@@ -1,6 +1,6 @@
 import { appendRow } from "@/lib/v1/sheets.helpers";
 import { readSheet } from "@/lib/v1/sheets.read";
-import { generateUUID } from "@/lib/v1/uuid";
+import { generateUUID } from "@/domains/shared/utils/uuid";
 import { UserNutrientTargetsMap } from "@/types/user-nutrient-targets";
 
 export async function createUserTargets(

@@ -1,5 +1,5 @@
 import { readSheet } from "@/lib/v1/sheets.read";
-import { NutrientsMap } from "@/types/nutrients";
+import { NutrientsMap } from "@/domains/nutrition/types/nutrient-value.types";
 
 export async function getProductNutrientsMap(
   productIds: string[],

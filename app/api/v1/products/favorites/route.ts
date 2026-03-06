@@ -2,7 +2,7 @@ import { z } from "zod";
 import { appendRow } from "@/lib/v1/sheets.helpers";
 import { deleteProductFavorite } from "@/lib/v1/sheets.helpers";
 import { readSheet } from "@/lib/v1/sheets.read";
-import { generateUUID } from "@/lib/v1/uuid";
+import { generateUUID } from "@/domains/shared/utils/uuid";
 
 const Schema = z.object({
   product_id: z.string(),

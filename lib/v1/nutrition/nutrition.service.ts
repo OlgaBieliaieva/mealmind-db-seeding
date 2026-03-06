@@ -2,7 +2,7 @@ import { MenuEntry } from "@/types/menu-entry";
 import { getProductNutrientsMap } from "./nutrition.read";
 import { getRecipeNutrientsMap } from "@/lib/v1/recipes/recipe-nutrients.read";
 import { aggregateEntriesNutrients } from "./nutrition.aggregate";
-import { NutrientsMap } from "@/types/nutrients";
+import { NutrientsMap } from "@/domains/nutrition/types/nutrient-value.types";
 import { AggregatedNutrients } from "@/types/nutrition-aggregation";
 
 type BuildParams = {

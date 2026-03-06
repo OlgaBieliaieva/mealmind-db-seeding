@@ -1,5 +1,5 @@
 import { RecipeIngredientDraft } from "@/types/recipe-ingredient";
-import { NutrientsMap } from "@/types/nutrients";
+import { NutrientsMap } from "@/domains/nutrition/types/nutrient-value.types";
 
 export type ScaleBy =
   | {

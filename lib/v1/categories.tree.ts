@@ -1,4 +1,4 @@
-import { CategoryNode } from "@/types/category.dto";
+import { CategoryNode } from "@/domains/shared/types/category.types";
 
 type FlatCategory = {
   id: number;
@@ -12,16 +12,16 @@ export function buildCategoryTree(categories: FlatCategory[]): CategoryNode[] {
   const roots: CategoryNode[] = [];
 
   // init nodes
-  for (const c of categories) {
-    map.set(c.id, {
-      category_id: c.id,
-      name: {
-        en: c.name_en,
-        ua: c.name_ua,
-      },
-      children: [],
-    });
-  }
+  // for (const c of categories) {
+  //   map.set(c.id, {
+  //     category_id: c.id,
+  //     name: {
+  //       en: c.name_en,
+  //       ua: c.name_ua,
+  //     },
+  //     children: [],
+  //   });
+  // }
 
   // build tree
   for (const c of categories) {

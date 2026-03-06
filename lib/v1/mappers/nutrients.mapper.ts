@@ -1,5 +1,5 @@
-import { NutrientsMap } from "@/types/nutrients";
-import { generateUUID } from "@/lib/v1/uuid";
+import { NutrientsMap } from "@/domains/nutrition/types/nutrient-value.types";
+import { generateUUID } from "@/domains/shared/utils/uuid";
 
 export function mapNutrientsToRows(
   productId: string,

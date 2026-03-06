@@ -1,6 +1,6 @@
 import { readSheet } from "@/lib/v1/sheets.read";
 import { appendRow } from "@/lib/v1/sheets.helpers";
-import { generateUUID } from "@/lib/v1/uuid";
+import { generateUUID } from "@/domains/shared/utils/uuid";
 import { getWeekStart } from "@/lib/v1/date/getWeekStart";
 
 export async function getOrCreateMenuPlan(familyId: string, date: string) {

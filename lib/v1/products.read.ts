@@ -1,5 +1,5 @@
 import { readSheet } from "@/lib/v1/sheets.read";
-import { ProductInput } from "@/types/product.schema";
+import { ProductInput } from "@/domains/product/schemas/product.schema";
 
 export type ProductListItem = {
   product_id: string;
@@ -67,29 +67,29 @@ export async function getProductById(
       ua: row[2],
       en: row[1],
     },
-    category_id: Number(row[7]),
-    subcategory_id: row[8] ? Number(row[8]) : undefined,
+    category_id: row[7],
+    // subcategory_id: row[8] ? Number(row[8]) : undefined,
     unit: row[9] as "g" | "ml" | "pcs",
     nutrients,
     is_verified: row[16] === "true",
   };
 
-  if (type === "branded") {
-    const brandRows = await readSheet("brands!A2:F");
-    const brand = brandRows.find((r) => r[0] === row[4]);
-    if (!brand) return null;
-    return {
-      ...base,
-      type: "branded",
-      brand: {
-        id: row[4],
-        name: {
-          ua: brand[2],
-          en: brand[1],
-        },
-      },
-    };
-  }
+  // if (type === "branded") {
+  //   const brandRows = await readSheet("brands!A2:F");
+  //   const brand = brandRows.find((r) => r[0] === row[4]);
+  //   if (!brand) return null;
+  //   return {
+  //     ...base,
+  //     type: "branded",
+  //     brand: {
+  //       id: row[4],
+  //       name: {
+  //         ua: brand[2],
+  //         en: brand[1],
+  //       },
+  //     },
+  //   };
+  // }
 
   return {
     ...base,

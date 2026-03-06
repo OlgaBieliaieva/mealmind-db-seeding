@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Brand } from "@/types/brand";
+import { Brand } from "@/domains/product/types/brand.types";
 
 export function useBrands() {
   const [brands, setBrands] = useState<Brand[]>([]);

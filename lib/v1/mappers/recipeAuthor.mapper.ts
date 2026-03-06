@@ -1,4 +1,4 @@
-import { generateUUID } from "@/lib/v1/uuid";
+import { generateUUID } from "@/domains/shared/utils/uuid";
 import { RecipeAuthor } from "@/types/recipe-author";
 import { RecipeAuthorCreateInput } from "@/types/recipe-author-create.dto";
 

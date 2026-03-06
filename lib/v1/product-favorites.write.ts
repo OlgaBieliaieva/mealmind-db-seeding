@@ -1,6 +1,6 @@
 import { appendRow } from "@/lib/v1/sheets.helpers";
 import { readSheet } from "@/lib/v1/sheets.read";
-import { generateUUID } from "./uuid";
+import { generateUUID } from "../../domains/shared/utils/uuid";
 
 export async function toggleProductFavorite(
   productId: string,

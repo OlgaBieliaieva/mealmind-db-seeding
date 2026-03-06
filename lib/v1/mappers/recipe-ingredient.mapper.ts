@@ -1,5 +1,5 @@
 import { RecipeIngredientInput } from "@/types/recipe-ingredients.dto";
-import { generateUUID } from "@/lib/v1/uuid";
+import { generateUUID } from "@/domains/shared/utils/uuid";
 
 export function mapRecipeIngredientToRow(
   recipeId: string,
