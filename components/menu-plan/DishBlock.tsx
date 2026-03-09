@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { MenuEntry } from "@/types/menu-entry";
-import { NutritionDisplayItem } from "@/lib/nutrition/nutrition.adapter";
+import { NutritionDisplayItem } from "@/lib/v1/nutrition/nutrition.adapter";
 
 type Props = {
   planId: string;

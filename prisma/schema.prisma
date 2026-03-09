@@ -90,8 +90,6 @@ enum AllergySeverity {
   high
 }
 
-
-
 // SECTION ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // SECTION PRODUCTS DOMAIN
 // SECTION ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -102,7 +100,8 @@ enum AllergySeverity {
 model Product {
   // DB ━━ CORE ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-  id     String  @id @default(uuid()) @db.Uuid
+  id String @id @default(uuid()) @db.Uuid
+
   nameEn String
   nameUa String?
 
@@ -113,13 +112,16 @@ model Product {
   brandId String? @db.Uuid
   brand   Brand?  @relation(fields: [brandId], references: [id])
 
-  categoryId String?   @db.Uuid
+  categoryId String    @db.Uuid
   category   Category? @relation(fields: [categoryId], references: [id])
 
   // NOTE Self relation for branded products
-  parentProductId String?   @db.Uuid
-  parentProduct   Product?  @relation("ProductVariants", fields: [parentProductId], references: [id])
-  variants        Product[] @relation("ProductVariants")
+
+  parentProductId String? @db.Uuid
+
+  parentProduct Product? @relation("ProductVariants", fields: [parentProductId], references: [id])
+
+  variants Product[] @relation("ProductVariants")
 
   // DB ━━ IDENTIFIERS ━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -133,7 +135,7 @@ model Product {
   yieldFactor    Float?
   cookingLossPct Float?
 
-  rawOrCookedDefault ProductState
+  rawOrCookedDefault ProductState @default(raw)
 
   // DB ━━ META ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -154,10 +156,12 @@ model Product {
   photos    ProductPhoto[]
   favorites ProductFavorite[]
 
-  // DB ━━ USER RELATIONS ━━━━━━━━━━━━━━━━━━━━━━
-
   allergies       UserAllergy[]
   dislikedByUsers UserDislikedProduct[]
+
+  // TAG SYSTEM
+
+  tags ProductTag[]
 
   // DB ━━ INDEXES ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -169,8 +173,9 @@ model Product {
 // SECTION BRANDS
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-model Brand {
+model Brand { 
   id String @id @default(uuid()) @db.Uuid
+  legacyId String? @unique
 
   nameEn String
   nameUa String?
@@ -193,19 +198,45 @@ model Brand {
 // SECTION CATEGORIES
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-model Category {
+// WHY: hierarchical tree for navigation
+
+model Category { 
+  // DB ━━ CORE ━━━━━━━━━━━━━━━━━━━━━━━━━
+
   id String @id @default(uuid()) @db.Uuid
+  legacyId Int? @unique
 
   nameEn String
-  nameUa String?
+  nameUa String
+
+  // DB ━━ TREE STRUCTURE ━━━━━━━━━━━━━━━
 
   parentId String? @db.Uuid
 
-  // NOTE hierarchical structure
-  parent   Category?  @relation("CategoryHierarchy", fields: [parentId], references: [id])
-  children Category[] @relation("CategoryHierarchy")
+  parent Category? @relation("CategoryTree", fields: [parentId], references: [id])
+
+  children Category[] @relation("CategoryTree")
+
+  // DB ━━ RELATIONS ━━━━━━━━━━━━━━━━━━━━
 
   products Product[]
+
+  // DB ━━ INDEXES ━━━━━━━━━━━━━━━━━━━━━━
+
+  @@index([parentId])
+}
+
+// SECTION PRODUCT TAG RELATION
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+model ProductTag {
+  productId String @db.Uuid
+  tagId     String @db.Uuid
+
+  product Product @relation(fields: [productId], references: [id])
+  tag     Tag     @relation(fields: [tagId], references: [id])
+
+  @@id([productId, tagId])
 }
 
 // SECTION PRODUCT PHOTOS
@@ -245,7 +276,6 @@ model ProductFavorite {
 // SECTION ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // SECTION NUTRITION DOMAIN
 // SECTION ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
 
 // SECTION PRODUCT NUTRIENTS
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -428,7 +458,6 @@ model UserMealSetting {
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 model UserDietaryRestriction {
-
   id String @id @default(uuid()) @db.Uuid
 
   userId String @db.Uuid
@@ -495,18 +524,16 @@ model UserCuisinePreference {
   @@unique([userId, cuisineId])
 }
 
-
-
 // SECTION ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // SECTION REFERENCE TABLES
 // SECTION ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-
 // SECTION NUTRIENTS REFERENCE
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-model NutrientReference {
+model NutrientReference { 
   id String @id @default(uuid()) @db.Uuid
+  legacyId Int? @unique
 
   code String @unique
 
@@ -532,31 +559,27 @@ model NutrientReference {
   userTargets UserNutrientTarget[]
 }
 
-
-
 // SECTION CUISINES
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-model Cuisine {
-
+model Cuisine { 
   // DB ━━ CORE ━━━━━━━━━━━━━━━━━━━━━━━
 
-  id        Int    @id @default(autoincrement()) @map("cuisine_id")
+  id Int @id @default(autoincrement()) @map("cuisine_id")
+  legacyId Int? @unique
 
-  code      String @unique
+  code String @unique
 
-  nameEn    String @map("name_en")
-  nameUa    String @map("name_ua")
+  nameEn String @map("name_en")
+  nameUa String @map("name_ua")
 
-  region    String?
+  region String?
 
-  isActive  Boolean @default(true) @map("is_active")
-
+  isActive Boolean @default(true) @map("is_active")
 
   // DB ━━ RELATIONS ━━━━━━━━━━━━━━━━━━
 
   userPreferences UserCuisinePreference[]
-
 
   @@map("cuisines")
 }
@@ -564,22 +587,35 @@ model Cuisine {
 // SECTION DIETARY TAGS
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-model DietaryTag {
+model DietaryTag { 
+  id Int @id @default(autoincrement()) @map("dietary_tag_id")
+  legacyId Int? @unique
 
-  id        Int    @id @default(autoincrement()) @map("dietary_tag_id")
+  code String @unique
 
-  code      String @unique
+  nameEn String @map("name_en")
+  nameUa String @map("name_ua")
 
-  nameEn    String @map("name_en")
-  nameUa    String @map("name_ua")
-
-  isActive  Boolean @default(true) @map("is_active")
-
+  isActive Boolean @default(true) @map("is_active")
 
   // DB ━━ RELATIONS ━━━━━━━━━━━━━━━━━━
 
   userRestrictions UserDietaryRestriction[]
 
-
   @@map("dietary_tags")
+}
+
+// SECTION TAG MODEL
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// WHY: flexible filtering system
+
+model Tag {
+  id String @id @default(uuid()) @db.Uuid
+
+  code String @unique
+
+  nameEn String
+  nameUa String
+
+  products ProductTag[]
 }

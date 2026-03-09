@@ -1,7 +1,7 @@
 "use client";
 
 import { RecipeRow } from "@/components/recipe/RecipeRow";
-import { useRecipeFavoritesMap } from "@/lib/hooks/useRecipeFavoritesMap";
+import { useRecipeFavoritesMap } from "@/lib/v1/hooks/useRecipeFavoritesMap";
 
 const ADMIN_USER_ID = "00000000-0000-0000-0000-000000000000";
 const ADMIN_FAMILY_ID = "00000000-0000-0000-0000-000000000000";

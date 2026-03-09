@@ -6,8 +6,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { RecipeIngredientView } from "@/types/recipe-ingredient";
 import { RecipeStepDraft } from "@/types/recipe-step";
-import { NutrientsMap } from "@/types/nutrients";
-import { NutrientReference } from "@/types/nutrient.dto";
+import { NutrientsMap } from "@/domains/nutrition/types/nutrient-value.types";
+import { NutrientReference } from "@/domains/shared/types/nutrient.types";
 import { RecipePreview } from "./RecipePreview";
 
 type Props = {
