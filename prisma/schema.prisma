@@ -173,8 +173,9 @@ model Product {
 // SECTION BRANDS
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-model Brand {
+model Brand { 
   id String @id @default(uuid()) @db.Uuid
+  legacyId String? @unique
 
   nameEn String
   nameUa String?
@@ -199,10 +200,11 @@ model Brand {
 
 // WHY: hierarchical tree for navigation
 
-model Category {
+model Category { 
   // DB ━━ CORE ━━━━━━━━━━━━━━━━━━━━━━━━━
 
   id String @id @default(uuid()) @db.Uuid
+  legacyId Int? @unique
 
   nameEn String
   nameUa String
@@ -529,8 +531,9 @@ model UserCuisinePreference {
 // SECTION NUTRIENTS REFERENCE
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-model NutrientReference {
+model NutrientReference { 
   id String @id @default(uuid()) @db.Uuid
+  legacyId Int? @unique
 
   code String @unique
 
@@ -559,10 +562,11 @@ model NutrientReference {
 // SECTION CUISINES
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-model Cuisine {
+model Cuisine { 
   // DB ━━ CORE ━━━━━━━━━━━━━━━━━━━━━━━
 
   id Int @id @default(autoincrement()) @map("cuisine_id")
+  legacyId Int? @unique
 
   code String @unique
 
@@ -583,8 +587,9 @@ model Cuisine {
 // SECTION DIETARY TAGS
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-model DietaryTag {
+model DietaryTag { 
   id Int @id @default(autoincrement()) @map("dietary_tag_id")
+  legacyId Int? @unique
 
   code String @unique
 
