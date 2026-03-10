@@ -1,0 +1,16 @@
+dietary_tag_id,code,name_en,name_ua,is_active
+1,vegetarian,Vegetarian,Вегетаріанське,TRUE
+2,vegan,Vegan,Веганське,TRUE
+3,pescatarian,Pescatarian,Пескетаріанське,TRUE
+4,gluten_free,Gluten free,Без глютену,TRUE
+5,lactose_free,Lactose free,Без лактози,TRUE
+6,dairy_free,Dairy free,Без молочних продуктів,TRUE
+7,nut_free,Nut free,Без горіхів,TRUE
+8,egg_free,Egg free,Без яєць,TRUE
+9,keto,Keto,Кето,TRUE
+10,low_carb,Low carb,Низьковуглеводне,TRUE
+11,low_fat,Low fat,Низькожирове,TRUE
+12,high_protein,High protein,Високобілкове,TRUE
+13,diabetic,Diabetic,Для діабетиків,TRUE
+14,low_sodium,Low sodium,Низький натрій,TRUE
+15,heart_healthy,Heart healthy,Для серця,TRUE

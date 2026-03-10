@@ -1,0 +1,23 @@
+cuisine_id,code,name_en,name_ua,region,is_active
+1,ukrainian,Ukrainian,Українська,Europe,TRUE
+2,polish,Polish,Польська,Europe,TRUE
+3,italian,Italian,Італійська,Europe,TRUE
+4,french,French,Французька,Europe,TRUE
+5,spanish,Spanish,Іспанська,Europe,TRUE
+6,greek,Greek,Грецька,Europe,TRUE
+7,mediterranean,Mediterranean,Середземноморська,Europe,TRUE
+8,german,German,Німецька,Europe,TRUE
+9,chinese,Chinese,Китайська,Asia,TRUE
+10,japanese,Japanese,Японська,Asia,TRUE
+11,korean,Korean,Корейська,Asia,TRUE
+12,thai,Thai,Тайська,Asia,TRUE
+13,indian,Indian,Індійська,Asia,TRUE
+14,vietnamese,Vietnamese,Вʼєтнамська,Asia,TRUE
+15,american,American,Американська,Americas,TRUE
+16,mexican,Mexican,Мексиканська,Americas,TRUE
+17,brazilian,Brazilian,Бразильська,Americas,TRUE
+18,middle_eastern,Middle Eastern,Близькосхідна,Middle East,TRUE
+19,turkish,Turkish,Турецька,Middle East,TRUE
+20,moroccan,Moroccan,Марокканська,Africa,TRUE
+21,international,International,Міжнародна,Global,TRUE
+22,fusion,Fusion,Фʼюжн,Global,TRUE

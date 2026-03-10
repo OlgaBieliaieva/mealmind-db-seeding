@@ -1,0 +1,8 @@
+meal_type_id,code,name_ua,name_en,order_index
+1,breakfast,Сніданок,Breakfast,1
+2,morning_snack,Ранковий перекус,Morning snack,2
+3,lunch,Обід,Lunch,3
+4,afternoon_snack,Післяобідній перекус,Afternoon snack,4
+5,dinner,Вечеря,Dinner,5
+6,evening_snack,Вечірній перекус,Evening snack,6
+7,late_meal,Пізній прийом їжі,Late meal,7
