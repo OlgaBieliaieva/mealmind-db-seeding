@@ -1,0 +1,58 @@
+category_id,name_en,name_ua,parent_id
+1,Fruits,Фрукти,NULL
+2,Citrus fruits,Цитрусові,1
+3,Berries,Ягоди,1
+4,Stone fruits,Кісточкові,1
+5,Apples & pears,Яблука та груші,1
+6,Tropical fruits,Тропічні,1
+7,Vegetables,Овочі,NULL
+8,Leafy greens,Листяні,7
+9,Cruciferous,Хрестоцвіті,7
+10,Root vegetables,Коренеплоди,7
+11,Alliums,Цибулеві,7
+12,Nightshades,Пасльонові,7
+13,Squash & gourds,Кабачкові та гарбузові,7
+14,Grains & cereals,Крупи та зернові,NULL
+15,Rice,Рис,14
+16,Wheat & pasta,Пшениця та паста,14
+17,Oats & cereals,Вівсянка та пластівці,14
+18,Quinoa & others,Кіноа та інші,14
+19,Legumes,Бобові,NULL
+20,Beans,Фасоля,19
+21,Lentils,Чечевиця,19
+22,Peas,Горох,19
+23,Meat & Poultry,М’ясо та птиця,NULL
+24,Beef,Яловичина,23
+25,Pork,Свинина,23
+26,Chicken,Курка,23
+27,Turkey,Індичка,23
+28,Lamb & goat,Ягня / коза,23
+29,Fish & Seafood,Риба та морепродукти,NULL
+30,Fatty fish,Жирна риба,29
+31,Lean fish,Пісна риба,29
+32,Shellfish,Молюски,29
+33,Dairy & Eggs,Молочні продукти та яйця,NULL
+34,Milk,Молоко,33
+35,Cheese,Сир,33
+36,Yogurt,Йогурт,33
+37,Eggs,Яйця,33
+38,Fats & Oils,Жири та олії,NULL
+39,Butter & Margarine,Масло та маргарин,38
+40,Vegetable oils,Рослинні олії,38
+41,Nuts & seeds,Горіхи та насіння,38
+42,Snacks & Sweets,Закуски та солодощі,NULL
+43,Chocolate,Шоколад,42
+44,Confectionery,Цукерки,42
+45,Chips & Crisps,Чіпси,42
+46,Cookies & biscuits,Печиво,42
+47,Beverages,Напої,NULL
+48,Water,Вода,47
+49,Tea & Coffee,Чай та кава,47
+50,Juice,Соки,47
+51,Soft drinks,Газовані напої,47
+52,Alcohol,Алкоголь,47
+53,Herbs & Spices,Трави та спеції,NULL
+54,Fresh herbs,Свіжі трави,53
+55,Dried herbs & spices,Сухі спеції,53
+56,Miscellaneous,Різне,NULL
+57,Dried fruits,Сухофрукти,1

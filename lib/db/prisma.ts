@@ -1,7 +1,14 @@
 // SECTION ███ DATABASE CLIENT ███
 import { PrismaClient } from "@prisma/client";
+import { PrismaPg } from "@prisma/adapter-pg";
+import { Pool } from "pg";
 
-// NOTE: запобігає створенню багатьох клієнтів у Next.js dev mode
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+});
+
+const adapter = new PrismaPg(pool);
+
 const globalForPrisma = global as unknown as {
   prisma: PrismaClient | undefined;
 };
@@ -9,7 +16,10 @@ const globalForPrisma = global as unknown as {
 export const prisma =
   globalForPrisma.prisma ??
   new PrismaClient({
+    adapter,
     log: ["error", "warn"],
   });
 
-if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
+if (process.env.NODE_ENV !== "production") {
+  globalForPrisma.prisma = prisma;
+}
