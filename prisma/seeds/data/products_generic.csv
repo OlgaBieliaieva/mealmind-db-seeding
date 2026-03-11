@@ -1,0 +1,651 @@
+product_id,name_en,name_ua,type,brand,parent_product_id,barcode,category,subcategory,unit,edible_part_pct,yield_factor,cooking_loss_pct,raw_or_cooked_default,notes,image_url,is_verified,source,created_at,updated_at
+1,"Apple, raw, with skin",Яблуко сире з шкіркою,generic,,,,1,5,g,90,0.9,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+2,"Banana, raw",Банан сирий,generic,,,,1,6,g,68,0.68,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+3,"Orange, raw",Апельсин сирий,generic,,,,1,2,g,70,0.7,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+4,"Strawberries, raw",Полуниця сира,generic,,,,1,3,g,97,0.97,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+5,"Grapes, raw",Виноград сирий,generic,,,,1,3,g,95,0.95,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+6,"Pear, raw",Груша сира,generic,,,,1,5,g,88,0.88,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+7,"Pineapple, raw",Ананас сирий,generic,,,,1,6,g,56,0.56,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+8,"Blueberries, raw",Чорниця сира,generic,,,,1,3,g,95,0.95,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+9,"Mango, raw",Манго сире,generic,,,,1,6,g,67,0.67,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+10,"Kiwi fruit, raw",Ківі сирий,generic,,,,1,6,g,76,0.76,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+11,"Peach, raw",Персик сирий,generic,,,,1,4,g,94,0.94,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+12,"Plum, raw",Слива сира,generic,,,,1,4,g,95,0.95,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+13,"Cherries, sweet, raw",Черешня сира,generic,,,,1,4,g,92,0.92,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+14,"Lemon, raw",Лимон сирий,generic,,,,1,2,g,58,0.58,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+15,"Lime, raw",Лайм сирий,generic,,,,1,2,g,67,0.67,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+16,"Watermelon, raw",Кавун сирий,generic,,,,1,6,g,69,0.69,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+17,"Cantaloupe, raw",Диня канталупа,generic,,,,1,6,g,60,0.6,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+18,"Pomegranate, raw",Гранат сирий,generic,,,,1,6,g,52,0.52,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+19,"Apricot, raw",Абрикос сирий,generic,,,,1,4,g,94,0.94,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+20,"Avocado, raw",Авокадо сире,generic,,,,1,6,g,68,0.68,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+21,"Raspberries, raw",Малина сира,generic,,,,1,3,g,97,0.97,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+22,"Blackberries, raw",Ожина сира,generic,,,,1,3,g,96,0.96,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+23,"Cranberries, raw",Журавлина сира,generic,,,,1,3,g,95,0.95,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+24,"Fig, raw",Інжир сирий,generic,,,,1,6,g,95,0.95,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+25,"Dates, fresh",Фініки свіжі,generic,,,,1,6,g,90,0.9,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+26,"Papaya, raw",Папая сира,generic,,,,1,6,g,72,0.72,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+27,"Guava, raw",Гуава сира,generic,,,,1,6,g,85,0.85,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+28,"Passion fruit, raw",Маракуйя сира,generic,,,,1,6,g,50,0.5,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+29,"Nectarine, raw",Нектарин сирий,generic,,,,1,4,g,93,0.93,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+30,"Tangerine, raw",Мандарин сирий,generic,,,,1,2,g,74,0.74,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+31,"Grapefruit, raw",Грейпфрут сирий,generic,,,,1,2,g,64,0.64,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+32,"Persimmon, raw",Хурма сира,generic,,,,1,6,g,96,0.96,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+33,"Lychee, raw",Лічі сирий,generic,,,,1,6,g,65,0.65,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+34,"Kumquat, raw",Кумкват сирий,generic,,,,1,2,g,90,0.9,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+35,"Quince, raw",Айва сира,generic,,,,1,5,g,85,0.85,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+36,"Starfruit, raw",Карамбола сира,generic,,,,1,6,g,95,0.95,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+37,"Jackfruit, raw",Джекфрут сирий,generic,,,,1,6,g,65,0.65,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+38,"Mulberries, raw",Шовковиця сира,generic,,,,1,3,g,96,0.96,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+39,"Gooseberries, raw",Аґрус сирий,generic,,,,1,3,g,95,0.95,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+40,"Currants, red, raw",Червона смородина,generic,,,,1,3,g,95,0.95,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+41,"Currants, black, raw",Чорна смородина,generic,,,,1,3,g,95,0.95,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+42,"Elderberries, raw",Бузина сира,generic,,,,1,3,g,95,0.95,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+43,"Boysenberries, raw",Бойзенова ягода,generic,,,,1,3,g,96,0.96,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+44,"Plantains, raw",Плантани сирі,generic,,,,1,6,g,66,0.66,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+45,"Soursop, raw",Саурсоп сирий,generic,,,,1,6,g,68,0.68,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+46,"Rambutan, raw",Рамбутан сирий,generic,,,,1,6,g,50,0.5,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+47,"Longan, raw",Лонган сирий,generic,,,,1,6,g,65,0.65,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+48,"Jujube, raw",Зизифус сирий,generic,,,,1,6,g,90,0.9,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+49,"Acerola, raw",Ацерола сира,generic,,,,1,3,g,95,0.95,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+50,"Salak, raw",Салак сирий,generic,,,,1,6,g,70,0.7,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+51,"Carrot, raw",Морква сира,generic,,,,7,10,g,88,0.88,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+52,"Potato, raw",Картопля сира,generic,,,,7,10,g,78,0.78,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+53,"Onion, raw",Цибуля сира,generic,,,,7,11,g,89,0.89,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+54,"Garlic, raw",Часник сирий,generic,,,,7,11,g,85,0.85,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+55,"Tomato, raw",Помідор сирий,generic,,,,7,12,g,95,0.95,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+56,"Cucumber, raw",Огірок сирий,generic,,,,7,12,g,96,0.96,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+57,"Bell pepper, raw",Перець солодкий сирий,generic,,,,7,12,g,92,0.92,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+58,"Zucchini, raw",Кабачок сирий,generic,,,,7,13,g,95,0.95,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+59,"Eggplant, raw",Баклажан сирий,generic,,,,7,12,g,92,0.92,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+60,"Broccoli, raw",Броколі сира,generic,,,,7,9,g,89,0.89,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+61,"Cauliflower, raw",Цвітна капуста сира,generic,,,,7,9,g,92,0.92,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+62,"Cabbage, green, raw",Капуста білокачанна сира,generic,,,,7,9,g,93,0.93,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+63,"Spinach, raw",Шпинат сирий,generic,,,,7,8,g,91,0.91,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+64,"Lettuce, romaine, raw",Салат ромен сирий,generic,,,,7,8,g,95,0.95,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+65,"Beetroot, raw",Буряк сирий,generic,,,,7,10,g,87,0.87,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+66,"Radish, raw",Редиска сира,generic,,,,7,10,g,95,0.95,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+67,"Turnip, raw",Ріпа сира,generic,,,,7,10,g,90,0.9,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+68,"Sweet potato, raw",Батат сирий,generic,,,,7,10,g,77,0.77,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+69,"Pumpkin, raw",Гарбуз сирий,generic,,,,7,13,g,70,0.7,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+70,"Butternut squash, raw",Гарбуз мускатний сирий,generic,,,,7,13,g,72,0.72,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+71,"Green beans, raw",Квасоля стручкова сира,generic,,,,7,19,g,90,0.9,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+72,"Peas, green, raw",Горох зелений сирий,generic,,,,7,22,g,85,0.85,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+73,"Corn, sweet, raw",Кукурудза солодка сира,generic,,,,7,14,g,85,0.85,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+74,"Asparagus, raw",Спаржа сира,generic,,,,7,8,g,93,0.93,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+75,"Celery, raw",Селера стеблова сира,generic,,,,7,8,g,95,0.95,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+76,"Leek, raw",Цибуля-порей сира,generic,,,,7,11,g,83,0.83,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+77,"Mushrooms, white, raw",Печериці сирі,generic,,,,7,56,g,92,0.92,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+78,"Kale, raw",Кале сире,generic,,,,7,8,g,85,0.85,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+79,"Brussels sprouts, raw",Брюссельська капуста сира,generic,,,,7,9,g,88,0.88,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+80,"Arugula, raw",Рукола сира,generic,,,,7,8,g,90,0.9,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+81,"Okra, raw",Бамія сира,generic,,,,7,13,g,90,0.9,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+82,"Chard, raw",Мангольд сирий,generic,,,,7,8,g,90,0.9,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+83,"Parsnip, raw",Пастернак сирий,generic,,,,7,10,g,85,0.85,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+84,"Artichoke, raw",Артишок сирий,generic,,,,7,9,g,65,0.65,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+85,"Fennel, raw",Фенхель сирий,generic,,,,7,8,g,85,0.85,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+86,"Endive, raw",Ендивій сирий,generic,,,,7,8,g,95,0.95,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+87,"Chili pepper, raw",Перець чилі сирий,generic,,,,7,12,g,88,0.88,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+88,"Bok choy, raw",Пак-чой сирий,generic,,,,7,9,g,90,0.9,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+89,"Collard greens, raw",Капуста листова сира,generic,,,,7,8,g,90,0.9,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+90,"Mustard greens, raw",Гірчичне листя сире,generic,,,,7,8,g,90,0.9,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+91,"Watercress, raw",Крес-салат сирий,generic,,,,7,8,g,95,0.95,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+92,"Rutabaga, raw",Бруква сира,generic,,,,7,10,g,85,0.85,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+93,"Daikon radish, raw",Дайкон сирий,generic,,,,7,10,g,95,0.95,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+94,"Jerusalem artichoke, raw",Топінамбур сирий,generic,,,,7,10,g,79,0.79,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+95,"Cassava, raw",Маніок сирий,generic,,,,7,10,g,62,0.62,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+96,"Bamboo shoots, raw",Пагони бамбука сирі,generic,,,,7,56,g,92,0.92,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+97,"Seaweed, wakame, raw",Вакаме сирі,generic,,,,7,56,g,70,0.7,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+98,"Seaweed, nori, raw",Норі сирі,generic,,,,7,56,g,70,0.7,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+99,"Kohlrabi, raw",Кольрабі сирий,generic,,,,7,9,g,85,0.85,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+100,"Sorrel, raw",Щавель сирий,generic,,,,7,8,g,90,0.9,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+101,"Rice, white, long-grain, raw",Рис білий довгозернистий сирий,generic,,,,14,15,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+102,"Rice, brown, long-grain, raw",Рис бурий довгозернистий сирий,generic,,,,14,15,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+103,"Wheat flour, white",Пшеничне борошно біле,generic,,,,14,16,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+104,"Wheat flour, whole-grain",Борошно пшеничне цільнозернове,generic,,,,14,16,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+105,"Pasta, dry",Паста суха,generic,,,,14,16,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+106,"Bread, white",Хліб білий,generic,,,,14,16,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+107,"Bread, whole wheat",Хліб цільнозерновий,generic,,,,14,16,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+108,"Oats, raw",Овес сирий,generic,,,,14,17,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+109,Oat flakes,Вівсяні пластівці,generic,,,,14,17,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+110,"Barley, raw",Ячмінь сирий,generic,,,,14,17,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+111,"Pearl barley, raw",Перлова крупа сира,generic,,,,14,17,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+112,"Buckwheat, raw",Гречка сира,generic,,,,14,18,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+113,"Millet, raw",Пшоно сире,generic,,,,14,18,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+114,"Quinoa, raw",Кіноа сира,generic,,,,14,18,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+115,"Couscous, dry",Кускус сухий,generic,,,,14,16,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+116,"Bulgur, dry",Булгур сухий,generic,,,,14,16,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+117,"Cornmeal, whole-grain",Кукурудзяне борошно,generic,,,,14,16,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+118,Corn flakes,Кукурудзяні пластівці,generic,,,,14,17,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+119,Rye flour,Житнє борошно,generic,,,,14,16,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+120,Rye bread,Хліб житній,generic,,,,14,16,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+121,"Spelt, raw",Полба сира,generic,,,,14,18,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+122,"Farro, raw",Фарро сире,generic,,,,14,18,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+123,"Semolina, dry",Манна крупа суха,generic,,,,14,16,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+124,"Teff, raw",Теф сирий,generic,,,,14,18,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+125,"Amaranth, raw",Амарант сирий,generic,,,,14,18,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+126,"Sorghum, raw",Сорго сире,generic,,,,14,18,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+127,"Wild rice, raw",Дикий рис сирий,generic,,,,14,15,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+128,"Rice noodles, dry",Рисова локшина суха,generic,,,,14,16,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+129,"Wheat noodles, dry",Пшенична локшина суха,generic,,,,14,16,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+130,Pita bread,Лаваш (піта),generic,,,,14,16,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+131,"Tortilla, wheat",Тортилья пшенична,generic,,,,14,16,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+132,"Tortilla, corn",Тортилья кукурудзяна,generic,,,,14,16,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+133,"Crackers, plain",Крекери прості,generic,,,,14,17,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+134,Muesli,Мюслі,generic,,,,14,17,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+135,Granola,Гранола,generic,,,,14,17,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+136,Rice cakes,Рисові хлібці,generic,,,,14,17,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+137,"Cereal, corn-based",Кукурудзяні сніданки,generic,,,,14,17,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+138,"Cereal, wheat-based",Пшеничні сніданки,generic,,,,14,17,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+139,"Polenta, dry",Полента суха,generic,,,,14,16,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+140,"Fonio, raw",Фоніо сире,generic,,,,14,18,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+141,"Kamut, raw",Камут сирий,generic,,,,14,18,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+142,"Triticale, raw",Тритикале сире,generic,,,,14,18,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+143,"Freekeh, raw",Фріке сире,generic,,,,14,18,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+144,"Einkorn, raw",Однозернянка сира,generic,,,,14,18,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+145,"Durum wheat, raw",Тверда пшениця сира,generic,,,,14,16,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+146,Rice bran,Рисові висівки,generic,,,,14,17,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+147,Wheat bran,Пшеничні висівки,generic,,,,14,17,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+148,Oat bran,Вівсяні висівки,generic,,,,14,17,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+149,"Corn grits, dry",Кукурудзяна крупа,generic,,,,14,16,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+150,Instant oats,Вівсянка швидкого приготування,generic,,,,14,17,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+151,"Beans, black, dry",Квасоля чорна суха,generic,,,,19,20,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+152,"Beans, kidney, dry",Квасоля червона суха,generic,,,,19,20,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+153,"Beans, pinto, dry",Квасоля пінто суха,generic,,,,19,20,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+154,"Beans, navy, dry",Квасоля біла суха,generic,,,,19,20,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+155,"Beans, mung, dry",Маш сухий,generic,,,,19,20,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+156,"Beans, adzuki, dry",Квасоля адзукі суха,generic,,,,19,20,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+157,"Beans, lima, dry",Квасоля ліма суха,generic,,,,19,20,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+158,"Beans, fava, dry",Боби фава сухі,generic,,,,19,20,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+159,"Beans, cannellini, dry",Квасоля каннелліні суха,generic,,,,19,20,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+160,"Lentils, brown, dry",Чечевиця коричнева суха,generic,,,,19,21,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+161,"Lentils, green, dry",Чечевиця зелена суха,generic,,,,19,21,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+162,"Lentils, red, dry",Чечевиця червона суха,generic,,,,19,21,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+163,"Peas, split, dry",Горох колотий сухий,generic,,,,19,22,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+164,"Peas, green, dry",Горох сухий,generic,,,,19,22,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+165,"Chickpeas, dry",Нут сухий,generic,,,,19,19,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+166,"Soybeans, dry",Соєві боби сухі,generic,,,,19,19,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+167,"Edamame, raw",Едамаме сирі,generic,,,,19,19,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+168,"Black-eyed peas, dry",Коров’ячий горох сухий,generic,,,,19,22,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+169,"Lupins, dry",Люпин сухий,generic,,,,19,19,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+170,"Peanuts, raw",Арахіс сирий,generic,,,,19,19,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+171,"Split peas, yellow, dry",Горох жовтий колотий сухий,generic,,,,19,22,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+172,"Cowpeas, dry",Коров’ячий горох сухий,generic,,,,19,22,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+173,"Azuki beans, dry",Квасоля адзукі суха,generic,,,,19,20,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+174,"Bambara beans, dry",Бамбарські боби сухі,generic,,,,19,19,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+175,"Winged beans, dry",Крилаті боби сухі,generic,,,,19,19,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+176,"Hyacinth beans, dry",Гіацинтові боби сухі,generic,,,,19,19,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+177,"Moth beans, dry",Боби молі сухі,generic,,,,19,19,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+178,"Ricebeans, dry",Рисові боби сухі,generic,,,,19,19,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+179,"Horse gram, dry",Кінський горох сухий,generic,,,,19,22,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+180,"Pigeon peas, dry",Голубиний горох сухий,generic,,,,19,22,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+181,"Tepary beans, dry",Тепарі боби сухі,generic,,,,19,20,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+182,"Broad beans, dry",Боби широкі сухі,generic,,,,19,20,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+183,Fenugreek seeds,Насіння пажитника,generic,,,,19,19,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+184,"Carob, raw",Кероб сирий,generic,,,,19,19,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+185,"Mesquite pods, dry",Стручки мескіту сухі,generic,,,,19,19,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+186,"Green peas, fresh",Горох зелений свіжий,generic,,,,19,22,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+187,"Snow peas, raw",Горох сніговий сирий,generic,,,,19,22,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+188,"Sugar snap peas, raw",Горох цукровий сирий,generic,,,,19,22,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+189,Soy flour,Соєве борошно,generic,,,,19,19,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+190,Chickpea flour,Нутове борошно,generic,,,,19,19,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+191,Lentil flour,Борошно з чечевиці,generic,,,,19,21,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+192,Pea flour,Горохове борошно,generic,,,,19,22,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+193,Soy protein isolate,Соєвий протеїновий ізолят,generic,,,,19,19,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+194,Textured vegetable protein,Текстурований рослинний білок,generic,,,,19,19,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+195,"Falafel mix, dry",Суха суміш фалафель,generic,,,,19,19,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+196,Hummus powder,Сухий хумус,generic,,,,19,19,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+197,Tempeh,Темпе,generic,,,,19,19,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+198,"Tofu, firm",Тофу твердий,generic,,,,19,19,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+199,"Tofu, silken",Тофу м’який,generic,,,,19,19,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+200,Miso,Місо,generic,,,,19,19,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+201,"Beef, chuck, raw","Яловичина, лопатка, сира",generic,,,,23,24,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+202,"Beef, sirloin, raw","Яловичина, філе, сира",generic,,,,23,24,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+203,"Beef, ground, raw",Яловичий фарш сирий,generic,,,,23,24,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+204,"Beef, brisket, raw","Яловичина, грудинка, сира",generic,,,,23,24,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+205,"Beef, ribeye, raw","Яловичина, рібай, сира",generic,,,,23,24,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+206,"Pork, loin, raw","Свинина, корейка, сира",generic,,,,23,25,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+207,"Pork, shoulder, raw","Свинина, лопатка, сира",generic,,,,23,25,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+208,"Pork, belly, raw","Свинина, грудинка, сира",generic,,,,23,25,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+209,"Pork, tenderloin, raw","Свинина, вирізка, сира",generic,,,,23,25,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+210,"Pork, ribs, raw","Свинина, ребра, сирі",generic,,,,23,25,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+211,"Chicken breast, raw",Куряча грудка сира,generic,,,,23,26,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+212,"Chicken thigh, raw",Куряче стегно сире,generic,,,,23,26,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+213,"Chicken drumstick, raw",Куряча гомілка сира,generic,,,,23,26,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+214,"Chicken wings, raw",Курячі крильця сирі,generic,,,,23,26,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+215,"Chicken liver, raw",Куряча печінка сира,generic,,,,23,26,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+216,"Turkey breast, raw","Індичка, грудка, сира",generic,,,,23,27,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+217,"Turkey thigh, raw","Індичка, стегно, сире",generic,,,,23,27,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+218,"Duck meat, raw","Качка, м’ясо сире",generic,,,,23,27,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+219,"Goose meat, raw","Гусак, м’ясо сире",generic,,,,23,27,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+220,"Lamb, leg, raw","Ягня, нога, сира",generic,,,,23,28,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+221,"Lamb, shoulder, raw","Ягня, лопатка, сира",generic,,,,23,28,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+222,"Lamb, chops, raw","Ягня, котлети, сирі",generic,,,,23,28,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+223,"Goat meat, raw",Козлятина сира,generic,,,,23,28,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+224,"Veal, raw",Телятина сира,generic,,,,23,24,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+225,"Rabbit meat, raw",Кролятина сира,generic,,,,23,23,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+226,"Chicken heart, raw",Куряче серце сире,generic,,,,23,26,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+227,"Chicken gizzard, raw",Курячі шлунки сирі,generic,,,,23,26,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+228,"Turkey liver, raw",Печінка індички сира,generic,,,,23,27,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+229,"Duck liver, raw",Печінка качки сира,generic,,,,23,27,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+230,"Beef liver, raw",Яловича печінка сира,generic,,,,23,24,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+231,"Beef tongue, raw",Яловичий язик сирий,generic,,,,23,24,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+232,"Beef kidney, raw",Яловичі нирки сирі,generic,,,,23,24,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+233,"Pork liver, raw",Свиняча печінка сира,generic,,,,23,25,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+234,"Pork heart, raw",Свиняче серце сире,generic,,,,23,25,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+235,"Chicken sausage, raw",Куряча ковбаса сира,generic,,,,23,26,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+236,"Turkey sausage, raw",Індича ковбаса сира,generic,,,,23,27,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+237,"Beef sausage, raw",Яловича ковбаса сира,generic,,,,23,24,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+238,"Pork sausage, raw",Свиняча ковбаса сира,generic,,,,23,25,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+239,"Bacon, raw",Бекон сирий,generic,,,,23,25,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+240,"Ham, raw",Шинка сира,generic,,,,23,25,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+241,"Prosciutto, raw",Прошутто сире,generic,,,,23,25,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+242,"Salami, raw",Салямі сира,generic,,,,23,25,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+243,"Chicken nuggets, raw",Курячі нагетси сирі,generic,,,,23,26,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+244,"Chicken patties, raw",Курячі котлети сирі,generic,,,,23,26,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+245,"Turkey patties, raw",Індичі котлети сирі,generic,,,,23,27,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+246,"Meatballs, beef, raw",Тефтелі яловичі сирі,generic,,,,23,24,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+247,"Meatballs, pork, raw",Тефтелі свинячі сирі,generic,,,,23,25,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+248,"Mixed ground meat, raw",Фарш змішаний сирий,generic,,,,23,23,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+249,"Quail meat, raw","Перепілка, м’ясо сире",generic,,,,23,23,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+250,"Game meat, venison, raw",Оленина сира,generic,,,,23,23,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+251,"Salmon, Atlantic, raw",Лосось атлантичний сирий,generic,,,,29,30,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+252,"Salmon, sockeye, raw",Лосось нерка сирий,generic,,,,29,30,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+253,"Tuna, yellowfin, raw",Тунець жовтоперий сирий,generic,,,,29,31,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+254,"Tuna, skipjack, raw",Тунець смугастий сирий,generic,,,,29,31,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+255,"Cod, Atlantic, raw",Тріска атлантична сира,generic,,,,29,31,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+256,"Haddock, raw",Пікша сира,generic,,,,29,31,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+257,"Pollock, raw",Минтай сирий,generic,,,,29,31,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+258,"Herring, raw",Оселедець сирий,generic,,,,29,30,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+259,"Mackerel, Atlantic, raw",Скумбрія атлантична сира,generic,,,,29,30,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+260,"Sardines, raw",Сардини сирі,generic,,,,29,30,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+261,"Anchovies, raw",Анчоуси сирі,generic,,,,29,30,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+262,"Trout, rainbow, raw",Форель райдужна сира,generic,,,,29,30,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+263,"Halibut, raw",Палтус сирий,generic,,,,29,31,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+264,"Flounder, raw",Камбала сира,generic,,,,29,31,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+265,"Sole, raw",Морський язик сирий,generic,,,,29,31,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+266,"Sea bass, raw",Морський окунь сирий,generic,,,,29,31,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+267,"Snapper, raw",Снеппер сирий,generic,,,,29,31,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+268,"Grouper, raw",Групер сирий,generic,,,,29,31,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+269,"Catfish, raw",Сом сирий,generic,,,,29,31,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+270,"Tilapia, raw",Тилапія сира,generic,,,,29,31,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+271,"Carp, raw",Короп сирий,generic,,,,29,31,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+272,"Perch, raw",Окунь річковий сирий,generic,,,,29,31,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+273,"Pike, raw",Щука сира,generic,,,,29,31,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+274,"Swordfish, raw",Риба-меч сира,generic,,,,29,30,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+275,"Shark, raw",Акула сира,generic,,,,29,31,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+276,"Eel, raw",Вугор сирий,generic,,,,29,30,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+277,"Octopus, raw",Восьминіг сирий,generic,,,,29,32,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+278,"Squid, raw",Кальмар сирий,generic,,,,29,32,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+279,"Cuttlefish, raw",Каракатиця сира,generic,,,,29,32,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+280,"Shrimp, raw",Креветки сирі,generic,,,,29,32,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+281,"Prawn, raw",Пані креветки сирі,generic,,,,29,32,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+282,"Crab, raw",Краб сирий,generic,,,,29,32,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+283,"Lobster, raw",Омар сирий,generic,,,,29,32,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+284,"Crayfish, raw",Рак сирий,generic,,,,29,32,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+285,"Mussels, raw",Мідії сирі,generic,,,,29,32,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+286,"Clams, raw",Молюски сирі,generic,,,,29,32,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+287,"Oysters, raw",Устриці сирі,generic,,,,29,32,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+288,"Scallops, raw",Морські гребінці сирі,generic,,,,29,32,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+289,"Abalone, raw",Абалон сирий,generic,,,,29,32,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+290,"Sea urchin, raw",Морський їжак сирий,generic,,,,29,32,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+291,"Smelt, raw",Корюшка сира,generic,,,,29,31,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+292,"Whitefish, raw",Сиг сирий,generic,,,,29,31,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+293,"Bluefish, raw",Блюфіш сирий,generic,,,,29,31,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+294,"Rockfish, raw",Морський окунь червоний сирий,generic,,,,29,31,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+295,"Monkfish, raw",Морський чорт сирий,generic,,,,29,31,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+296,"Barramundi, raw",Баррамунді сирий,generic,,,,29,31,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+297,"Butterfish, raw",Масляна риба сира,generic,,,,29,30,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+298,"Tilefish, raw",Тайловий окунь сирий,generic,,,,29,31,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+299,"Marlin, raw",Марлін сирий,generic,,,,29,30,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+300,"Orange roughy, raw",Помаранчевий окунь сирий,generic,,,,29,31,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+301,"Milk, whole",Молоко цільне,generic,,,,33,34,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+302,"Milk, low-fat 2%",Молоко 2%,generic,,,,33,34,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+303,"Milk, skim",Молоко знежирене,generic,,,,33,34,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+304,Goat milk,Козяче молоко,generic,,,,33,34,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+305,Sheep milk,Овече молоко,generic,,,,33,34,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+306,"Cream, heavy",Вершки жирні,generic,,,,33,34,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+307,"Cream, light",Вершки легкі,generic,,,,33,34,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+308,Butter,Масло вершкове,generic,,,,33,39,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+309,Ghee,Масло гхі,generic,,,,33,39,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+310,"Cheese, cheddar",Сир чеддер,generic,,,,33,35,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+311,"Cheese, mozzarella",Сир моцарела,generic,,,,33,35,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+312,"Cheese, parmesan",Сир пармезан,generic,,,,33,35,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+313,"Cheese, gouda",Сир гауда,generic,,,,33,35,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+314,"Cheese, brie",Сир брі,generic,,,,33,35,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+315,"Cheese, camembert",Сир камамбер,generic,,,,33,35,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+316,"Cheese, feta",Сир фета,generic,,,,33,35,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+317,"Cheese, ricotta",Сир рікота,generic,,,,33,35,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+318,"Cheese, cottage",Сир кисломолочний,generic,,,,33,35,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+319,"Yogurt, whole, plain",Йогурт цільний натуральний,generic,,,,33,36,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+320,"Yogurt, low-fat, plain",Йогурт нежирний натуральний,generic,,,,33,36,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+321,"Yogurt, Greek, plain",Йогурт грецький натуральний,generic,,,,33,36,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+322,Kefir,Кефір,generic,,,,33,36,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+323,Buttermilk,Пахта,generic,,,,33,36,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+324,Sour cream,Сметана,generic,,,,33,36,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+325,"Ice cream, vanilla",Морозиво ванільне,generic,,,,33,36,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+326,Custard,Заварний крем,generic,,,,33,36,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+327,"Egg, whole, raw",Яйце куряче сире,generic,,,,33,37,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+328,"Egg white, raw",Яєчний білок сирий,generic,,,,33,37,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+329,"Egg yolk, raw",Яєчний жовток сирий,generic,,,,33,37,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+330,"Duck egg, raw",Яйце качине сире,generic,,,,33,37,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+331,"Quail egg, raw",Яйце перепелине сире,generic,,,,33,37,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+332,"Goose egg, raw",Яйце гусяче сире,generic,,,,33,37,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+333,Egg powder,Яєчний порошок,generic,,,,33,37,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+334,"Milk powder, whole",Сухе молоко цільне,generic,,,,33,34,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+335,"Milk powder, skim",Сухе молоко знежирене,generic,,,,33,34,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+336,Whey protein powder,Сироватковий протеїн,generic,,,,33,36,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+337,Casein protein powder,Казеїновий протеїн,generic,,,,33,36,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+338,"Condensed milk, sweetened",Згущене молоко з цукром,generic,,,,33,34,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+339,Evaporated milk,Молоко концентроване,generic,,,,33,34,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+340,Cheese spread,Сирний спред,generic,,,,33,35,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+341,Processed cheese,Плавлений сир,generic,,,,33,35,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+342,Skyr,Скир,generic,,,,33,36,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+343,Ayran,Айран,generic,,,,33,36,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+344,Lassi,Лассі,generic,,,,33,36,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+345,Mascarpone,Сир маскарпоне,generic,,,,33,35,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+346,Blue cheese,Сир з блакитною пліснявою,generic,,,,33,35,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+347,Halloumi,Сир халумі,generic,,,,33,35,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+348,Paneer,Сир панір,generic,,,,33,35,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+349,Clotted cream,Крем каймак,generic,,,,33,34,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+350,Egg substitute,Замінник яєць,generic,,,,33,37,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+351,"Olive oil, extra virgin",Оливкова олія extra virgin,generic,,,,38,40,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+352,"Olive oil, refined",Оливкова олія рафінована,generic,,,,38,40,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+353,Sunflower oil,Соняшникова олія,generic,,,,38,40,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+354,Canola oil,Ріпакова олія,generic,,,,38,40,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+355,Soybean oil,Соєва олія,generic,,,,38,40,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+356,Corn oil,Кукурудзяна олія,generic,,,,38,40,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+357,Peanut oil,Арахісова олія,generic,,,,38,40,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+358,Sesame oil,Кунжутна олія,generic,,,,38,40,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+359,Coconut oil,Кокосова олія,generic,,,,38,40,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+360,Palm oil,Пальмова олія,generic,,,,38,40,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+361,Butter,Вершкове масло,generic,,,,38,39,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+362,Ghee,Масло гхі,generic,,,,38,39,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+363,Margarine,Маргарин,generic,,,,38,39,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+364,Lard,Сало свиняче,generic,,,,38,39,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+365,Beef tallow,Яловичий жир,generic,,,,38,39,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+366,Duck fat,Качиний жир,generic,,,,38,39,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+367,Goose fat,Гусячий жир,generic,,,,38,39,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+368,Fish oil,Риб’ячий жир,generic,,,,38,39,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+369,Flaxseed oil,Лляна олія,generic,,,,38,40,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+370,Walnut oil,Горіхова олія,generic,,,,38,40,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+371,Avocado oil,Олія авокадо,generic,,,,38,40,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+372,Grapeseed oil,Олія з виноградних кісточок,generic,,,,38,40,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+373,Rice bran oil,Олія з рисових висівок,generic,,,,38,40,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+374,Cottonseed oil,Бавовняна олія,generic,,,,38,40,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+375,Safflower oil,Сафлорова олія,generic,,,,38,40,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+376,Hemp seed oil,Конопляна олія,generic,,,,38,40,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+377,Pumpkin seed oil,Гарбузова олія,generic,,,,38,40,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+378,Macadamia oil,Олія макадамії,generic,,,,38,40,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+379,Almond oil,Мигдальна олія,generic,,,,38,40,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+380,Hazelnut oil,Фундучна олія,generic,,,,38,40,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+381,Pistachio oil,Фісташкова олія,generic,,,,38,40,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+382,Mustard oil,Гірчична олія,generic,,,,38,40,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+383,Shortening,Кулінарний жир,generic,,,,38,39,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+384,Butter spread,Масляний спред,generic,,,,38,39,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+385,Cream cheese,Вершковий сир,generic,,,,38,39,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+386,Mayonnaise,Майонез,generic,,,,38,39,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+387,Aioli,Айолі,generic,,,,38,39,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+388,Tahini,Тахіні,generic,,,,38,41,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+389,Peanut butter,Арахісова паста,generic,,,,38,41,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+390,Almond butter,Мигдальна паста,generic,,,,38,41,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+391,Cashew butter,Кеш’ю паста,generic,,,,38,41,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+392,Sunflower seed butter,Паста з насіння соняшнику,generic,,,,38,41,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+393,Sesame paste,Кунжутна паста,generic,,,,38,41,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+394,Poppy seed paste,Макова паста,generic,,,,38,41,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+395,Chia seed oil,Олія чіа,generic,,,,38,40,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+396,Black cumin seed oil,Олія чорного кмину,generic,,,,38,40,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+397,Evening primrose oil,Олія примули вечірньої,generic,,,,38,40,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+398,Camelina oil,Олія камеліни,generic,,,,38,40,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+399,Perilla oil,Олія перили,generic,,,,38,40,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+400,Shea butter,Масло ши,generic,,,,38,39,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+401,"Chocolate, dark",Шоколад чорний,generic,,,,42,43,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+402,"Chocolate, milk",Шоколад молочний,generic,,,,42,43,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+403,"Chocolate, white",Шоколад білий,generic,,,,42,43,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+404,"Candy, hard",Цукерки льодяники,generic,,,,42,44,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+405,"Candy, gummy",Желейні цукерки,generic,,,,42,44,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+406,"Candy, caramel",Карамель,generic,,,,42,44,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+407,Toffee,Ірис,generic,,,,42,44,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+408,Marshmallow,Маршмелоу,generic,,,,42,44,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+409,Nougat,Нуга,generic,,,,42,44,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+410,Fudge,Фадж,generic,,,,42,44,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+411,"Cookies, plain",Печиво просте,generic,,,,42,46,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+412,"Cookies, chocolate chip",Печиво з шоколадом,generic,,,,42,46,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+413,"Biscuits, butter",Масляне печиво,generic,,,,42,46,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+414,Wafer cookies,Вафлі,generic,,,,42,46,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+415,Crackers,Крекери,generic,,,,42,46,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+416,"Chips, potato",Чіпси картопляні,generic,,,,42,45,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+417,"Chips, corn",Кукурудзяні чіпси,generic,,,,42,45,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+418,Pretzels,Кренделі,generic,,,,42,45,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+419,"Popcorn, plain",Попкорн простий,generic,,,,42,45,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+420,"Popcorn, caramel",Попкорн карамельний,generic,,,,42,45,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+421,"Cake, sponge",Бісквіт,generic,,,,42,44,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+422,"Cake, chocolate",Шоколадний торт,generic,,,,42,44,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+423,Brownie,Брауні,generic,,,,42,44,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+424,"Donut, plain",Пончик простий,generic,,,,42,44,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+425,"Donut, glazed",Пончик глазурований,generic,,,,42,44,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+426,"Muffin, plain",Маффін простий,generic,,,,42,44,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+427,"Muffin, chocolate",Шоколадний маффін,generic,,,,42,44,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+428,Croissant,Круасан,generic,,,,42,46,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+429,"Pastry, puff",Листкове тісто,generic,,,,42,46,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+430,Pie crust,Тісто для пирога,generic,,,,42,46,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+431,"Ice cream, vanilla",Морозиво ванільне,generic,,,,42,44,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+432,"Ice cream, chocolate",Морозиво шоколадне,generic,,,,42,44,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+433,Frozen yogurt,Заморожений йогурт,generic,,,,42,44,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+434,Pudding,Пудинг,generic,,,,42,44,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+435,Custard dessert,Заварний десерт,generic,,,,42,44,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+436,Energy bar,Енергетичний батончик,generic,,,,42,42,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+437,Protein bar,Протеїновий батончик,generic,,,,42,42,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+438,Granola bar,Гранола батончик,generic,,,,42,42,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+439,Cereal bar,Зерновий батончик,generic,,,,42,42,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+440,Fruit snacks,Фруктові снеки,generic,,,,42,42,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+441,Trail mix,Суміш сухофруктів і горіхів,generic,,,,42,42,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+442,Dried fruit mix,Суміш сухофруктів,generic,,,,42,42,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+443,Chocolate spread,Шоколадна паста,generic,,,,42,43,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+444,Honey,Мед,generic,,,,42,42,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+445,Jam,Джем,generic,,,,42,42,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+446,Marmalade,Мармелад,generic,,,,42,42,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+447,Halva,Халва,generic,,,,42,42,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+448,Baklava,Пахлава,generic,,,,42,42,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+449,Rice pudding,Рисовий пудинг,generic,,,,42,44,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+450,Cheesecake,Чізкейк,generic,,,,42,44,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+451,"Water, bottled",Вода бутильована,generic,,,,47,48,ml,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+452,"Water, sparkling",Вода газована,generic,,,,47,48,ml,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+453,Mineral water,Мінеральна вода,generic,,,,47,48,ml,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+454,"Tea, black, brewed",Чай чорний заварений,generic,,,,47,49,ml,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+455,"Tea, green, brewed",Чай зелений заварений,generic,,,,47,49,ml,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+456,"Tea, herbal, brewed",Трав'яний чай,generic,,,,47,49,ml,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+457,"Coffee, black, brewed",Кава чорна заварена,generic,,,,47,49,ml,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+458,"Coffee, espresso",Еспресо,generic,,,,47,49,ml,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+459,"Coffee, latte",Лате,generic,,,,47,49,ml,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+460,"Coffee, cappuccino",Капучино,generic,,,,47,49,ml,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+461,Milkshake,Молочний коктейль,generic,,,,47,47,ml,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+462,"Smoothie, fruit",Фруктовий смузі,generic,,,,47,47,ml,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+463,"Smoothie, green",Зелений смузі,generic,,,,47,47,ml,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+464,"Juice, orange",Апельсиновий сік,generic,,,,47,50,ml,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+465,"Juice, apple",Яблучний сік,generic,,,,47,50,ml,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+466,"Juice, grape",Виноградний сік,generic,,,,47,50,ml,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+467,"Juice, tomato",Томатний сік,generic,,,,47,50,ml,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+468,"Juice, carrot",Морквяний сік,generic,,,,47,50,ml,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+469,"Juice, pineapple",Ананасовий сік,generic,,,,47,50,ml,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+470,"Juice, cranberry",Журавлиновий сік,generic,,,,47,50,ml,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+471,"Soft drink, cola",Кола,generic,,,,47,51,ml,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+472,"Soft drink, lemon-lime",Лимонад,generic,,,,47,51,ml,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+473,"Soft drink, orange",Апельсиновий напій,generic,,,,47,51,ml,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+474,"Soft drink, tonic",Тонік,generic,,,,47,51,ml,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+475,Energy drink,Енергетичний напій,generic,,,,47,51,ml,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+476,Sports drink,Спортивний напій,generic,,,,47,51,ml,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+477,Iced tea,Холодний чай,generic,,,,47,51,ml,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+478,Kombucha,Комбуча,generic,,,,47,51,ml,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+479,"Beer, lager",Пиво лагер,generic,,,,47,52,ml,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+480,"Beer, ale",Пиво ель,generic,,,,47,52,ml,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+481,"Beer, non-alcoholic",Пиво безалкогольне,generic,,,,47,52,ml,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+482,"Wine, red",Вино червоне,generic,,,,47,52,ml,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+483,"Wine, white",Вино біле,generic,,,,47,52,ml,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+484,"Wine, rosé",Вино рожеве,generic,,,,47,52,ml,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+485,Champagne,Шампанське,generic,,,,47,52,ml,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+486,Cider,Сидр,generic,,,,47,52,ml,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+487,Whiskey,Віскі,generic,,,,47,52,ml,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+488,Vodka,Горілка,generic,,,,47,52,ml,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+489,Rum,Ром,generic,,,,47,52,ml,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+490,Gin,Джин,generic,,,,47,52,ml,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+491,Tequila,Текіла,generic,,,,47,52,ml,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+492,Brandy,Бренді,generic,,,,47,52,ml,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+493,Liqueur,Лікер,generic,,,,47,52,ml,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+494,Sake,Саке,generic,,,,47,52,ml,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+495,Kefir drink,Кефірний напій,generic,,,,47,47,ml,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+496,Ayran drink,Айран напій,generic,,,,47,47,ml,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+497,"Plant milk, soy",Соєве молоко,generic,,,,47,47,ml,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+498,"Plant milk, almond",Мигдальне молоко,generic,,,,47,47,ml,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+499,"Plant milk, oat",Вівсяне молоко,generic,,,,47,47,ml,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+500,Cocoa drink,Какао напій,generic,,,,47,47,ml,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+501,"Basil, fresh",Базилік свіжий,generic,,,,53,54,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+502,"Parsley, fresh",Петрушка свіжа,generic,,,,53,54,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+503,"Cilantro, fresh",Кінза свіжа,generic,,,,53,54,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+504,"Dill, fresh",Кріп свіжий,generic,,,,53,54,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+505,"Mint, fresh",М'ята свіжа,generic,,,,53,54,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+506,"Rosemary, fresh",Розмарин свіжий,generic,,,,53,54,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+507,"Thyme, fresh",Чебрець свіжий,generic,,,,53,54,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+508,"Oregano, fresh",Орегано свіжий,generic,,,,53,54,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+509,"Sage, fresh",Шавлія свіжа,generic,,,,53,54,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+510,"Bay leaf, dried",Лавровий лист,generic,,,,53,55,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+511,"Black pepper, ground",Чорний перець мелений,generic,,,,53,55,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+512,"White pepper, ground",Білий перець мелений,generic,,,,53,55,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+513,Paprika,Паприка,generic,,,,53,55,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+514,Chili powder,Порошок чилі,generic,,,,53,55,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+515,Cayenne pepper,Каєнський перець,generic,,,,53,55,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+516,"Cinnamon, ground",Кориця мелена,generic,,,,53,55,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+517,"Nutmeg, ground",Мускатний горіх мелений,generic,,,,53,55,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+518,"Cloves, ground",Гвоздика мелена,generic,,,,53,55,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+519,"Allspice, ground",Запашний перець мелений,generic,,,,53,55,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+520,"Ginger, fresh",Імбир свіжий,generic,,,,53,54,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+521,"Ginger, ground",Імбир мелений,generic,,,,53,55,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+522,"Turmeric, ground",Куркума мелена,generic,,,,53,55,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+523,Cumin seeds,Кумин (зіра),generic,,,,53,55,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+524,Coriander seeds,Насіння коріандру,generic,,,,53,55,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+525,Fennel seeds,Насіння фенхелю,generic,,,,53,55,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+526,Fenugreek seeds,Насіння пажитника,generic,,,,53,55,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+527,"Cardamom, ground",Кардамон мелений,generic,,,,53,55,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+528,Star anise,Бадьян,generic,,,,53,55,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+529,"Vanilla, extract",Ванільний екстракт,generic,,,,53,55,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+530,Garlic powder,Часниковий порошок,generic,,,,53,55,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+531,Onion powder,Цибульний порошок,generic,,,,53,55,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+532,Mustard seeds,Гірчичне насіння,generic,,,,53,55,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+533,Mustard powder,Гірчичний порошок,generic,,,,53,55,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+534,Sesame seeds,Кунжутне насіння,generic,,,,53,55,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+535,Poppy seeds,Мак,generic,,,,53,55,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+536,Caraway seeds,Кмин,generic,,,,53,55,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+537,Celery seeds,Насіння селери,generic,,,,53,55,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+538,Anise seeds,Аніс,generic,,,,53,55,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+539,Saffron,Шафран,generic,,,,53,55,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+540,Sumac,Сумах,generic,,,,53,55,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+541,Za'atar,Заатар,generic,,,,53,55,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+542,Herbes de Provence,Прованські трави,generic,,,,53,55,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+543,Curry powder,Карі порошок,generic,,,,53,55,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+544,Garam masala,Гарам масала,generic,,,,53,55,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+545,Five spice powder,П’ять спецій,generic,,,,53,55,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+546,"Tarragon, fresh",Естрагон свіжий,generic,,,,53,54,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+547,"Chives, fresh",Шніт-цибуля,generic,,,,53,54,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+548,"Lemongrass, fresh",Лемонграс свіжий,generic,,,,53,54,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+549,"Horseradish, raw",Хрін сирий,generic,,,,53,54,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+550,"Wasabi, paste",Васабі паста,generic,,,,53,55,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+551,"Salt, table",Сіль кухонна,generic,,,,56,,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+552,"Salt, sea",Сіль морська,generic,,,,56,,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+553,"Sugar, white",Цукор білий,generic,,,,56,,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+554,"Sugar, brown",Цукор коричневий,generic,,,,56,,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+555,Honey,Мед,generic,,,,56,,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+556,Maple syrup,Кленовий сироп,generic,,,,56,,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+557,Molasses,Меляса,generic,,,,56,,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+558,"Flour, wheat, white",Борошно пшеничне біле,generic,,,,56,,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+559,"Flour, wheat, whole-grain",Борошно пшеничне цільнозернове,generic,,,,56,,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+560,"Flour, rye",Борошно житнє,generic,,,,56,,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+561,"Flour, corn",Борошно кукурудзяне,generic,,,,56,,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+562,"Flour, rice",Борошно рисове,generic,,,,56,,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+563,"Flour, oat",Борошно вівсяне,generic,,,,56,,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+564,"Starch, corn",Крохмаль кукурудзяний,generic,,,,56,,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+565,"Starch, potato",Крохмаль картопляний,generic,,,,56,,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+566,Baking powder,Розпушувач тіста,generic,,,,56,,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+567,Baking soda,Сода харчова,generic,,,,56,,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+568,"Yeast, dry",Дріжджі сухі,generic,,,,56,,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+569,"Yeast, fresh",Дріжджі свіжі,generic,,,,56,,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+570,Gelatin,Желатин,generic,,,,56,,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+571,Agar-agar,Агар-агар,generic,,,,56,,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+572,Pectin,Пектин,generic,,,,56,,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+573,Cocoa powder,Какао-порошок,generic,,,,56,,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+574,Chocolate chips,Шоколадні краплі,generic,,,,56,,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+575,Vanilla sugar,Ванільний цукор,generic,,,,56,,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+576,"Sweetener, stevia",Стевія,generic,,,,56,,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+577,"Sweetener, aspartame",Аспартам,generic,,,,56,,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+578,"Sweetener, sucralose",Сукралоза,generic,,,,56,,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+579,"Vinegar, white",Оцет білий,generic,,,,56,,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+580,"Vinegar, apple cider",Оцет яблучний,generic,,,,56,,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+581,Soy sauce,Соєвий соус,generic,,,,56,,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+582,Worcestershire sauce,Вустерширський соус,generic,,,,56,,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+583,Fish sauce,Рибний соус,generic,,,,56,,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+584,Ketchup,Кетчуп,generic,,,,56,,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+585,Mustard,Гірчиця,generic,,,,56,,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+586,Mayonnaise,Майонез,generic,,,,56,,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+587,BBQ sauce,Соус барбекю,generic,,,,56,,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+588,Hot sauce,Гострий соус,generic,,,,56,,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+589,"Broth, vegetable",Овочевий бульйон,generic,,,,56,,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+590,"Broth, chicken",Курячий бульйон,generic,,,,56,,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+591,Bouillon cube,Бульйонний кубик,generic,,,,56,,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+592,"Soup mix, dry",Суха супова суміш,generic,,,,56,,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+593,"Protein powder, generic",Протеїновий порошок,generic,,,,56,,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+594,Meal replacement powder,Порошок-замінник їжі,generic,,,,56,,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+595,Coconut flakes,Кокосова стружка,generic,,,,56,,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+596,Breadcrumbs,Панірувальні сухарі,generic,,,,56,,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+597,Croutons,Крутони,generic,,,,56,,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+598,Food coloring,Харчовий барвник,generic,,,,56,,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+599,Flavor enhancer (MSG),Підсилювач смаку (MSG),generic,,,,56,,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+600,Gel food thickener,Загущувач харчовий,generic,,,,56,,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+601,Raisins,Родзинки,generic,,,,1,57,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+602,Sultanas,Султани,generic,,,,1,57,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+603,"Currants, dried",Смородина сушена,generic,,,,1,57,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+604,"Dates, dried",Фініки сушені,generic,,,,1,57,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+605,"Figs, dried",Інжир сушений,generic,,,,1,57,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+606,"Apricots, dried",Курага,generic,,,,1,57,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+607,Prunes,Чорнослив,generic,,,,1,57,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+608,"Cranberries, dried",Журавлина сушена,generic,,,,1,57,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+609,"Blueberries, dried",Чорниця сушена,generic,,,,1,57,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+610,"Cherries, dried",Вишня сушена,generic,,,,1,57,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+611,"Mango, dried",Манго сушене,generic,,,,1,57,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+612,"Pineapple, dried",Ананас сушений,generic,,,,1,57,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+613,"Papaya, dried",Папая сушена,generic,,,,1,57,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+614,Banana chips,Бананові чіпси,generic,,,,1,57,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+615,"Apple rings, dried",Яблука сушені,generic,,,,1,57,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+616,"Pear, dried",Груша сушена,generic,,,,1,57,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+617,"Peach, dried",Персик сушений,generic,,,,1,57,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+618,"Nectarine, dried",Нектарин сушений,generic,,,,1,57,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+619,"Plum, dried",Слива сушена,generic,,,,1,57,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+620,"Mulberries, dried",Шовковиця сушена,generic,,,,1,57,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+621,"Goji berries, dried",Ягоди годжі,generic,,,,1,57,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+622,"Physalis, dried",Фізаліс сушений,generic,,,,1,57,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+623,"Persimmon, dried",Хурма сушена,generic,,,,1,57,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+624,"Coconut flakes, unsweetened",Кокосова стружка,generic,,,,1,57,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+625,Coconut chips,Кокосові чіпси,generic,,,,1,57,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+626,"Strawberries, dried",Полуниця сушена,generic,,,,1,57,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+627,"Raspberries, dried",Малина сушена,generic,,,,1,57,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+628,"Blackberries, dried",Ожина сушена,generic,,,,1,57,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+629,"Kiwi, dried",Ківі сушене,generic,,,,1,57,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+630,"Orange peel, dried",Цедра апельсина сушена,generic,,,,1,57,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+631,"Lemon peel, dried",Цедра лимона сушена,generic,,,,1,57,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+632,"Tangerine, dried",Мандарин сушений,generic,,,,1,57,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+633,"Pomegranate arils, dried",Зерна граната сушені,generic,,,,1,57,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+634,"Jackfruit, dried",Джекфрут сушений,generic,,,,1,57,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+635,"Lychee, dried",Лічі сушений,generic,,,,1,57,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+636,"Longan, dried",Лонган сушений,generic,,,,1,57,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+637,"Starfruit, dried",Карамбола сушена,generic,,,,1,57,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+638,"Quince, dried",Айва сушена,generic,,,,1,57,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+639,"Guava, dried",Гуава сушена,generic,,,,1,57,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+640,"Melon, dried",Диня сушена,generic,,,,1,57,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+641,"Watermelon, dried",Кавун сушений,generic,,,,1,57,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+642,"Papaya cubes, dried",Папая кубики сушені,generic,,,,1,57,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+643,Apple chips,Яблучні чіпси,generic,,,,1,57,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+644,Date sugar,Фініковий цукор,generic,,,,1,57,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+645,Grape powder,Виноградний порошок,generic,,,,1,57,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+646,Banana powder,Банановий порошок,generic,,,,1,57,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+647,Mango powder,Манговий порошок,generic,,,,1,57,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+648,Pineapple powder,Ананасовий порошок,generic,,,,1,57,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+649,"Berry mix, dried",Суміш сушених ягід,generic,,,,1,57,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
+650,Fruit leather,Фруктова пастила,generic,,,,1,57,g,100,1.0,0,raw,,,FALSE,USDA,2026-01-22,2026-01-22
