@@ -107,23 +107,24 @@ model Product {
   // DB ━━ CORE ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
   id String @id @default(uuid()) @db.Uuid
+  legacyId String? @unique
 
-  nameEn String
-  nameUa String?
+  nameEn String @map("name_en")
+  nameUa String @map("name_ua")
 
   type ProductType
 
   // DB ━━ RELATIONS ━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-  brandId String? @db.Uuid
+  brandId String? @db.Uuid @map("brand_id")
   brand   Brand?  @relation(fields: [brandId], references: [id])
 
-  categoryId String    @db.Uuid
+  categoryId String    @db.Uuid @map("category_id")
   category   Category? @relation(fields: [categoryId], references: [id])
 
   // NOTE Self relation for branded products
 
-  parentProductId String? @db.Uuid
+  parentProductId String? @db.Uuid @map("parent_product_id")
 
   parentProduct Product? @relation("ProductVariants", fields: [parentProductId], references: [id])
 
@@ -137,24 +138,24 @@ model Product {
 
   unit ProductUnit
 
-  ediblePartPct  Float?
-  yieldFactor    Float?
-  cookingLossPct Float?
+  ediblePartPct  Float? @map("edible_part_pct")
+  yieldFactor    Float? @map("yield_factor")
+  cookingLossPct Float? @map("cooking_loss_pct")
 
-  rawOrCookedDefault ProductState @default(raw)
+  rawOrCookedDefault ProductState @default(raw) @map("raw_or_cooked_default")
 
   // DB ━━ META ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
   notes String?
 
-  isVerified Boolean @default(false)
+  isVerified Boolean @default(false) @map("is_verified")
 
   source String?
 
   // DB ━━ TIMESTAMPS ━━━━━━━━━━━━━━━━━━━━━━━━━
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   // DB ━━ RELATION TABLES ━━━━━━━━━━━━━━━━━━━━
 
@@ -174,6 +175,7 @@ model Product {
   @@index([type])
   @@index([categoryId])
   @@index([brandId])
+  @@index([nameEn])
 }
 
 // SECTION PRODUCT RELATIONS
@@ -185,25 +187,26 @@ model Product {
 
 model ProductNutrient {
   id String @id @default(uuid()) @db.Uuid
+  legacyId String? @unique
 
-  productId String  @db.Uuid
+  productId String  @db.Uuid @map("product_id")
   product   Product @relation(fields: [productId], references: [id])
 
-  nutrientId String            @db.Uuid
+  nutrientId String            @db.Uuid @map("nutrient_id")
   nutrient   Nutrient @relation(fields: [nutrientId], references: [id])
 
-  valuePer100g Float
+  valuePer100g Float @map("value_per_100g")
 
-  valuePerServing Float?
+  valuePerServing Float? @map("value_per_serving")
 
   unit String?
 
   source String?
 
-  isEstimated Boolean @default(false)
+  isEstimated Boolean @default(false) @map("is_estimated")
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   @@unique([productId, nutrientId])
 }
@@ -228,15 +231,16 @@ model ProductTag {
 
 model ProductPhoto {
   id String @id @default(uuid()) @db.Uuid
+  legacyId String? @unique
 
-  productId String  @db.Uuid
+  productId String  @db.Uuid @map("product_id")
   product   Product @relation(fields: [productId], references: [id])
 
   photoType ProductPhotoType
 
   url String
 
-  uploadedAt DateTime @default(now())
+  uploadedAt DateTime @default(now()) @map("uploaded_at")
 }
 
 
