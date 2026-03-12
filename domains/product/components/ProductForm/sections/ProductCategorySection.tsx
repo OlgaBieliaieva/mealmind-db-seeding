@@ -12,8 +12,9 @@ import { FormSection } from "@/domains/shared/components/form/FormSection";
 
 import { PRODUCT_LABELS } from "@/domains/product/constants/product.labels";
 import { ProductFormValues } from "../../../schemas/product-form.schema";
+import { ProductFormSection } from "@/domains/product/types/product-form-section.types";
 
-export function ProductCategorySection() {
+export function ProductCategorySection<ProductFormSection>() {
   const { register, watch, setValue } = useFormContext<ProductFormValues>();
 
   const { data: categories, isLoading } = useCategories();
