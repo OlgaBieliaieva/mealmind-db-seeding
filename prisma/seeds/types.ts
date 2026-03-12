@@ -73,6 +73,7 @@ export type ProductRow = {
   brand: string;
   barcode: string;
   category: string;
+  subcategory: string;
   parent_product_id: string;
   unit: string;
   edible_part_pct: string;

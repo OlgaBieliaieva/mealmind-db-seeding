@@ -1,20 +1,18 @@
-import { BrandSchema } from "@/domains/product/schemas/brand.schema";
+import { BrandCreateSchema } from "@/domains/product/schemas/brand.schema";
 import { appendRow } from "@/lib/v1/sheets.helpers";
 import { mapBrandToRow } from "@/lib/v1/mappers/brand.mapper";
 import { getSheetsClient } from "@/lib/v1/sheets";
 
 export async function POST(req: Request) {
   try {
-    const body = await req.json();
-    const brand = BrandSchema.parse(body);
-
-    const { brandId, row } = mapBrandToRow(brand);
-    await appendRow("brands", row);
-
-    return Response.json({
-      success: true,
-      brand_id: brandId,
-    });
+    // const body = await req.json();
+    // const brand = BrandCreateSchema.parse(body);
+    // const { brandId, row } = mapBrandToRow(brand);
+    // await appendRow("brands", row);
+    // return Response.json({
+    //   success: true,
+    //   brand_id: brandId,
+    // });
   } catch (error: unknown) {
     console.error(error);
 

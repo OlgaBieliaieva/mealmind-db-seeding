@@ -1,92 +1,124 @@
 "use client";
 
 // SECTION ███ PRODUCT CATEGORY SECTION ███
-// WHY: category + subcategory selection for product form
+// RHF-driven leaf category selector with derived root
 
 import { useMemo } from "react";
-import { FieldErrors, UseFormRegister, UseFormWatch } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 
 import { useCategories } from "@/domains/product/hooks/useCategories";
 import { buildCategoryTree } from "@/domains/product/utils/buildCategoryTree";
+import { FormSection } from "@/domains/shared/components/form/FormSection";
 
 import { PRODUCT_LABELS } from "@/domains/product/constants/product.labels";
-
 import { ProductFormValues } from "../../../schemas/product-form.schema";
 
-type Props = {
-  register: UseFormRegister<ProductFormValues>;
-  watch: UseFormWatch<ProductFormValues>;
-  errors: FieldErrors<ProductFormValues>;
-};
+export function ProductCategorySection() {
+  const { register, watch, setValue } = useFormContext<ProductFormValues>();
 
-export function ProductCategorySection({ register, watch }: Props) {
   const { data: categories, isLoading } = useCategories();
 
-  // build category tree only when data changes
   const tree = useMemo(() => {
     if (!categories) return [];
     return buildCategoryTree(categories);
   }, [categories]);
 
-  // selected category id from form
-  const categoryId = watch("category_id");
+  // ⭐ SINGLE SOURCE OF TRUTH
+  const leafId = watch("category_id");
 
-  // find selected category node
-  const selectedCategory = useMemo(
-    () => tree.find((c) => c.id === categoryId),
-    [tree, categoryId],
+  // ⭐ derive root from leaf
+  const rootId = useMemo(() => {
+    if (!leafId) return undefined;
+
+    for (const root of tree) {
+      if (root.children.some((c) => c.id === leafId)) {
+        return root.id;
+      }
+    }
+
+    return undefined;
+  }, [tree, leafId]);
+
+  const selectedRoot = useMemo(
+    () => tree.find((c) => c.id === rootId),
+    [tree, rootId],
   );
 
-  // safe subcategories list
-  const subcategories = selectedCategory?.children ?? [];
+  const subcategories = selectedRoot?.children ?? [];
 
   if (isLoading) {
-    return <p className="text-sm text-gray-500">Loading categories...</p>;
+    return <p className="text-sm text-gray-500">Завантажуємо категорії...</p>;
   }
 
   return (
-    <div className="space-y-4">
-      {/* CATEGORY */}
+    <FormSection title="Категорія" description="Вкажіть групу продукту">
+      <div className="space-y-4">
+        {/* ROOT CATEGORY */}
 
-      <div>
-        <label className="text-sm font-medium">{PRODUCT_LABELS.CATEGORY}</label>
-
-        <select
-          {...register("category_id")}
-          className="mt-1 w-full rounded border px-3 py-2"
-        >
-          <option value="">Select category</option>
-
-          {tree.map((category) => (
-            <option key={category.id} value={category.id}>
-              {category.name.ua}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      {/* SUBCATEGORY */}
-
-      {subcategories.length > 0 && (
         <div>
           <label className="text-sm font-medium">
-            {PRODUCT_LABELS.SUBCATEGORY}
+            {PRODUCT_LABELS.CATEGORY}
           </label>
 
+          {/* <select
+            value={rootId ?? ""}
+            onChange={() => {
+              // ⭐ root changed → reset leaf
+              setValue("category_id", undefined, {
+                shouldDirty: true,
+                shouldValidate: true,
+              }); */}
           <select
-            {...register("subcategory_id")}
+            value={rootId ?? ""}
+            onChange={(e) => {
+              const newRoot = e.target.value || undefined;
+
+              if (!newRoot) {
+                setValue("category_id", undefined);
+                return;
+              }
+
+              const rootNode = tree.find((r) => r.id === newRoot);
+
+              const firstLeaf = rootNode?.children?.[0]?.id;
+
+              setValue("category_id", firstLeaf);
+            }}
             className="mt-1 w-full rounded border px-3 py-2"
           >
-            <option value="">Select subcategory</option>
+            <option value="">Оберіть категорію</option>
 
-            {subcategories.map((subcategory) => (
-              <option key={subcategory.id} value={subcategory.id}>
-                {subcategory.name.ua}
+            {tree.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.name.ua}
               </option>
             ))}
           </select>
         </div>
-      )}
-    </div>
+
+        {/* LEAF CATEGORY */}
+
+        {subcategories.length > 0 && (
+          <div>
+            <label className="text-sm font-medium">
+              {PRODUCT_LABELS.SUBCATEGORY}
+            </label>
+
+            <select
+              {...register("category_id")}
+              className="mt-1 w-full rounded border px-3 py-2"
+            >
+              <option value="">Оберіть підкатегорію</option>
+
+              {subcategories.map((subcategory) => (
+                <option key={subcategory.id} value={subcategory.id}>
+                  {subcategory.name.ua}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
+      </div>
+    </FormSection>
   );
 }
