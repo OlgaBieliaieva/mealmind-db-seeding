@@ -4,10 +4,11 @@ import { useFormContext } from "react-hook-form";
 import { useBrands } from "@/domains/product/hooks/useBrands";
 import { FormSection } from "@/domains/shared/components/form/FormSection";
 import { ProductFormValues } from "@/domains/product/schemas/product-form.schema";
+import { ProductFormSection } from "@/domains/product/types/product-form-section.types";
 import { BrandDto } from "@/domains/product/schemas/brand.schema";
 import { PRODUCT_LABELS } from "@/domains/product/constants/product.labels";
 
-export function ProductBrandSection() {
+export function ProductBrandSection<ProductFormSection>() {
   const { register, watch } = useFormContext<ProductFormValues>();
   const { data: brands, isLoading } = useBrands();
 
