@@ -5,6 +5,7 @@ import { z } from "zod";
 import {
   PRODUCT_UNITS,
   PRODUCT_TYPES,
+  PRODUCT_STATES,
 } from "@/domains/product/constants/product.constants";
 
 // SECTION ━━ ENUMS ━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -12,6 +13,7 @@ import {
 const UnitEnum = z.enum([PRODUCT_UNITS.G, PRODUCT_UNITS.ML, PRODUCT_UNITS.PCS]);
 
 export const TypeEnum = z.enum([PRODUCT_TYPES.GENERIC, PRODUCT_TYPES.BRANDED]);
+export const StateEnum = z.enum([PRODUCT_STATES.RAW, PRODUCT_STATES.COOKED]);
 
 // SECTION ━━ PHOTO ━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -42,11 +44,13 @@ export const ProductFormSchema = z.object({
 
   unit: UnitEnum,
 
+  raw_or_cooked_default: StateEnum,
+
   // DB ━━ METADATA
 
   category_id: z.string().optional(),
 
-  subcategory_id: z.string().optional(),
+  // subcategory_id: z.string().optional(),
 
   notes: z.string().optional(),
 
@@ -59,6 +63,8 @@ export const ProductFormSchema = z.object({
   new_brand_name_en: z.string().optional(),
 
   new_brand_name_ua: z.string().optional(),
+
+  new_brand_country: z.string().optional(),
 
   // GENERIC PARENT
 

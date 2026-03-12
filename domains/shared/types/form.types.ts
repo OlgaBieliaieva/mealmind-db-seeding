@@ -1,11 +1,6 @@
 // SECTION ███ SHARED FORM TYPES ███
 
-import {
-  FieldErrors,
-  FieldPath,
-  FieldValues,
-  UseFormRegister,
-} from "react-hook-form";
+import { FieldPath, FieldValues } from "react-hook-form";
 
 export type FormFieldOption = {
   value: string;
@@ -40,6 +35,4 @@ export type FormField<T extends FieldValues> =
 
 export type FormRendererProps<T extends FieldValues> = {
   fields: FormField<T>[];
-  register: UseFormRegister<T>;
-  errors: FieldErrors<T>;
 };

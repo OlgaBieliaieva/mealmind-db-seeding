@@ -1,9 +1,6 @@
 "use client";
 
-// SECTION ███ GENERIC FORM RENDERER ███
-// WHY: schema-driven forms for admin UI
-
-import { FieldValues } from "react-hook-form";
+import { FieldValues, useFormContext } from "react-hook-form";
 
 import { InputField } from "./InputField";
 import { SelectField } from "./SelectField";
@@ -13,9 +10,12 @@ import { FormRendererProps } from "@/domains/shared/types/form.types";
 
 export function FormRenderer<T extends FieldValues>({
   fields,
-  register,
-  errors,
 }: FormRendererProps<T>) {
+  const {
+    register,
+    formState: { errors },
+  } = useFormContext<T>();
+
   return (
     <div className="space-y-4">
       {fields.map((field) => {

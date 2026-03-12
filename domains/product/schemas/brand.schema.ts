@@ -1,7 +1,8 @@
 import { z } from "zod";
 
-export const BrandSchema = z.object({
-  brand_id: z.string().uuid().optional(), // генерується беком
+/* ⭐ API CREATE DTO */
+
+export const BrandCreateSchema = z.object({
   name: z.object({
     en: z.string().min(1),
     ua: z.string().min(1),
@@ -9,7 +10,16 @@ export const BrandSchema = z.object({
   country: z.string().optional(),
   website: z.string().url().optional(),
   notes: z.string().optional(),
-  is_verified: z.boolean().default(false),
+  is_verified: z.boolean().optional(),
 });
 
-export type BrandInput = z.infer<typeof BrandSchema>;
+export type BrandCreateInput = z.infer<typeof BrandCreateSchema>;
+
+export type BrandDto = {
+  brand_id: string;
+  name: {
+    en: string;
+    ua: string;
+  };
+  country?: string | null;
+};

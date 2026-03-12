@@ -1,26 +1,16 @@
 "use client";
 
-// SECTION ███ PRODUCT BASIC SECTION ███
-
-import { FieldErrors, UseFormRegister } from "react-hook-form";
-
-import { ProductFormValues } from "../../../schemas/product-form.schema";
-
+import { FormSection } from "@/domains/shared/components/form/FormSection";
+import { PRODUCT_BASIC_FIELDS } from "../../../forms/productBasic.fields";
 import { FormRenderer } from "@/domains/shared/components/form/FormRenderer";
 
-import { PRODUCT_BASIC_FIELDS } from "../../../forms/productBasic.fields";
-
-type Props = {
-  register: UseFormRegister<ProductFormValues>;
-  errors: FieldErrors<ProductFormValues>;
-};
-
-export function ProductBasicSection({ register, errors }: Props) {
+export function ProductBasicSection() {
   return (
-    <FormRenderer<ProductFormValues>
-      fields={PRODUCT_BASIC_FIELDS}
-      register={register}
-      errors={errors}
-    />
+    <FormSection
+      title="Основна інформація"
+      description="Назва, тип та одиниця виміру"
+    >
+      <FormRenderer fields={PRODUCT_BASIC_FIELDS} />
+    </FormSection>
   );
 }

@@ -32,7 +32,7 @@ export function SelectField<T extends FieldValues>({
         {...register(name)}
         className="w-full rounded border px-3 py-2 text-sm"
       >
-        <option value="">Select...</option>
+        <option value="">Оберіть варіант...</option>
 
         {options.map((opt) => (
           <option key={opt.value} value={opt.value}>

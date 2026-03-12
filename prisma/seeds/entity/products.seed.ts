@@ -34,7 +34,9 @@ export async function seedProducts(prisma: PrismaClient) {
 
       type: row.type as ProductType,
 
-      categoryId: categoryMap.get(Number(row.category))!,
+      categoryId: row.subcategory
+        ? categoryMap.get(Number(row.subcategory))!
+        : categoryMap.get(Number(row.category))!,
 
       unit: row.unit as ProductUnit,
 
@@ -97,7 +99,9 @@ export async function seedProducts(prisma: PrismaClient) {
 
       parentProductId: genericMap.get(row.parent_product_id),
 
-      categoryId: categoryMap.get(Number(row.category))!,
+      categoryId: row.subcategory
+        ? categoryMap.get(Number(row.subcategory))!
+        : categoryMap.get(Number(row.category))!,
 
       unit: row.unit as ProductUnit,
 
@@ -109,7 +113,9 @@ export async function seedProducts(prisma: PrismaClient) {
         ? Number(row.cooking_loss_pct)
         : null,
 
-      //   rawOrCookedDefault: row.raw_or_cooked_default as ProductState,
+      rawOrCookedDefault: row.raw_or_cooked_default
+        ? (row.raw_or_cooked_default as ProductState)
+        : "raw",
 
       source: row.source,
 

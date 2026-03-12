@@ -51,6 +51,10 @@ const BaseProductSchema = z.object({
 
   type: z.enum([PRODUCT_TYPES.GENERIC, PRODUCT_TYPES.BRANDED]),
 
+  raw_or_cooked_default: z
+    .enum([PRODUCT_STATES.RAW, PRODUCT_STATES.COOKED])
+    .optional(),
+
   unit: z.enum([PRODUCT_UNITS.G, PRODUCT_UNITS.ML, PRODUCT_UNITS.PCS]),
 
   name: z.object({
@@ -77,10 +81,6 @@ const GenericProductSchema = BaseProductSchema.extend({
   edible_part_pct: z.number().min(0).max(100).optional(),
   yield_factor: z.number().positive().optional(),
   cooking_loss_pct: z.number().min(0).max(100).optional(),
-
-  raw_or_cooked_default: z
-    .enum([PRODUCT_STATES.RAW, PRODUCT_STATES.COOKED])
-    .optional(),
 });
 
 /* ---------- branded-only ---------- */
