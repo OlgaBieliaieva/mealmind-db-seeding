@@ -1,3 +1,5 @@
+import { ProductState, ProductUnit } from "../constants/product.constants";
+
 export type GenericProduct = {
   product_id: string;
 
@@ -6,8 +8,13 @@ export type GenericProduct = {
     ua: string;
   };
 
-  category_id: number;
-  subcategory_id?: number;
+  category_id: string;
 
-  unit: "g" | "ml" | "pcs";
+  raw_or_cooked_default?: ProductState;
+
+  unit: ProductUnit;
+
+  cooking_loss_pct?: number;
+  edible_part_pct?: number;
+  yield_factor?: number;
 };

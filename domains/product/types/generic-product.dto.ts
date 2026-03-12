@@ -4,6 +4,6 @@ export type GenericProductListItem = {
     en: string;
     ua: string;
   };
-  category_id: number;
+  category_id: string;
   unit: string;
 };

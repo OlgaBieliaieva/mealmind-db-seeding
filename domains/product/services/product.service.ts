@@ -25,3 +25,7 @@ export async function createProduct(data: ProductInput) {
 
   return productRepository.create(data);
 }
+
+export async function searchGenericProducts(query: string) {
+  return productRepository.searchGeneric(query);
+}

@@ -75,6 +75,10 @@ export const ProductFormSchema = z.object({
   barcode: z.string().min(8).optional(),
 
   photos: z.array(ProductPhotoFormSchema).optional(),
+
+  cooking_loss_pct: z.number().optional(),
+  edible_part_pct: z.number().optional(),
+  yield_factor: z.number().optional(),
 });
 
 export type ProductFormValues = z.infer<typeof ProductFormSchema>;

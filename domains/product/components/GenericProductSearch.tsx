@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useGenericProductSearch } from "../hooks/useGenericProductSearch";
 import { GenericProduct } from "@/domains/product/types/generic-product.types";
 
 type Props = {
@@ -10,62 +11,58 @@ type Props = {
 
 export function GenericProductSearch({ value, onSelect }: Props) {
   const [query, setQuery] = useState("");
-  const [items, setItems] = useState<GenericProduct[]>([]);
-  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    if (query.length < 2) {
-      setItems([]);
-      return;
-    }
+  const { data, isFetching } = useGenericProductSearch(query);
 
-    const timeout = setTimeout(async () => {
-      setLoading(true);
-      try {
-        const res = await fetch(
-          `/api/products/generic?query=${encodeURIComponent(query)}`,
-        );
-        const data = await res.json();
-        setItems(data.items ?? []);
-      } finally {
-        setLoading(false);
-      }
-    }, 300);
+  const items = data?.items ?? [];
 
-    return () => clearTimeout(timeout);
-  }, [query]);
+  /* ---------------- selected mode ---------------- */
 
   if (value) {
     return (
-      <div className="rounded border p-2 flex items-center justify-between">
-        <span>
-          {value.name.en} / {value.name.ua}
-        </span>
+      <div className="flex items-center justify-between rounded border px-3 py-2">
+        <span className="text-sm font-medium">{value.name.ua}</span>
+
         <button
           type="button"
-          className="text-sm text-red-600"
           onClick={() => onSelect(null)}
+          className="text-sm text-red-600 hover:underline"
         >
-          Change
+          Змінити
         </button>
       </div>
     );
   }
+
+  /* ---------------- search mode ---------------- */
+
+  const showDropdown = query.length >= 2;
 
   return (
     <div className="relative">
       <input
         value={query}
         onChange={(e) => setQuery(e.target.value)}
-        placeholder="Search generic product..."
+        placeholder="Шукати базовий продукт..."
         className="w-full rounded border px-3 py-2"
       />
 
-      {loading && (
-        <div className="absolute z-10 bg-white p-2 text-sm">Loading...</div>
+      {/* loading */}
+      {showDropdown && isFetching && (
+        <div className="absolute z-10 mt-1 w-full rounded border bg-white p-2 text-sm shadow">
+          Завантаження...
+        </div>
       )}
 
-      {items.length > 0 && (
+      {/* empty */}
+      {showDropdown && !isFetching && items.length === 0 && (
+        <div className="absolute z-10 mt-1 w-full rounded border bg-white p-2 text-sm shadow">
+          Нічого не знайдено
+        </div>
+      )}
+
+      {/* results */}
+      {showDropdown && items.length > 0 && (
         <ul className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded border bg-white shadow">
           {items.map((item) => (
             <li
@@ -74,10 +71,11 @@ export function GenericProductSearch({ value, onSelect }: Props) {
               onClick={() => {
                 onSelect(item);
                 setQuery("");
-                setItems([]);
               }}
             >
-              {item.name.en} / {item.name.ua}
+              <div className="text-sm font-medium">{item.name.ua}</div>
+
+              <div className="text-xs text-gray-500">{item.name.en}</div>
             </li>
           ))}
         </ul>

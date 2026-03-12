@@ -4,6 +4,7 @@
 import { ProductSchema } from "@/domains/product/schemas/product.schema";
 
 import { createProduct } from "@/domains/product/services/product.service";
+import { searchGenericProducts } from "@/domains/product/services/product.service";
 
 export async function POST(req: Request) {
   try {

@@ -8,7 +8,7 @@
 // - nutrients
 // - photos
 
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -16,6 +16,8 @@ import {
   ProductFormSchema,
   ProductFormValues,
 } from "../../schemas/product-form.schema";
+
+import { ProductFormContext } from "../../forms/product-form.context";
 
 import { useProductFormSubmit } from "../../hooks/useProductFormSubmit";
 
@@ -43,6 +45,7 @@ const defaultValues: ProductFormValues = {
 };
 
 export function ProductForm() {
+  const [parentLocked, setParentLocked] = useState(false);
   const methods = useForm<ProductFormValues>({
     resolver: zodResolver(ProductFormSchema),
     defaultValues,
@@ -64,19 +67,21 @@ export function ProductForm() {
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <FormStatus
-          loading={isSubmitting}
-          error={isError}
-          success={isSuccess}
-        />
+      <ProductFormContext.Provider value={{ parentLocked, setParentLocked }}>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <FormStatus
+            loading={isSubmitting}
+            error={isError}
+            success={isSuccess}
+          />
 
-        {PRODUCT_FORM_SECTIONS.map((Section, i) => (
-          <Section key={i} />
-        ))}
+          {PRODUCT_FORM_SECTIONS.map((Section, i) => (
+            <Section key={i} />
+          ))}
 
-        <button disabled={isSubmitting}>Save</button>
-      </form>
+          <button disabled={isSubmitting}>Save</button>
+        </form>
+      </ProductFormContext.Provider>
     </FormProvider>
   );
 }
