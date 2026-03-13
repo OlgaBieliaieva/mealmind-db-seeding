@@ -58,6 +58,8 @@ export const ProductFormSchema = z.object({
 
   brand_id: z.string().optional(),
 
+  source: z.string().optional(),
+
   // TODO new brand creation flow
 
   new_brand_name_en: z.string().optional(),

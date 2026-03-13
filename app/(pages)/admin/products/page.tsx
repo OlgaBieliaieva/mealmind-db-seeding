@@ -5,7 +5,7 @@ import { ProductForm } from "@/domains/product/components/ProductForm/ProductFor
 export default function AddProductPage() {
   return (
     <div className="space-y-6">
-      <h1 className="text-xl font-semibold">Add product</h1>
+      <h1 className="text-xl font-semibold">Новий продукт</h1>
 
       <ProductForm />
     </div>

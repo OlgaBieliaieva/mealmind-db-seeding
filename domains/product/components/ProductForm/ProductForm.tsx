@@ -33,6 +33,7 @@ const defaultValues: ProductFormValues = {
   category_id: undefined,
   notes: "",
   is_verified: false,
+  source: "",
   raw_or_cooked_default: "raw",
   brand_id: undefined,
   new_brand_name_en: "",

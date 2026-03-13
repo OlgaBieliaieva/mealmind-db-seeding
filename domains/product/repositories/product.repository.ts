@@ -43,16 +43,6 @@ export const productRepository = {
         });
       }
 
-      if (product.photos?.length) {
-        await tx.productPhoto.createMany({
-          data: product.photos.map((p) => ({
-            productId: created.id,
-            photoType: p.type,
-            url: p.url,
-          })),
-        });
-      }
-
       return {
         success: true,
         product_id: created.id,

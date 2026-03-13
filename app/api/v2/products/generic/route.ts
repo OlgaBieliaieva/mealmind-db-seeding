@@ -45,6 +45,9 @@ export async function GET(req: Request) {
         categoryId: true,
         rawOrCookedDefault: true,
         unit: true,
+        ediblePartPct: true,
+        yieldFactor: true,
+        cookingLossPct: true,
       },
     });
 
@@ -58,6 +61,9 @@ export async function GET(req: Request) {
         category_id: p.categoryId,
         raw_or_cooked_default: p.rawOrCookedDefault,
         unit: p.unit,
+        edible_part_pct: p.ediblePartPct,
+        yield_factor: p.yieldFactor,
+        cooking_loss_pct: p.yieldFactor,
       })),
     });
   } catch (error) {

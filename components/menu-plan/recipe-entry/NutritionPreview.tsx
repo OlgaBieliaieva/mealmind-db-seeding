@@ -18,42 +18,42 @@ export default function NutritionPreview({
   const { items: refs, loading } = useNutrientsReference();
   const [expanded, setExpanded] = useState(false);
 
-  const referenceMap = useMemo(() => {
-    const map: Record<string, string> = {};
-    refs.forEach((r) => {
-      map[String(r.nutrient_id)] = r.name.ua;
-    });
-    return map;
-  }, [refs]);
+  // const referenceMap = useMemo(() => {
+  //   const map: Record<string, string> = {};
+  //   refs.forEach((r) => {
+  //     map[String(r.nutrient_id)] = r.name.ua;
+  //   });
+  //   return map;
+  // }, [refs]);
 
-  const nutrientGroupMap = useMemo(() => {
-    const map: Record<string, string> = {};
-    refs.forEach((r) => {
-      map[String(r.nutrient_id)] = r.nutrient_group;
-    });
-    return map;
-  }, [refs]);
+  // const nutrientGroupMap = useMemo(() => {
+  //   const map: Record<string, string> = {};
+  //   refs.forEach((r) => {
+  //     map[String(r.nutrient_id)] = r.nutrient_group;
+  //   });
+  //   return map;
+  // }, [refs]);
 
-  const scaled = useMemo(() => {
-    return Object.entries(nutrients).map(([id, data]) => {
-      const value = baseWeight > 0 ? (data.value * portion) / baseWeight : 0;
+  // const scaled = useMemo(() => {
+  //   return Object.entries(nutrients).map(([id, data]) => {
+  //     const value = baseWeight > 0 ? (data.value * portion) / baseWeight : 0;
 
-      return {
-        id,
-        group: nutrientGroupMap[id],
-        name: referenceMap[id] ?? `Нутрієнт #${id}`,
-        value,
-        unit: data.unit,
-      };
-    });
-  }, [nutrients, portion, baseWeight, referenceMap, nutrientGroupMap]);
+  //     return {
+  //       id,
+  //       group: nutrientGroupMap[id],
+  //       name: referenceMap[id] ?? `Нутрієнт #${id}`,
+  //       value,
+  //       unit: data.unit,
+  //     };
+  //   });
+  // }, [nutrients, portion, baseWeight, referenceMap, nutrientGroupMap]);
 
-  if (loading) return null;
+  // if (loading) return null;
 
-  // 🔹 Визначаємо макроси (можеш змінити ID якщо потрібно)
-  const macros = scaled.filter((n) => n.group === "macro");
+  // // 🔹 Визначаємо макроси (можеш змінити ID якщо потрібно)
+  // const macros = scaled.filter((n) => n.group === "macro");
 
-  const micros = scaled.filter((n) => n.group !== "macro");
+  // const micros = scaled.filter((n) => n.group !== "macro");
 
   return (
     <div className="rounded-2xl border p-5 bg-gradient-to-br from-purple-50 to-white space-y-5">
@@ -65,9 +65,8 @@ export default function NutritionPreview({
           Розраховано автоматично відповідно до обраної порції
         </p>
       </div>
-
       {/* ================= MACROS ================= */}
-      <div className="grid grid-cols-2 gap-4">
+      {/* <div className="grid grid-cols-2 gap-4">
         {macros.map((n) => (
           <div
             key={n.id}
@@ -79,10 +78,9 @@ export default function NutritionPreview({
             </span>
           </div>
         ))}
-      </div>
-
+      </div> */}
       {/* ================= MICRO TOGGLE ================= */}
-      {micros.length > 0 && (
+      {/* {micros.length > 0 && (
         <div>
           <button
             type="button"
@@ -105,7 +103,7 @@ export default function NutritionPreview({
             </div>
           )}
         </div>
-      )}
+      )} */}
     </div>
   );
 }
