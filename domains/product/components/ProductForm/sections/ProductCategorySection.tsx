@@ -4,18 +4,22 @@
 // RHF-driven leaf category selector with derived root
 
 import { useMemo } from "react";
-import { useFormContext } from "react-hook-form";
+import { useFormContext, useWatch } from "react-hook-form";
 
 import { useCategories } from "@/domains/product/hooks/useCategories";
+import { useProductFormUI } from "@/domains/product/forms/product-form.context";
 import { buildCategoryTree } from "@/domains/product/utils/buildCategoryTree";
 import { FormSection } from "@/domains/shared/components/form/FormSection";
 
-import { PRODUCT_LABELS } from "@/domains/product/constants/product.labels";
 import { ProductFormValues } from "../../../schemas/product-form.schema";
-import { ProductFormSection } from "@/domains/product/types/product-form-section.types";
 
-export function ProductCategorySection<ProductFormSection>() {
-  const { register, watch, setValue } = useFormContext<ProductFormValues>();
+export function ProductCategorySection() {
+  const { parentLocked } = useProductFormUI();
+  const { register, setValue } = useFormContext<ProductFormValues>();
+
+  const leafId = useWatch({
+    name: "category_id",
+  });
 
   const { data: categories, isLoading } = useCategories();
 
@@ -24,10 +28,7 @@ export function ProductCategorySection<ProductFormSection>() {
     return buildCategoryTree(categories);
   }, [categories]);
 
-  // ⭐ SINGLE SOURCE OF TRUTH
-  const leafId = watch("category_id");
-
-  // ⭐ derive root from leaf
+  // ⭐ NEW SMART ROOT DETECTION
   const rootId = useMemo(() => {
     if (!leafId) return undefined;
 
@@ -37,15 +38,18 @@ export function ProductCategorySection<ProductFormSection>() {
       }
     }
 
+    const rootNode = tree.find((r) => r.id === leafId);
+    if (rootNode) return rootNode.id;
+
     return undefined;
   }, [tree, leafId]);
 
-  const selectedRoot = useMemo(
-    () => tree.find((c) => c.id === rootId),
-    [tree, rootId],
-  );
+  const subcategories = useMemo(() => {
+    if (!rootId) return [];
 
-  const subcategories = selectedRoot?.children ?? [];
+    const rootNode = tree.find((r) => r.id === rootId);
+    return rootNode?.children ?? [];
+  }, [tree, rootId]);
 
   if (isLoading) {
     return <p className="text-sm text-gray-500">Завантажуємо категорії...</p>;
@@ -54,70 +58,50 @@ export function ProductCategorySection<ProductFormSection>() {
   return (
     <FormSection title="Категорія" description="Вкажіть групу продукту">
       <div className="space-y-4">
-        {/* ROOT CATEGORY */}
+        {/* ROOT */}
+        <select
+          disabled={parentLocked}
+          value={rootId ?? ""}
+          onChange={(e) => {
+            const newRoot = e.target.value || undefined;
 
-        <div>
-          <label className="text-sm font-medium">
-            {PRODUCT_LABELS.CATEGORY}
-          </label>
+            if (!newRoot) {
+              setValue("category_id", undefined);
+              return;
+            }
 
-          {/* <select
-            value={rootId ?? ""}
-            onChange={() => {
-              // ⭐ root changed → reset leaf
-              setValue("category_id", undefined, {
-                shouldDirty: true,
-                shouldValidate: true,
-              }); */}
+            const rootNode = tree.find((r) => r.id === newRoot);
+
+            const firstLeaf = rootNode?.children?.[0]?.id;
+
+            setValue("category_id", firstLeaf ?? newRoot);
+          }}
+          className="w-full rounded border px-3 py-2"
+        >
+          <option value="">Оберіть категорію</option>
+
+          {tree.map((c) => (
+            <option key={c.id} value={c.id}>
+              {c.name.ua}
+            </option>
+          ))}
+        </select>
+
+        {/* LEAF */}
+        {subcategories.length > 0 && (
           <select
-            value={rootId ?? ""}
-            onChange={(e) => {
-              const newRoot = e.target.value || undefined;
-
-              if (!newRoot) {
-                setValue("category_id", undefined);
-                return;
-              }
-
-              const rootNode = tree.find((r) => r.id === newRoot);
-
-              const firstLeaf = rootNode?.children?.[0]?.id;
-
-              setValue("category_id", firstLeaf);
-            }}
-            className="mt-1 w-full rounded border px-3 py-2"
+            disabled={parentLocked}
+            {...register("category_id")}
+            className="w-full rounded border px-3 py-2"
           >
-            <option value="">Оберіть категорію</option>
+            <option value="">Оберіть підкатегорію</option>
 
-            {tree.map((category) => (
-              <option key={category.id} value={category.id}>
-                {category.name.ua}
+            {subcategories.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.name.ua}
               </option>
             ))}
           </select>
-        </div>
-
-        {/* LEAF CATEGORY */}
-
-        {subcategories.length > 0 && (
-          <div>
-            <label className="text-sm font-medium">
-              {PRODUCT_LABELS.SUBCATEGORY}
-            </label>
-
-            <select
-              {...register("category_id")}
-              className="mt-1 w-full rounded border px-3 py-2"
-            >
-              <option value="">Оберіть підкатегорію</option>
-
-              {subcategories.map((subcategory) => (
-                <option key={subcategory.id} value={subcategory.id}>
-                  {subcategory.name.ua}
-                </option>
-              ))}
-            </select>
-          </div>
         )}
       </div>
     </FormSection>

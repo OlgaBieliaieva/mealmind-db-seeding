@@ -1,4 +1,12 @@
+import { ProductPhotoType } from "../constants/product.constants";
+
+export type TempProductPhoto = {
+  type: ProductPhotoType;
+  url: string;
+  objectName: string;
+};
+
 export type ProductPhoto = {
-  type: "packaging" | "ingredients" | "other";
+  type: ProductPhotoType;
   url: string;
 };

@@ -32,7 +32,7 @@ export function RecipePreview({
 
       <table className="w-full text-sm">
         <tbody>
-          {nutrientRefs.map((n) => {
+          {/* {nutrientRefs.map((n) => {
             const total = nutrients[n.nutrient_id]?.value ?? 0;
 
             const per100g = outputWeight > 0 ? (total / outputWeight) * 100 : 0;
@@ -52,7 +52,7 @@ export function RecipePreview({
                 </td>
               </tr>
             );
-          })}
+          })} */}
         </tbody>
       </table>
     </div>

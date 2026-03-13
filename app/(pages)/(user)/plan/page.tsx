@@ -14,7 +14,7 @@ import { aggregateSingleEntryNutrients } from "@/lib/v1/nutrition/nutrition.aggr
 import { AggregatedNutrients } from "@/types/nutrition-aggregation";
 import { NutrientReference } from "@/domains/shared/types/nutrient.types";
 import {
-  mapNutritionToDisplay,
+  // mapNutritionToDisplay,
   NutritionDisplayItem,
 } from "@/lib/v1/nutrition/nutrition.adapter";
 import PlanLayout from "@/components/menu-plan/PlanLayout";
@@ -134,33 +134,33 @@ export default async function PlanPage({ searchParams }: Props) {
 
   const nutrientRefRows = await readSheet("nutrients_reference!A2:L");
 
-  const nutrientRefs: NutrientReference[] = nutrientRefRows.map((row) => {
-    const group = row[5];
+  // const nutrientRefs: NutrientReference[] = nutrientRefRows.map((row) => {
+  //   const group = row[5];
 
-    if (
-      group !== "macro" &&
-      group !== "micro" &&
-      group !== "vitamin" &&
-      group !== "mineral" &&
-      group !== "other"
-    ) {
-      throw new Error(`Invalid nutrient_group value: ${group}`);
-    }
+  //   if (
+  //     group !== "macro" &&
+  //     group !== "micro" &&
+  //     group !== "vitamin" &&
+  //     group !== "mineral" &&
+  //     group !== "other"
+  //   ) {
+  //     throw new Error(`Invalid nutrient_group value: ${group}`);
+  //   }
 
-    return {
-      nutrient_id: row[0],
-      code: row[1],
-      name: {
-        en: row[2],
-        ua: row[3],
-      },
-      default_unit: row[4],
-      nutrient_group: group,
-      sort_order: Number(row[6]),
-      rda_value: row[7] ? Number(row[7]) : undefined,
-      rda_unit: row[8] || undefined,
-    };
-  });
+  //   return {
+  //     nutrient_id: row[0],
+  //     code: row[1],
+  //     name: {
+  //       en: row[2],
+  //       ua: row[3],
+  //     },
+  //     default_unit: row[4],
+  //     nutrient_group: group,
+  //     sort_order: Number(row[6]),
+  //     rda_value: row[7] ? Number(row[7]) : undefined,
+  //     rda_unit: row[8] || undefined,
+  //   };
+  // });
 
   const memberDishNutritionMap: Record<
     string,
@@ -181,10 +181,10 @@ export default async function PlanPage({ searchParams }: Props) {
         productNutrientsMap,
       });
 
-      dishMap[entry.menu_entry_id] = mapNutritionToDisplay(
-        aggregated,
-        nutrientRefs,
-      );
+      // dishMap[entry.menu_entry_id] = mapNutritionToDisplay(
+      //   aggregated,
+      //   // nutrientRefs,
+      // );
     }
 
     memberDishNutritionMap[member.user_id] = dishMap;
@@ -194,10 +194,10 @@ export default async function PlanPage({ searchParams }: Props) {
   // 🔥 PHASE 5 — DISPLAY MAPS
   // =========================
 
-  const planNutritionDisplay = mapNutritionToDisplay(
-    planNutrition,
-    nutrientRefs,
-  );
+  // const planNutritionDisplay = mapNutritionToDisplay(
+  //   planNutrition,
+  //   // nutrientRefs,
+  // );
 
   const memberNutritionDisplayMap: Record<string, NutritionDisplayItem[]> = {};
 
@@ -207,19 +207,19 @@ export default async function PlanPage({ searchParams }: Props) {
   > = {};
 
   for (const member of members) {
-    memberNutritionDisplayMap[member.user_id] = mapNutritionToDisplay(
-      memberNutritionMap[member.user_id],
-      nutrientRefs,
-    );
+    // memberNutritionDisplayMap[member.user_id] = mapNutritionToDisplay(
+    //   memberNutritionMap[member.user_id],
+    //   // nutrientRefs,
+    // );
 
     const mealDisplayMap: Record<number, NutritionDisplayItem[]> = {};
 
-    for (const meal of mealTypes) {
-      mealDisplayMap[meal.meal_type_id] = mapNutritionToDisplay(
-        memberMealNutritionMap[member.user_id][meal.meal_type_id],
-        nutrientRefs,
-      );
-    }
+    // for (const meal of mealTypes) {
+    //   mealDisplayMap[meal.meal_type_id] = mapNutritionToDisplay(
+    //     memberMealNutritionMap[member.user_id][meal.meal_type_id],
+    //     // nutrientRefs,
+    //   );
+    // }
 
     memberMealNutritionDisplayMap[member.user_id] = mealDisplayMap;
   }
@@ -258,7 +258,7 @@ export default async function PlanPage({ searchParams }: Props) {
         selectedDays={selectedDays}
       />
 
-      <PlanLayout
+      {/* <PlanLayout
         planId={plan.menu_plan_id}
         members={members}
         mealTypes={mealTypes}
@@ -269,13 +269,13 @@ export default async function PlanPage({ searchParams }: Props) {
         productsMap={fullData?.productsMap ?? {}}
         recipeWeightMap={recipeWeightMap}
         productUnitMap={fullData?.productUnitMap ?? {}}
-        planNutrition={planNutritionDisplay}
+        // planNutrition={planNutritionDisplay}
         memberNutritionMap={memberNutritionDisplayMap}
         memberMealNutritionMap={memberMealNutritionDisplayMap}
         memberDishNutritionMap={memberDishNutritionMap}
         memberBalanceMap={memberBalanceMap}
         memberTargetsMap={memberTargetsMap}
-      />
+      /> */}
     </>
   );
 }
