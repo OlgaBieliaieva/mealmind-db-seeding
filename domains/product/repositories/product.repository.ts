@@ -1,6 +1,7 @@
 // SECTION ███ PRODUCT REPOSITORY ███
 // DATAFLOW: service → repository → prisma
 
+import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db/prisma";
 import { ProductInput } from "../schemas/product.schema";
 
@@ -82,4 +83,81 @@ export const productRepository = {
       },
     });
   },
+
+  async searchProducts(filters: {
+  query?: string;
+  type?: "generic" | "branded";
+  categoryId?: string;
+  brandId?: string;
+  page?: number;
+  limit?: number;
+}) {
+  const {
+    query,
+    type,
+    categoryId,
+    brandId,
+    page = 1,
+    limit = 20,
+  } = filters;
+
+  const where: Prisma.ProductWhereInput = {};
+
+  if (type) where.type = type;
+
+  if (categoryId) where.categoryId = categoryId;
+
+  if (brandId) where.brandId = brandId;
+
+  if (query) {
+    where.OR = [
+      {
+        nameEn: {
+          contains: query,
+          mode: "insensitive",
+        },
+      },
+      {
+        nameUa: {
+          contains: query,
+          mode: "insensitive",
+        },
+      },
+    ];
+  }
+
+  const [items, total] = await prisma.$transaction([
+    prisma.product.findMany({
+      where,
+      orderBy: {
+        createdAt: "desc",
+      },
+      skip: (page - 1) * limit,
+      take: limit,
+      include: {
+        brand: true,
+        category: true,
+      },
+    }),
+
+    prisma.product.count({
+      where,
+    }),
+  ]);
+
+  return {
+    items: items.map((p) => ({
+      product_id: p.id,
+      name_en: p.nameEn,
+      name_ua: p.nameUa,
+      type: p.type,
+      category: p.category?.nameUa,
+      brand: p.brand?.nameUa ?? null,
+      is_verified: p.isVerified,
+    })),
+    total,
+    page,
+    limit,
+  };
+}
 };

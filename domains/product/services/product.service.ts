@@ -77,3 +77,14 @@ export async function attachProductPhotos(
     })),
   });
 }
+
+export async function listProducts(filters: {
+  query?: string;
+  type?: "generic" | "branded";
+  categoryId?: string;
+  brandId?: string;
+  page?: number;
+  limit?: number;
+}) {
+  return productRepository.searchProducts(filters);
+}
