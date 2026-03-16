@@ -1,32 +1,46 @@
 // SECTION ███ PRODUCTS API V2 ███
 // CONTRACT: POST /api/v2/products
 
+import { NextRequest } from "next/server";
+
+import { productRepository } from "@/domains/product/repositories/product.repository";
 import { ProductSchema } from "@/domains/product/schemas/product.schema";
 import {
   createProduct,
-  listProducts,
 } from "@/domains/product/services/product.service";
 
-export async function GET(req: Request) {
-  const { searchParams } = new URL(req.url);
+export async function GET(req: NextRequest) {
+  try {
+    const { searchParams } = new URL(req.url);
 
-  const query = searchParams.get("query") ?? undefined;
-  const type = searchParams.get("type") as "generic" | "branded" | null;
-  const categoryId = searchParams.get("categoryId") ?? undefined;
-  const brandId = searchParams.get("brandId") ?? undefined;
-  const page = Number(searchParams.get("page") ?? 1);
-  const limit = Number(searchParams.get("limit") ?? 20);
+    const query = searchParams.get("query") ?? undefined;
+    const type =
+      (searchParams.get("type") as "generic" | "branded") ?? undefined;
 
-  const result = await listProducts({
-    query,
-    type: type ?? undefined,
-    categoryId,
-    brandId,
-    page,
-    limit,
-  });
+    const categoryId = searchParams.get("categoryId") ?? undefined;
 
-  return Response.json(result);
+    const brandId = searchParams.get("brandId") ?? undefined;
+
+    const page = Number(searchParams.get("page") ?? "1");
+
+    const result = await productRepository.searchProducts({
+      query,
+      type,
+      categoryId,
+      brandId,
+      page,
+      limit: 20,
+    });
+
+    return Response.json(result);
+  } catch (e) {
+    console.error(e);
+
+    return Response.json(
+      { error: "Failed to fetch products" },
+      { status: 500 },
+    );
+  }
 }
 
 export async function POST(req: Request) {
