@@ -9,7 +9,7 @@ import {
   PRODUCT_UNIT_OPTIONS,
 } from "../constants/product.constants";
 
-import { PRODUCT_LABELS } from "../constants/product.labels";
+import { PRODUCT_LABELS } from "../constants/product.form.labels";
 
 export const PRODUCT_BASIC_FIELDS: FormField<ProductFormValues>[] = [
   {

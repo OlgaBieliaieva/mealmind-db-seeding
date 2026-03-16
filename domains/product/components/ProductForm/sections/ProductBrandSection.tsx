@@ -6,7 +6,7 @@ import { FormSection } from "@/domains/shared/components/form/FormSection";
 import { ProductFormValues } from "@/domains/product/schemas/product-form.schema";
 
 import { BrandDto } from "@/domains/product/schemas/brand.schema";
-import { PRODUCT_LABELS } from "@/domains/product/constants/product.labels";
+import { PRODUCT_LABELS } from "@/domains/product/constants/product.form.labels";
 
 export function ProductBrandSection() {
   const { register, watch } = useFormContext<ProductFormValues>();
