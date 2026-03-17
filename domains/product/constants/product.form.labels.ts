@@ -8,6 +8,8 @@ export const PRODUCT_LABELS = {
 
   TYPE: "Тип продукту",
 
+  STATE: "Стан продукту",
+
   UNIT: "Одиниця виміру",
 
   BRAND: "Бренд",

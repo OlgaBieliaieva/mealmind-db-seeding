@@ -1,4 +1,4 @@
-import { supabaseAdmin } from "@/lib/supabase/admin";
+import { getSupabaseAdmin } from "@/lib/supabase/admin";
 
 const BUCKET = "product-photos";
 const TEMP_PREFIX = "products/temp/";
@@ -7,7 +7,7 @@ const MAX_AGE_HOURS = 24;
 
 export async function cleanupTempProductPhotos() {
   console.log("🧹 Starting temp photo cleanup...");
-
+  const supabaseAdmin = getSupabaseAdmin();
   const { data: files, error } = await supabaseAdmin.storage
     .from(BUCKET)
     .list(TEMP_PREFIX, {

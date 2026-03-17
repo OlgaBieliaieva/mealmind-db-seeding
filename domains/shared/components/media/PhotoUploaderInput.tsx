@@ -2,10 +2,8 @@
 
 import { useState } from "react";
 
-import {
-  PRODUCT_PHOTO_TYPE_OPTIONS,
-  ProductPhotoType,
-} from "@/domains/product/constants/product.constants";
+import { ProductPhotoType } from "@/domains/product/constants/product.constants";
+import { PRODUCT_PHOTO_TYPE_OPTIONS } from "@/domains/product/constants/product.ui.options";
 
 type Props = {
   uploading: boolean;

@@ -9,6 +9,9 @@ export const PRODUCT_ADMIN_LABELS = {
     type: "Тип",
     category: "Категорія",
     brand: "Бренд",
+    allTypes: "Усі типи",
+    categorySoon: "Фільтр категорій скоро",
+    brandSoon: "Фільтр брендів скоро",
   },
 
   empty: {

@@ -1,5 +1,5 @@
 import sharp from "sharp";
-import { supabaseAdmin } from "@/lib/supabase/admin";
+import { getSupabaseAdmin } from "@/lib/supabase/admin";
 
 type Variant = {
   folder: string;
@@ -18,6 +18,7 @@ export async function generateProductPhotoVariants(
   productId: string,
   objectName: string,
 ) {
+  const supabaseAdmin = getSupabaseAdmin();
   const { data } = await supabaseAdmin.storage
     .from("product-photos")
     .download(objectName);
