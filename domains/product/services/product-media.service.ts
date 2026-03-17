@@ -1,4 +1,4 @@
-import { supabaseAdmin } from "@/lib/supabase/admin";
+import { getSupabaseAdmin } from "@/lib/supabase/admin";
 import { TempProductPhoto } from "../types/product-photo.types";
 
 export async function finalizeProductPhotos(
@@ -6,7 +6,7 @@ export async function finalizeProductPhotos(
   photos: TempProductPhoto[],
 ): Promise<TempProductPhoto[]> {
   const finalized: TempProductPhoto[] = [];
-
+  const supabaseAdmin = getSupabaseAdmin();
   for (const photo of photos) {
     const filename = photo.objectName.split("/").pop();
 
