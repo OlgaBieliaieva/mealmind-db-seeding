@@ -69,7 +69,10 @@ export function ProductForm() {
   return (
     <FormProvider {...methods}>
       <ProductFormContext.Provider value={{ parentLocked, setParentLocked }}>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="flex flex-col justify-center"
+        >
           <FormStatus
             loading={isSubmitting}
             error={isError}
@@ -80,7 +83,12 @@ export function ProductForm() {
             <Section key={i} />
           ))}
 
-          <button disabled={isSubmitting}>Save</button>
+          <button
+            disabled={isSubmitting}
+            className="rounded bg-black px-4 py-2 text-white"
+          >
+            Save
+          </button>
         </form>
       </ProductFormContext.Provider>
     </FormProvider>

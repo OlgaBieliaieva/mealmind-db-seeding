@@ -4,4 +4,5 @@ export type Brand = {
     en: string;
     ua: string;
   };
+  country: string;
 };

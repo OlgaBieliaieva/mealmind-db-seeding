@@ -7,7 +7,8 @@ import { ProductFormValues } from "../schemas/product-form.schema";
 import {
   PRODUCT_TYPE_OPTIONS,
   PRODUCT_UNIT_OPTIONS,
-} from "../constants/product.constants";
+  PRODUCT_STATE_OPTIONS,
+} from "@/domains/product/constants/product.ui.options";
 
 import { PRODUCT_LABELS } from "../constants/product.form.labels";
 
@@ -29,6 +30,13 @@ export const PRODUCT_BASIC_FIELDS: FormField<ProductFormValues>[] = [
     name: "type",
     label: PRODUCT_LABELS.TYPE,
     options: PRODUCT_TYPE_OPTIONS,
+  },
+
+  {
+    type: "select",
+    name: "type",
+    label: PRODUCT_LABELS.STATE,
+    options: PRODUCT_STATE_OPTIONS,
   },
 
   {

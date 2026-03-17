@@ -19,3 +19,10 @@ export type ProductListResponse = {
   page: number;
   limit: number;
 };
+
+export type ProductListItemDto = {
+  product_id: string;
+  name_ua: string;
+  type: "generic" | "branded";
+  brand?: string | null;
+};

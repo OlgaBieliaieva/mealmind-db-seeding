@@ -3,7 +3,10 @@
 import Link from "next/link";
 import { useProductList } from "@/domains/product/hooks/useProductList";
 import { useProductFilters } from "@/domains/product/hooks/useProductFilters";
+import { TableCardSkeleton } from "@/domains/shared/components/table/TableCardSkeleton";
 import { ProductFiltersBar } from "@/domains/product/components/ProductList/ProductFiltersBar";
+import { ProductListEmpty } from "@/domains/product/components/ProductList/ProductListEmpty";
+import { ProductList } from "@/domains/product/components/ProductList/ProductList";
 import { Pagination } from "@/domains/shared/components/table/Pagination";
 import { PRODUCT_ADMIN_LABELS } from "@/domains/product/constants/product.admin.labels";
 
@@ -12,7 +15,7 @@ export default function ProductListPage() {
   const { filters, updateFilters, isPending } = useProductFilters();
 
   const page = filters.page ?? 1;
-  const totalPages = data?.total ?? 1;
+  const totalPages = data ? Math.max(1, Math.ceil(data.total / data.limit)) : 1;
 
   return (
     <div className="space-y-6">
@@ -32,36 +35,14 @@ export default function ProductListPage() {
 
       {/* LIST */}
 
-      {isLoading && <p className="text-sm text-gray-500">Завантаження…</p>}
-
-      {data && data.items.length === 0 && (
-        <div className="rounded border bg-white p-6 text-center">
-          <p className="font-medium">{PRODUCT_ADMIN_LABELS.empty.title}</p>
-
-          <p className="text-sm text-gray-500">
-            {PRODUCT_ADMIN_LABELS.empty.description}
-          </p>
-        </div>
+      {isLoading && <TableCardSkeleton />}
+      {isFetching && !isLoading && (
+        <div className="text-xs text-gray-400">Оновлення…</div>
       )}
 
-      {data && data.items.length > 0 && (
-        <div className="rounded border bg-white">
-          {data.items.map((p) => (
-            <div
-              key={p.product_id}
-              className="flex items-center justify-between border-b px-4 py-3 last:border-b-0"
-            >
-              <div>
-                <div className="font-medium">{p.name_ua}</div>
+      {data && data.items.length === 0 && <ProductListEmpty />}
 
-                <div className="text-xs text-gray-500">{p.type}</div>
-              </div>
-
-              <div className="text-sm text-gray-500">{p.brand ?? "—"}</div>
-            </div>
-          ))}
-        </div>
-      )}
+      {data && data.items.length > 0 && <ProductList items={data.items} />}
 
       {/* PAGINATION */}
 
