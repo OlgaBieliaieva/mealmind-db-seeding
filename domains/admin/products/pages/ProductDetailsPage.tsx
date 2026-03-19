@@ -1,14 +1,35 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import { useProductDetails } from "../hooks/useProductDetails";
 import { PageLoader } from "@/domains/shared/components/page/PageLoader";
 import { PageError } from "@/domains/shared/components/page/PageError";
+import { ProductDetailsBackLink } from "../components/details/ProductDetailsBackLink";
 import { ProductDetailsHeaderCard } from "../components/details/ProductDetailsHeaderCard";
+import { ProductDetailsStickyHeader } from "../components/details/ProductDetailsStickyHeader";
 import { ProductDetailsBasicInfoSection } from "../components/details/ProductDetailsBasicInfoSection";
-import { ProductDetailsCategorySection } from "../components/details/ProductDetailsCategorySection";
+import { ProductDetailsFooterActions } from "../components/details/ProductDetailsFooterActions";
+import { PRODUCT_DETAILS_SECTIONS } from "../constants/product-details.sections";
 
 export function ProductDetailsPage() {
   const { data, isLoading, isError, refetch } = useProductDetails();
+  const headerRef = useRef<HTMLDivElement | null>(null);
+  const [showSticky, setShowSticky] = useState(false);
+
+  useEffect(() => {
+    function onScroll() {
+      const header = headerRef.current;
+      if (!header) return;
+
+      const threshold = header.offsetHeight;
+
+      setShowSticky(window.scrollY > threshold);
+    }
+
+    window.addEventListener("scroll", onScroll);
+
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   if (isLoading) {
     return <PageLoader title="Loading product..." />;
@@ -19,15 +40,22 @@ export function ProductDetailsPage() {
   }
 
   return (
-    <div className="space-y-6">
-      <ProductDetailsHeaderCard product={data} />
+    <div className="space-y-6 pb-20">
+      {showSticky && <ProductDetailsStickyHeader product={data} />}
+
+      <ProductDetailsBackLink />
+
+      <div ref={headerRef}>
+        <ProductDetailsHeaderCard product={data} />
+      </div>
 
       <ProductDetailsBasicInfoSection product={data} />
-      <ProductDetailsCategorySection
-        category={data.category}
-        brand={data.brand}
-        parent={data.parent}
-      />
+
+      {PRODUCT_DETAILS_SECTIONS.map((Section, i) => (
+        <Section key={i} product={data} />
+      ))}
+
+      <ProductDetailsFooterActions product={data} />
     </div>
   );
 }

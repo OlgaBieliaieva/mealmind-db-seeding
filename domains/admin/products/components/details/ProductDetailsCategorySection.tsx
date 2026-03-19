@@ -1,41 +1,42 @@
 import { DetailsSectionCard } from "./DetailsSectionCard";
 import { EntityLink } from "@/domains/shared/components/link/EntityLink";
 import { ProductDetailsDTO } from "../../types/product-details.dto";
+import { PRODUCT_DETAILS_LABELS } from "../../constants/product-details.labels";
 
 type Props = {
-  category?: ProductDetailsDTO["category"];
-  brand?: ProductDetailsDTO["brand"];
-  parent?: ProductDetailsDTO["parent"];
+  product: ProductDetailsDTO;
 };
 
-export function ProductDetailsCategorySection({
-  category,
-  parent,
-  brand,
-}: Props) {
+export function ProductDetailsCategorySection({ product }: Props) {
   return (
-    <DetailsSectionCard title="Classification">
+    <DetailsSectionCard title={PRODUCT_DETAILS_LABELS.CLASSIFICATION}>
       <div className="space-y-3 text-sm">
-        {category && (
+        {product.category && (
           <div>
-            <span className="text-muted-foreground">Category:</span>{" "}
+            <span className="text-muted-foreground">
+              {PRODUCT_DETAILS_LABELS.CATEGORY}:
+            </span>{" "}
             <span className="font-medium">
-              {category.rootName} / {category.leafName}
+              {product.category.rootName} / {product.category.leafName}
             </span>
           </div>
         )}
 
-        {brand && (
+        {product.brand && (
           <div>
-            <span className="text-muted-foreground">Brand:</span>{" "}
-            <span className="font-medium">{brand.name}</span>
+            <span className="text-muted-foreground">
+              {PRODUCT_DETAILS_LABELS.BRAND}:
+            </span>{" "}
+            <span className="font-medium">{product.brand.name}</span>
           </div>
         )}
 
-        {parent && (
+        {product.parent && (
           <div>
-            <span className="text-muted-foreground">Parent product:</span>{" "}
-            <EntityLink href={`/admin/products/${parent.id}`}>
+            <span className="text-muted-foreground">
+              {PRODUCT_DETAILS_LABELS.PARENT_PRODUCT}:
+            </span>{" "}
+            <EntityLink href={`/admin/products/${product.parent.id}`}>
               {parent.name}
             </EntityLink>
           </div>

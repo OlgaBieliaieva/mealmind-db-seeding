@@ -5,6 +5,8 @@ import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db/prisma";
 import { ProductInput } from "../schemas/product.schema";
 import { getCategoryDescendantIds } from "../utils/getCategoryDescendantIds";
+import { ProductDetailsDTO } from "@/domains/admin/products/types/product-details.dto";
+import { mapProductToDetailsDTO } from "../mappers/productToDetails.mapper";
 
 export const productRepository = {
   async create(product: ProductInput) {
@@ -163,5 +165,35 @@ export const productRepository = {
       page,
       limit,
     };
+  },
+
+  async getProductDetails(id: string): Promise<ProductDetailsDTO | null> {
+    const product = await prisma.product.findUnique({
+      where: { id },
+
+      include: {
+        brand: true,
+
+        category: {
+          include: {
+            parent: true,
+          },
+        },
+
+        parentProduct: true,
+
+        nutrients: {
+          include: {
+            nutrient: true,
+          },
+        },
+
+        photos: true,
+      },
+    });
+
+    if (!product) return null;
+
+    return mapProductToDetailsDTO(product);
   },
 };
