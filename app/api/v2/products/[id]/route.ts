@@ -15,3 +15,14 @@ export async function GET(
 
   return NextResponse.json(product);
 }
+
+export async function DELETE(
+  _: Request,
+  context: { params: Promise<{ id: string }> },
+) {
+  const { id } = await context.params;
+
+  await productRepository.deleteProduct(id);
+
+  return NextResponse.json({ success: true });
+}

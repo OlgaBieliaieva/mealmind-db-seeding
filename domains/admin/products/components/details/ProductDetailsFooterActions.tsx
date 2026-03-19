@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useDeleteProduct } from "../../hooks/useDeleteProduct";
 import { ProductDetailsDTO } from "../../types/product-details.dto";
 
 type Props = {
@@ -9,6 +10,7 @@ type Props = {
 
 export function ProductDetailsFooterActions({ product }: Props) {
   const router = useRouter();
+  const { mutate, isPending } = useDeleteProduct();
 
   return (
     <div className="mt-10 border-t pt-6">
@@ -17,11 +19,19 @@ export function ProductDetailsFooterActions({ product }: Props) {
           onClick={() => router.push(`/admin/products/${product.id}/edit`)}
           className="rounded-lg border px-4 py-2 text-sm font-medium hover:bg-gray-50"
         >
-          Edit product
+          Змінити
         </button>
 
-        <button className="rounded-lg border px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50">
-          Delete product
+        <button
+          className="rounded-lg border px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50"
+          disabled={isPending}
+          onClick={() => {
+            if (confirm("Delete this product?")) {
+              mutate(product.id);
+            }
+          }}
+        >
+          Видалити
         </button>
       </div>
     </div>

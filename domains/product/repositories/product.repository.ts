@@ -196,4 +196,28 @@ export const productRepository = {
 
     return mapProductToDetailsDTO(product);
   },
+
+  async deleteProduct(id: string) {
+    await prisma.$transaction([
+      prisma.productNutrient.deleteMany({
+        where: { productId: id },
+      }),
+
+      prisma.productPhoto.deleteMany({
+        where: { productId: id },
+      }),
+
+      prisma.productTag.deleteMany({
+        where: { productId: id },
+      }),
+
+      prisma.productFavorite.deleteMany({
+        where: { productId: id },
+      }),
+
+      prisma.product.delete({
+        where: { id },
+      }),
+    ]);
+  },
 };
