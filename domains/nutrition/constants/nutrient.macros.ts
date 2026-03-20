@@ -1,0 +1,13 @@
+import { NUTRIENT_CODES } from "./nutrient.codes";
+
+export const MACRO_NUTRIENT_CODES = {
+  PROTEIN: NUTRIENT_CODES.PROTEIN,
+  FAT: NUTRIENT_CODES.FAT,
+  CARBOHYDRATES: NUTRIENT_CODES.CARBOHYDRATES,
+  ENERGY: NUTRIENT_CODES.ENERGY_KCAL,
+} as const;
+
+export const REQUIRED_MACRO_VALUES = Object.values(MACRO_NUTRIENT_CODES);
+
+export type MacroNutrientCode =
+  (typeof MACRO_NUTRIENT_CODES)[keyof typeof MACRO_NUTRIENT_CODES];

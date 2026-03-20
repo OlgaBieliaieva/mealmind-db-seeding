@@ -6,9 +6,10 @@ import { NutrientReference } from "@/domains/shared/types/nutrient.types";
 
 type Props = {
   nutrient: NutrientReference;
+  isRequired?: boolean;
 };
 
-export function NutrientRow({ nutrient }: Props) {
+export function NutrientRow({ nutrient, isRequired }: Props) {
   const { watch, setValue } = useFormContext<ProductFormValues>();
 
   const nutrients = watch("nutrients") ?? {};
@@ -40,7 +41,9 @@ export function NutrientRow({ nutrient }: Props) {
 
   return (
     <div className="grid grid-cols-3 gap-3 items-center">
-      <div className="text-sm">{nutrient.name.ua}</div>
+      <div className="text-sm">
+        {isRequired ? `${nutrient.name.ua}*` : nutrient.name.ua}
+      </div>
 
       <input
         type="number"

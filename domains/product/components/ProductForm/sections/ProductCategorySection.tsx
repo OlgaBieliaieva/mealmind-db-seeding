@@ -66,7 +66,7 @@ export function ProductCategorySection() {
             const newRoot = e.target.value || undefined;
 
             if (!newRoot) {
-              setValue("category_id", undefined);
+              setValue("category_id", "");
               return;
             }
 

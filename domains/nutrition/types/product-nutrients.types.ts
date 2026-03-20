@@ -3,5 +3,6 @@ export type ProductNutrients = Record<
   {
     value: number;
     unit: string;
+    code?: string;
   }
 >;

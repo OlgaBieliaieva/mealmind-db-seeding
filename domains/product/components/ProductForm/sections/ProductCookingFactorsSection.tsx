@@ -20,7 +20,7 @@ export function ProductCookingFactorsSection() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {/* edible part */}
         <div className="space-y-1">
-          <label className="text-sm font-medium">Їстівна частина (%)</label>
+          <label className="text-sm font-medium">Їстівна частина (%)*</label>
 
           <input
             type="number"
@@ -38,7 +38,7 @@ export function ProductCookingFactorsSection() {
 
         {/* yield factor */}
         <div className="space-y-1">
-          <label className="text-sm font-medium">Коефіцієнт виходу</label>
+          <label className="text-sm font-medium">Коефіцієнт виходу*</label>
 
           <input
             type="number"
@@ -56,7 +56,7 @@ export function ProductCookingFactorsSection() {
         {/* cooking loss */}
         <div className="space-y-1">
           <label className="text-sm font-medium">
-            Втрати при приготуванні (%)
+            Втрати при приготуванні (%)*
           </label>
 
           <input

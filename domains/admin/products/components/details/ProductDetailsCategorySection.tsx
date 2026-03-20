@@ -37,7 +37,7 @@ export function ProductDetailsCategorySection({ product }: Props) {
               {PRODUCT_DETAILS_LABELS.PARENT_PRODUCT}:
             </span>{" "}
             <EntityLink href={`/admin/products/${product.parent.id}`}>
-              {parent.name}
+              {product.parent.name}
             </EntityLink>
           </div>
         )}

@@ -2,21 +2,21 @@
 // WHY: централізовані тексти UI
 
 export const PRODUCT_LABELS = {
-  NAME_UA: "Назва (UA)",
+  NAME_UA: "Назва (UA)*",
 
-  NAME_EN: "Назва (EN)",
+  NAME_EN: "Назва (EN)*",
 
-  TYPE: "Тип продукту",
+  TYPE: "Тип продукту*",
 
-  STATE: "Стан продукту",
+  STATE: "Стан продукту*",
 
-  UNIT: "Одиниця виміру",
+  UNIT: "Одиниця виміру*",
 
   BRAND: "Бренд",
 
   NEW_BRAND: "Новий бренд",
 
-  CATEGORY: "Категорія",
+  CATEGORY: "Категорія*",
 
   SUBCATEGORY: "Підкатегорія",
 

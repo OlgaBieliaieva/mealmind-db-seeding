@@ -1,12 +1,13 @@
 // SECTION ███ PRODUCT FORM SCHEMA ███
 // WHY: schema для react-hook-form та API payload validation
 
-import { z } from "zod";
+import { z, RefinementCtx } from "zod";
 import {
   PRODUCT_UNITS,
   PRODUCT_TYPES,
   PRODUCT_STATES,
 } from "@/domains/product/constants/product.constants";
+import { REQUIRED_MACRO_VALUES } from "@/domains/nutrition/constants/nutrient.macros";
 
 // SECTION ━━ ENUMS ━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -35,52 +36,70 @@ export const ProductFormNutrientSchema = z.object({
 
 // SECTION ━━ MAIN PRODUCT FORM ━━━━━━━━━━━━━━━━
 
-export const ProductFormSchema = z.object({
-  name_en: z.string().min(1),
+export const ProductFormSchema = z
+  .object({
+    name_en: z.string().min(1),
 
-  name_ua: z.string().min(1),
+    name_ua: z.string().min(1),
 
-  type: TypeEnum,
+    type: TypeEnum,
 
-  unit: UnitEnum,
+    unit: UnitEnum,
 
-  raw_or_cooked_default: StateEnum,
+    raw_or_cooked_default: StateEnum,
 
-  // DB ━━ METADATA
+    // DB ━━ METADATA
 
-  category_id: z.string().optional(),
+    category_id: z.string(),
 
-  // subcategory_id: z.string().optional(),
+    notes: z.string().optional(),
 
-  notes: z.string().optional(),
+    is_verified: z.boolean(),
 
-  is_verified: z.boolean(),
+    brand_id: z.string().optional(),
 
-  brand_id: z.string().optional(),
+    source: z.string().optional(),
 
-  source: z.string().optional(),
+    // TODO new brand creation flow
 
-  // TODO new brand creation flow
+    new_brand_name_en: z.string().optional(),
 
-  new_brand_name_en: z.string().optional(),
+    new_brand_name_ua: z.string().optional(),
 
-  new_brand_name_ua: z.string().optional(),
+    new_brand_country: z.string().optional(),
 
-  new_brand_country: z.string().optional(),
+    // GENERIC PARENT
 
-  // GENERIC PARENT
+    parent_product_id: z.string().optional(),
 
-  parent_product_id: z.string().optional(),
+    nutrients: z.record(z.string(), ProductFormNutrientSchema).optional(),
 
-  nutrients: z.record(z.string(), ProductFormNutrientSchema).optional(),
+    barcode: z.string().min(8).optional(),
 
-  barcode: z.string().min(8).optional(),
+    photos: z.array(ProductPhotoFormSchema).optional(),
 
-  photos: z.array(ProductPhotoFormSchema).optional(),
+    cooking_loss_pct: z.number().optional(),
+    edible_part_pct: z.number().optional(),
+    yield_factor: z.number().optional(),
+  })
+  .superRefine((data: ProductFormValues, ctx: RefinementCtx) => {
+    const hasParent = !!data.parent_product_id;
 
-  cooking_loss_pct: z.number().optional(),
-  edible_part_pct: z.number().optional(),
-  yield_factor: z.number().optional(),
-});
+    if (hasParent) return;
+
+    const nutrients = data.nutrients ?? {};
+
+    for (const macro of REQUIRED_MACRO_VALUES) {
+      const entry = nutrients[macro];
+
+      if (!entry || entry.value === undefined || entry.value === null) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Required macronutrient",
+          path: ["nutrients", macro, "value"],
+        });
+      }
+    }
+  });
 
 export type ProductFormValues = z.infer<typeof ProductFormSchema>;
