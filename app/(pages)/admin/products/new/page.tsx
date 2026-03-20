@@ -10,7 +10,7 @@ export default function AddProductPage() {
         {PRODUCT_ADMIN_LABELS.form.title}
       </h1>
 
-      <ProductForm />
+      <ProductForm mode="create" />
     </div>
   );
 }

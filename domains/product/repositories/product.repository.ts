@@ -249,6 +249,46 @@ export const productRepository = {
     return mapProductToDetailsDTO(product);
   },
 
+  async updateProduct(id: string, product: ProductInput) {
+    return prisma.$transaction(async (tx) => {
+      await tx.product.update({
+        where: { id },
+        data: {
+          nameEn: product.name.en,
+          nameUa: product.name.ua,
+          unit: product.unit,
+          notes: product.notes,
+          source: product.source,
+          isVerified: product.is_verified,
+          cookingLossPct: product.cooking_loss_pct,
+          ediblePartPct: product.edible_part_pct,
+          yieldFactor: product.yield_factor,
+          ...(product.type === "branded"
+            ? {
+                barcode: product.barcode,
+                brandId: product.brand_id,
+              }
+            : {}),
+        },
+      });
+
+      await tx.productNutrient.deleteMany({
+        where: { productId: id },
+      });
+
+      if (product.nutrients) {
+        await tx.productNutrient.createMany({
+          data: Object.entries(product.nutrients).map(([nid, v]) => ({
+            productId: id,
+            nutrientId: nid,
+            valuePer100g: v.value,
+            unit: v.unit,
+          })),
+        });
+      }
+    });
+  },
+
   async deleteProduct(id: string) {
     await prisma.$transaction([
       prisma.productNutrient.deleteMany({

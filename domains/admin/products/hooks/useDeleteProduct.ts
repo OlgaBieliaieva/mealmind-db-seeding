@@ -20,7 +20,7 @@ export function useDeleteProduct() {
     },
 
     onSuccess: () => {
-      toast.success("Продукт успешно удален");
+      toast.success("Продукт успішно видалено");
 
       qc.invalidateQueries({ queryKey: ["products"] });
 

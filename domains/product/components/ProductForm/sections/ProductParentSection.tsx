@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { useFormContext } from "react-hook-form";
 
 import { FormSection } from "@/domains/shared/components/form/FormSection";
@@ -13,22 +12,17 @@ import { ProductFormValues } from "@/domains/product/schemas/product-form.schema
 import { GenericProduct } from "@/domains/product/types/generic-product.types";
 
 export function ProductParentSection() {
-  const { setParentLocked } = useProductFormUI();
+  const { setParentLocked, parentLocked } = useProductFormUI();
   const { watch } = useFormContext<ProductFormValues>();
 
   const type = watch("type");
-
-  const [selectedParent, setSelectedParent] = useState<GenericProduct | null>(
-    null,
-  );
+  const parentId = watch("parent_product_id");
 
   const { applyInheritance, clearInheritance } = useGenericInheritance();
 
   if (type !== "branded") return null;
 
   function handleSelect(product: GenericProduct | null) {
-    setSelectedParent(product);
-
     if (!product) {
       clearInheritance();
       setParentLocked(false);
@@ -44,7 +38,11 @@ export function ProductParentSection() {
       title="Базовий продукт"
       description="Можна наслідувати параметри від generic продукту"
     >
-      <GenericProductSearch value={selectedParent} onSelect={handleSelect} />
+      <GenericProductSearch
+        valueId={parentId}
+        disabled={parentLocked}
+        onSelect={handleSelect}
+      />
     </FormSection>
   );
 }

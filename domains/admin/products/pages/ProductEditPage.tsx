@@ -1,15 +1,24 @@
 "use client";
+import { useMemo } from "react";
+import { ProductForm } from "@/domains/product/components/ProductForm/ProductForm";
+import { ProductDetailsDTO } from "../types/product-details.dto";
+import { mapProductDetailsToForm } from "@/domains/product/mappers/mapProductDetailsToForm";
 
-import { useParams } from "next/navigation";
+type Props = {
+  product: ProductDetailsDTO;
+};
 
-export function ProductEditPage() {
-  const params = useParams();
+export function ProductEditPage({ product }: Props) {
+  const initialValues = useMemo(
+    () => mapProductDetailsToForm(product),
+    [product],
+  );
 
   return (
-    <div className="space-y-6">
-      <div className="text-xl font-semibold">Edit product {params.id}</div>
-
-      {/* тут скоро буде Form reuse */}
-    </div>
+    <ProductForm
+      mode="edit"
+      initialValues={initialValues}
+      productId={product.id}
+    />
   );
 }

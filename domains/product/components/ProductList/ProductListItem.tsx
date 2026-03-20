@@ -12,11 +12,12 @@ type Props = {
 export function ProductListItem({ product }: Props) {
   const params = useSearchParams();
 
-const returnTo =
-  `/admin/products?${params.toString()}`;
+  const returnTo = `/admin/products?${params.toString()}`;
   return (
-    <Link href={`/admin/products/${product.product_id}?returnTo=${encodeURIComponent(returnTo)}`}>
-      <div className="flex items-center justify-between border-b px-4 py-3 last:border-b-0 hover:bg-gray-50 cursor-pointer">
+    <Link
+      href={`/admin/products/${product.product_id}?returnTo=${encodeURIComponent(returnTo)}`}
+    >
+      <div className="flex items-center justify-between border px-4 py-3 last:border-b-0 hover:bg-gray-50 cursor-pointer">
         <div>
           <div className="font-medium">{product.name_ua}</div>
 

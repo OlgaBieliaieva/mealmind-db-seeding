@@ -13,11 +13,19 @@ import {
 
 import { ProductFormContext } from "../../forms/product-form.context";
 
-import { useProductFormSubmit } from "../../hooks/useProductFormSubmit";
+import { useProductFormFlow } from "../../hooks/useProductFormFlow";
+import { useDirtyGuard } from "@/domains/shared/hooks/useDirtyGuard";
 
 import { FormStatus } from "@/domains/shared/components/form/FormStatus";
 
 import { PRODUCT_FORM_SECTIONS } from "../../forms/productForm.registry";
+import { ProductEditNavigation } from "@/domains/admin/products/components/ProductEditNavigation";
+
+type Props = {
+  mode?: "create" | "edit";
+  initialValues?: ProductFormValues;
+  productId?: string;
+};
 
 const defaultValues: ProductFormValues = {
   name_en: "",
@@ -39,16 +47,34 @@ const defaultValues: ProductFormValues = {
   photos: [],
 };
 
-export function ProductForm() {
-  const [parentLocked, setParentLocked] = useState(false);
+export function ProductForm({
+  mode = "create",
+  initialValues = defaultValues,
+  productId,
+}: Props) {
+  const [manualParentLock, setManualParentLock] = useState(false);
+
+  const parentLocked = mode === "edit" || manualParentLock;
+
   const methods = useForm<ProductFormValues>({
     resolver: zodResolver(ProductFormSchema),
-    defaultValues,
+    defaultValues: initialValues,
   });
 
-  const { handleSubmit } = methods;
+  const {
+    handleSubmit,
+    formState,
+    formState: { isDirty },
+  } = methods;
 
-  const { submit, isSubmitting, isError, isSuccess } = useProductFormSubmit();
+  useDirtyGuard({
+    enabled: mode === "edit" && isDirty,
+  });
+
+  const { submit, isSubmitting, isError, isSuccess } = useProductFormFlow(
+    mode,
+    productId,
+  );
 
   async function onSubmit(values: ProductFormValues) {
     await submit(values);
@@ -56,11 +82,14 @@ export function ProductForm() {
 
   return (
     <FormProvider {...methods}>
-      <ProductFormContext.Provider value={{ parentLocked, setParentLocked }}>
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="flex flex-col justify-center"
-        >
+      <ProductFormContext.Provider
+        value={{
+          parentLocked,
+          setParentLocked: setManualParentLock,
+        }}
+      >
+        <ProductEditNavigation />
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
           <FormStatus
             loading={isSubmitting}
             error={isError}
@@ -72,7 +101,7 @@ export function ProductForm() {
           ))}
 
           <button
-            disabled={isSubmitting}
+            disabled={!formState.isDirty || isSubmitting}
             className="rounded bg-black px-4 py-2 text-white"
           >
             Save

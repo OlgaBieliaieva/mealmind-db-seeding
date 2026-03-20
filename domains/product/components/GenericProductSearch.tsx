@@ -2,15 +2,20 @@
 
 import { useState } from "react";
 import { useGenericProductSearch } from "../hooks/useGenericProductSearch";
+import { useGenericProductById } from "../hooks/useGenericProductById";
 import { GenericProduct } from "@/domains/product/types/generic-product.types";
 
 type Props = {
-  value?: GenericProduct | null;
+  valueId?: string;
+  disabled?: boolean;
   onSelect: (product: GenericProduct | null) => void;
 };
 
-export function GenericProductSearch({ value, onSelect }: Props) {
+export function GenericProductSearch({ valueId, disabled, onSelect }: Props) {
   const [query, setQuery] = useState("");
+
+  const { data: selected, isLoading: isLoadingSelected } =
+    useGenericProductById(valueId);
 
   const { data, isFetching } = useGenericProductSearch(query);
 
@@ -18,18 +23,28 @@ export function GenericProductSearch({ value, onSelect }: Props) {
 
   /* ---------------- selected mode ---------------- */
 
-  if (value) {
+  if (valueId) {
+    if (isLoadingSelected) {
+      return (
+        <div className="rounded border px-3 py-2 text-sm">Завантаження...</div>
+      );
+    }
+
     return (
       <div className="flex items-center justify-between rounded border px-3 py-2">
-        <span className="text-sm font-medium">{value.name.ua}</span>
+        <span className="text-sm font-medium">
+          {selected?.name.ua ?? "Unknown"}
+        </span>
 
-        <button
-          type="button"
-          onClick={() => onSelect(null)}
-          className="text-sm text-red-600 hover:underline"
-        >
-          Змінити
-        </button>
+        {!disabled && (
+          <button
+            type="button"
+            onClick={() => onSelect(null)}
+            className="text-sm text-red-600 hover:underline"
+          >
+            Змінити
+          </button>
+        )}
       </div>
     );
   }
@@ -41,27 +56,25 @@ export function GenericProductSearch({ value, onSelect }: Props) {
   return (
     <div className="relative">
       <input
+        disabled={disabled}
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         placeholder="Шукати базовий продукт..."
-        className="w-full rounded border px-3 py-2"
+        className="w-full rounded border px-3 py-2 disabled:bg-gray-100"
       />
 
-      {/* loading */}
       {showDropdown && isFetching && (
         <div className="absolute z-10 mt-1 w-full rounded border bg-white p-2 text-sm shadow">
           Завантаження...
         </div>
       )}
 
-      {/* empty */}
       {showDropdown && !isFetching && items.length === 0 && (
         <div className="absolute z-10 mt-1 w-full rounded border bg-white p-2 text-sm shadow">
           Нічого не знайдено
         </div>
       )}
 
-      {/* results */}
       {showDropdown && items.length > 0 && (
         <ul className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded border bg-white shadow">
           {items.map((item) => (

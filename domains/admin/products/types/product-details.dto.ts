@@ -2,23 +2,24 @@ import {
   ProductType,
   ProductUnit,
   ProductState,
+  ProductPhotoType,
 } from "@/domains/product/constants/product.constants";
 
 export type ProductDetailsDTO = {
   id: string;
   name: string;
 
-  nameEn?: string | null;
+  nameEn: string;
   barcode?: string | null;
   notes?: string | null;
-  isVerified?: boolean;
+  isVerified: boolean;
   source?: string | null;
 
   type: ProductType;
   unit: ProductUnit;
   rawOrCooked: ProductState;
 
-  category?: {
+  category: {
     leafId: string;
     leafName: string;
 
@@ -36,27 +37,26 @@ export type ProductDetailsDTO = {
     name: string;
   };
 
-  cookingFactors?: {
-    ediblePartPct?: number | null;
-    cookingLossPct?: number | null;
-    yieldFactor?: number | null;
+  cookingFactors: {
+    ediblePartPct: number;
+    cookingLossPct: number;
+    yieldFactor: number;
 
     inheritedFromGeneric?: boolean;
   };
 
-  nutrients?: Record<
-    string,
-    {
-      name: string;
-      value: number;
-      unit: string;
-    }
-  >;
+  nutrients?: Array<{
+    nutrientId: string;
+    code: string;
+    name: string;
+    value: number;
+    unit: string;
+  }>;
 
-  photos?: Array<{
+  photos: Array<{
     id: string;
     url: string;
-    type: string;
+    type: ProductPhotoType;
     isPrimary?: boolean;
   }>;
 };
