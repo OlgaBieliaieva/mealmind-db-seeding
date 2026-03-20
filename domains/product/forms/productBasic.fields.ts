@@ -34,7 +34,7 @@ export const PRODUCT_BASIC_FIELDS: FormField<ProductFormValues>[] = [
 
   {
     type: "select",
-    name: "type",
+    name: "raw_or_cooked_default",
     label: PRODUCT_LABELS.STATE,
     options: PRODUCT_STATE_OPTIONS,
   },

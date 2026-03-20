@@ -1,14 +1,8 @@
 "use client";
 
 // SECTION ███ PRODUCT FORM ███
-// TODO Tree
-// - basic info
-// - brand
-// - category
-// - nutrients
-// - photos
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -30,7 +24,7 @@ const defaultValues: ProductFormValues = {
   name_ua: "",
   type: "branded",
   unit: "g",
-  category_id: undefined,
+  category_id: "",
   notes: "",
   is_verified: false,
   source: "",
@@ -52,15 +46,9 @@ export function ProductForm() {
     defaultValues,
   });
 
-  const { handleSubmit, reset } = methods;
+  const { handleSubmit } = methods;
 
   const { submit, isSubmitting, isError, isSuccess } = useProductFormSubmit();
-
-  useEffect(() => {
-    if (isSuccess) {
-      reset(defaultValues);
-    }
-  }, [isSuccess, reset]);
 
   async function onSubmit(values: ProductFormValues) {
     await submit(values);

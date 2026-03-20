@@ -66,6 +66,10 @@ const BaseProductSchema = z.object({
 
   nutrients: NutrientsSchema.optional(),
 
+  edible_part_pct: z.number().min(0).max(100).optional(),
+  yield_factor: z.number().positive().optional(),
+  cooking_loss_pct: z.number().min(0).max(100).optional(),
+
   photos: z.array(ProductPhotoSchema).optional(),
 
   notes: z.string().optional(),
@@ -77,10 +81,6 @@ const BaseProductSchema = z.object({
 
 const GenericProductSchema = BaseProductSchema.extend({
   type: z.literal("generic"),
-
-  edible_part_pct: z.number().min(0).max(100).optional(),
-  yield_factor: z.number().positive().optional(),
-  cooking_loss_pct: z.number().min(0).max(100).optional(),
 });
 
 /* ---------- branded-only ---------- */

@@ -34,7 +34,7 @@ export function useGenericInheritance() {
   function clearInheritance() {
     setValue("parent_product_id", undefined);
 
-    setValue("category_id", undefined, {
+    setValue("category_id", "", {
       shouldDirty: false,
       shouldValidate: true,
     });

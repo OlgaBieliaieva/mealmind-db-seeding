@@ -15,12 +15,12 @@ export function ProductMetaSection() {
     >
       <div className="space-y-4">
         {/* barcode */}
-        <FormBarcodeField name="barcode" />
+        <FormBarcodeField name="barcode" label="Штрихкод" />
 
         {/* source */}
 
         <div>
-          <label className="text-sm font-medium">Source</label>
+          <label className="text-sm font-medium">Джерело</label>
 
           <input
             {...register("source")}
@@ -32,7 +32,7 @@ export function ProductMetaSection() {
         {/* notes */}
 
         <div>
-          <label className="text-sm font-medium">Notes</label>
+          <label className="text-sm font-medium">Примітки</label>
 
           <textarea
             {...register("notes")}
@@ -46,7 +46,7 @@ export function ProductMetaSection() {
         <div className="flex items-center gap-2">
           <input type="checkbox" {...register("is_verified")} />
 
-          <span className="text-sm">Verified продукт</span>
+          <span className="text-sm">Дані про продукт перевірено</span>
         </div>
       </div>
     </FormSection>

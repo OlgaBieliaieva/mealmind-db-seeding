@@ -11,6 +11,28 @@ import { mapProductToDetailsDTO } from "../mappers/productToDetails.mapper";
 export const productRepository = {
   async create(product: ProductInput) {
     return prisma.$transaction(async (tx) => {
+      // ⭐ STEP 1 — load parent if exists
+      const parent =
+        product.type === "branded" && product.parent_product_id
+          ? await tx.product.findUnique({
+              where: { id: product.parent_product_id },
+              include: {
+                nutrients: true,
+              },
+            })
+          : null;
+
+      // ⭐ STEP 2 — resolve cooking factors inheritance (snapshot)
+      const ediblePartPct =
+        product.edible_part_pct ?? parent?.ediblePartPct ?? undefined;
+
+      const cookingLossPct =
+        product.cooking_loss_pct ?? parent?.cookingLossPct ?? undefined;
+
+      const yieldFactor =
+        product.yield_factor ?? parent?.yieldFactor ?? undefined;
+
+      // ⭐ STEP 3 — create product
       const created = await tx.product.create({
         data: {
           nameEn: product.name.en,
@@ -21,29 +43,59 @@ export const productRepository = {
 
           categoryId: product.category_id,
 
-          brandId: product.type === "branded" ? product.brand_id : undefined,
+          brandId:
+            product.type === "branded"
+              ? (product.brand_id ?? undefined)
+              : undefined,
 
           parentProductId:
-            product.type === "branded" ? product.parent_product_id : undefined,
+            product.type === "branded"
+              ? (product.parent_product_id ?? undefined)
+              : undefined,
 
-          barcode: product.type === "branded" ? product.barcode : undefined,
+          barcode:
+            product.type === "branded"
+              ? (product.barcode ?? undefined)
+              : undefined,
 
           notes: product.notes,
           isVerified: product.is_verified,
           source: product.source,
 
           rawOrCookedDefault: product.raw_or_cooked_default ?? "raw",
+
+          ediblePartPct,
+          cookingLossPct,
+          yieldFactor,
         },
       });
 
-      if (product.nutrients) {
-        await tx.productNutrient.createMany({
-          data: Object.entries(product.nutrients).map(([nutrientId, val]) => ({
+      // ⭐ STEP 4 — decide nutrients snapshot source
+      let nutrientsToCreate: Prisma.ProductNutrientCreateManyInput[] = [];
+
+      if (product.nutrients && Object.keys(product.nutrients).length) {
+        // ✅ user provided nutrients → use them
+        nutrientsToCreate = Object.entries(product.nutrients).map(
+          ([nutrientId, val]) => ({
             productId: created.id,
             nutrientId,
             valuePer100g: val.value,
             unit: val.unit,
-          })),
+          }),
+        );
+      } else if (parent?.nutrients?.length) {
+        // ✅ inherit snapshot from parent
+        nutrientsToCreate = parent.nutrients.map((n) => ({
+          productId: created.id,
+          nutrientId: n.nutrientId,
+          valuePer100g: n.valuePer100g,
+          unit: n.unit,
+        }));
+      }
+
+      if (nutrientsToCreate.length) {
+        await tx.productNutrient.createMany({
+          data: nutrientsToCreate,
         });
       }
 
