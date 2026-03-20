@@ -29,4 +29,7 @@ export const PRODUCT_ADMIN_LABELS = {
   form: {
     title: "Новий продукт",
   },
+  edit_form: {
+    title: "Редагувати продукт",
+  },
 };

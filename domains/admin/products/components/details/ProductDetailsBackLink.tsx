@@ -11,7 +11,7 @@ export function ProductDetailsBackLink() {
   const href = returnTo ?? "/admin/products";
 
   return (
-    <Link href={href} className="text-sm text-gray-500 hover:underline">
+    <Link href={href} className="text-sm text-gray-500 hover:underline mb-2">
       ← Назад до списку
     </Link>
   );

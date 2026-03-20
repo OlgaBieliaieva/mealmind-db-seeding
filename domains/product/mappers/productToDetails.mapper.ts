@@ -48,15 +48,12 @@ export function mapProductToDetailsDTO(
     unit: product.unit,
     rawOrCooked: product.rawOrCookedDefault,
 
-    category: product.category
-      ? {
-          leafId: product.category.id,
-          leafName: product.category.nameUa,
-
-          rootId: product.category.parent?.id,
-          rootName: product.category.parent?.nameUa,
-        }
-      : undefined,
+    category: {
+      leafId: product.category!.id,
+      leafName: product.category!.nameUa,
+      rootId: product.category!.parent?.id,
+      rootName: product.category!.parent?.nameUa,
+    },
 
     brand: product.brand
       ? {
@@ -71,14 +68,14 @@ export function mapProductToDetailsDTO(
     parent: product.parentProduct
       ? {
           id: product.parentProduct.id,
-          name: product.parentProduct.nameEn,
+          name: product.parentProduct.nameUa,
         }
       : undefined,
 
     cookingFactors: {
-      ediblePartPct: product.ediblePartPct,
-      cookingLossPct: product.cookingLossPct,
-      yieldFactor: product.yieldFactor,
+      ediblePartPct: product.ediblePartPct ?? 100,
+      cookingLossPct: product.cookingLossPct ?? 0,
+      yieldFactor: product.yieldFactor ?? 1,
       inheritedFromGeneric: !!product.parentProductId,
     },
 
@@ -88,23 +85,16 @@ export function mapProductToDetailsDTO(
   };
 }
 
-function mapNutrients(
-  rows: ProductNutrientRow[],
-): Record<string, { name: string; value: number; unit: string }> {
+function mapNutrients(rows: ProductNutrientRow[]) {
   return rows
     .sort((a, b) => a.nutrient.sortOrder - b.nutrient.sortOrder)
-    .reduce(
-      (acc, row) => {
-        acc[row.nutrient.code] = {
-          name: row.nutrient.nameUa,
-          value: row.valuePer100g,
-          unit: row.unit ?? row.nutrient.defaultUnit,
-        };
-
-        return acc;
-      },
-      {} as Record<string, { name: string; value: number; unit: string }>,
-    );
+    .map((row) => ({
+      nutrientId: row.nutrientId,
+      code: row.nutrient.code,
+      name: row.nutrient.nameUa,
+      value: row.valuePer100g,
+      unit: row.unit ?? row.nutrient.defaultUnit,
+    }));
 }
 
 function mapPhotos(rows: ProductPhoto[]) {

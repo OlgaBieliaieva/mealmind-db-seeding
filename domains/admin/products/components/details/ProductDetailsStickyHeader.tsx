@@ -39,7 +39,7 @@ export function ProductDetailsStickyHeader({ product }: Props) {
               className="text-sm border px-3 py-1 rounded"
               disabled={isPending}
               onClick={() => {
-                if (confirm("Delete this product?")) {
+                if (confirm("Ви впевнені, що бажаєте видалити цей продукт?")) {
                   mutate(product.id);
                 }
               }}

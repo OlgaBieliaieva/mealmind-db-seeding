@@ -16,6 +16,19 @@ export async function GET(
   return NextResponse.json(product);
 }
 
+export async function PATCH(
+  req: Request,
+  { params }: { params: Promise<{ id: string }> },
+) {
+  const { id } = await params;
+
+  const body = await req.json();
+
+  await productRepository.updateProduct(id, body);
+
+  return NextResponse.json({ success: true });
+}
+
 export async function DELETE(
   _: Request,
   context: { params: Promise<{ id: string }> },

@@ -63,7 +63,7 @@ export async function GET(req: Request) {
         unit: p.unit,
         edible_part_pct: p.ediblePartPct,
         yield_factor: p.yieldFactor,
-        cooking_loss_pct: p.yieldFactor,
+        cooking_loss_pct: p.cookingLossPct,
       })),
     });
   } catch (error) {
