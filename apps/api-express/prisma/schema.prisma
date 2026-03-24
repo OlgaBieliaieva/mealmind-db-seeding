@@ -1,0 +1,759 @@
+// ███████████████████████████████████████████████████
+// SECTION ███ PRISMA SCHEMAS ███
+// ███████████████████████████████████████████████████
+
+// SECTION ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// SECTION CONFIGURATION
+// SECTION ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+// CONFIG Database connection
+datasource db {
+  provider = "postgresql"
+}
+
+// CONFIG Prisma Client generator
+generator client {
+  provider = "prisma-client-js"
+}
+
+// SECTION━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// SECTION ENUMS / CONSTANTS
+// SECTION ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+// SECTION PRODUCT ENUMS
+// _____________________________________
+
+// DB Product type
+enum ProductType {
+  generic
+  branded
+}
+
+// DB Product state
+enum ProductState {
+  raw
+  cooked
+}
+
+// DB Product units
+enum ProductUnit {
+  g
+  ml
+  pcs
+}
+
+// DB Nutrient groups
+enum NutrientGroup {
+  macro
+  micro
+  vitamin
+  mineral
+  other
+}
+
+// DB Photo type
+enum ProductPhotoType {
+  packaging
+  ingredients
+  other
+}
+
+// SECTION USER ENUMS
+// _____________________________________
+
+// DB User Sex
+enum UserSex {
+  male
+  female
+}
+
+// DB Family Role
+enum FamilyRole {
+  owner
+  participant
+}
+
+// DB User Activity level
+enum ActivityLevel {
+  sedentary
+  light
+  moderate
+  active
+  very_active
+}
+
+// DB User Weight goal
+enum WeightGoal {
+  maintain
+  lose
+  gain
+}
+
+// DB User Allergy severity
+enum AllergySeverity {
+  low
+  medium
+  high
+}
+
+// SECTION ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// SECTION PRODUCTS DOMAIN
+// SECTION ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+// SECTION PRODUCT ENTITY
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+model Product {
+  // DB ━━ CORE ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  id String @id @default(uuid()) @db.Uuid
+  legacyId String? @unique
+
+  nameEn String @map("name_en")
+  nameUa String @map("name_ua")
+
+  type ProductType
+
+  // DB ━━ RELATIONS ━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  brandId String? @db.Uuid @map("brand_id")
+  brand   Brand?  @relation(fields: [brandId], references: [id])
+
+  categoryId String    @db.Uuid @map("category_id")
+  category   Category? @relation(fields: [categoryId], references: [id])
+
+  // NOTE Self relation for branded products
+
+  parentProductId String? @db.Uuid @map("parent_product_id")
+
+  parentProduct Product? @relation("ProductVariants", fields: [parentProductId], references: [id])
+
+  variants Product[] @relation("ProductVariants")
+
+  // DB ━━ IDENTIFIERS ━━━━━━━━━━━━━━━━━━━━━━━━
+
+  barcode String? @unique
+
+  // DB ━━ MEASUREMENTS ━━━━━━━━━━━━━━━━━━━━━━━
+
+  unit ProductUnit
+
+  ediblePartPct  Float? @map("edible_part_pct")
+  yieldFactor    Float? @map("yield_factor")
+  cookingLossPct Float? @map("cooking_loss_pct")
+
+  rawOrCookedDefault ProductState @default(raw) @map("raw_or_cooked_default")
+
+  // DB ━━ META ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  notes String?
+
+  isVerified Boolean @default(false) @map("is_verified")
+
+  source String?
+
+  // DB ━━ TIMESTAMPS ━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // DB ━━ RELATION TABLES ━━━━━━━━━━━━━━━━━━━━
+
+  nutrients ProductNutrient[]
+  photos    ProductPhoto[]
+  favorites ProductFavorite[]
+
+  allergies       UserAllergy[]
+  dislikedByUsers UserDislikedProduct[]
+
+  // TAG SYSTEM
+
+  tags ProductTag[]
+
+  // DB ━━ INDEXES ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  @@index([type])
+  @@index([categoryId])
+  @@index([brandId])
+  @@index([nameEn])
+}
+
+// SECTION PRODUCT RELATIONS
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+
+// SECTION Product Nutrient Relation
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+model ProductNutrient {
+  id String @id @default(uuid()) @db.Uuid
+  legacyId String? @unique
+
+  productId String  @db.Uuid @map("product_id")
+  product   Product @relation(fields: [productId], references: [id])
+
+  nutrientId String            @db.Uuid @map("nutrient_id")
+  nutrient   Nutrient @relation(fields: [nutrientId], references: [id])
+
+  valuePer100g Float @map("value_per_100g")
+
+  valuePerServing Float? @map("value_per_serving")
+
+  unit String?
+
+  source String?
+
+  isEstimated Boolean @default(false) @map("is_estimated")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@unique([productId, nutrientId])
+}
+
+
+// SECTION Product Tag Relation
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+model ProductTag {
+  productId String @db.Uuid
+  tagId     String @db.Uuid
+
+  product Product @relation(fields: [productId], references: [id])
+  tag     Tag     @relation(fields: [tagId], references: [id])
+
+  @@id([productId, tagId])
+}
+
+
+// SECTION Product Photo Relation
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+model ProductPhoto {
+  id String @id @default(uuid()) @db.Uuid
+  legacyId String? @unique
+
+  productId String  @db.Uuid @map("product_id")
+  product   Product @relation(fields: [productId], references: [id])
+
+  photoType ProductPhotoType
+
+  url String
+
+  uploadedAt DateTime @default(now()) @map("uploaded_at")
+}
+
+
+// SECTION Product Favorite Relation
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+model ProductFavorite {
+  id String @id @default(uuid()) @db.Uuid
+
+  productId String  @db.Uuid
+  product   Product @relation(fields: [productId], references: [id])
+
+  userId   String  @db.Uuid
+  familyId String? @db.Uuid
+
+  createdAt DateTime @default(now())
+
+  // NOTE prevents duplicate favorites
+  @@unique([productId, userId, familyId])
+}
+
+// SECTION ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// SECTION NUTRITION DOMAIN
+// SECTION ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+
+
+
+
+// SECTION ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// SECTION USER DOMAIN
+// SECTION ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+// SECTION USERS
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+model User {
+  // DB ━━ CORE ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  id    String @id @default(uuid()) @db.Uuid
+  email String @unique
+
+  passwordHash String?
+
+  firstName String
+  lastName  String?
+
+  sex UserSex
+
+  birthDate DateTime @db.Date
+
+  heightCm Int?
+
+  avatarUrl String?
+
+  onboardingCompleted Boolean @default(false)
+
+  // DB ━━ RELATIONS ━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  familiesCreated   Family[]
+  familyMemberships FamilyMember[]
+
+  bodyMetrics     UserBodyMetric[]
+  nutrientTargets UserNutrientTarget[]
+
+  mealSettings UserMealSetting[]
+
+  dietaryRestrictions UserDietaryRestriction[]
+
+  allergies UserAllergy[]
+
+  dislikedProducts UserDislikedProduct[]
+
+  cuisinePreferences UserCuisinePreference[]
+
+  // DB ━━ META ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  deletedAt DateTime?
+}
+
+
+// SECTION USER RELATIONS
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+
+// SECTION User Body Metrics Relations
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+model UserBodyMetric {
+  id String @id @default(uuid()) @db.Uuid
+
+  userId String @db.Uuid
+  user   User   @relation(fields: [userId], references: [id])
+
+  weightKg Float
+
+  activityLevel ActivityLevel
+
+  goal WeightGoal
+
+  goalRate Float?
+
+  createdAt DateTime @default(now())
+}
+
+// SECTION User Nutrient Target Relations
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+model UserNutrientTarget {
+  id String @id @default(uuid()) @db.Uuid
+
+  userId String @db.Uuid
+  user   User   @relation(fields: [userId], references: [id])
+
+  nutrientId String            @db.Uuid
+  nutrient   Nutrient @relation(fields: [nutrientId], references: [id])
+
+  targetValue Float
+
+  calculated Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, nutrientId])
+}
+
+// SECTION User Meal Settings Relations
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+model UserMealSetting {
+  id String @id @default(uuid()) @db.Uuid
+
+  userId String @db.Uuid
+  user   User   @relation(fields: [userId], references: [id])
+
+  mealsPerDay Int
+
+  snacksEnabled Boolean @default(false)
+
+  createdAt DateTime @default(now())
+}
+
+// SECTION User Dietary Restrictions Relations
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+model UserDietaryRestriction {
+  id String @id @default(uuid()) @db.Uuid
+
+  userId String  @db.Uuid
+  user   User   @relation(fields: [userId], references: [id])
+
+  dietaryTagId String  @db.Uuid
+  dietaryTag   DietaryTag @relation(fields: [dietaryTagId], references: [id])
+
+  createdAt DateTime @default(now())
+
+  @@unique([userId, dietaryTagId])
+}
+
+// SECTION User Allergies Relations
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+model UserAllergy {
+  id String @id @default(uuid()) @db.Uuid
+
+  userId String @db.Uuid
+  user   User   @relation(fields: [userId], references: [id])
+
+  productId String?  @db.Uuid
+  product   Product? @relation(fields: [productId], references: [id])
+
+  allergenName String?
+
+  severity AllergySeverity
+
+  createdAt DateTime @default(now())
+}
+
+// SECTION User Disliked Products Relations
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+model UserDislikedProduct {
+  id String @id @default(uuid()) @db.Uuid
+
+  userId String @db.Uuid
+  user   User   @relation(fields: [userId], references: [id])
+
+  productId String  @db.Uuid
+  product   Product @relation(fields: [productId], references: [id])
+
+  createdAt DateTime @default(now())
+
+  @@unique([userId, productId])
+}
+
+// SECTION User Cuisine Preference Relations
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+model UserCuisinePreference {
+  id String @id @default(uuid()) @db.Uuid
+
+  userId String @db.Uuid
+  user   User   @relation(fields: [userId], references: [id])
+
+  cuisineId String @db.Uuid
+  cuisine   Cuisine @relation(fields: [cuisineId], references: [id])
+
+  createdAt DateTime @default(now())
+
+  @@unique([userId, cuisineId])
+}
+
+
+// SECTION ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// SECTION FAMILY DOMAIN
+// SECTION ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+// SECTION FAMILIES
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+model Family {
+  id String @id @default(uuid()) @db.Uuid
+
+  name String
+
+  createdBy String @db.Uuid
+  creator   User   @relation(fields: [createdBy], references: [id])
+
+  createdAt DateTime @default(now())
+
+  members FamilyMember[]
+}
+
+
+// SECTION FAMILY RELATIONS
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+// SECTION Family Members Relations
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+model FamilyMember {
+  id String @id @default(uuid()) @db.Uuid
+
+  familyId String @db.Uuid
+  family   Family @relation(fields: [familyId], references: [id])
+
+  userId String @db.Uuid
+  user   User   @relation(fields: [userId], references: [id])
+
+  role FamilyRole
+
+  isActive Boolean @default(true)
+
+  joinedAt DateTime @default(now())
+
+  @@unique([familyId, userId])
+}
+
+// SECTION ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// SECTION REFERENCE TABLES
+// SECTION ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+
+// SECTION CATEGORIES
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+// WHY: hierarchical tree for navigation
+
+model Category { 
+  // DB ━━ CORE ━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  id String @id @default(uuid()) @db.Uuid
+  legacyId Int? @unique
+
+  nameEn String @map("name_en")
+  nameUa String @map("name_ua")
+
+  // DB ━━ TREE STRUCTURE ━━━━━━━━━━━━━━━
+
+  parentId String? @db.Uuid @map("parent_id")
+
+  parent Category? @relation("CategoryTree", fields: [parentId], references: [id])
+
+  children Category[] @relation("CategoryTree")
+
+  // DB ━━ RELATIONS ━━━━━━━━━━━━━━━━━━━━
+
+  products Product[]
+
+  // DB ━━ INDEXES ━━━━━━━━━━━━━━━━━━━━━━
+  
+  @@index([legacyId])
+  @@index([parentId])
+
+  // DB ━━ NAMING ━━━━━━━━━━━━━━━━━━━━━━
+
+  @@map("categories")
+}
+
+// SECTION BRANDS
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+model Brand { 
+  id String @id @default(uuid()) @db.Uuid
+  legacyId String? @unique
+
+  nameEn String @map("name_en")
+  nameUa String @map("name_ua")
+
+  country String?
+
+  website String?
+
+  isVerified Boolean @default(false) @map("is_verified")
+
+  notes String?
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // DB ━━ RELATIONS ━━━━━━━━━━━━━━━━━━
+
+  products Product[]
+
+  // DB ━━ INDEXES ━━━━━━━━━━━━━━━━━━━━━━
+  
+  @@index([legacyId])
+  
+
+  // DB ━━ NAMING ━━━━━━━━━━━━━━━━━━━━━━
+
+  @@map("brands")
+}
+
+// SECTION NUTRIENTS
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+model Nutrient { 
+  id String @id @default(uuid()) @db.Uuid
+  legacyId Int? @unique
+
+  code String @unique
+
+  nameEn String @map("name_en")
+  nameUa String @map("name_ua")
+
+  defaultUnit String @map("default_unit")
+
+  nutrientGroup NutrientGroup @map("nutrient_group")
+
+  sortOrder Int @map("sort_order")
+
+  rdaValue Float? @map("rda_value")
+  rdaUnit  String? @map("rda_unit")
+
+  notes String?
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // DB ━━ RELATIONS ━━━━━━━━━━━━━━━━━━
+
+  products    ProductNutrient[]
+  userTargets UserNutrientTarget[]
+
+  // DB ━━ INDEXES ━━━━━━━━━━━━━━━━━━━━━━
+
+  @@index([legacyId])
+  @@index([nutrientGroup])
+  @@index([sortOrder])
+
+  // DB ━━ NAMING ━━━━━━━━━━━━━━━━━━━━━━
+
+  @@map("nutrients")
+}
+
+// SECTION RECIPE TYPES
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+model RecipeType {
+
+  id String @id @default(uuid()) @db.Uuid
+
+  legacyId Int? @unique
+
+  code String @unique
+
+  nameEn String @map("name_en")
+  nameUa String @map("name_ua")
+
+  notes String?
+
+  // DB ━━ INDEXES ━━━━━━━━━━━━━━━━━━━━━━
+
+  @@index([legacyId])
+    
+
+  // DB ━━ NAMING ━━━━━━━━━━━━━━━━━━━━━━
+
+  @@map("recipe_types")
+
+}
+
+// SECTION CUISINES
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+model Cuisine { 
+  
+  id String @id @default(uuid()) @db.Uuid
+  legacyId Int? @unique
+
+  code String @unique
+
+  nameEn String @map("name_en")
+  nameUa String @map("name_ua")
+
+  region String?
+
+  isActive Boolean @default(true) @map("is_active")
+
+  // DB ━━ RELATIONS ━━━━━━━━━━━━━━━━━━
+
+  userPreferences UserCuisinePreference[]
+
+  // DB ━━ INDEXES ━━━━━━━━━━━━━━━━━━━━━━
+
+  @@index([legacyId])
+  
+  // DB ━━ NAMING ━━━━━━━━━━━━━━━━━━━━━━
+
+  @@map("cuisines")
+}
+
+// SECTION DIETARY TAGS
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+model DietaryTag { 
+  id String @id @default(uuid()) @db.Uuid
+  legacyId Int? @unique
+
+  code String @unique
+
+  nameEn String @map("name_en")
+  nameUa String @map("name_ua")
+
+  isActive Boolean @default(true) @map("is_active")
+
+  // DB ━━ RELATIONS ━━━━━━━━━━━━━━━━━━
+
+  userRestrictions UserDietaryRestriction[]
+
+  // DB ━━ INDEXES ━━━━━━━━━━━━━━━━━━━━━━
+
+  @@index([legacyId])
+
+  // DB ━━ NAMING ━━━━━━━━━━━━━━━━━━━━━━
+
+  @@map("dietary_tags")
+}
+
+// SECTION MEAL TYPES
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+model MealType {
+
+  id String @id @default(uuid()) @db.Uuid
+
+  legacyId Int? @unique
+
+  code String @unique
+
+  nameEn String @map("name_en")
+  nameUa String @map("name_ua")
+
+  orderIndex Int @map("order_index")
+
+  // DB ━━ INDEXES ━━━━━━━━━━━━━━━━━━━━━━
+
+  @@index([legacyId])
+
+  // DB ━━ NAMING ━━━━━━━━━━━━━━━━━━━━━━
+
+  @@map("meal_types")
+
+}
+
+// SECTION TAG MODEL
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// WHY: flexible filtering system
+
+model Tag {
+  id String @id @default(uuid()) @db.Uuid
+
+  code String @unique
+
+  nameEn String @map("name_en")
+  nameUa String @map("name_ua")
+
+  // DB ━━ RELATIONS ━━━━━━━━━━━━━━━━━━
+
+  products ProductTag[]  
+
+  // DB ━━ NAMING ━━━━━━━━━━━━━━━━━━━━━━
+
+  @@map("tags")
+}
+
+
+
+
+
+
