@@ -2,13 +2,28 @@
 // WHY: validation для API layer
 
 import { z } from "zod";
-
 import {
-  PRODUCT_TYPES,
-  PRODUCT_UNITS,
-  PRODUCT_STATES,
-  PRODUCT_PHOTO_TYPES,
-} from "../constants/product.constants";
+  ProductType,
+  ProductUnit,
+  ProductState,
+  ProductPhotoType,
+} from "@prisma/client";
+
+/* ---------- constants ---------- */
+
+const PRODUCT_TYPE_VALUES = Object.values(ProductType) as [string, ...string[]];
+
+const PRODUCT_UNIT_VALUES = Object.values(ProductUnit) as [string, ...string[]];
+
+const PRODUCT_STATE_VALUES = Object.values(ProductState) as [
+  string,
+  ...string[],
+];
+
+const PRODUCT_PHOTO_TYPE_VALUES = Object.values(ProductPhotoType) as [
+  string,
+  ...string[],
+];
 
 /* ---------- nutrients ---------- */
 
@@ -17,18 +32,14 @@ export const NutrientValueSchema = z.object({
   unit: z.string(),
 });
 
-export const NutrientsSchema = z.record(z.string(), NutrientValueSchema);
+export const NutrientsSchema = z.record(z.string().uuid(), NutrientValueSchema);
 
 /* ---------- photos ---------- */
 
 export const ProductPhotoSchema = z.object({
-  type: z.enum([
-    PRODUCT_PHOTO_TYPES.INGREDIENTS,
-    PRODUCT_PHOTO_TYPES.OTHER,
-    PRODUCT_PHOTO_TYPES.PACKAGING,
-  ]),
-  url: z.string().url(),
-  objectName: z.string().optional(),
+  type: z.enum(PRODUCT_PHOTO_TYPE_VALUES),
+  // url: z.string().url(),
+  objectName: z.string(),
 });
 
 /* ---------- brand ---------- */
@@ -49,13 +60,11 @@ const BaseProductSchema = z.object({
   // Will be migrated to UUID in SQL phase.
   product_id: z.string().uuid().optional(),
 
-  type: z.enum([PRODUCT_TYPES.GENERIC, PRODUCT_TYPES.BRANDED]),
+  type: z.enum(PRODUCT_TYPE_VALUES),
 
-  raw_or_cooked_default: z
-    .enum([PRODUCT_STATES.RAW, PRODUCT_STATES.COOKED])
-    .optional(),
+  raw_or_cooked_default: z.enum(PRODUCT_STATE_VALUES).optional(),
 
-  unit: z.enum([PRODUCT_UNITS.G, PRODUCT_UNITS.ML, PRODUCT_UNITS.PCS]),
+  unit: z.enum(PRODUCT_UNIT_VALUES),
 
   name: z.object({
     en: z.string().min(1),
@@ -90,14 +99,14 @@ const BrandedProductSchema = BaseProductSchema.extend({
 
   brand_id: z.string().uuid(),
   barcode: z.string().min(8).optional(),
-  parent_product_id: z.string().min(1).optional(),
+  parent_product_id: z.string().uuid().optional(),
 });
 
 /* ---------- final product ---------- */
 
-export const ProductSchema = z.discriminatedUnion("type", [
+export const AdminCreateProductSchema = z.discriminatedUnion("type", [
   GenericProductSchema,
   BrandedProductSchema,
 ]);
 
-export type ProductInput = z.infer<typeof ProductSchema>;
+export type AdminCreateProductInput = z.infer<typeof AdminCreateProductSchema>;

@@ -1,5 +1,5 @@
-import { getSupabaseAdmin } from "../../infra/supabase/supabase.admin";
-import { TempProductPhoto } from "./types/product-media.types";
+import { getSupabaseAdmin } from "../../../infra/supabase/supabase.admin";
+import { TempProductPhoto } from "../../product-media/types/product-media.types";
 
 export async function finalizeProductPhotos(
   productId: string,

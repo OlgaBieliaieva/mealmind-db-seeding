@@ -1,12 +1,12 @@
-import { PrismaClient, Prisma } from "@prisma/client";
-import { ProductInput } from "./dto/product.input";
-import { ProductWithRelations } from "./types/product.types";
-import { TempProductPhoto } from "../product-media/types/product-media.types";
+import { PrismaClient, ProductUnit, ProductState } from "@prisma/client";
+import { AdminCreateProductInput } from "../transport/admin/schemas/product.create.schema";
+import { ProductPersistenceAggregate } from "./persistence/product.prisma.types";
+import { TempProductPhoto } from "../../product-media/types/product-media.types";
 
 export class ProductRepository {
   constructor(private prisma: PrismaClient) {}
 
-  async createProduct(product: ProductInput) {
+  async create(product: AdminCreateProductInput) {
     return this.prisma.$transaction(async (tx) => {
       const parent =
         product.type === "branded" && product.parent_product_id
@@ -30,7 +30,7 @@ export class ProductRepository {
           nameEn: product.name.en,
           nameUa: product.name.ua,
           type: product.type,
-          unit: product.unit,
+          unit: product.unit as ProductUnit,
           categoryId: product.category_id,
           brandId:
             product.type === "branded"
@@ -47,7 +47,8 @@ export class ProductRepository {
           notes: product.notes,
           isVerified: product.is_verified,
           source: product.source,
-          rawOrCookedDefault: product.raw_or_cooked_default ?? "raw",
+          rawOrCookedDefault:
+            (product.raw_or_cooked_default as ProductState) || "raw",
           ediblePartPct,
           cookingLossPct,
           yieldFactor,
@@ -69,52 +70,9 @@ export class ProductRepository {
     });
   }
 
-  async findManyProductsWithCount(
-    where: Prisma.ProductWhereInput,
-    page: number,
-    limit: number,
-  ) {
-    const [items, total] = await this.prisma.$transaction([
-      this.prisma.product.findMany({
-        where,
-        orderBy: { createdAt: "desc" },
-        skip: (page - 1) * limit,
-        take: limit,
-        include: {
-          brand: true,
-          category: true,
-        },
-      }),
-      this.prisma.product.count({ where }),
-    ]);
-
-    return { items, total };
-  }
-
-  async findGenericProductByQuery(query: string) {
-    return this.prisma.product.findMany({
-      where: {
-        type: "generic",
-        OR: [
-          { nameEn: { contains: query, mode: "insensitive" } },
-          { nameUa: { contains: query, mode: "insensitive" } },
-        ],
-      },
-      take: 10,
-      orderBy: {
-        nameEn: "asc",
-      },
-      select: {
-        id: true,
-        nameEn: true,
-        nameUa: true,
-        categoryId: true,
-        rawOrCookedDefault: true,
-      },
-    });
-  }
-
-  async findByIdDetailed(id: string): Promise<ProductWithRelations | null> {
+  async findByIdDetailed(
+    id: string,
+  ): Promise<ProductPersistenceAggregate | null> {
     return this.prisma.product.findUnique({
       where: { id },
       include: {
@@ -127,14 +85,14 @@ export class ProductRepository {
     });
   }
 
-  async updateProduct(id: string, product: ProductInput) {
+  async update(id: string, product: AdminCreateProductInput) {
     return this.prisma.$transaction(async (tx) => {
       await tx.product.update({
         where: { id },
         data: {
           nameEn: product.name.en,
           nameUa: product.name.ua,
-          unit: product.unit,
+          unit: product.unit as ProductUnit,
           notes: product.notes,
           source: product.source,
           isVerified: product.is_verified,
@@ -167,7 +125,7 @@ export class ProductRepository {
     });
   }
 
-  async deleteProduct(id: string) {
+  async delete(id: string) {
     return this.prisma.$transaction(async (tx) => {
       await tx.productNutrient.deleteMany({ where: { productId: id } });
       await tx.productPhoto.deleteMany({ where: { productId: id } });

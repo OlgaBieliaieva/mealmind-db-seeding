@@ -1,17 +1,26 @@
 import { PrismaClient } from "@prisma/client";
-import { ProductRepository } from "./product.repository";
-import { ProductService } from "./product.service";
-import { ProductController } from "./product.controller";
-import { createProductRouter } from "./product.routes";
+
+import { ProductRepository } from "./domain/product.repository";
+import { ProductSearchQuery } from "./domain/queries/product-search.query";
+import { ProductValidationQuery } from "./domain/queries/product-validation.query";
+
+import { ProductService } from "./application/product.service";
+
+import { ProductAdminController } from "./transport/admin/product.admin.controller";
+import { ProductAdminRouter } from "../../routes/v1/admin/product.routes";
 
 export function createProductModule(prisma: PrismaClient) {
   const repo = new ProductRepository(prisma);
-  const service = new ProductService(repo, prisma);
-  const controller = new ProductController(service);
+  const searchQuery = new ProductSearchQuery(prisma);
+  const validationQuery = new ProductValidationQuery(prisma);
 
-  const router = createProductRouter(controller);
+  const service = new ProductService(repo, searchQuery, validationQuery);
+
+  const controller = new ProductAdminController(service);
+
+  const adminRouter = ProductAdminRouter(controller);
 
   return {
-    router,
+    adminRouter,
   };
 }

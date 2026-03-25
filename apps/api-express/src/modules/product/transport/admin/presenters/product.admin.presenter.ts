@@ -1,5 +1,5 @@
 import { Prisma } from "@prisma/client";
-import { ProductWithRelations } from "../types/product.types";
+import { ProductPersistenceAggregate } from "../../../domain/persistence/product.prisma.types";
 
 type ProductListRow = Prisma.ProductGetPayload<{
   include: {
@@ -24,7 +24,9 @@ export function presentProductListItem(product: ProductListRow) {
   };
 }
 
-export function presentProductDetailsAdmin(product: ProductWithRelations) {
+export function presentProductDetailsAdmin(
+  product: ProductPersistenceAggregate,
+) {
   return {
     id: product.id,
     name: {

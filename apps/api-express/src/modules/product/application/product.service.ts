@@ -1,17 +1,24 @@
-import { PrismaClient, Prisma } from "@prisma/client";
-import { ProductRepository } from "./product.repository";
-import { presentProductListItem } from "./presenters/product.admin.presenter";
-import { ProductInput } from "./dto/product.input";
-import { ProductSearchFilters } from "./types/product-search.types";
-import { finalizeProductPhotos } from "../product-media/product-media.service";
-import { generateProductPhotoVariants } from "../product-media/product-media.worker";
-import { TempProductPhoto } from "../product-media/types/product-media.types";
-import { getCategoryDescendantIds } from "./utils/getCategoryDescendantIds";
+import { Prisma } from "@prisma/client";
+
+import { ProductRepository } from "../domain/product.repository";
+import { ProductSearchQuery } from "../domain/queries/product-search.query";
+import { ProductValidationQuery } from "../domain/queries/product-validation.query";
+
+import { presentProductListItem } from "../transport/admin/presenters/product.admin.presenter";
+
+import { AdminCreateProductInput} from "../transport/admin/schemas/product.create.schema";
+import { ProductSearchFilters } from "../transport/shared/dto/product-search.filters.dto";
+
+import { finalizeProductPhotos } from "../domain/product-media.service";
+import { generateProductPhotoVariants } from "../../product-media/product-media.worker";
+
+import { TempProductPhoto } from "../../product-media/types/product-media.types";
 
 export class ProductService {
   constructor(
     private repo: ProductRepository,
-    private prisma: PrismaClient,
+    private searchQuery: ProductSearchQuery,
+    private validationQuery: ProductValidationQuery,
   ) {}
 
   async getDetails(id: string) {
@@ -24,38 +31,35 @@ export class ProductService {
     return product;
   }
 
-  async create(input: ProductInput) {
-    // ⭐ VALIDATE CATEGORY
-    const categoryExists = await this.prisma.category.findUnique({
-      where: { id: input.category_id },
-      select: { id: true },
-    });
+  async create(input: AdminCreateProductInput) {
+    // ⭐ VALIDATION через query layer
+
+    const categoryExists = await this.validationQuery.categoryExists(
+      input.category_id,
+    );
 
     if (!categoryExists) {
       throw new Error("Category not found");
     }
 
-    // ⭐ VALIDATE BRAND
     if (input.type === "branded") {
-      const brandExists = await this.prisma.brand.findUnique({
-        where: { id: input.brand_id },
-        select: { id: true },
-      });
+      const brandExists = await this.validationQuery.brandExists(
+        input.brand_id,
+      );
 
       if (!brandExists) {
         throw new Error("Brand not found");
       }
     }
 
-    // ⭐ SPLIT PHOTOS
+    // ⭐ MEDIA SPLIT
+
     const { photos, ...rest } = input;
 
-    const created = await this.repo.createProduct({
-      ...rest,
-      photos: [],
-    });
+    const created = await this.repo.create(rest);
 
     // ⭐ MEDIA LIFECYCLE
+
     if (photos?.length) {
       const validPhotos = photos.filter(
         (p): p is TempProductPhoto => !!p.objectName,
@@ -66,7 +70,6 @@ export class ProductService {
 
         await this.repo.attachPhotos(created.id, finalized);
 
-        // async worker trigger
         Promise.all(
           finalized.map((p) =>
             generateProductPhotoVariants(created.id, p.objectName),
@@ -78,12 +81,12 @@ export class ProductService {
     return created;
   }
 
-  async update(id: string, input: ProductInput) {
-    await this.repo.updateProduct(id, input);
+  async update(id: string, input: AdminCreateProductInput) {
+    await this.repo.update(id, input);
   }
 
   async delete(id: string) {
-    await this.repo.deleteProduct(id);
+    await this.repo.delete(id);
   }
 
   async searchProducts(filters: ProductSearchFilters) {
@@ -94,8 +97,7 @@ export class ProductService {
     if (type) where.type = type;
 
     if (categoryId) {
-      const ids = await getCategoryDescendantIds(this.prisma, categoryId);
-
+      const ids = await this.searchQuery.loadCategorySubtreeIds(categoryId);
       where.categoryId = { in: ids };
     }
 
@@ -108,7 +110,7 @@ export class ProductService {
       ];
     }
 
-    const { items, total } = await this.repo.findManyProductsWithCount(
+    const { items, total } = await this.searchQuery.searchProducts(
       where,
       page,
       limit,
@@ -127,8 +129,6 @@ export class ProductService {
       return [];
     }
 
-    const items = await this.repo.findGenericProductByQuery(query);
-
-    return items;
+    return this.searchQuery.searchGeneric(query);
   }
 }
