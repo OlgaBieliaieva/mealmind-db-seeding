@@ -1,0 +1,15 @@
+recipe_type_id,code,name_en,name_ua,notes
+1,breakfast,Breakfast,Сніданки,Типові страви для сніданку
+2,appetizers,Appetizers,Закуски,Холодні/гарячі закуски
+3,soups,Soups,Перші страви,Рідкі страви
+4,main_dishes,Main dishes,Головні страви,Основна частина прийому їжі
+5,sides,Side dishes,Гарніри,Доповнення до основних
+6,salads,Salads,Салати,Самостійні або додаткові
+7,bakery,Bread & bakery,Хліб і випічка,"Хліб, булки, пироги"
+8,desserts,Desserts,Десерти,Солодкі страви
+9,sauces,Sauces,Соуси,"Соуси, заправки"
+10,beverages,Beverages,Напої,Гарячі та холодні
+11,snacks,Snacks,Перекуси,"Батончики, швидкі страви"
+12,preserves,Preserves,Заготовки,"Варення, соуси, ферментація"
+13,baby_food,Baby food,Дитяче харчування,Окремий сценарій
+14,medical,Medical diet,Лікувальне / дієтичне,За потреби

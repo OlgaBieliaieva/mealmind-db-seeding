@@ -1,0 +1,13 @@
+category_id,name_en,name_ua,parent_id
+1,Fruits,Фрукти,NULL
+7,Vegetables,Овочі,NULL
+14,Grains & cereals,Крупи та зернові,NULL
+19,Legumes,Бобові,NULL
+23,Meat & Poultry,М’ясо та птиця,NULL
+29,Fish & Seafood,Риба та морепродукти,NULL
+33,Dairy & Eggs,Молочні продукти та яйця,NULL
+38,Fats & Oils,Жири та олії,NULL
+42,Snacks & Sweets,Закуски та солодощі,NULL
+47,Beverages,Напої,NULL
+53,Herbs & Spices,Трави та спеції,NULL
+56,Miscellaneous,Різне,NULL

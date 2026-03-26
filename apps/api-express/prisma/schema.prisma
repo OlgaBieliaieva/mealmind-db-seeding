@@ -1,0 +1,402 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Product {
+  id                 String                @id @default(uuid()) @db.Uuid
+  type               ProductType
+  barcode            String?               @unique
+  unit               ProductUnit
+  notes              String?
+  source             String?
+  brandId            String?               @map("brand_id") @db.Uuid
+  categoryId         String                @map("category_id") @db.Uuid
+  cookingLossPct     Float?                @map("cooking_loss_pct")
+  createdAt          DateTime              @default(now()) @map("created_at")
+  ediblePartPct      Float?                @map("edible_part_pct")
+  isVerified         Boolean               @default(false) @map("is_verified")
+  legacyId           String?               @unique
+  nameEn             String                @map("name_en")
+  nameUa             String                @map("name_ua")
+  parentProductId    String?               @map("parent_product_id") @db.Uuid
+  rawOrCookedDefault ProductState          @default(raw) @map("raw_or_cooked_default")
+  updatedAt          DateTime              @updatedAt @map("updated_at")
+  yieldFactor        Float?                @map("yield_factor")
+  archivedAt         DateTime?             @map("archived_at")
+  status             ProductStatus         @default(draft)
+  brand              Brand?                @relation(fields: [brandId], references: [id])
+  category           Category              @relation(fields: [categoryId], references: [id])
+  parentProduct      Product?              @relation("ProductVariants", fields: [parentProductId], references: [id])
+  variants           Product[]             @relation("ProductVariants")
+  favorites          ProductFavorite[]
+  nutrients          ProductNutrient[]
+  photos             ProductPhoto[]
+  tags               ProductTag[]
+  allergies          UserAllergy[]
+  dislikedByUsers    UserDislikedProduct[]
+
+  @@index([type])
+  @@index([categoryId])
+  @@index([brandId])
+  @@index([nameEn])
+}
+
+model ProductNutrient {
+  id              String   @id @default(uuid()) @db.Uuid
+  unit            String?
+  source          String?
+  createdAt       DateTime @default(now()) @map("created_at")
+  isEstimated     Boolean  @default(false) @map("is_estimated")
+  legacyId        String?  @unique
+  nutrientId      String   @map("nutrient_id") @db.Uuid
+  productId       String   @map("product_id") @db.Uuid
+  updatedAt       DateTime @updatedAt @map("updated_at")
+  valuePer100g    Float    @map("value_per_100g")
+  valuePerServing Float?   @map("value_per_serving")
+  nutrient        Nutrient @relation(fields: [nutrientId], references: [id])
+  product         Product  @relation(fields: [productId], references: [id])
+
+  @@unique([productId, nutrientId])
+}
+
+model ProductTag {
+  productId String  @db.Uuid
+  tagId     String  @db.Uuid
+  product   Product @relation(fields: [productId], references: [id])
+  tag       Tag     @relation(fields: [tagId], references: [id])
+
+  @@id([productId, tagId])
+}
+
+model ProductPhoto {
+  id         String           @id @default(uuid()) @db.Uuid
+  photoType  ProductPhotoType
+  url        String
+  objectName String           @map("object_name")
+  legacyId   String?          @unique
+  productId  String           @map("product_id") @db.Uuid
+  uploadedAt DateTime         @default(now()) @map("uploaded_at")
+  product    Product          @relation(fields: [productId], references: [id])
+}
+
+model ProductFavorite {
+  id        String   @id @default(uuid()) @db.Uuid
+  productId String   @db.Uuid
+  userId    String   @db.Uuid
+  familyId  String?  @db.Uuid
+  createdAt DateTime @default(now())
+  product   Product  @relation(fields: [productId], references: [id])
+
+  @@unique([productId, userId, familyId])
+}
+
+model User {
+  id                  String                   @id @default(uuid()) @db.Uuid
+  email               String                   @unique
+  passwordHash        String?
+  firstName           String
+  lastName            String?
+  sex                 UserSex
+  birthDate           DateTime                 @db.Date
+  heightCm            Int?
+  avatarUrl           String?
+  onboardingCompleted Boolean                  @default(false)
+  createdAt           DateTime                 @default(now())
+  updatedAt           DateTime                 @updatedAt
+  deletedAt           DateTime?
+  familiesCreated     Family[]
+  familyMemberships   FamilyMember[]
+  allergies           UserAllergy[]
+  bodyMetrics         UserBodyMetric[]
+  cuisinePreferences  UserCuisinePreference[]
+  dietaryRestrictions UserDietaryRestriction[]
+  dislikedProducts    UserDislikedProduct[]
+  mealSettings        UserMealSetting[]
+  nutrientTargets     UserNutrientTarget[]
+}
+
+model UserBodyMetric {
+  id            String        @id @default(uuid()) @db.Uuid
+  userId        String        @db.Uuid
+  weightKg      Float
+  activityLevel ActivityLevel
+  goal          WeightGoal
+  goalRate      Float?
+  createdAt     DateTime      @default(now())
+  user          User          @relation(fields: [userId], references: [id])
+}
+
+model UserNutrientTarget {
+  id          String   @id @default(uuid()) @db.Uuid
+  userId      String   @db.Uuid
+  nutrientId  String   @db.Uuid
+  targetValue Float
+  calculated  Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  nutrient    Nutrient @relation(fields: [nutrientId], references: [id])
+  user        User     @relation(fields: [userId], references: [id])
+
+  @@unique([userId, nutrientId])
+}
+
+model UserMealSetting {
+  id            String   @id @default(uuid()) @db.Uuid
+  userId        String   @db.Uuid
+  mealsPerDay   Int
+  snacksEnabled Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  user          User     @relation(fields: [userId], references: [id])
+}
+
+model UserDietaryRestriction {
+  id           String     @id @default(uuid()) @db.Uuid
+  userId       String     @db.Uuid
+  createdAt    DateTime   @default(now())
+  dietaryTagId String     @db.Uuid
+  dietaryTag   DietaryTag @relation(fields: [dietaryTagId], references: [id])
+  user         User       @relation(fields: [userId], references: [id])
+
+  @@unique([userId, dietaryTagId])
+}
+
+model UserAllergy {
+  id           String          @id @default(uuid()) @db.Uuid
+  userId       String          @db.Uuid
+  productId    String?         @db.Uuid
+  allergenName String?
+  severity     AllergySeverity
+  createdAt    DateTime        @default(now())
+  product      Product?        @relation(fields: [productId], references: [id])
+  user         User            @relation(fields: [userId], references: [id])
+}
+
+model UserDislikedProduct {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @db.Uuid
+  productId String   @db.Uuid
+  createdAt DateTime @default(now())
+  product   Product  @relation(fields: [productId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@unique([userId, productId])
+}
+
+model UserCuisinePreference {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @db.Uuid
+  createdAt DateTime @default(now())
+  cuisineId String   @db.Uuid
+  cuisine   Cuisine  @relation(fields: [cuisineId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@unique([userId, cuisineId])
+}
+
+model Family {
+  id        String         @id @default(uuid()) @db.Uuid
+  name      String
+  createdBy String         @db.Uuid
+  createdAt DateTime       @default(now())
+  creator   User           @relation(fields: [createdBy], references: [id])
+  members   FamilyMember[]
+}
+
+model FamilyMember {
+  id       String     @id @default(uuid()) @db.Uuid
+  familyId String     @db.Uuid
+  userId   String     @db.Uuid
+  role     FamilyRole
+  isActive Boolean    @default(true)
+  joinedAt DateTime   @default(now())
+  family   Family     @relation(fields: [familyId], references: [id])
+  user     User       @relation(fields: [userId], references: [id])
+
+  @@unique([familyId, userId])
+}
+
+model Category {
+  id       String     @id @default(uuid()) @db.Uuid
+  legacyId Int?       @unique
+  nameEn   String     @map("name_en")
+  nameUa   String     @map("name_ua")
+  parentId String?    @map("parent_id") @db.Uuid
+  products Product[]
+  parent   Category?  @relation("CategoryTree", fields: [parentId], references: [id])
+  children Category[] @relation("CategoryTree")
+
+  @@index([legacyId])
+  @@index([parentId])
+  @@map("categories")
+}
+
+model Brand {
+  id         String    @id @default(uuid()) @db.Uuid
+  legacyId   String?   @unique
+  nameEn     String    @map("name_en")
+  nameUa     String    @map("name_ua")
+  country    String?
+  website    String?
+  isVerified Boolean   @default(false) @map("is_verified")
+  notes      String?
+  createdAt  DateTime  @default(now()) @map("created_at")
+  updatedAt  DateTime  @updatedAt @map("updated_at")
+  products   Product[]
+
+  @@index([legacyId])
+  @@map("brands")
+}
+
+model Nutrient {
+  id            String               @id @default(uuid()) @db.Uuid
+  legacyId      Int?                 @unique
+  code          String               @unique
+  nameEn        String               @map("name_en")
+  nameUa        String               @map("name_ua")
+  defaultUnit   String               @map("default_unit")
+  nutrientGroup NutrientGroup        @map("nutrient_group")
+  sortOrder     Int                  @map("sort_order")
+  rdaValue      Float?               @map("rda_value")
+  rdaUnit       String?              @map("rda_unit")
+  notes         String?
+  createdAt     DateTime             @default(now()) @map("created_at")
+  updatedAt     DateTime             @updatedAt @map("updated_at")
+  products      ProductNutrient[]
+  userTargets   UserNutrientTarget[]
+
+  @@index([legacyId])
+  @@index([nutrientGroup])
+  @@index([sortOrder])
+  @@map("nutrients")
+}
+
+model RecipeType {
+  id       String  @id @default(uuid()) @db.Uuid
+  legacyId Int?    @unique
+  code     String  @unique
+  nameEn   String  @map("name_en")
+  nameUa   String  @map("name_ua")
+  notes    String?
+
+  @@index([legacyId])
+  @@map("recipe_types")
+}
+
+model Cuisine {
+  code            String                  @unique
+  nameEn          String                  @map("name_en")
+  nameUa          String                  @map("name_ua")
+  region          String?
+  isActive        Boolean                 @default(true) @map("is_active")
+  legacyId        Int?                    @unique
+  id              String                  @id @default(uuid()) @db.Uuid
+  userPreferences UserCuisinePreference[]
+
+  @@index([legacyId])
+  @@map("cuisines")
+}
+
+model DietaryTag {
+  code             String                   @unique
+  nameEn           String                   @map("name_en")
+  nameUa           String                   @map("name_ua")
+  isActive         Boolean                  @default(true) @map("is_active")
+  legacyId         Int?                     @unique
+  id               String                   @id @default(uuid()) @db.Uuid
+  userRestrictions UserDietaryRestriction[]
+
+  @@index([legacyId])
+  @@map("dietary_tags")
+}
+
+model MealType {
+  id         String @id @default(uuid()) @db.Uuid
+  legacyId   Int?   @unique
+  code       String @unique
+  nameEn     String @map("name_en")
+  nameUa     String @map("name_ua")
+  orderIndex Int    @map("order_index")
+
+  @@index([legacyId])
+  @@map("meal_types")
+}
+
+model Tag {
+  id       String       @id @default(uuid()) @db.Uuid
+  code     String       @unique
+  nameEn   String       @map("name_en")
+  nameUa   String       @map("name_ua")
+  products ProductTag[]
+
+  @@map("tags")
+}
+
+enum ProductType {
+  generic
+  branded
+}
+
+enum ProductStatus {
+  draft
+  active
+  archived
+}
+
+enum ProductState {
+  raw
+  cooked
+}
+
+enum ProductUnit {
+  g
+  ml
+  pcs
+}
+
+enum NutrientGroup {
+  macro
+  vitamin
+  mineral
+  other
+  micro
+}
+
+enum ProductPhotoType {
+  packaging
+  ingredients
+  other
+}
+
+enum UserSex {
+  male
+  female
+}
+
+enum FamilyRole {
+  owner
+  participant
+}
+
+enum ActivityLevel {
+  sedentary
+  light
+  moderate
+  active
+  very_active
+}
+
+enum WeightGoal {
+  maintain
+  lose
+  gain
+}
+
+enum AllergySeverity {
+  low
+  medium
+  high
+}
