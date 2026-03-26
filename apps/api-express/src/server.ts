@@ -12,7 +12,7 @@ const productModule = createProductModule(prisma);
 app.use(cors());
 app.use(express.json());
 
-app.use("/products", productModule.adminRouter);
+app.use("/api/v1/products", productModule.adminRouter);
 
 app.get("/health", (_req, res) => {
   res.json({

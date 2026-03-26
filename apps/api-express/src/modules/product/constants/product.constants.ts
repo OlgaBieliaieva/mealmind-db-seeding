@@ -61,6 +61,12 @@ export const PRODUCT_STATES_VALUES = Object.values(
   PRODUCT_STATES,
 ) as readonly string[];
 
-export const PRODUCT_PHOTO_TYPE_VALUES = Object.values(
-  PRODUCT_PHOTO_TYPES,
-) as readonly string[];
+// export const PRODUCT_PHOTO_TYPE_VALUES = Object.values(
+//   PRODUCT_PHOTO_TYPES,
+// ) as readonly string[];
+
+export const PRODUCT_PHOTO_TYPE_VALUES = [
+  PRODUCT_PHOTO_TYPES.PACKAGING,
+  PRODUCT_PHOTO_TYPES.INGREDIENTS,
+  PRODUCT_PHOTO_TYPES.OTHER,
+] as const;

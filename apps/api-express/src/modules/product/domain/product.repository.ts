@@ -1,7 +1,14 @@
-import { PrismaClient, ProductUnit, ProductState } from "@prisma/client";
+import {
+  Prisma,
+  PrismaClient,
+  ProductUnit,
+  ProductState,
+} from "@prisma/client";
 import { AdminCreateProductInput } from "../transport/admin/schemas/product.create.schema";
+import { AdminUpdateProductInput } from "../transport/admin/schemas/product.update.schema";
 import { ProductPersistenceAggregate } from "./persistence/product.prisma.types";
 import { TempProductPhoto } from "../../product-media/types/product-media.types";
+import { connectRelation } from "./persistence/prisma-relations.helper";
 
 export class ProductRepository {
   constructor(private prisma: PrismaClient) {}
@@ -70,6 +77,36 @@ export class ProductRepository {
     });
   }
 
+  async activate(id: string) {
+    await this.prisma.product.update({
+      where: { id },
+      data: {
+        status: "active",
+        archivedAt: null,
+      },
+    });
+  }
+
+  async archive(id: string) {
+    await this.prisma.product.update({
+      where: { id },
+      data: {
+        status: "archived",
+        archivedAt: new Date(),
+      },
+    });
+  }
+
+  async restore(id: string) {
+    await this.prisma.product.update({
+      where: { id },
+      data: {
+        status: "active",
+        archivedAt: null,
+      },
+    });
+  }
+
   async findByIdDetailed(
     id: string,
   ): Promise<ProductPersistenceAggregate | null> {
@@ -85,52 +122,129 @@ export class ProductRepository {
     });
   }
 
-  async update(id: string, product: AdminCreateProductInput) {
-    return this.prisma.$transaction(async (tx) => {
-      await tx.product.update({
-        where: { id },
-        data: {
-          nameEn: product.name.en,
-          nameUa: product.name.ua,
-          unit: product.unit as ProductUnit,
-          notes: product.notes,
-          source: product.source,
-          isVerified: product.is_verified,
-          cookingLossPct: product.cooking_loss_pct,
-          ediblePartPct: product.edible_part_pct,
-          yieldFactor: product.yield_factor,
-          ...(product.type === "branded"
-            ? {
-                barcode: product.barcode,
-                brandId: product.brand_id,
-              }
-            : {}),
-        },
-      });
+  async updatePartial(id: string, input: Partial<AdminUpdateProductInput>) {
+    const data: Prisma.ProductUpdateInput = {};
 
-      await tx.productNutrient.deleteMany({
-        where: { productId: id },
-      });
+    if (input.name) {
+      data.nameEn = input.name.en;
+      data.nameUa = input.name.ua;
+    }
 
-      if (product.nutrients && Object.keys(product.nutrients).length) {
-        await tx.productNutrient.createMany({
-          data: Object.entries(product.nutrients).map(([nid, v]) => ({
-            productId: id,
-            nutrientId: nid,
-            valuePer100g: v.value,
-            unit: v.unit,
-          })),
-        });
-      }
+    if (input.unit !== undefined) {
+      data.unit = input.unit as ProductUnit;
+    }
+
+    if (input.raw_or_cooked_default !== undefined) {
+      data.rawOrCookedDefault = input.raw_or_cooked_default as ProductState;
+    }
+
+    if (input.category_id !== undefined) {
+      data.category = {
+        connect: { id: input.category_id },
+      };
+    }
+
+    if (input.edible_part_pct !== undefined) {
+      data.ediblePartPct = input.edible_part_pct;
+    }
+
+    if (input.yield_factor !== undefined) {
+      data.yieldFactor = input.yield_factor;
+    }
+
+    if (input.cooking_loss_pct !== undefined) {
+      data.cookingLossPct = input.cooking_loss_pct;
+    }
+
+    if (input.notes !== undefined) {
+      data.notes = input.notes;
+    }
+
+    if (input.source !== undefined) {
+      data.source = input.source;
+    }
+
+    if (input.barcode !== undefined) {
+      data.barcode = input.barcode;
+    }
+
+    const brandRelation = connectRelation(input.brand_id);
+
+    if (brandRelation) {
+      data.brand = brandRelation;
+    }
+
+    if (input.is_verified !== undefined) {
+      data.isVerified = input.is_verified;
+    }
+
+    await this.prisma.product.update({
+      where: { id },
+      data,
     });
   }
 
-  async delete(id: string) {
+  async replaceNutrients(
+    productId: string,
+    nutrients: Record<string, { value: number; unit: string }>,
+  ) {
+    await this.prisma.$transaction(async (tx) => {
+      await tx.productNutrient.deleteMany({
+        where: { productId },
+      });
+
+      await tx.productNutrient.createMany({
+        data: Object.entries(nutrients).map(([nid, v]) => ({
+          productId,
+          nutrientId: nid,
+          valuePer100g: v.value,
+          unit: v.unit,
+        })),
+      });
+    });
+  }
+
+  async removePhoto(productId: string, photoId: string) {
+    const photo = await this.prisma.productPhoto.findFirst({
+      where: {
+        id: photoId,
+        productId,
+      },
+    });
+
+    if (!photo) throw new Error("Photo not found");
+
+    await this.prisma.productPhoto.delete({
+      where: { id: photoId },
+    });
+  }
+
+  async deletePhotos(photoIds: string[]) {
+    await this.prisma.productPhoto.deleteMany({
+      where: {
+        id: { in: photoIds },
+      },
+    });
+  }
+
+  async detachChildren(parentId: string) {
+    await this.prisma.product.updateMany({
+      where: {
+        parentProductId: parentId,
+      },
+      data: {
+        parentProductId: null,
+      },
+    });
+  }
+
+  async deleteHard(id: string) {
     return this.prisma.$transaction(async (tx) => {
       await tx.productNutrient.deleteMany({ where: { productId: id } });
       await tx.productPhoto.deleteMany({ where: { productId: id } });
       await tx.productTag.deleteMany({ where: { productId: id } });
       await tx.productFavorite.deleteMany({ where: { productId: id } });
+
       await tx.product.delete({ where: { id } });
     });
   }

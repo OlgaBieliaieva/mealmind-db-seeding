@@ -7,7 +7,13 @@ export class ProductSearchQuery {
     where: Prisma.ProductWhereInput,
     page: number,
     limit: number,
+    options?: {
+      includeArchived?: boolean;
+    },
   ) {
+    if (!options?.includeArchived) {
+      where.status = "active";
+    }
     const [items, total] = await this.prisma.$transaction([
       this.prisma.product.findMany({
         where,

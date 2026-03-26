@@ -1,9 +1,10 @@
 import { getSupabaseAdmin } from "../../../infra/supabase/supabase.admin";
+import { ProductPhotoUploadDto } from "../transport/admin/dto/product-photo-upload.dto";
 import { TempProductPhoto } from "../../product-media/types/product-media.types";
 
 export async function finalizeProductPhotos(
   productId: string,
-  photos: TempProductPhoto[],
+  photos: ProductPhotoUploadDto[],
 ): Promise<TempProductPhoto[]> {
   const finalized: TempProductPhoto[] = [];
   const supabaseAdmin = getSupabaseAdmin();
