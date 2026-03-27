@@ -1,8 +1,7 @@
-// TODO DELETE after refactor
 "use client";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { apiFetch } from "@/lib/api/api";
+import { updateProduct } from "@/src/shared/api/products/products.api";
 import { ProductInput } from "../schemas/product.schema";
 
 export function useUpdateProduct() {
@@ -10,10 +9,7 @@ export function useUpdateProduct() {
 
   return useMutation({
     mutationFn: ({ id, data }: { id: string; data: ProductInput }) =>
-      apiFetch(`/api/v2/products/${id}`, {
-        method: "PATCH",
-        body: JSON.stringify(data),
-      }),
+      updateProduct(id, data),
 
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["products"] });

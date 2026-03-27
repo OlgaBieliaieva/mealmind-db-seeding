@@ -1,24 +1,17 @@
-// TODO DELETE after refactor
 "use client";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
+import { deleteProductHard } from "@/src/shared/api/products/products.api";
+
 export function useDeleteProduct() {
   const router = useRouter();
   const qc = useQueryClient();
 
   return useMutation({
-    mutationFn: async (id: string) => {
-      const res = await fetch(`/api/v2/products/${id}`, {
-        method: "DELETE",
-      });
-
-      if (!res.ok) {
-        throw new Error("Failed to delete");
-      }
-    },
+    mutationFn: (id: string) => deleteProductHard(id),
 
     onSuccess: () => {
       toast.success("Продукт успішно видалено");

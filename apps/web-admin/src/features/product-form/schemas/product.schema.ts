@@ -1,4 +1,4 @@
-// TODO DELETE after refactor
+
 // SECTION ███ PRODUCT API SCHEMA ███
 // WHY: validation для API layer
 
@@ -9,7 +9,7 @@ import {
   PRODUCT_UNITS,
   PRODUCT_STATES,
   PRODUCT_PHOTO_TYPES,
-} from "../constants/product.constants";
+} from "@/src/shared/domain/constants/product.constants";
 
 /* ---------- nutrients ---------- */
 
