@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { UseFormSetValue } from "react-hook-form";
-import { ProductFormValues } from "@/domains/product/schemas/product-form.schema";
+import { ProductFormValues } from "@/apps/web-admin/src/features/product-form/schemas/product-form.schema";
 
 const PHOTO_TYPES = [
   { value: "packaging", label: "Packaging" },

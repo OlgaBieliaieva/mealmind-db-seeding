@@ -4,7 +4,7 @@ import { useMemo } from "react";
 
 import { useProductFilters } from "../../hooks/useProductFilters";
 import { useBrands } from "../../hooks/useBrands";
-import { useCategories } from "../../hooks/useCategories";
+import { useCategories } from "../../../../apps/web-admin/src/shared/hooks/useCategories";
 
 import { PRODUCT_ADMIN_LABELS } from "../../constants/product.admin.labels";
 import { PRODUCT_TYPE_OPTIONS } from "../../constants/product.ui.options";

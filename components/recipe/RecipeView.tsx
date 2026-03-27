@@ -7,7 +7,7 @@ import Link from "next/link";
 import { RecipeIngredientView } from "@/types/recipe-ingredient";
 import { RecipeStepDraft } from "@/types/recipe-step";
 import { NutrientsMap } from "@/domains/nutrition/types/nutrient-value.types";
-import { NutrientReference } from "@/domains/shared/types/nutrient.types";
+import { NutrientReference } from "@/apps/web-admin/src/shared/domain/nutrition/nutrient.types";
 import { RecipePreview } from "./RecipePreview";
 
 type Props = {

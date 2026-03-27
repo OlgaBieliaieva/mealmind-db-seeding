@@ -1,3 +1,4 @@
+// TODO DELETE after refactor
 "use client";
 
 import { supabase } from "@/lib/supabase/client";

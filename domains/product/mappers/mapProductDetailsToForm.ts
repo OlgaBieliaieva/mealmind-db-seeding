@@ -1,5 +1,6 @@
+// TODO DELETE after refactor
 import { ProductDetailsDTO } from "@/domains/admin/products/types/product-details.dto";
-import { ProductFormValues } from "../schemas/product-form.schema";
+import { ProductFormValues } from "../../../apps/web-admin/src/features/product-form/schemas/product-form.schema";
 
 export function mapProductDetailsToForm(
   dto: ProductDetailsDTO,

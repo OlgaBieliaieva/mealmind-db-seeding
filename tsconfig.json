@@ -28,7 +28,8 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
-    "**/*.mts"
+    "**/*.mts",
+    "apps/web-admin/src/app/admin/products/[id]/edit"
   ],
   "exclude": ["node_modules", "apps/api-express"]
 }
