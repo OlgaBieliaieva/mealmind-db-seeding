@@ -1,9 +1,11 @@
-// TODO DELETE after refactor
 "use client";
 
 import { useSearchParams, useRouter } from "next/navigation";
 import { useMemo, useTransition } from "react";
-import { PRODUCT_TYPES, ProductType } from "../constants/product.constants";
+import {
+  PRODUCT_TYPES,
+  ProductType,
+} from "@/src/shared/domain/constants/product.constants";
 
 export type ProductFilters = {
   query?: string;

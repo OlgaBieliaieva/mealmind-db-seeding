@@ -1,3 +1,4 @@
+// TODO DELETE after refactor
 // SECTION ███ API CLIENT ███
 
 export async function apiFetch<T>(
