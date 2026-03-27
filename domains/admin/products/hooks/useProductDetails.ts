@@ -1,3 +1,4 @@
+// TODO DELETE after refactor
 "use client";
 
 import { useParams } from "next/navigation";

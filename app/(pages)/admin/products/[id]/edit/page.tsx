@@ -1,3 +1,4 @@
+// TODO DELETE after refactor
 import { notFound } from "next/navigation";
 import { productRepository } from "@/domains/product/repositories/product.repository";
 import { ProductEditPage } from "@/domains/admin/products/pages/ProductEditPage";

@@ -1,8 +1,9 @@
+// TODO DELETE after refactor
 "use client";
 
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { ProductFormValues } from "../schemas/product-form.schema";
+import { ProductFormValues } from "../../../apps/web-admin/src/features/product-form/schemas/product-form.schema";
 
 import { useCreateProduct } from "./useCreateProduct";
 import { useUpdateProduct } from "./useUpdateProduct";

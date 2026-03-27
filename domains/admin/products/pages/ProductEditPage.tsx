@@ -1,6 +1,7 @@
+// TODO DELETE after refactor
 "use client";
 import { useMemo } from "react";
-import { ProductForm } from "@/domains/product/components/ProductForm/ProductForm";
+// import { ProductForm } from "@/domains/product/components/ProductForm/ProductForm";
 import { ProductDetailsDTO } from "../types/product-details.dto";
 import { mapProductDetailsToForm } from "@/domains/product/mappers/mapProductDetailsToForm";
 
@@ -15,10 +16,11 @@ export function ProductEditPage({ product }: Props) {
   );
 
   return (
-    <ProductForm
-      mode="edit"
-      initialValues={initialValues}
-      productId={product.id}
-    />
+    <p>DELETE after refactor</p>
+    // <ProductForm
+    //   mode="edit"
+    //   initialValues={initialValues}
+    //   productId={product.id}
+    // />
   );
 }

@@ -6,7 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 
 import { apiFetch } from "@/lib/api/api";
 
-import { NutrientReference } from "@/domains/shared/types/nutrient.types";
+import { NutrientReference } from "@/apps/web-admin/src/shared/domain/nutrition/nutrient.types";
 
 export function useNutrients() {
   return useQuery({

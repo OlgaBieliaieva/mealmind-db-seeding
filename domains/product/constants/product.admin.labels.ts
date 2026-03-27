@@ -1,3 +1,4 @@
+// TODO DELETE after refactor
 export const PRODUCT_ADMIN_LABELS = {
   title: "Продукти",
 

@@ -12,7 +12,7 @@ import { getMenuPlanFullData } from "@/lib/v1/menu-plans/menu-plans.read";
 import { buildPlanNutrition } from "@/lib/v1/nutrition/nutrition.service";
 import { aggregateSingleEntryNutrients } from "@/lib/v1/nutrition/nutrition.aggregate";
 import { AggregatedNutrients } from "@/types/nutrition-aggregation";
-import { NutrientReference } from "@/domains/shared/types/nutrient.types";
+import { NutrientReference } from "@/apps/web-admin/src/shared/domain/nutrition/nutrient.types";
 import {
   // mapNutritionToDisplay,
   NutritionDisplayItem,

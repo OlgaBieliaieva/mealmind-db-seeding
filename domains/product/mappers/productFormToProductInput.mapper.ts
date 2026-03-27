@@ -1,9 +1,10 @@
+// TODO DELETE after refactor
 // SECTION ███ FORM → PRODUCT INPUT MAPPER ███
 // DATAFLOW: ProductFormValues → ProductInput
 
 import { generateUUID } from "@/domains/shared/utils/uuid";
 
-import { ProductFormValues } from "../schemas/product-form.schema";
+import { ProductFormValues } from "../../../apps/web-admin/src/features/product-form/schemas/product-form.schema";
 import { ProductInput } from "@/domains/product/schemas/product.schema";
 
 import { Brand } from "@/domains/product/types/brand.types";

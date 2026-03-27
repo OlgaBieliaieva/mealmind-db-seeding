@@ -1,3 +1,4 @@
+// TODO DELETE after refactor
 // SECTION ███ PRODUCT API SCHEMA ███
 // WHY: validation для API layer
 
