@@ -40,8 +40,8 @@ export function mapProductDetailsToForm(
   dto: ProductDetailsDto,
 ): ProductFormValues {
   return {
-    name_en: dto.nameEn,
-    name_ua: dto.name,
+    name_en: dto.name.en,
+    name_ua: dto.name.ua,
 
     type: dto.type,
     unit: normalizeUnit(dto.unit),

@@ -1,3 +1,4 @@
+
 import { ProductDetailsCategorySection } from "../components/details/ProductDetailsCategorySection";
 import { ProductDetailsCookingFactorsSection } from "../components/details/ProductDetailsCookingFactorsSection";
 import { ProductDetailsNutrientsSection } from "../components/details/ProductDetailsNutrientsSection";

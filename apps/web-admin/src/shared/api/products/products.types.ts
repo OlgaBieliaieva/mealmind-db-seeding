@@ -34,8 +34,10 @@ export type ProductSearchResponseDto = {
 export type ProductDetailsDto = {
   id: string;
 
-  name: string;
-  nameEn: string;
+  name: {
+    ua: string;
+    en: string;
+  };
 
   barcode?: string | null;
   notes?: string | null;
@@ -87,5 +89,3 @@ export type ProductDetailsDto = {
     isPrimary?: boolean;
   }>;
 };
-
-
