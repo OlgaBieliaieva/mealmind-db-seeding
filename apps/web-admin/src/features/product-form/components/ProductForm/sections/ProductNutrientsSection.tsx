@@ -2,10 +2,10 @@
 
 import { useFormContext } from "react-hook-form";
 import { ProductFormValues } from "../../../schemas/product-form.schema";
-import { FormSection } from "@/src/shared/ui/form/FormSection";
-import { useNutrientReferences } from "@/src/shared/hooks/useNutrientReferences";
+import { FormSection } from "@/shared/ui/form/FormSection";
+import { useNutrientReferences } from "@/shared/hooks/useNutrientReferences";
 import { NutrientRow } from "../nutrients/NutrientRow";
-import { isMacroNutrient } from "@/src/features/product-nutrients/lib/isMacroNutrient";
+import { isMacroNutrient } from "@/features/product-nutrients/lib/isMacroNutrient";
 
 export function ProductNutrientsSection() {
   const { data, isLoading } = useNutrientReferences();

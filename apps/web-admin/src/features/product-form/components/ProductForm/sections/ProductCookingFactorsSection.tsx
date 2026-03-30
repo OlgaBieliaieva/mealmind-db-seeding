@@ -2,7 +2,7 @@
 
 import { useFormContext } from "react-hook-form";
 
-import { FormSection } from "@/src/shared/ui/form/FormSection";
+import { FormSection } from "@/shared/ui/form/FormSection";
 import { useProductFormUI } from "../../../forms/product-form.context";
 import { ProductFormValues } from "../../../schemas/product-form.schema";
 

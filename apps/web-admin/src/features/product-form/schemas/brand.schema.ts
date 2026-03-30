@@ -1,7 +1,5 @@
 import { z } from "zod";
 
-/* ⭐ API CREATE DTO */
-
 export const BrandCreateInput = z.object({
   name: z.object({
     en: z.string().min(1),
@@ -16,10 +14,8 @@ export const BrandCreateInput = z.object({
 export type BrandCreateInput = z.infer<typeof BrandCreateInput>;
 
 export type BrandDto = {
-  brand_id: string;
-  name: {
-    en: string;
-    ua: string;
-  };
+  id: string;
+  nameEn: string;
+  nameUa: string;
   country?: string | null;
 };

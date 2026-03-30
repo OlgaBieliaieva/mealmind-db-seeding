@@ -1,6 +1,6 @@
 "use client";
 
-import { supabase } from "@/src/shared/lib/supabase/client";
+import { supabase } from "@/shared/lib/supabase/client";
 
 export function usePhotoDelete() {
   async function remove(objectName: string) {

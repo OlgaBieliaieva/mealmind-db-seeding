@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { apiFetch } from "@/src/shared/lib/api/api";
+import { apiFetch } from "@/shared/lib/api/api";
 import { NutrientReference } from "../domain/nutrition/nutrient.types";
 
 export function useNutrientReferences() {

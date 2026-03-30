@@ -9,17 +9,17 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   ProductFormSchema,
   ProductFormValues,
-} from "@/src/features/product-form/schemas/product-form.schema";
+} from "@/features/product-form/schemas/product-form.schema";
 
 import { ProductFormContext } from "../../forms/product-form.context";
 
 import { useProductFormFlow } from "../../hooks/useProductFormFlow";
 import { useDirtyGuard } from "../../hooks/useDirtyGuard";
 
-import { FormStatus } from "@/src/shared/ui/form/FormStatus";
+import { FormStatus } from "@/shared/ui/form/FormStatus";
 
 import { PRODUCT_FORM_SECTIONS } from "../../forms/productForm.registry";
-import { ProductEditNavigation } from "@/src/features/product-details/components/ProductEditNavigation";
+import { ProductEditNavigation } from "@/features/product-details/components/ProductEditNavigation";
 
 type Props = {
   mode?: "create" | "edit";

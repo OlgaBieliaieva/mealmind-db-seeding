@@ -1,7 +1,7 @@
 // SECTION ███ FORM → PRODUCT INPUT MAPPER ███
 // DATAFLOW: ProductFormValues → ProductInput
 
-import { generateUUID } from "@/src/shared/lib/utils/uuid";
+import { generateUUID } from "@/shared/lib/utils/uuid";
 
 import { ProductFormValues } from "../schemas/product-form.schema";
 import { ProductInput } from "../schemas/product.schema";

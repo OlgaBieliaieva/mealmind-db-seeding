@@ -1,8 +1,8 @@
 "use client";
 
-import { FormSection } from "@/src/shared/ui/form/FormSection";
+import { FormSection } from "@/shared/ui/form/FormSection";
 import { PRODUCT_BASIC_FIELDS } from "../../../forms/productBasic.fields";
-import { FormRenderer } from "@/src/shared/ui/form/FormRenderer";
+import { FormRenderer } from "@/shared/ui/form/FormRenderer";
 import { ProductFormSection } from "../../../types/product-form-section.types";
 
 export function ProductBasicSection<ProductFormSection>() {

@@ -3,10 +3,10 @@
 import { useMemo } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 
-import { useCategories } from "@/src/shared/hooks/useCategories";
+import { useCategories } from "@/shared/hooks/useCategories";
 import { useProductFormUI } from "../../../forms/product-form.context";
-import { buildCategoryTree } from "@/src/shared/lib/category/buildCategoryTree";
-import { FormSection } from "@/src/shared/ui/form/FormSection";
+import { buildCategoryTree } from "@/shared/lib/category/buildCategoryTree";
+import { FormSection } from "@/shared/ui/form/FormSection";
 
 import { ProductFormValues } from "../../../schemas/product-form.schema";
 

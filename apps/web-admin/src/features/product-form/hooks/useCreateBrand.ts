@@ -1,7 +1,7 @@
 "use client";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createBrand } from "@/src/shared/api/brands/brands.api";
+import { createBrand } from "@/shared/api/brands/brands.api";
 
 import { BrandCreateInput } from "../schemas/brand.schema";
 

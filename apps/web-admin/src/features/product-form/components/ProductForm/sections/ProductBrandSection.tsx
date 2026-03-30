@@ -1,8 +1,8 @@
 "use client";
 
 import { useFormContext } from "react-hook-form";
-import { useBrands } from "@/src/shared/hooks/useBrands";
-import { FormSection } from "@/src/shared/ui/form/FormSection";
+import { useBrands } from "@/shared/hooks/useBrands";
+import { FormSection } from "@/shared/ui/form/FormSection";
 import { ProductFormValues } from "../../../schemas/product-form.schema";
 
 import { BrandDto } from "../../../schemas/brand.schema";
@@ -18,13 +18,13 @@ export function ProductBrandSection() {
   if (type !== "branded") return null;
 
   function getBrandDisplayName(b: BrandDto) {
-    if (!b.country) return b.name.en ?? b.name.ua;
+    if (!b.country) return b.nameEn ?? b.nameUa;
 
     if (b.country.toLowerCase() === "україна") {
-      return b.name.ua ?? b.name.en;
+      return b.nameUa ?? b.nameEn;
     }
 
-    return b.name.en ?? b.name.ua;
+    return b.nameEn ?? b.nameUa;
   }
 
   return (
@@ -42,7 +42,7 @@ export function ProductBrandSection() {
             <option value="">Оберіть бренд</option>
 
             {brands?.map((b) => (
-              <option key={b.brand_id} value={b.brand_id}>
+              <option key={b.id} value={b.id}>
                 {getBrandDisplayName(b)}
               </option>
             ))}

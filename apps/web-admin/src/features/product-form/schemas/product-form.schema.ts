@@ -7,7 +7,7 @@ import {
   PRODUCT_UNITS,
   PRODUCT_TYPES,
   PRODUCT_STATES,
-} from "@/src/shared/domain/constants/product.constants";
+} from "@/shared/domain/constants/product.constants";
 import { REQUIRED_MACRO_VALUES } from "../../product-nutrients/constants/nutrient.macros";
 
 // SECTION ━━ ENUMS ━━━━━━━━━━━━━━━━━━━━━━━━━━━

@@ -1,7 +1,7 @@
 import {
   PRODUCT_TYPES,
   ProductType,
-} from "@/src/shared/domain/constants/product.constants";
+} from "@/shared/domain/constants/product.constants";
 
 export const PRODUCT_TYPE_LABELS: Record<ProductType, string> = {
   [PRODUCT_TYPES.GENERIC]: "Базовий продукт",

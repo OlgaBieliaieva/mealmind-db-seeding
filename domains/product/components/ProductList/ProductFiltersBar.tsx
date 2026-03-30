@@ -3,11 +3,11 @@
 import { useMemo } from "react";
 
 import { useProductFilters } from "../../hooks/useProductFilters";
-import { useBrands } from "../../hooks/useBrands";
+// import { useBrands } from "../../hooks/useBrands";
 import { useCategories } from "../../../../apps/web-admin/src/shared/hooks/useCategories";
 
 import { PRODUCT_ADMIN_LABELS } from "../../constants/product.admin.labels";
-import { PRODUCT_TYPE_OPTIONS } from "../../constants/product.ui.options";
+// import { PRODUCT_TYPE_OPTIONS } from "../../constants/product.ui.options";
 
 import { buildCategoryTree } from "../../utils/buildCategoryTree";
 import { mapCategoryTreeToOptions } from "../../adapters/category-options.adapter";
@@ -18,7 +18,7 @@ import { ProductType } from "../../constants/product.constants";
 export function ProductFiltersBar() {
   const { filters, updateFilters, isPending } = useProductFilters();
 
-  const { data: brands } = useBrands();
+  // const { data: brands } = useBrands();
   const { data: categories } = useCategories();
 
   /* ---------- category options ---------- */
@@ -33,11 +33,11 @@ export function ProductFiltersBar() {
 
   /* ---------- brand options ---------- */
 
-  const brandOptions = useMemo(() => {
-    if (!brands) return [];
+  // const brandOptions = useMemo(() => {
+  //   if (!brands) return [];
 
-    return mapBrandsToOptions(brands);
-  }, [brands]);
+  //   return mapBrandsToOptions(brands);
+  // }, [brands]);
 
   return (
     <div className="grid gap-3 md:grid-cols-4">
@@ -67,11 +67,11 @@ export function ProductFiltersBar() {
       >
         <option value="">{PRODUCT_ADMIN_LABELS.filters.allTypes}</option>
 
-        {PRODUCT_TYPE_OPTIONS.map((opt) => (
+        {/* {PRODUCT_TYPE_OPTIONS.map((opt) => (
           <option key={opt.value} value={opt.value}>
             {opt.label}
           </option>
-        ))}
+        ))} */}
       </select>
 
       {/* CATEGORY */}
@@ -107,11 +107,11 @@ export function ProductFiltersBar() {
       >
         <option value="">{PRODUCT_ADMIN_LABELS.filters.brand}</option>
 
-        {brandOptions.map((b) => (
+        {/* {brandOptions.map((b) => (
           <option key={b.id} value={b.id}>
             {b.label}
           </option>
-        ))}
+        ))} */}
       </select>
 
       {isPending && (

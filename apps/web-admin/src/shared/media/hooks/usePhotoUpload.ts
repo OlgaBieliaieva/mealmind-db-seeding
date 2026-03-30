@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { supabase } from "@/src/shared/lib/supabase/client";
-import { generateUUID } from "@/src/shared/lib/utils/uuid";
+import { supabase } from "@/shared/lib/supabase/client";
+import { generateUUID } from "@/shared/lib/utils/uuid";
 
 export function usePhotoUpload() {
   const [uploading, setUploading] = useState(false);

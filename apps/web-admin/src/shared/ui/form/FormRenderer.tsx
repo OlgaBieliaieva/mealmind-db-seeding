@@ -6,7 +6,7 @@ import { InputField } from "./InputField";
 import { SelectField } from "./SelectField";
 import { TextareaField } from "./TextareaField";
 
-import { FormRendererProps } from "@/src/features/product-form/forms/form.types";
+import { FormRendererProps } from "@/features/product-form/forms/form.types";
 
 export function FormRenderer<T extends FieldValues>({
   fields,

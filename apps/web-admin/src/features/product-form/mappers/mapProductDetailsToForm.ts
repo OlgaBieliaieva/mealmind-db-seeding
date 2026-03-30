@@ -1,4 +1,4 @@
-import { ProductDetailsDto } from "@/src/shared/api/products/products.types";
+import { ProductDetailsDto } from "@/shared/api/products/products.types";
 import { ProductFormValues } from "../schemas/product-form.schema";
 
 import {
@@ -6,12 +6,12 @@ import {
   PRODUCT_STATES,
   ProductUnit,
   ProductState,
-} from "@/src/shared/domain/constants/product.constants";
+} from "@/shared/domain/constants/product.constants";
 
 import {
   PRODUCT_PHOTO_TYPES,
   ProductPhotoType,
-} from "@/src/shared/domain/constants/product.constants";
+} from "@/shared/domain/constants/product.constants";
 
 function mapPhotoType(type: string): ProductPhotoType {
   if (type === PRODUCT_PHOTO_TYPES.PACKAGING) return type;

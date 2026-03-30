@@ -1,7 +1,7 @@
 "use client";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { updateProduct } from "@/src/shared/api/products/products.api";
+import { updateProduct } from "@/shared/api/products/products.api";
 import { ProductInput } from "../schemas/product.schema";
 
 export function useUpdateProduct() {

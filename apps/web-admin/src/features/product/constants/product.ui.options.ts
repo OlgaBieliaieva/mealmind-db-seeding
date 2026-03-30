@@ -8,7 +8,7 @@ import {
   ProductUnit,
   ProductPhotoType,
   ProductState,
-} from "@/src/shared/domain/constants/product.constants";
+} from "@/shared/domain/constants/product.constants";
 import { string } from "zod";
 
 // SECTION ━━ OPTIONS FOR SELECTS ━━━━━━━━━━━

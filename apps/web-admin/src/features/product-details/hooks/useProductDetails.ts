@@ -3,7 +3,7 @@
 import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 
-import { getProductDetails } from "@/src/shared/api/products/products.api";
+import { getProductDetails } from "@/shared/api/products/products.api";
 
 export function useProductDetails() {
   const params = useParams();

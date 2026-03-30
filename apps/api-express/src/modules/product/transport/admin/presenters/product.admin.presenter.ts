@@ -20,6 +20,7 @@ export function presentProductListItem(product: ProductListRow) {
         ? product.brand.nameUa
         : product.brand.nameEn
       : null,
+    status: product.status,
     is_verified: product.isVerified,
   };
 }

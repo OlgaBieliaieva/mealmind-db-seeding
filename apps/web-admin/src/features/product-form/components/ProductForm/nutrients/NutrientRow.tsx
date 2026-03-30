@@ -2,7 +2,7 @@
 
 import { useFormContext } from "react-hook-form";
 import { ProductFormValues } from "../../../schemas/product-form.schema";
-import { NutrientReference } from "@/src/shared/domain/nutrition/nutrient.types";
+import { NutrientReference } from "@/shared/domain/nutrition/nutrient.types";
 
 type Props = {
   nutrient: NutrientReference;

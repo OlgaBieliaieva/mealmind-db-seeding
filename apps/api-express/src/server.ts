@@ -2,17 +2,23 @@ import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import { createProductModule } from "./modules/product/product.module";
+import { createCategoryModule } from "./modules/category/category.module";
+import { createBrandModule } from "./modules/brand/brand.module";
 
 import { prisma } from "./db/prisma";
 
 const app = express();
 
 const productModule = createProductModule(prisma);
+const categoryModule = createCategoryModule(prisma);
+const brandModule = createBrandModule(prisma);
 
 app.use(cors());
 app.use(express.json());
 
-app.use("/api/v1/products", productModule.adminRouter);
+app.use("/api/v1/admin/products", productModule.adminRouter);
+app.use("/api/v1/admin/categories", categoryModule.adminRouter);
+app.use("/api/v1/admin/brands", brandModule.adminRouter);
 
 app.get("/health", (_req, res) => {
   res.json({

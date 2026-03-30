@@ -2,12 +2,12 @@
 
 import { useFormContext } from "react-hook-form";
 
-import { FormSection } from "@/src/shared/ui/form/FormSection";
-import { GenericProductSearch } from "@/src/features/generic-product/components/GenericProductSearch";
+import { FormSection } from "@/shared/ui/form/FormSection";
+import { GenericProductSearch } from "@/features/generic-product/components/GenericProductSearch";
 import { useGenericInheritance } from "../../../hooks/useGenericInheritance";
 import { useProductFormUI } from "../../../forms/product-form.context";
 import { ProductFormValues } from "../../../schemas/product-form.schema";
-import { GenericProduct } from "@/src/features/generic-product/types/generic-product.types";
+import { GenericProduct } from "@/features/generic-product/types/generic-product.types";
 
 export function ProductParentSection() {
   const { setParentLocked, parentLocked } = useProductFormUI();

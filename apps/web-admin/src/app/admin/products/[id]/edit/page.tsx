@@ -1,8 +1,8 @@
 "use client";
 
-import { ProductEditPage } from "@/src/features/product-form/pages/ProductEditPage";
-import { PRODUCT_ADMIN_LABELS } from "@/src/features/product/constants/product.admin.labels";
-import { useProductDetails } from "@/src/features/product-details/hooks/useProductDetails";
+import { ProductEditPage } from "@/features/product-form/pages/ProductEditPage";
+import { PRODUCT_ADMIN_LABELS } from "@/features/product/constants/product.admin.labels";
+import { useProductDetails } from "@/features/product-details/hooks/useProductDetails";
 
 export default function Page() {
   const { data: product, isLoading, isError } = useProductDetails();

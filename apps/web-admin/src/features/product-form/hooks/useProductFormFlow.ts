@@ -6,8 +6,8 @@ import { ProductFormValues } from "../schemas/product-form.schema";
 import { useCreateProduct } from "./useCreateProduct";
 import { useUpdateProduct } from "./useUpdateProduct";
 import { useCreateBrand } from "./useCreateBrand";
-import { usePhotoLifecycle } from "@/src/shared/media/hooks/usePhotoLifecycle";
-import { addPhotos } from "@/src/shared/api/products/products.api";
+import { usePhotoLifecycle } from "@/shared/media/hooks/usePhotoLifecycle";
+import { addPhotos } from "@/shared/api/products/products.api";
 import { mapProductFormToProductInput } from "../mappers/productFormToProductInput.mapper";
 
 export function useProductFormFlow(

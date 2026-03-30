@@ -1,4 +1,4 @@
-import { apiFetch } from "@/src/shared/lib/api/api";
+import { apiFetch } from "@/shared/lib/api/api";
 import { ProductDetailsDto, ProductSearchResponseDto } from "./products.types";
 
 // ===== SEARCH =====

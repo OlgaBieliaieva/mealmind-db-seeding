@@ -1,9 +1,9 @@
 "use client";
 
 import { useFormContext } from "react-hook-form";
-import { FormSection } from "@/src/shared/ui/form/FormSection";
+import { FormSection } from "@/shared/ui/form/FormSection";
 import { ProductFormValues } from "../../../schemas/product-form.schema";
-import { FormBarcodeField } from "@/src/shared/ui/form/FormBarcodeField";
+import { FormBarcodeField } from "@/shared/ui/form/FormBarcodeField";
 
 export function ProductMetaSection() {
   const { register } = useFormContext<ProductFormValues>();
