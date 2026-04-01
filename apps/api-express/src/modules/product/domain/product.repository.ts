@@ -62,9 +62,27 @@ export class ProductRepository {
         },
       });
 
-      if (product.nutrients && Object.keys(product.nutrients).length) {
+      const parentNutrients: Record<string, { value: number; unit: string }> =
+        parent?.nutrients
+          ? Object.fromEntries(
+              parent.nutrients.map((n) => [
+                n.nutrientId,
+                {
+                  value: n.valuePer100g,
+                  unit: n.unit ?? "g",
+                },
+              ]),
+            )
+          : {};
+
+      const finalNutrients: Record<string, { value: number; unit: string }> = {
+        ...parentNutrients,
+        ...(product.nutrients ?? {}),
+      };
+
+      if (Object.keys(finalNutrients).length > 0) {
         await tx.productNutrient.createMany({
-          data: Object.entries(product.nutrients).map(([nid, v]) => ({
+          data: Object.entries(finalNutrients).map(([nid, v]) => ({
             productId: created.id,
             nutrientId: nid,
             valuePer100g: v.value,

@@ -1,7 +1,7 @@
 "use client";
 
 import { useFormContext } from "react-hook-form";
-import { ProductFormValues } from "../../../schemas/product-form.schema";
+import { ProductFormInput } from "../../../schemas/product-form.schema";
 import { FormSection } from "@/shared/ui/form/FormSection";
 import { useNutrientReferences } from "@/shared/hooks/useNutrientReferences";
 import { NutrientRow } from "../nutrients/NutrientRow";
@@ -9,7 +9,7 @@ import { isMacroNutrient } from "@/features/product-nutrients/lib/isMacroNutrien
 
 export function ProductNutrientsSection() {
   const { data, isLoading } = useNutrientReferences();
-  const { watch } = useFormContext<ProductFormValues>();
+  const { watch } = useFormContext<ProductFormInput>();
 
   const type = watch("type");
   const parentId = watch("parent_product_id");
@@ -32,7 +32,7 @@ export function ProductNutrientsSection() {
       <div className="space-y-2">
         {data?.map((n) => (
           <NutrientRow
-            key={n.nutrient_id}
+            key={n.code}
             nutrient={n}
             isRequired={macrosRequired && isMacroNutrient(n.code)}
           />

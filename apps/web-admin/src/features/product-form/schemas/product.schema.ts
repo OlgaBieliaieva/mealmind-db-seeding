@@ -1,4 +1,3 @@
-
 // SECTION ███ PRODUCT API SCHEMA ███
 // WHY: validation для API layer
 
@@ -102,3 +101,9 @@ export const ProductSchema = z.discriminatedUnion("type", [
 ]);
 
 export type ProductInput = z.infer<typeof ProductSchema>;
+
+export type ProductInputWithBrandDraft = ProductInput & {
+  new_brand_name_en?: string;
+  new_brand_name_ua?: string;
+  new_brand_country?: string;
+};

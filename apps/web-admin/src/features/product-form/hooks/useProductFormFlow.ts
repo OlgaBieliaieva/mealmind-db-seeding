@@ -2,13 +2,17 @@
 
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { ProductFormValues } from "../schemas/product-form.schema";
+
+import {
+  ProductInput,
+  ProductInputWithBrandDraft,
+} from "../schemas/product.schema";
 import { useCreateProduct } from "./useCreateProduct";
 import { useUpdateProduct } from "./useUpdateProduct";
 import { useCreateBrand } from "./useCreateBrand";
+
 import { usePhotoLifecycle } from "@/shared/media/hooks/usePhotoLifecycle";
 import { addPhotos } from "@/shared/api/products/products.api";
-import { mapProductFormToProductInput } from "../mappers/productFormToProductInput.mapper";
 
 export function useProductFormFlow(
   mode: "create" | "edit",
@@ -22,41 +26,46 @@ export function useProductFormFlow(
 
   const { finalizePhotos } = usePhotoLifecycle();
 
-  async function submit(values: ProductFormValues) {
+  async function submit(payload: ProductInput) {
     try {
-      let brandId = values.brand_id;
+      let finalPayload = payload;
 
-      // ⭐ INLINE BRAND CREATION — через mutation hook
-      if (values.type === "branded" && brandId === "__new__") {
+      // ================= BRAND CREATION =================
+
+      if (payload.type === "branded" && payload.brand_id === "__new__") {
+        const draft = payload as ProductInputWithBrandDraft;
+
+        if (!draft.new_brand_name_en || !draft.new_brand_name_ua) {
+          throw new Error("New brand data is missing");
+        }
+
         const created = await createBrandMutation.mutateAsync({
           name: {
-            en: values.new_brand_name_en!,
-            ua: values.new_brand_name_ua!,
+            en: draft.new_brand_name_en,
+            ua: draft.new_brand_name_ua,
           },
-          country: values.new_brand_country || undefined,
+          country: draft.new_brand_country || undefined,
         });
 
-        brandId = created.brand_id;
+        finalPayload = {
+          ...payload,
+          brand_id: created.brand_id,
+        };
       }
-
-      const normalizedValues: ProductFormValues = {
-        ...values,
-        brand_id: values.type === "branded" ? brandId : undefined,
-      };
-
-      const payload = mapProductFormToProductInput(
-        normalizedValues,
-        mode === "edit" ? productId : undefined,
-      );
 
       // ================= CREATE =================
 
       if (mode === "create") {
-        const result = await createProductMutation.mutateAsync(payload);
+        const result = await createProductMutation.mutateAsync(finalPayload);
 
         const id = result.product_id;
 
-        const finalized = await finalizePhotos(values.photos ?? [], id);
+        const safePhotos = (payload.photos ?? []).map((p) => ({
+          ...p,
+          objectName: p.objectName ?? p.url,
+        }));
+
+        const finalized = await finalizePhotos(safePhotos, id);
 
         if (finalized.length) {
           await addPhotos(id, finalized);
@@ -75,10 +84,15 @@ export function useProductFormFlow(
 
         await updateProductMutation.mutateAsync({
           id: productId,
-          data: payload,
+          data: finalPayload,
         });
 
-        const finalized = await finalizePhotos(values.photos ?? [], productId);
+        const safePhotos = (payload.photos ?? []).map((p) => ({
+          ...p,
+          objectName: p.objectName ?? p.url,
+        }));
+
+        const finalized = await finalizePhotos(safePhotos, productId);
 
         if (finalized.length) {
           await addPhotos(productId, finalized);
@@ -96,6 +110,7 @@ export function useProductFormFlow(
 
   return {
     submit,
+
     isSubmitting:
       createProductMutation.isPending ||
       updateProductMutation.isPending ||

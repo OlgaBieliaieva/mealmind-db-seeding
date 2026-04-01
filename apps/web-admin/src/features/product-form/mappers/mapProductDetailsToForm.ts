@@ -1,5 +1,5 @@
 import { ProductDetailsDto } from "@/shared/api/products/products.types";
-import { ProductFormValues } from "../schemas/product-form.schema";
+import { ProductFormInput } from "../schemas/product-form.schema";
 
 import {
   PRODUCT_UNITS,
@@ -38,7 +38,7 @@ export function normalizeState(value: string): ProductState {
 
 export function mapProductDetailsToForm(
   dto: ProductDetailsDto,
-): ProductFormValues {
+): ProductFormInput {
   return {
     name_en: dto.name.en,
     name_ua: dto.name.ua,
@@ -50,7 +50,6 @@ export function mapProductDetailsToForm(
     raw_or_cooked_default: normalizeState(dto.rawOrCooked),
 
     category_id: dto.category.leafId,
-
     parent_product_id: dto.parent?.id,
 
     notes: dto.notes ?? "",
@@ -64,16 +63,16 @@ export function mapProductDetailsToForm(
           dto.nutrients.map((n) => [
             n.nutrientId,
             {
-              value: n.value,
+              value: String(n.value),
               unit: n.unit,
             },
           ]),
         )
       : {},
 
-    cooking_loss_pct: dto.cookingFactors?.cookingLossPct,
-    edible_part_pct: dto.cookingFactors?.ediblePartPct,
-    yield_factor: dto.cookingFactors?.yieldFactor,
+    cooking_loss_pct: String(dto.cookingFactors?.cookingLossPct ?? ""),
+    edible_part_pct: String(dto.cookingFactors?.ediblePartPct ?? ""),
+    yield_factor: String(dto.cookingFactors?.yieldFactor ?? ""),
 
     photos: dto.photos?.map((p) => ({
       type: mapPhotoType(p.type),

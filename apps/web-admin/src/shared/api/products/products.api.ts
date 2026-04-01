@@ -24,6 +24,14 @@ export function searchProducts(params: {
   );
 }
 
+export function searchGenericProducts(query: string) {
+  return searchProducts({
+    query,
+    type: "generic",
+    limit: 10,
+  });
+}
+
 // ===== DETAILS =====
 
 export function getProductDetails(id: string) {

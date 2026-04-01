@@ -8,13 +8,17 @@ import { useProductFormUI } from "../../../forms/product-form.context";
 import { buildCategoryTree } from "@/shared/lib/category/buildCategoryTree";
 import { FormSection } from "@/shared/ui/form/FormSection";
 
-import { ProductFormValues } from "../../../schemas/product-form.schema";
+import { ProductFormInput } from "../../../schemas/product-form.schema";
 
 export function ProductCategorySection() {
   const { parentLocked } = useProductFormUI();
-  const { register, setValue } = useFormContext<ProductFormValues>();
+  const {
+    register,
+    setValue,
+    formState: { errors },
+  } = useFormContext<ProductFormInput>();
 
-  const leafId = useWatch<ProductFormValues>({
+  const leafId = useWatch<ProductFormInput>({
     name: "category_id",
   });
 
@@ -71,7 +75,10 @@ export function ProductCategorySection() {
 
             const firstLeaf = rootNode?.children?.[0]?.id;
 
-            setValue("category_id", firstLeaf ?? newRoot);
+            setValue("category_id", firstLeaf ?? newRoot, {
+              shouldDirty: true,
+              shouldValidate: true,
+            });
           }}
           className="w-full rounded border px-3 py-2"
         >
@@ -83,22 +90,31 @@ export function ProductCategorySection() {
             </option>
           ))}
         </select>
-
+        {errors.category_id && (
+          <p className="text-xs text-red-500">{errors.category_id.message}</p>
+        )}
         {/* LEAF */}
         {subcategories.length > 0 && (
-          <select
-            disabled={parentLocked}
-            {...register("category_id")}
-            className="w-full rounded border px-3 py-2"
-          >
-            <option value="">Оберіть підкатегорію</option>
+          <>
+            <select
+              disabled={parentLocked}
+              {...register("category_id")}
+              className="w-full rounded border px-3 py-2"
+            >
+              <option value="">Оберіть підкатегорію</option>
 
-            {subcategories.map((c) => (
-              <option key={c.id} value={c.id}>
-                {c.name.ua}
-              </option>
-            ))}
-          </select>
+              {subcategories.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.name.ua}
+                </option>
+              ))}
+            </select>
+            {errors.category_id && (
+              <p className="text-xs text-red-500">
+                {errors.category_id.message}
+              </p>
+            )}
+          </>
         )}
       </div>
     </FormSection>

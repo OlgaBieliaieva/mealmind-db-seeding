@@ -22,12 +22,12 @@ export default function ProductListPage() {
       <div className="flex items-center justify-between">
         <h1 className="text-xl font-semibold">{PRODUCT_ADMIN_LABELS.title}</h1>
 
-        <Link
+        {/* <Link
           href="/admin/products/new"
           className="rounded bg-black px-4 py-2 text-white"
         >
           {PRODUCT_ADMIN_LABELS.createButton}
-        </Link>
+        </Link> */}
       </div>
 
       {/* FILTER */}

@@ -2,7 +2,7 @@
 
 import { FormField } from "./form.types";
 
-import { ProductFormValues } from "../schemas/product-form.schema";
+import { ProductFormInput } from "../schemas/product-form.schema";
 
 import {
   PRODUCT_TYPE_OPTIONS,
@@ -12,7 +12,7 @@ import {
 
 import { PRODUCT_LABELS } from "./product.form.labels";
 
-export const PRODUCT_BASIC_FIELDS: FormField<ProductFormValues>[] = [
+export const PRODUCT_BASIC_FIELDS: FormField<ProductFormInput>[] = [
   {
     type: "input",
     name: "name_ua",

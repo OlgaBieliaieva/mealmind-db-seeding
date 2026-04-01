@@ -1,14 +1,15 @@
 // SECTION ███ PRODUCT FORM SCHEMA ███
 // WHY: schema для react-hook-form та API payload validation
 
-import { z, RefinementCtx } from "zod";
-
+import { z } from "zod";
+import { addFieldError } from "@/shared/lib/validation/addFieldError";
 import {
   PRODUCT_UNITS,
   PRODUCT_TYPES,
   PRODUCT_STATES,
 } from "@/shared/domain/constants/product.constants";
-import { REQUIRED_MACRO_VALUES } from "../../product-nutrients/constants/nutrient.macros";
+
+import { NUTRIENT_META } from "@/features/product-nutrients/constants/nutrient.meta";
 
 // SECTION ━━ ENUMS ━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -30,77 +31,62 @@ export const ProductPhotoFormSchema = z.object({
 // SECTION ━━ NUTRIENT ━━━━━━━━━━━━━━━━━━━━━━━━━
 
 export const ProductFormNutrientSchema = z.object({
-  value: z.number(),
+  value: z
+    .string()
+    .min(1, "Обовʼязкове поле")
+    .refine((val) => !isNaN(Number(val)), {
+      message: "Має бути числом",
+    })
+    .transform((val) => Number(val)),
 
   unit: z.string(),
 });
 
 // SECTION ━━ MAIN PRODUCT FORM ━━━━━━━━━━━━━━━━
 
-export const ProductFormSchema = z
-  .object({
-    name_en: z.string().min(1),
+// product-form.schema.ts
 
-    name_ua: z.string().min(1),
+export const ProductFormSchema = z.object({
+  name_en: z.string().min(1, "Введіть назву англійською"),
+  name_ua: z.string().min(1, "Введіть назву українською"),
 
-    type: TypeEnum,
+  type: TypeEnum,
+  unit: UnitEnum,
+  raw_or_cooked_default: StateEnum,
 
-    unit: UnitEnum,
+  category_id: z.string().min(1, "Оберіть категорію"),
 
-    raw_or_cooked_default: StateEnum,
+  notes: z.string().optional(),
+  is_verified: z.boolean(),
 
-    // DB ━━ METADATA
+  brand_id: z.string().optional(),
+  source: z.string().optional(),
 
-    category_id: z.string(),
+  new_brand_name_en: z.string().optional(),
+  new_brand_name_ua: z.string().optional(),
+  new_brand_country: z.string().optional(),
 
-    notes: z.string().optional(),
+  parent_product_id: z.string().optional(),
 
-    is_verified: z.boolean(),
+  barcode: z.string().min(8).optional(),
+  photos: z.array(ProductPhotoFormSchema).optional(),
 
-    brand_id: z.string().optional(),
+  cooking_loss_pct: z.string().min(1, "Введіть втрати"),
+  edible_part_pct: z.string().min(1, "Введіть їстівну частину"),
+  yield_factor: z.string().min(1, "Введіть коефіцієнт"),
 
-    source: z.string().optional(),
+  nutrients: z.record(
+    z.string(),
+    z.object({
+      value: z
+        .string()
+        .min(1, "Обовʼязкове поле")
+        .refine((v) => !isNaN(Number(v)), {
+          message: "Має бути числом",
+        }),
+      unit: z.string(),
+    }),
+  ),
+});
 
-    // TODO new brand creation flow
-
-    new_brand_name_en: z.string().optional(),
-
-    new_brand_name_ua: z.string().optional(),
-
-    new_brand_country: z.string().optional(),
-
-    // GENERIC PARENT
-
-    parent_product_id: z.string().optional(),
-
-    nutrients: z.record(z.string(), ProductFormNutrientSchema).optional(),
-
-    barcode: z.string().min(8).optional(),
-
-    photos: z.array(ProductPhotoFormSchema).optional(),
-
-    cooking_loss_pct: z.number().optional(),
-    edible_part_pct: z.number().optional(),
-    yield_factor: z.number().optional(),
-  })
-  .superRefine((data: ProductFormValues, ctx: RefinementCtx) => {
-    const hasParent = !!data.parent_product_id;
-
-    if (hasParent) return;
-
-    const nutrients = data.nutrients ?? {};
-
-    for (const macro of REQUIRED_MACRO_VALUES) {
-      const entry = nutrients[macro];
-
-      if (!entry || entry.value === undefined || entry.value === null) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "Required macronutrient",
-          path: ["nutrients", macro, "value"],
-        });
-      }
-    }
-  });
-
-export type ProductFormValues = z.infer<typeof ProductFormSchema>;
+export type ProductFormInput = z.infer<typeof ProductFormSchema>;

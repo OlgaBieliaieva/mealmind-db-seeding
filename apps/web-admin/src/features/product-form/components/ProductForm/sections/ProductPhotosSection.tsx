@@ -10,10 +10,10 @@ import { PhotoCard } from "@/shared/media/components/PhotoCard";
 
 import { ProductPhotoType } from "@/shared/domain/constants/product.constants";
 
-import { ProductFormValues } from "../../../schemas/product-form.schema";
+import { ProductFormInput } from "../../../schemas/product-form.schema";
 
 export function ProductPhotosSection() {
-  const { watch, setValue } = useFormContext<ProductFormValues>();
+  const { watch, setValue } = useFormContext<ProductFormInput>();
 
   const photos = watch("photos") ?? [];
 

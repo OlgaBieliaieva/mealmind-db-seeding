@@ -1,6 +1,8 @@
 import {
   ProductStatus,
   ProductType,
+  ProductUnit,
+  ProductState,
 } from "@/shared/domain/constants/product.constants";
 
 // ===== COMMON =====
@@ -45,8 +47,8 @@ export type ProductDetailsDto = {
   source?: string | null;
 
   type: ProductTypeDto;
-  unit: string;
-  rawOrCooked: string;
+  unit: ProductUnit;
+  rawOrCooked: ProductState;
 
   status: ProductStatusDto;
 
