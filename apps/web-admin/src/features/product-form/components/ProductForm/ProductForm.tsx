@@ -3,46 +3,46 @@
 // SECTION ███ PRODUCT FORM ███
 
 import { useState } from "react";
-import { useForm, FormProvider } from "react-hook-form";
+import { useForm, FormProvider, FieldErrors } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import {
   ProductFormSchema,
-  ProductFormValues,
-} from "@/src/features/product-form/schemas/product-form.schema";
+  ProductFormInput,
+} from "@/features/product-form/schemas/product-form.schema";
 
 import { ProductFormContext } from "../../forms/product-form.context";
 
 import { useProductFormFlow } from "../../hooks/useProductFormFlow";
 import { useDirtyGuard } from "../../hooks/useDirtyGuard";
 
-import { FormStatus } from "@/src/shared/ui/form/FormStatus";
-
+import { FormStatus } from "@/shared/ui/form/FormStatus";
+import { mapProductFormToProductInput } from "../../mappers/productFormToProductInput.mapper";
 import { PRODUCT_FORM_SECTIONS } from "../../forms/productForm.registry";
-import { ProductEditNavigation } from "@/src/features/product-details/components/ProductEditNavigation";
+import { ProductEditNavigation } from "@/features/product-details/components/ProductEditNavigation";
 
 type Props = {
   mode?: "create" | "edit";
-  initialValues?: ProductFormValues;
+  initialValues?: Partial<ProductFormInput>;
   productId?: string;
 };
 
-const defaultValues: ProductFormValues = {
+const defaultValues: ProductFormInput = {
   name_en: "",
   name_ua: "",
-  type: "branded",
+  type: "generic",
   unit: "g",
+  raw_or_cooked_default: "raw",
   category_id: "",
   notes: "",
   is_verified: false,
   source: "",
-  raw_or_cooked_default: "raw",
   brand_id: undefined,
-  new_brand_name_en: "",
-  new_brand_name_ua: "",
-  new_brand_country: "",
   parent_product_id: undefined,
   barcode: undefined,
+  cooking_loss_pct: "",
+  edible_part_pct: "",
+  yield_factor: "",
   nutrients: {},
   photos: [],
 };
@@ -56,10 +56,17 @@ export function ProductForm({
 
   const parentLocked = mode === "edit" || manualParentLock;
 
-  const methods = useForm<ProductFormValues>({
+  const methods = useForm<ProductFormInput>({
     resolver: zodResolver(ProductFormSchema),
-    defaultValues: initialValues,
+    defaultValues: {
+      ...defaultValues,
+      ...initialValues,
+    },
   });
+
+  function onInvalid(errors: FieldErrors<ProductFormInput>) {
+    console.log("FORM ERRORS", errors);
+  }
 
   const {
     handleSubmit,
@@ -76,9 +83,16 @@ export function ProductForm({
     productId,
   );
 
-  async function onSubmit(values: ProductFormValues) {
-    await submit(values);
-  }
+  const onSubmit = async (values: ProductFormInput) => {
+    const validated = ProductFormSchema.parse(values);
+
+    const payload = mapProductFormToProductInput(validated);
+    console.log({ values: values });
+    console.log({ validated: validated });
+    console.log({ payload: payload });
+
+    await submit(payload);
+  };
 
   return (
     <FormProvider {...methods}>
@@ -88,8 +102,11 @@ export function ProductForm({
           setParentLocked: setManualParentLock,
         }}
       >
-        <ProductEditNavigation />
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
+        {mode === "edit" && <ProductEditNavigation />}
+        <form
+          onSubmit={handleSubmit(onSubmit, onInvalid)}
+          className="flex flex-col"
+        >
           <FormStatus
             loading={isSubmitting}
             error={isError}
@@ -99,12 +116,17 @@ export function ProductForm({
           {PRODUCT_FORM_SECTIONS.map((Section, i) => (
             <Section key={i} />
           ))}
-
+          {Object.keys(formState.errors).length > 0 && (
+            <div className="text-sm text-red-500">
+              Заповніть обовʼязкові поля
+            </div>
+          )}
           <button
-            disabled={!formState.isDirty || isSubmitting}
-            className="rounded bg-black px-4 py-2 text-white"
+            type="submit"
+            disabled={(mode === "edit" && !formState.isDirty) || isSubmitting}
+            className="rounded bg-black px-4 py-2 text-white disabled:opacity-50"
           >
-            Save
+            {isSubmitting ? "Збереження..." : "Зберегти"}
           </button>
         </form>
       </ProductFormContext.Provider>

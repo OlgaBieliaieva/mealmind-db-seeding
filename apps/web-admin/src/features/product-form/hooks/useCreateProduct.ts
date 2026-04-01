@@ -1,7 +1,7 @@
 "use client";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createProduct } from "@/src/shared/api/products/products.api";
+import { createProduct } from "@/shared/api/products/products.api";
 
 import { ProductInput } from "../schemas/product.schema";
 

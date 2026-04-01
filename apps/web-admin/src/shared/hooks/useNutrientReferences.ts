@@ -1,13 +1,11 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { apiFetch } from "@/src/shared/lib/api/api";
-import { NutrientReference } from "../domain/nutrition/nutrient.types";
+import { getNutrientReferences } from "../api/nutrients/nutrients.api";
 
 export function useNutrientReferences() {
   return useQuery({
     queryKey: ["nutrient-references"],
-    queryFn: () =>
-      apiFetch<NutrientReference[]>("/api/v1/admin/products/nutrients"),
+    queryFn: getNutrientReferences,
   });
 }

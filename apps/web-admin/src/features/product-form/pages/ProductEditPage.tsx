@@ -1,7 +1,7 @@
 "use client";
 import { useMemo } from "react";
-import { ProductForm } from "@/src/features/product-form/components/ProductForm/ProductForm";
-import { ProductDetailsDto } from "@/src/shared/api/products/products.types";
+import { ProductForm } from "@/features/product-form/components/ProductForm/ProductForm";
+import { ProductDetailsDto } from "@/shared/api/products/products.types";
 import { mapProductDetailsToForm } from "../mappers/mapProductDetailsToForm";
 
 type Props = {

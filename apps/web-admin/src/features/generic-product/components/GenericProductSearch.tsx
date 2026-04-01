@@ -3,12 +3,11 @@
 import { useState } from "react";
 import { useGenericProductSearch } from "../hooks/useGenericProductSearch";
 import { useGenericProductById } from "../hooks/useGenericProductById";
-import { GenericProduct } from "../types/generic-product.types";
 
 type Props = {
   valueId?: string;
   disabled?: boolean;
-  onSelect: (product: GenericProduct | null) => void;
+  onSelect: (productId: string | null) => void;
 };
 
 export function GenericProductSearch({ valueId, disabled, onSelect }: Props) {
@@ -18,6 +17,7 @@ export function GenericProductSearch({ valueId, disabled, onSelect }: Props) {
     useGenericProductById(valueId);
 
   const { data, isFetching } = useGenericProductSearch(query);
+  console.log(data);
 
   const items = data?.items ?? [];
 
@@ -82,13 +82,13 @@ export function GenericProductSearch({ valueId, disabled, onSelect }: Props) {
               key={item.product_id}
               className="cursor-pointer px-3 py-2 hover:bg-gray-100"
               onClick={() => {
-                onSelect(item);
+                onSelect(item.product_id);
                 setQuery("");
               }}
             >
-              <div className="text-sm font-medium">{item.name.ua}</div>
+              <div className="text-sm font-medium">{item.name_ua}</div>
 
-              <div className="text-xs text-gray-500">{item.name.en}</div>
+              <div className="text-xs text-gray-500">{item.name_ua}</div>
             </li>
           ))}
         </ul>

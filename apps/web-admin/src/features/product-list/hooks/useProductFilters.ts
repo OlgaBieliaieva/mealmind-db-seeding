@@ -5,7 +5,7 @@ import { useMemo, useTransition } from "react";
 import {
   PRODUCT_TYPES,
   ProductType,
-} from "@/src/shared/domain/constants/product.constants";
+} from "@/shared/domain/constants/product.constants";
 
 export type ProductFilters = {
   query?: string;

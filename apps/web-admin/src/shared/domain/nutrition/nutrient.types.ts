@@ -1,7 +1,7 @@
 // SECTION ███ NUTRIENT TYPES ███
 
-import { NutrientGroup } from "@/src/features/product-nutrients/constants/nutrient.constants";
-import { NutrientCode } from "@/src/features/product-nutrients/constants/nutrient.codes";
+import { NutrientGroup } from "@/features/product-nutrients/constants/nutrient.constants";
+import { NutrientCode } from "@/features/product-nutrients/constants/nutrient.codes";
 
 export type NutrientReference = {
   nutrient_id: string;

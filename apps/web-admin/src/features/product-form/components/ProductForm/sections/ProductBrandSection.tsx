@@ -1,15 +1,19 @@
 "use client";
 
 import { useFormContext } from "react-hook-form";
-import { useBrands } from "@/src/shared/hooks/useBrands";
-import { FormSection } from "@/src/shared/ui/form/FormSection";
-import { ProductFormValues } from "../../../schemas/product-form.schema";
+import { useBrands } from "@/shared/hooks/useBrands";
+import { FormSection } from "@/shared/ui/form/FormSection";
+import { ProductFormInput } from "../../../schemas/product-form.schema";
 
 import { BrandDto } from "../../../schemas/brand.schema";
 import { PRODUCT_LABELS } from "../../../forms/product.form.labels";
 
 export function ProductBrandSection() {
-  const { register, watch } = useFormContext<ProductFormValues>();
+  const {
+    register,
+    watch,
+    formState: { errors },
+  } = useFormContext<ProductFormInput>();
   const { data: brands, isLoading } = useBrands();
 
   const type = watch("type");
@@ -18,13 +22,13 @@ export function ProductBrandSection() {
   if (type !== "branded") return null;
 
   function getBrandDisplayName(b: BrandDto) {
-    if (!b.country) return b.name.en ?? b.name.ua;
+    if (!b.country) return b.nameEn ?? b.nameUa;
 
     if (b.country.toLowerCase() === "україна") {
-      return b.name.ua ?? b.name.en;
+      return b.nameUa ?? b.nameEn;
     }
 
-    return b.name.en ?? b.name.ua;
+    return b.nameEn ?? b.nameUa;
   }
 
   return (
@@ -42,13 +46,16 @@ export function ProductBrandSection() {
             <option value="">Оберіть бренд</option>
 
             {brands?.map((b) => (
-              <option key={b.brand_id} value={b.brand_id}>
+              <option key={b.id} value={b.id}>
                 {getBrandDisplayName(b)}
               </option>
             ))}
 
             <option value="__new__">➕ Додати новий</option>
           </select>
+        )}
+        {errors.brand_id && (
+          <p className="text-xs text-red-500">{errors.brand_id.message}</p>
         )}
 
         {brandId === "__new__" && (
@@ -58,18 +65,32 @@ export function ProductBrandSection() {
               placeholder="Назва бренду UA"
               className="w-full rounded border px-3 py-2"
             />
+            {errors.new_brand_name_ua && (
+              <p className="text-xs text-red-500">
+                {errors.new_brand_name_ua.message}
+              </p>
+            )}
 
             <input
               {...register("new_brand_name_en")}
               placeholder="Назва бренду EN"
               className="w-full rounded border px-3 py-2"
             />
-
+            {errors.new_brand_name_en && (
+              <p className="text-xs text-red-500">
+                {errors.new_brand_name_en.message}
+              </p>
+            )}
             <input
               {...register("new_brand_country")}
               placeholder="Країна"
               className="w-full rounded border px-3 py-2"
             />
+            {errors.new_brand_country && (
+              <p className="text-xs text-red-500">
+                {errors.new_brand_country.message}
+              </p>
+            )}
           </div>
         )}
       </div>

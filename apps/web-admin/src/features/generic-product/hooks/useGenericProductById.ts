@@ -1,14 +1,16 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { apiFetch } from "@/src/shared/lib/api/api";
-import { GenericProduct } from "../types/generic-product.types";
+import { getProductDetails } from "@/shared/api/products/products.api";
+import { mapToGenericProduct } from "../mappers/mapProductDetailsToGenericProduct";
 
 export function useGenericProductById(id?: string) {
   return useQuery({
     queryKey: ["generic-product", id],
     enabled: !!id,
-    queryFn: () =>
-      apiFetch<GenericProduct>(`/api/v1/admin/products/generic/${id}`),
+    queryFn: async () => {
+      const dto = await getProductDetails(id!);
+      return mapToGenericProduct(dto);
+    },
   });
 }

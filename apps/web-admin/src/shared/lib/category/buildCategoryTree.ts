@@ -1,7 +1,7 @@
 import {
   Category,
   CategoryNode,
-} from "@/src/shared/domain/category/category.types";
+} from "@/shared/domain/category/category.types";
 
 export function buildCategoryTree(categories: Category[]): CategoryNode[] {
   const map = new Map<string, CategoryNode>();

@@ -1,8 +1,8 @@
 "use client";
 
-import { useFormContext } from "react-hook-form";
-import { ProductFormValues } from "../../../schemas/product-form.schema";
-import { NutrientReference } from "@/src/shared/domain/nutrition/nutrient.types";
+import { useFormContext, Path } from "react-hook-form";
+import { ProductFormInput } from "../../../schemas/product-form.schema";
+import { NutrientReference } from "@/shared/domain/nutrition/nutrient.types";
 
 type Props = {
   nutrient: NutrientReference;
@@ -10,21 +10,27 @@ type Props = {
 };
 
 export function NutrientRow({ nutrient, isRequired }: Props) {
-  const { watch, setValue } = useFormContext<ProductFormValues>();
+  const {
+    watch,
+    setValue,
+    formState: { errors },
+  } = useFormContext<ProductFormInput>();
+
+  const error = errors.nutrients?.[nutrient.code]?.value;
 
   const nutrients = watch("nutrients") ?? {};
 
-  const value = nutrients[nutrient.nutrient_id]?.value ?? "";
-  const unit = nutrients[nutrient.nutrient_id]?.unit ?? nutrient.default_unit;
+  const value = nutrients[nutrient.code]?.value ?? "";
+  const unit = nutrients[nutrient.nutrient_id]?.unit ?? nutrient.rda_unit;
 
-  function updateValue(v: number) {
+  function updateValue(v: string) {
     setValue(
-      `nutrients.${nutrient.nutrient_id}`,
+      `nutrients.${nutrient.code}` as Path<ProductFormInput>,
       {
         value: v,
         unit,
       },
-      { shouldDirty: true },
+      { shouldDirty: true, shouldValidate: true },
     );
   }
 
@@ -32,26 +38,28 @@ export function NutrientRow({ nutrient, isRequired }: Props) {
     setValue(
       `nutrients.${nutrient.nutrient_id}`,
       {
-        value: value || 0,
+        value: value || "",
         unit: u,
       },
-      { shouldDirty: true },
+      { shouldDirty: true, shouldValidate: true },
     );
   }
 
   return (
-    <div className="grid grid-cols-3 gap-3 items-center">
+    <div className="grid grid-cols-3 gap-3 items-start">
       <div className="text-sm">
-        {isRequired ? `${nutrient.name.ua}*` : nutrient.name.ua}
+        {isRequired ? `${nutrient.name.ua}*` : `${nutrient.name.ua}`}
       </div>
 
-      <input
-        type="number"
-        value={value}
-        onChange={(e) => updateValue(Number(e.target.value))}
-        className="rounded border px-2 py-1"
-      />
-
+      <div>
+        <input
+          type="number"
+          value={value}
+          onChange={(e) => updateValue(e.target.value)}
+          className="max-w-full rounded border px-2 py-1"
+        />
+        {error && <p className="text-xs text-red-500">{error.message}</p>}
+      </div>
       <input
         value={unit}
         onChange={(e) => updateUnit(e.target.value)}

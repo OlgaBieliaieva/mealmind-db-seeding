@@ -1,7 +1,9 @@
 import {
   ProductStatus,
   ProductType,
-} from "@/src/shared/domain/constants/product.constants";
+  ProductUnit,
+  ProductState,
+} from "@/shared/domain/constants/product.constants";
 
 // ===== COMMON =====
 
@@ -12,13 +14,14 @@ export type ProductTypeDto = ProductType;
 // ===== LIST =====
 
 export type ProductListItemDto = {
-  id: string;
-  name: string;
+  product_id: string;
+  name_en: string;
+  name_ua: string;
   type: ProductTypeDto;
+  category: string | null;
+  brand: string | null;
   status: ProductStatusDto;
-
-  category?: string | null;
-  brand?: string | null;
+  is_verified: boolean;
 };
 
 export type ProductSearchResponseDto = {
@@ -33,8 +36,10 @@ export type ProductSearchResponseDto = {
 export type ProductDetailsDto = {
   id: string;
 
-  name: string;
-  nameEn: string;
+  name: {
+    ua: string;
+    en: string;
+  };
 
   barcode?: string | null;
   notes?: string | null;
@@ -42,8 +47,8 @@ export type ProductDetailsDto = {
   source?: string | null;
 
   type: ProductTypeDto;
-  unit: string;
-  rawOrCooked: string;
+  unit: ProductUnit;
+  rawOrCooked: ProductState;
 
   status: ProductStatusDto;
 

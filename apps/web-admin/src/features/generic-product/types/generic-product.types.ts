@@ -1,7 +1,7 @@
 import {
   ProductState,
   ProductUnit,
-} from "@/src/shared/domain/constants/product.constants";
+} from "@/shared/domain/constants/product.constants";
 
 export type GenericProduct = {
   product_id: string;

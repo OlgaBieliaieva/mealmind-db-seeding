@@ -1,7 +1,7 @@
 "use client";
 
 import { useFormContext } from "react-hook-form";
-import { useConfirmNavigation } from "@/src/shared/hooks/useConfirmNavigation";
+import { useConfirmNavigation } from "@/shared/hooks/useConfirmNavigation";
 
 export function ProductEditNavigation() {
   const {

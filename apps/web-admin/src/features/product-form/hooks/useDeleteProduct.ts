@@ -4,7 +4,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
-import { deleteProductHard } from "@/src/shared/api/products/products.api";
+import { deleteProductHard } from "@/shared/api/products/products.api";
 
 export function useDeleteProduct() {
   const router = useRouter();

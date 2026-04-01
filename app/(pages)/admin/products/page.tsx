@@ -4,9 +4,9 @@ import Link from "next/link";
 import { useProductList } from "@/domains/product/hooks/useProductList";
 import { useProductFilters } from "@/domains/product/hooks/useProductFilters";
 import { TableCardSkeleton } from "@/domains/shared/components/table/TableCardSkeleton";
-import { ProductFiltersBar } from "@/domains/product/components/ProductList/ProductFiltersBar";
+// import { ProductFiltersBar } from "@/domains/product/components/ProductList/ProductFiltersBar";
 import { ProductListEmpty } from "@/domains/product/components/ProductList/ProductListEmpty";
-import { ProductList } from "@/domains/product/components/ProductList/ProductList";
+// import { ProductList } from "@/domains/product/components/ProductList/ProductList";
 import { Pagination } from "@/domains/shared/components/table/Pagination";
 import { PRODUCT_ADMIN_LABELS } from "@/domains/product/constants/product.admin.labels";
 
@@ -22,16 +22,16 @@ export default function ProductListPage() {
       <div className="flex items-center justify-between">
         <h1 className="text-xl font-semibold">{PRODUCT_ADMIN_LABELS.title}</h1>
 
-        <Link
+        {/* <Link
           href="/admin/products/new"
           className="rounded bg-black px-4 py-2 text-white"
         >
           {PRODUCT_ADMIN_LABELS.createButton}
-        </Link>
+        </Link> */}
       </div>
 
       {/* FILTER */}
-      <ProductFiltersBar />
+      {/* <ProductFiltersBar /> */}
 
       {/* LIST */}
 
@@ -42,7 +42,7 @@ export default function ProductListPage() {
 
       {data && data.items.length === 0 && <ProductListEmpty />}
 
-      {data && data.items.length > 0 && <ProductList items={data.items} />}
+      {/* {data && data.items.length > 0 && <ProductList items={data.items} />} */}
 
       {/* PAGINATION */}
 

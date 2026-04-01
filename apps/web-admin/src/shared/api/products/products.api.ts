@@ -1,4 +1,4 @@
-import { apiFetch } from "@/src/shared/lib/api/api";
+import { apiFetch } from "@/shared/lib/api/api";
 import { ProductDetailsDto, ProductSearchResponseDto } from "./products.types";
 
 // ===== SEARCH =====
@@ -22,6 +22,14 @@ export function searchProducts(params: {
   return apiFetch<ProductSearchResponseDto>(
     `/products/search?${qs.toString()}`,
   );
+}
+
+export function searchGenericProducts(query: string) {
+  return searchProducts({
+    query,
+    type: "generic",
+    limit: 10,
+  });
 }
 
 // ===== DETAILS =====

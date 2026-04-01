@@ -2,11 +2,11 @@
 
 import { useFormContext } from "react-hook-form";
 
-import { ProductFormValues } from "../schemas/product-form.schema";
+import { ProductFormInput } from "../schemas/product-form.schema";
 import { GenericProduct } from "../../generic-product/types/generic-product.types";
 
 export function useGenericInheritance() {
-  const { setValue } = useFormContext<ProductFormValues>();
+  const { setValue } = useFormContext<ProductFormInput>();
 
   function applyInheritance(product: GenericProduct) {
     setValue("parent_product_id", product.product_id);
@@ -19,15 +19,21 @@ export function useGenericInheritance() {
     }
 
     if (product.cooking_loss_pct !== undefined) {
-      setValue("cooking_loss_pct", product.cooking_loss_pct);
+      setValue("cooking_loss_pct", String(product.cooking_loss_pct), {
+        shouldDirty: true,
+      });
     }
 
     if (product.edible_part_pct !== undefined) {
-      setValue("edible_part_pct", product.edible_part_pct);
+      setValue("edible_part_pct", String(product.edible_part_pct), {
+        shouldDirty: true,
+      });
     }
 
     if (product.yield_factor !== undefined) {
-      setValue("yield_factor", product.yield_factor);
+      setValue("yield_factor", String(product.yield_factor), {
+        shouldDirty: true,
+      });
     }
   }
 
@@ -39,9 +45,9 @@ export function useGenericInheritance() {
       shouldValidate: true,
     });
 
-    setValue("cooking_loss_pct", undefined);
-    setValue("edible_part_pct", undefined);
-    setValue("yield_factor", undefined);
+    setValue("cooking_loss_pct", "", { shouldDirty: true });
+    setValue("edible_part_pct", "", { shouldDirty: true });
+    setValue("yield_factor", "", { shouldDirty: true });
   }
 
   return {

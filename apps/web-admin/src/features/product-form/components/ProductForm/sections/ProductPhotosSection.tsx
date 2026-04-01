@@ -2,18 +2,18 @@
 
 import { useFormContext } from "react-hook-form";
 
-import { FormSection } from "@/src/shared/ui/form/FormSection";
-import { usePhotoUpload } from "@/src/shared/media/hooks/usePhotoUpload";
-import { usePhotoDelete } from "@/src/shared/media/hooks/usePhotoDelete";
-import { Uploader } from "@/src/shared/media/components/PhotoUploaderInput";
-import { PhotoCard } from "@/src/shared/media/components/PhotoCard";
+import { FormSection } from "@/shared/ui/form/FormSection";
+import { usePhotoUpload } from "@/shared/media/hooks/usePhotoUpload";
+import { usePhotoDelete } from "@/shared/media/hooks/usePhotoDelete";
+import { Uploader } from "@/shared/media/components/PhotoUploaderInput";
+import { PhotoCard } from "@/shared/media/components/PhotoCard";
 
-import { ProductPhotoType } from "@/src/shared/domain/constants/product.constants";
+import { ProductPhotoType } from "@/shared/domain/constants/product.constants";
 
-import { ProductFormValues } from "../../../schemas/product-form.schema";
+import { ProductFormInput } from "../../../schemas/product-form.schema";
 
 export function ProductPhotosSection() {
-  const { watch, setValue } = useFormContext<ProductFormValues>();
+  const { watch, setValue } = useFormContext<ProductFormInput>();
 
   const photos = watch("photos") ?? [];
 
