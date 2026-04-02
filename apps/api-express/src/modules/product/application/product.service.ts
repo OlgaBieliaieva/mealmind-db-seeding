@@ -242,6 +242,6 @@ export class ProductService {
   }
 
   async removePhoto(productId: string, photoId: string) {
-  await this.repo.removePhoto(productId, photoId);
-}
+    await this.repo.removePhoto(productId, photoId);
+  }
 }

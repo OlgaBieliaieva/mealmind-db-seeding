@@ -10,6 +10,7 @@ type Props<T extends FieldValues> = {
     type: "input" | "select" | "textarea";
     options?: { value: string; label: string }[];
     placeholder?: string;
+    disabled?: boolean;
   }[];
 };
 

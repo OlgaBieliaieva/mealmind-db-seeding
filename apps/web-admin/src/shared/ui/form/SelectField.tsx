@@ -15,6 +15,7 @@ type Props<T extends FieldValues> = {
   register: UseFormRegister<T>;
   options: Option[];
   error?: string;
+  disabled?: boolean;
 };
 
 export function SelectField<T extends FieldValues>({
@@ -23,6 +24,7 @@ export function SelectField<T extends FieldValues>({
   register,
   options,
   error,
+  disabled,
 }: Props<T>) {
   return (
     <div className="space-y-1">
@@ -30,6 +32,7 @@ export function SelectField<T extends FieldValues>({
 
       <select
         {...register(name)}
+        disabled={disabled}
         className="w-full rounded border px-3 py-2 text-sm"
       >
         <option value="">Оберіть варіант...</option>

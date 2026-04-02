@@ -11,6 +11,7 @@ type Props<T extends FieldValues> = {
   error?: string;
   type?: string;
   placeholder?: string;
+  disabled?: boolean;
 };
 
 export function InputField<T extends FieldValues>({
@@ -20,6 +21,7 @@ export function InputField<T extends FieldValues>({
   error,
   type = "text",
   placeholder,
+  disabled,
 }: Props<T>) {
   return (
     <div className="space-y-1">
@@ -29,6 +31,7 @@ export function InputField<T extends FieldValues>({
         type={type}
         placeholder={placeholder}
         {...register(name)}
+        disabled={disabled}
         className="w-full rounded border px-3 py-2 text-sm"
       />
 

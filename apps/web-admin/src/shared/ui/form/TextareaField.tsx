@@ -10,6 +10,7 @@ type Props<T extends FieldValues> = {
   register: UseFormRegister<T>;
   error?: string;
   placeholder?: string;
+  disabled?: boolean;
 };
 
 export function TextareaField<T extends FieldValues>({
@@ -18,6 +19,7 @@ export function TextareaField<T extends FieldValues>({
   register,
   error,
   placeholder,
+  disabled
 }: Props<T>) {
   return (
     <div className="space-y-1">
@@ -26,6 +28,7 @@ export function TextareaField<T extends FieldValues>({
       <textarea
         placeholder={placeholder}
         {...register(name)}
+        disabled={disabled}
         className="w-full rounded border px-3 py-2 text-sm"
       />
 

@@ -30,6 +30,7 @@ export const PRODUCT_BASIC_FIELDS: FormField<ProductFormInput>[] = [
     name: "type",
     label: PRODUCT_LABELS.TYPE,
     options: PRODUCT_TYPE_OPTIONS,
+    // disabled: true,
   },
 
   {

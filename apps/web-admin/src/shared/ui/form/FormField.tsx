@@ -9,6 +9,7 @@ type Props<T extends FieldValues> = {
     type: "input" | "select" | "textarea";
     options?: { value: string; label: string }[];
     placeholder?: string;
+    disabled?: boolean;
   };
 };
 
@@ -29,6 +30,7 @@ export function FormField<T extends FieldValues>({ field }: Props<T>) {
         <input
           {...register(field.name)}
           placeholder={field.placeholder}
+          disabled={field.disabled}
           className="w-full rounded border px-3 py-2"
         />
       )}
@@ -37,6 +39,7 @@ export function FormField<T extends FieldValues>({ field }: Props<T>) {
         <textarea
           {...register(field.name)}
           placeholder={field.placeholder}
+          disabled={field.disabled}
           className="w-full rounded border px-3 py-2"
         />
       )}
@@ -44,6 +47,7 @@ export function FormField<T extends FieldValues>({ field }: Props<T>) {
       {field.type === "select" && (
         <select
           {...register(field.name)}
+          disabled={field.disabled}
           className="w-full rounded border px-3 py-2"
         >
           <option value="">Оберіть...</option>

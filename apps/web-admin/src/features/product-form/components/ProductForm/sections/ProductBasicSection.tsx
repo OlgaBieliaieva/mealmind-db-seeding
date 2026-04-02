@@ -5,6 +5,7 @@ import { PRODUCT_BASIC_FIELDS } from "../../../forms/productBasic.fields";
 import { FormRenderer } from "@/shared/ui/form/FormRenderer";
 import { ProductFormInput } from "../../../schemas/product-form.schema";
 
+
 export function ProductBasicSection() {
   return (
     <FormSection

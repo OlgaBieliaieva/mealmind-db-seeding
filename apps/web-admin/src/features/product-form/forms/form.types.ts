@@ -12,6 +12,7 @@ export type InputFieldConfig<T extends FieldValues> = {
   name: FieldPath<T>;
   label: string;
   placeholder?: string;
+  disabled?: boolean;
 };
 
 export type SelectFieldConfig<T extends FieldValues> = {
@@ -19,6 +20,7 @@ export type SelectFieldConfig<T extends FieldValues> = {
   name: FieldPath<T>;
   label: string;
   options: FormFieldOption[];
+  disabled?: boolean;
 };
 
 export type TextareaFieldConfig<T extends FieldValues> = {
@@ -26,6 +28,7 @@ export type TextareaFieldConfig<T extends FieldValues> = {
   name: FieldPath<T>;
   label: string;
   placeholder?: string;
+  disabled?: boolean;
 };
 
 export type FormField<T extends FieldValues> =

@@ -17,7 +17,6 @@ export function GenericProductSearch({ valueId, disabled, onSelect }: Props) {
     useGenericProductById(valueId);
 
   const { data, isFetching } = useGenericProductSearch(query);
-  console.log(data);
 
   const items = data?.items ?? [];
 

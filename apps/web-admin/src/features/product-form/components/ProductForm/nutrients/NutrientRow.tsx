@@ -16,16 +16,16 @@ export function NutrientRow({ nutrient, isRequired }: Props) {
     formState: { errors },
   } = useFormContext<ProductFormInput>();
 
-  const error = errors.nutrients?.[nutrient.code]?.value;
+  const error = errors.nutrients?.[nutrient.nutrient_id]?.value;
 
   const nutrients = watch("nutrients") ?? {};
 
-  const value = nutrients[nutrient.code]?.value ?? "";
+  const value = nutrients[nutrient.nutrient_id]?.value ?? "";
   const unit = nutrients[nutrient.nutrient_id]?.unit ?? nutrient.rda_unit;
 
   function updateValue(v: string) {
     setValue(
-      `nutrients.${nutrient.code}` as Path<ProductFormInput>,
+      `nutrients.${nutrient.nutrient_id}` as Path<ProductFormInput>,
       {
         value: v,
         unit,

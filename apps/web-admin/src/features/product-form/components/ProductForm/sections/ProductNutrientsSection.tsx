@@ -32,7 +32,7 @@ export function ProductNutrientsSection() {
       <div className="space-y-2">
         {data?.map((n) => (
           <NutrientRow
-            key={n.code}
+            key={n.nutrient_id}
             nutrient={n}
             isRequired={macrosRequired && isMacroNutrient(n.code)}
           />

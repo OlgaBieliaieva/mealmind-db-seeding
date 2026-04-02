@@ -2,7 +2,7 @@
 import { useMemo } from "react";
 import { ProductForm } from "@/features/product-form/components/ProductForm/ProductForm";
 import { ProductDetailsDto } from "@/shared/api/products/products.types";
-import { mapProductDetailsToForm } from "../mappers/mapProductDetailsToForm";
+import { mapProductDetailsToForm } from "../mappers/productDetailsToForm.mapper";
 
 type Props = {
   product: ProductDetailsDto;
