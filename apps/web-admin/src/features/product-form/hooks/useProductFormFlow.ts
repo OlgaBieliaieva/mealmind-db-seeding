@@ -2,13 +2,11 @@
 
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-
 import { ProductInputWithBrandDraft } from "../schemas/product.schema";
 import { ProductFormInput } from "../schemas/product-form.schema";
 import { useCreateProduct } from "./useCreateProduct";
 import { useUpdateProduct } from "./useUpdateProduct";
 import { useCreateBrand } from "./useCreateBrand";
-
 import { usePhotoLifecycle } from "@/shared/media/hooks/usePhotoLifecycle";
 import { mapProductFormToProductInput } from "../mappers/productFormToProductInput.mapper";
 import { buildUpdatePayload } from "../mappers/productFormToUpdatePayload.mapper";

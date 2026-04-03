@@ -44,9 +44,7 @@ export const BrandSchema = z.object({
 /* ---------- base product ---------- */
 
 const BaseProductSchema = z.object({
-  // NOTE:
-  // product_id is a string for now due to legacy Google Sheets IDs.
-  // Will be migrated to UUID in SQL phase.
+ 
   product_id: z.string().uuid().optional(),
 
   type: z.enum([PRODUCT_TYPES.GENERIC, PRODUCT_TYPES.BRANDED]),

@@ -1,7 +1,6 @@
 // SECTION ███ PRODUCT BASIC FIELDS CONFIG ███
 
 import { FormField } from "./form.types";
-
 import { ProductFormInput } from "../schemas/product-form.schema";
 
 import {
@@ -12,38 +11,38 @@ import {
 
 import { PRODUCT_LABELS } from "./product.form.labels";
 
-export const PRODUCT_BASIC_FIELDS: FormField<ProductFormInput>[] = [
-  {
-    type: "input",
-    name: "name_ua",
-    label: PRODUCT_LABELS.NAME_UA,
-  },
-
-  {
-    type: "input",
-    name: "name_en",
-    label: PRODUCT_LABELS.NAME_EN,
-  },
-
-  {
-    type: "select",
-    name: "type",
-    label: PRODUCT_LABELS.TYPE,
-    options: PRODUCT_TYPE_OPTIONS,
-    // disabled: true,
-  },
-
-  {
-    type: "select",
-    name: "raw_or_cooked_default",
-    label: PRODUCT_LABELS.STATE,
-    options: PRODUCT_STATE_OPTIONS,
-  },
-
-  {
-    type: "select",
-    name: "unit",
-    label: PRODUCT_LABELS.UNIT,
-    options: PRODUCT_UNIT_OPTIONS,
-  },
-];
+export function getProductBasicFields(
+  canEditType: boolean,
+): FormField<ProductFormInput>[] {
+  return [
+    {
+      type: "input",
+      name: "name_ua",
+      label: PRODUCT_LABELS.NAME_UA,
+    },
+    {
+      type: "input",
+      name: "name_en",
+      label: PRODUCT_LABELS.NAME_EN,
+    },
+    {
+      type: "select",
+      name: "type",
+      label: PRODUCT_LABELS.TYPE,
+      options: PRODUCT_TYPE_OPTIONS,
+      disabled: !canEditType,
+    },
+    {
+      type: "select",
+      name: "raw_or_cooked_default",
+      label: PRODUCT_LABELS.STATE,
+      options: PRODUCT_STATE_OPTIONS,
+    },
+    {
+      type: "select",
+      name: "unit",
+      label: PRODUCT_LABELS.UNIT,
+      options: PRODUCT_UNIT_OPTIONS,
+    },
+  ];
+}

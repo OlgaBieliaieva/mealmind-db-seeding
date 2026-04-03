@@ -1,12 +1,15 @@
 import "dotenv/config";
 import express from "express";
 import cors from "cors";
+import { errorHandler } from "./middleware/error-handler";
 import { createProductModule } from "./modules/product/product.module";
 import { createCategoryModule } from "./modules/category/category.module";
 import { createBrandModule } from "./modules/brand/brand.module";
 import { createNutrientModule } from "./modules/nutrient/nutrient.module";
 
 import { prisma } from "./db/prisma";
+
+const PORT = 4000;
 
 const app = express();
 
@@ -39,7 +42,7 @@ app.get("/test-db", async (_req, res) => {
   });
 });
 
-const PORT = 4000;
+app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log(`🚀 API running on http://localhost:${PORT}`);

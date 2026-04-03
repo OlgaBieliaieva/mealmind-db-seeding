@@ -3,7 +3,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-
 import { deleteProductHard } from "@/shared/api/products/products.api";
 
 export function useDeleteProduct() {
@@ -19,10 +18,6 @@ export function useDeleteProduct() {
       qc.invalidateQueries({ queryKey: ["products"] });
 
       router.push("/admin/products");
-    },
-
-    onError: () => {
-      toast.error("Помилка видалення продукту");
     },
   });
 }

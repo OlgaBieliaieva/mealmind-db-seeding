@@ -2,7 +2,6 @@
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateProduct } from "@/shared/api/products/products.api";
-// import { ProductInput } from "../schemas/product.schema";
 import { AdminUpdateProductInput } from "../types/product.update.schema";
 
 type UpdateArgs = {

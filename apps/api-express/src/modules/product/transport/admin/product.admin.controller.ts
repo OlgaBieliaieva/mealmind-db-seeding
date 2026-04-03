@@ -34,8 +34,6 @@ export class ProductAdminController {
   };
 
   update = async (req: Request, res: Response, next: NextFunction) => {
-    console.log(req.body);
-
     try {
       const { id } = req.params as AdminUpdateProductParams;
 

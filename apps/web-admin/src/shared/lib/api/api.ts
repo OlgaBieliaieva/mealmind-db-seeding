@@ -1,3 +1,5 @@
+import { ApiError } from "./api-error";
+
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000/api/v1/admin";
 
@@ -12,11 +14,17 @@ export async function apiFetch<T>(
     ...options,
   });
 
-  if (!res.ok) {
-    throw new Error(`API error ${res.status}`);
-  }
-
   if (res.status === 204) return undefined as T;
 
-  return res.json();
+  const data = await res.json().catch(() => null);
+
+  if (!res.ok) {
+    throw new ApiError(
+      data?.code || "UNKNOWN_ERROR",
+      res.status,
+      data?.message || `API error ${res.status}`,
+    );
+  }
+
+  return data;
 }

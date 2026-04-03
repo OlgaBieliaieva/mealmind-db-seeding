@@ -3,7 +3,10 @@ import { Prisma } from "@prisma/client";
 import { ProductRepository } from "../domain/product.repository";
 import { ProductSearchQuery } from "../domain/queries/product-search.query";
 import { ProductValidationQuery } from "../domain/queries/product-validation.query";
-
+import {
+  BadRequestError,
+  NotFoundError,
+} from "../../../shared/errors/http-errors";
 import { presentProductListItem } from "../transport/admin/presenters/product.admin.presenter";
 
 import { AdminCreateProductInput } from "../transport/admin/schemas/product.create.schema";
@@ -182,10 +185,14 @@ export class ProductService {
   async deleteHardProduct(id: string) {
     const product = await this.repo.findByIdDetailed(id);
 
-    if (!product) throw new Error("Product not found");
+    if (!product)
+      throw new NotFoundError("PRODUCT_NOT_FOUND", "Product not found");
 
     if (product.status !== "archived") {
-      throw new Error("Only archived product can be hard deleted");
+      throw new BadRequestError(
+        "ONLY_ARCHIVED_CAN_DELETE",
+        "Product must be archived before deletion",
+      );
     }
 
     // TODO later

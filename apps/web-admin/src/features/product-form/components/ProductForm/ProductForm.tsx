@@ -3,17 +3,13 @@
 import { useState } from "react";
 import { useForm, FormProvider, FieldErrors } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
 import {
   ProductFormSchema,
   ProductFormInput,
 } from "@/features/product-form/schemas/product-form.schema";
-
 import { ProductFormContext } from "../../forms/product-form.context";
-
 import { useProductFormFlow } from "../../hooks/useProductFormFlow";
 import { useDirtyGuard } from "../../hooks/useDirtyGuard";
-
 import { FormStatus } from "@/shared/ui/form/FormStatus";
 import { PRODUCT_FORM_SECTIONS } from "../../forms/productForm.registry";
 import { ProductEditNavigation } from "@/features/product-details/components/ProductEditNavigation";
@@ -76,7 +72,7 @@ export function ProductForm({
   const { submit, isSubmitting, isError, isSuccess } = useProductFormFlow(
     mode,
     productId,
-    initialValues // 🔥 важливо для diff
+    initialValues, // 🔥 важливо для diff
   );
 
   function onInvalid(errors: FieldErrors<ProductFormInput>) {
@@ -86,9 +82,7 @@ export function ProductForm({
   const onSubmit = async (values: ProductFormInput) => {
     const validated = ProductFormSchema.parse(values);
 
-    console.log("FORM VALUES", validated);
-
-    await submit(validated); // 🔥 без mapper
+    await submit(validated);
   };
 
   return (

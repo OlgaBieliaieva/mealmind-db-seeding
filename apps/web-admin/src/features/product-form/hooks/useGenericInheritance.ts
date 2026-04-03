@@ -1,7 +1,6 @@
 "use client";
 
 import { useFormContext } from "react-hook-form";
-
 import { ProductFormInput } from "../schemas/product-form.schema";
 import { GenericProduct } from "../../generic-product/types/generic-product.types";
 
