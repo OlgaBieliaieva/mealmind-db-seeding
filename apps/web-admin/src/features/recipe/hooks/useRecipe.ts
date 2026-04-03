@@ -1,5 +1,3 @@
-// useRecipe.ts
-
 import { useQuery } from "@tanstack/react-query";
 import { getRecipe } from "@/shared/api/recipes/recipes.api";
 

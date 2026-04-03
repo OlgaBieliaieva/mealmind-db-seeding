@@ -1,5 +1,3 @@
-// recipe-status.constants.ts
-
 export const RECIPE_STATUS = {
   DRAFT: "draft",
   READY: "ready",

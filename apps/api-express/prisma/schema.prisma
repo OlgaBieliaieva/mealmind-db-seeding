@@ -38,6 +38,7 @@ model Product {
   tags               ProductTag[]
   allergies          UserAllergy[]
   dislikedByUsers    UserDislikedProduct[]
+  recipeIngredients  RecipeIngredient[]
 
   @@index([type])
   @@index([categoryId])
@@ -92,6 +93,145 @@ model ProductFavorite {
   product   Product  @relation(fields: [productId], references: [id])
 
   @@unique([productId, userId, familyId])
+}
+
+model Recipe {
+  id          String  @id @default(uuid()) @db.Uuid
+  title       String
+  description String?
+
+  status     RecipeStatus     @default(draft)
+  visibility RecipeVisibility @default(private)
+
+  difficulty RecipeDifficulty?
+
+  recipeTypeId String?     @map("recipe_type_id") @db.Uuid
+  recipeType   RecipeType? @relation(fields: [recipeTypeId], references: [id])
+
+  recipeAuthorId String?       @map("recipe_author_id") @db.Uuid
+  author         RecipeAuthor? @relation(fields: [recipeAuthorId], references: [id])
+
+  familyId String? @map("family_id") @db.Uuid
+
+  baseServings      Int  @map("base_servings")
+  baseOutputWeightG Int  @map("base_output_weight_g")
+  containerWeightG  Int? @map("container_weight_g")
+
+  prepTimeMin Int? @map("prep_time_min")
+  cookTimeMin Int? @map("cook_time_min")
+
+  photoUrl String? @map("photo_url")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  ingredients RecipeIngredient[]
+  steps       RecipeStep[]
+  cuisines    RecipeCuisine[]
+  dietaryTags RecipeDietaryTag[]
+  videos      RecipeVideo[]
+  nutrients   RecipeNutrient[]
+
+  @@index([status])
+  @@index([recipeTypeId])
+}
+
+model RecipeIngredient {
+  id String @id @default(uuid()) @db.Uuid
+
+  recipeId String @map("recipe_id") @db.Uuid
+  recipe   Recipe @relation(fields: [recipeId], references: [id])
+
+  productId String  @map("product_id") @db.Uuid
+  product   Product @relation(fields: [productId], references: [id])
+
+  quantityG  Float   @map("quantity_g")
+  isOptional Boolean @default(false) @map("is_optional")
+
+  orderIndex Int @map("order_index")
+
+  @@index([recipeId])
+}
+
+model RecipeStep {
+  id String @id @default(uuid()) @db.Uuid
+
+  recipeId String @map("recipe_id") @db.Uuid
+  recipe   Recipe @relation(fields: [recipeId], references: [id])
+
+  stepNumber  Int    @map("step_number")
+  instruction String
+  timerSec    Int?   @map("timer_sec")
+
+  @@index([recipeId])
+}
+
+model RecipeCuisine {
+  recipeId  String @db.Uuid
+  cuisineId String @db.Uuid
+
+  recipe  Recipe  @relation(fields: [recipeId], references: [id])
+  cuisine Cuisine @relation(fields: [cuisineId], references: [id])
+
+  @@id([recipeId, cuisineId])
+}
+
+model RecipeDietaryTag {
+  recipeId     String @db.Uuid
+  dietaryTagId String @db.Uuid
+
+  recipe     Recipe     @relation(fields: [recipeId], references: [id])
+  dietaryTag DietaryTag @relation(fields: [dietaryTagId], references: [id])
+
+  @@id([recipeId, dietaryTagId])
+}
+
+model RecipeAuthor {
+  id   String           @id @default(uuid()) @db.Uuid
+  type RecipeAuthorType
+
+  displayName String  @map("display_name")
+  avatarUrl   String? @map("avatar_url")
+  profileUrl  String? @map("profile_url")
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  recipes Recipe[]
+  videos  RecipeVideo[]
+}
+
+model RecipeVideo {
+  id String @id @default(uuid()) @db.Uuid
+
+  recipeId String @map("recipe_id") @db.Uuid
+  recipe   Recipe @relation(fields: [recipeId], references: [id])
+
+  recipeAuthorId String?       @map("recipe_author_id") @db.Uuid
+  author         RecipeAuthor? @relation(fields: [recipeAuthorId], references: [id])
+
+  platform RecipeVideoPlatform
+  url      String
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([recipeId])
+}
+
+model RecipeNutrient {
+  id String @id @default(uuid()) @db.Uuid
+
+  recipeId String @map("recipe_id") @db.Uuid
+  recipe   Recipe @relation(fields: [recipeId], references: [id])
+
+  nutrientId String   @map("nutrient_id") @db.Uuid
+  nutrient   Nutrient @relation(fields: [nutrientId], references: [id])
+
+  valueTotal Float  @map("value_total")
+  unit       String
+
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@unique([recipeId, nutrientId])
 }
 
 model User {
@@ -252,21 +392,22 @@ model Brand {
 }
 
 model Nutrient {
-  id            String               @id @default(uuid()) @db.Uuid
-  legacyId      Int?                 @unique
-  code          String               @unique
-  nameEn        String               @map("name_en")
-  nameUa        String               @map("name_ua")
-  defaultUnit   String               @map("default_unit")
-  nutrientGroup NutrientGroup        @map("nutrient_group")
-  sortOrder     Int                  @map("sort_order")
-  rdaValue      Float?               @map("rda_value")
-  rdaUnit       String?              @map("rda_unit")
-  notes         String?
-  createdAt     DateTime             @default(now()) @map("created_at")
-  updatedAt     DateTime             @updatedAt @map("updated_at")
-  products      ProductNutrient[]
-  userTargets   UserNutrientTarget[]
+  id              String               @id @default(uuid()) @db.Uuid
+  legacyId        Int?                 @unique
+  code            String               @unique
+  nameEn          String               @map("name_en")
+  nameUa          String               @map("name_ua")
+  defaultUnit     String               @map("default_unit")
+  nutrientGroup   NutrientGroup        @map("nutrient_group")
+  sortOrder       Int                  @map("sort_order")
+  rdaValue        Float?               @map("rda_value")
+  rdaUnit         String?              @map("rda_unit")
+  notes           String?
+  createdAt       DateTime             @default(now()) @map("created_at")
+  updatedAt       DateTime             @updatedAt @map("updated_at")
+  products        ProductNutrient[]
+  userTargets     UserNutrientTarget[]
+  recipeNutrients RecipeNutrient[]
 
   @@index([legacyId])
   @@index([nutrientGroup])
@@ -275,12 +416,13 @@ model Nutrient {
 }
 
 model RecipeType {
-  id       String  @id @default(uuid()) @db.Uuid
-  legacyId Int?    @unique
-  code     String  @unique
-  nameEn   String  @map("name_en")
-  nameUa   String  @map("name_ua")
+  id       String   @id @default(uuid()) @db.Uuid
+  legacyId Int?     @unique
+  code     String   @unique
+  nameEn   String   @map("name_en")
+  nameUa   String   @map("name_ua")
   notes    String?
+  recipes  Recipe[]
 
   @@index([legacyId])
   @@map("recipe_types")
@@ -295,19 +437,21 @@ model Cuisine {
   legacyId        Int?                    @unique
   id              String                  @id @default(uuid()) @db.Uuid
   userPreferences UserCuisinePreference[]
+  recipeCuisines  RecipeCuisine[]
 
   @@index([legacyId])
   @@map("cuisines")
 }
 
 model DietaryTag {
-  code             String                   @unique
-  nameEn           String                   @map("name_en")
-  nameUa           String                   @map("name_ua")
-  isActive         Boolean                  @default(true) @map("is_active")
-  legacyId         Int?                     @unique
-  id               String                   @id @default(uuid()) @db.Uuid
-  userRestrictions UserDietaryRestriction[]
+  code              String                   @unique
+  nameEn            String                   @map("name_en")
+  nameUa            String                   @map("name_ua")
+  isActive          Boolean                  @default(true) @map("is_active")
+  legacyId          Int?                     @unique
+  id                String                   @id @default(uuid()) @db.Uuid
+  userRestrictions  UserDietaryRestriction[]
+  recipeDietaryTags RecipeDietaryTag[]
 
   @@index([legacyId])
   @@map("dietary_tags")
@@ -399,4 +543,35 @@ enum AllergySeverity {
   low
   medium
   high
+}
+
+enum RecipeStatus {
+  draft
+  ready
+  published
+  archived
+}
+
+enum RecipeVisibility {
+  private
+  public
+}
+
+enum RecipeDifficulty {
+  easy
+  medium
+  hard
+}
+
+enum RecipeAuthorType {
+  user
+  blogger
+  system
+}
+
+enum RecipeVideoPlatform {
+  youtube
+  instagram
+  tiktok
+  other
 }

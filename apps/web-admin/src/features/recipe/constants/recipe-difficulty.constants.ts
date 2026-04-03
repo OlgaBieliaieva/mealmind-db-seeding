@@ -1,5 +1,3 @@
-// recipe-difficulty.constants.ts
-
 export const RECIPE_DIFFICULTY = {
   EASY: "easy",
   MEDIUM: "medium",

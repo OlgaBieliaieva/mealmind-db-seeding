@@ -1,5 +1,3 @@
-// recipe-visibility.constants.ts
-
 export const RECIPE_VISIBILITY = {
   PRIVATE: "private",
   PUBLIC: "public",

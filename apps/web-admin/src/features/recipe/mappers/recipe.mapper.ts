@@ -1,5 +1,3 @@
-// recipe.mapper.ts
-
 import { RecipeDTO } from "../types/recipe.dto";
 import { RecipeDetailsVM } from "../types/recipe-details.vm";
 import { RecipeFormInput } from "../types/recipe-form.input";
