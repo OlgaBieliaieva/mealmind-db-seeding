@@ -2,13 +2,15 @@
 
 import { useRouter } from "next/navigation";
 import { useDeleteProduct } from "@/features/product-form/hooks/useDeleteProduct";
+import { useProductStatusActions } from "../../hooks/useProductStatusActions";
 import { ProductDetailsDto } from "@/shared/api/products/products.types";
 import { Badge } from "@/shared/ui/badge/Badge";
 import {
+  getProductStatusBadgeVariant,
   getProductTypeBadgeVariant,
   getProductStateBadgeVariant,
 } from "../../adapters/product.badge.adapters";
-
+import { getProductStatusLabel } from "../../adapters/product-status-label.adapter";
 import { getProductStateLabel } from "../../adapters/product-state-label.adapter";
 import { getProductTypeLabel } from "../../adapters/product-type-label.adapter";
 import { getProductUnitLabel } from "../../adapters/product-unit-label.adapter";
@@ -21,6 +23,7 @@ type Props = {
 
 export function ProductDetailsStickyHeader({ product }: Props) {
   const router = useRouter();
+  const { archive, activate, restore } = useProductStatusActions();
   const { mutate, isPending } = useDeleteProduct();
   const state = mapProductState(product.rawOrCooked);
   return (
@@ -37,22 +40,55 @@ export function ProductDetailsStickyHeader({ product }: Props) {
               Змінити
             </button>
 
-            <button
-              className="text-sm border px-3 py-1 rounded"
-              disabled={isPending}
-              onClick={() => {
-                if (confirm("Ви впевнені, що бажаєте видалити цей продукт?")) {
-                  mutate(product.id);
-                }
-              }}
-            >
-              Видалити
-            </button>
+            {/* ---------- STATUS ACTIONS ---------- */}
+
+            {product.status === "draft" && (
+              <button
+                className="text-sm border px-3 py-1 rounded bg-green-100 text-green-700"
+                onClick={() => activate.mutate(product.id)}
+                disabled={activate.isPending}
+              >
+                Опублікувати
+              </button>
+            )}
+
+            {product.status === "active" && (
+              <button
+                className="text-sm border px-3 py-1 rounded bg-gray-100 text-gray-700"
+                onClick={() => archive.mutate(product.id)}
+                disabled={archive.isPending}
+              >
+                Архівувати
+              </button>
+            )}
+
+            {product.status === "archived" && (
+              <>
+                <button
+                  className="text-sm border px-3 py-1 rounded bg-gray-100 text-gray-700 bg-yellow-100 text-yellow-700"
+                  onClick={() => restore.mutate(product.id)}
+                  disabled={restore.isPending}
+                >
+                  Відновити
+                </button>
+
+                <button
+                  className="text-sm border px-3 py-1 rounded bg-gray-100 text-gray-700 bg-red-100 text-red-700"
+                  onClick={() => mutate(product.id)}
+                  disabled={isPending}
+                >
+                  Видалити
+                </button>
+              </>
+            )}
           </div>
         </div>
         <div className="w-full font-semibold px-4">{product.name.ua}</div>
 
         <div className="w-full flex gap-2 px-4">
+          <Badge variant={getProductStatusBadgeVariant(product.status)}>
+            {getProductStatusLabel(product.status)}
+          </Badge>
           <Badge variant={getProductTypeBadgeVariant(product.type)}>
             {getProductTypeLabel(product.type)}
           </Badge>
