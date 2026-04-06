@@ -1,5 +1,9 @@
 import { z } from "zod";
-import { ProductUnit, ProductState, ProductPhotoType } from "@prisma/client";
+import {
+  PRODUCT_UNIT_VALUES,
+  PRODUCT_STATE_VALUES,
+  PRODUCT_PHOTO_TYPE_VALUES,
+} from "@/shared/domain/constants/product.constants";
 
 /* name */
 
@@ -20,7 +24,7 @@ const NutrientsSchema = z.record(z.string().uuid(), NutrientValueSchema);
 /* photos */
 
 const ProductPhotoUploadSchema = z.object({
-  type: z.nativeEnum(ProductPhotoType),
+  type: z.enum(PRODUCT_PHOTO_TYPE_VALUES),
   objectName: z.string(),
 });
 
@@ -29,8 +33,8 @@ const ProductPhotoUploadSchema = z.object({
 export const AdminUpdateProductSchema = z.object({
   // FULLY MUTABLE
   name: NameSchema.optional(),
-  unit: z.nativeEnum(ProductUnit).optional(),
-  raw_or_cooked_default: z.nativeEnum(ProductState).optional(),
+  unit: z.enum(PRODUCT_UNIT_VALUES).optional(),
+  raw_or_cooked_default: z.enum(PRODUCT_STATE_VALUES).optional(),
 
   // SEMI MUTABLE
   category_id: z.string().uuid().optional(),
