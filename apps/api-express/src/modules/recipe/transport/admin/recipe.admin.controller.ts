@@ -10,6 +10,10 @@ export async function createRecipeAdminHandler(req: Request, res: Response) {
 
     res.json({ id: recipe.id });
   } catch (e) {
-    res.status(400).json({ message: "Failed to create recipe" });
+    console.error(e);
+
+    res.status(400).json({
+      message: e instanceof Error ? e.message : "Failed to create recipe",
+    });
   }
 }
