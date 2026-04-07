@@ -90,7 +90,7 @@ export function presentProductDetailsAdmin(
       id: p.id,
       url: p.url,
       type: p.photoType,
-      isPrimary: false, // якщо ще нема логіки
+      isPrimary: false,
     })),
   };
 }
