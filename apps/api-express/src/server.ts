@@ -7,6 +7,9 @@ import { createCategoryModule } from "./modules/category/category.module";
 import { createBrandModule } from "./modules/brand/brand.module";
 import { createNutrientModule } from "./modules/nutrient/nutrient.module";
 import { createRecipeModule } from "./modules/recipe/recipe.module";
+import { createRecipeTypeModule } from "./modules/recipe-type/recipe-type.module";
+import { createCuisineModule } from "./modules/cuisine/cuisine.module";
+import { createDietaryTagModule } from "./modules/dietary-tag/dietary-tag.module";
 
 import { prisma } from "./db/prisma";
 
@@ -19,6 +22,9 @@ const categoryModule = createCategoryModule(prisma);
 const brandModule = createBrandModule(prisma);
 const nutrientModule = createNutrientModule(prisma);
 const recipeModule = createRecipeModule(prisma);
+const recipeTypeModule = createRecipeTypeModule(prisma);
+const cuisineModule = createCuisineModule(prisma);
+const dietaryTagModule = createDietaryTagModule(prisma);
 
 app.use(cors());
 app.use(express.json());
@@ -28,6 +34,9 @@ app.use("/api/v1/admin/categories", categoryModule.adminRouter);
 app.use("/api/v1/admin/brands", brandModule.adminRouter);
 app.use("/api/v1/admin/nutrients", nutrientModule.adminRouter);
 app.use("/api/v1/admin/recipes", recipeModule.adminRouter);
+app.use("/api/v1/admin/recipe-types", recipeTypeModule.adminRouter);
+app.use("/api/v1/admin/cuisines", cuisineModule.adminRouter);
+app.use("/api/v1/admin/dietary-tags", dietaryTagModule.adminRouter);
 
 app.get("/health", (_req, res) => {
   res.json({
