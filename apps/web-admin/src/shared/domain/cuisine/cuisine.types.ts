@@ -1,9 +1,10 @@
 export type Cuisine = {
   id: string;
   code: string;
-
-  nameEn: string;
-  nameUa: string;
+  name: {
+    en: string;
+    ua: string;
+  };
 
   region?: string | null;
 };
