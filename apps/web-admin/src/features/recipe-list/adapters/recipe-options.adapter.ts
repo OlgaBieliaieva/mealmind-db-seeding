@@ -5,20 +5,20 @@ import { DietaryTag } from "@/shared/domain/dietary-tag/dietary-tag.types";
 export function mapRecipeTypesToOptions(types: RecipeType[]) {
   return types.map((t) => ({
     id: t.id,
-    label: t.nameUa,
+    label: t.name.ua,
   }));
 }
 
 export function mapCuisinesToOptions(cuisines: Cuisine[]) {
   return cuisines.map((c) => ({
     id: c.id,
-    label: c.nameUa,
+    label: c.name.ua,
   }));
 }
 
 export function mapDietaryTagsToOptions(tags: DietaryTag[]) {
   return tags.map((t) => ({
     id: t.id,
-    label: t.nameUa,
+    label: t.name.ua,
   }));
 }
