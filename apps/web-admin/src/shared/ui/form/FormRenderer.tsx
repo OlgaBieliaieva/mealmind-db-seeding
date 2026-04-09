@@ -23,3 +23,23 @@ export function FormRenderer<T extends FieldValues>({ fields }: Props<T>) {
     </div>
   );
 }
+
+// "use client";
+
+// import { FieldValues } from "react-hook-form";
+// import { FormField } from "./FormField";
+// import { FormField as FormFieldType } from "./form.types";
+
+// type Props<T extends FieldValues> = {
+//   fields: FormFieldType<T>[];
+// };
+
+// export function FormRenderer<T extends FieldValues>({ fields }: Props<T>) {
+//   return (
+//     <div className="space-y-4">
+//       {fields.map((field, index) => (
+//         <FormField<T> key={`${field.name}-${index}`} field={field} />
+//       ))}
+//     </div>
+//   );
+// }

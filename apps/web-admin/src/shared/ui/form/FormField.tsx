@@ -4,6 +4,7 @@ import { useFormContext, FieldValues, Path, FieldError } from "react-hook-form";
 
 type Props<T extends FieldValues> = {
   field: {
+    valueType?: string;
     name: Path<T>;
     label: string;
     type: "input" | "select" | "textarea";
@@ -29,6 +30,7 @@ export function FormField<T extends FieldValues>({ field }: Props<T>) {
       {field.type === "input" && (
         <input
           {...register(field.name)}
+          type={field.valueType || "text"}
           placeholder={field.placeholder}
           disabled={field.disabled}
           className="w-full rounded border px-3 py-2"

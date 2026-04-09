@@ -5,7 +5,7 @@ export type RecipeInput = {
     title: string;
     description: string;
 
-    recipe_type_id?: number;
+    recipe_type_id?: string;
 
     base_servings: number;
     base_output_weight_g: number;
@@ -28,6 +28,6 @@ export type RecipeInput = {
     instruction: string;
   }[];
 
-  cuisine_ids: number[];
-  dietary_tag_ids: number[];
+  cuisine_ids: string[];
+  dietary_tag_ids: string[];
 };

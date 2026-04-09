@@ -4,7 +4,7 @@ export type RecipeFormInput = {
   title: string;
   description: string;
 
-  recipeTypeId?: number;
+  recipeTypeId?: string;
 
   servings: number;
   outputWeight?: number;
@@ -15,8 +15,8 @@ export type RecipeFormInput = {
   prepTime?: number;
   cookTime?: number;
 
-  cuisineIds: number[];
-  dietaryTagIds: number[];
+  cuisineIds: string[];
+  dietaryTagIds: string[];
 
   ingredients: {
     id: string;

@@ -9,6 +9,7 @@ export type FormFieldOption = {
 
 export type InputFieldConfig<T extends FieldValues> = {
   type: "input";
+  valueType?: string; // e.g., "text", "number", "email", etc.
   name: FieldPath<T>;
   label: string;
   placeholder?: string;
