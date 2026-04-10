@@ -9,7 +9,7 @@ export function mapRecipeFormToInput(values: RecipeCreateInput): RecipeInput {
       description: values.recipe.description ?? "",
 
       recipe_type_id: values.recipe.recipe_type_id,
-
+      output_weight_mode: values.recipe.output_weight_mode ?? "auto",
       base_servings: values.recipe.base_servings,
       base_output_weight_g: values.recipe.base_output_weight_g,
 

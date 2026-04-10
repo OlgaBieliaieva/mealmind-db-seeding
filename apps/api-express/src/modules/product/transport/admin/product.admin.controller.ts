@@ -110,4 +110,20 @@ export class ProductAdminController {
       next(e);
     }
   };
+
+  getNutrientsBatch = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ) => {
+    try {
+      const { product_ids } = req.body as { product_ids: string[] };
+
+      const result = await this.service.getProductsNutrients(product_ids);
+
+      res.json(result);
+    } catch (e) {
+      next(e);
+    }
+  };
 }

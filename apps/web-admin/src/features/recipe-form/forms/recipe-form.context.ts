@@ -1,9 +1,17 @@
 import { createContext, useContext } from "react";
 import { UseFormReturn } from "react-hook-form";
-import { RecipeCreateInput } from "../schemas/recipe.create.schema";
+import { z } from "zod";
+
+import { RecipeCreateSchema } from "../schemas/recipe.create.schema";
+
+// 🔥 RHF працює з INPUT типом (де можливі undefined)
+export type RecipeFormInput = z.input<typeof RecipeCreateSchema>;
+
+// (опціонально, але корисно мати)
+export type RecipeFormOutput = z.output<typeof RecipeCreateSchema>;
 
 type RecipeFormContextValue = {
-  form: UseFormReturn<RecipeCreateInput>;
+  form: UseFormReturn<RecipeFormInput>;
   mode: "create" | "edit";
 };
 

@@ -251,4 +251,28 @@ export class ProductService {
   async removePhoto(productId: string, photoId: string) {
     await this.repo.removePhoto(productId, photoId);
   }
+
+  async getProductsNutrients(productIds: string[]) {
+    if (!productIds.length) return {};
+
+    const rows = await this.repo.findNutrientsByProductIds(productIds);
+
+    const result: Record<
+      string,
+      Record<string, { value: number; unit: string }>
+    > = {};
+
+    for (const row of rows) {
+      if (!result[row.product_id]) {
+        result[row.product_id] = {};
+      }
+
+      result[row.product_id][row.nutrient_id] = {
+        value: row.value,
+        unit: row.unit,
+      };
+    }
+
+    return result;
+  }
 }

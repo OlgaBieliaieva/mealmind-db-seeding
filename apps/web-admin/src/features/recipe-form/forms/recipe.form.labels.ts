@@ -5,6 +5,11 @@ export const RECIPE_FORM_LABELS = {
   PREP_TIME: "Підготовка (хв)",
   COOK_TIME: "Приготування (хв)",
   DIFFICULTY: "Складність",
+  PORTIONS: {
+    SERVINGS: "Порції",
+    OUTPUT_WEIGHT: "Вага готової страви (г)",
+    CONTAINER_WEIGHT: "в тому числі, вага контейнера (г)",
+  },
   CUISINE: "Кухні",
   DIETARY: "Дієтичні теги",
 } as const;
@@ -20,6 +25,11 @@ export const RECIPE_FORM_SECTION_CONTENT = {
     description: "Час приготування та складність",
   },
 
+  PORTIONS: {
+    title: "Порції",
+    description: "Кількість і вага страви",
+  },
+
   CLASSIFICATION: {
     title: "Класифікація",
     description: "Кухні та дієтичні обмеження",
@@ -32,7 +42,7 @@ export const RECIPE_FORM_SECTION_CONTENT = {
 
   STEPS: {
     title: "Кроки приготування",
-    description: "Покрокова інструкція",
+    description: "Опишіть процес приготування",
   },
 
   MEDIA: {

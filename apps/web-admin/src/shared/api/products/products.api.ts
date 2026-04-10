@@ -1,5 +1,6 @@
 import { apiFetch } from "@/shared/lib/api/api";
 import { ProductDetailsDto, ProductSearchResponseDto } from "./products.types";
+import { NutrientsMap } from "@/shared/domain/nutrition/nutrient-value.types";
 
 // ===== SEARCH =====
 
@@ -36,6 +37,17 @@ export function searchGenericProducts(query: string) {
 
 export function getProductDetails(id: string) {
   return apiFetch<ProductDetailsDto>(`/products/${id}`);
+}
+
+// ===== NUTRIENTS =====
+
+export function getProductsNutrients(productIds: string[]) {
+  return apiFetch<Record<string, NutrientsMap>>(`/products/nutrients`, {
+    method: "POST",
+    body: JSON.stringify({
+      product_ids: productIds,
+    }),
+  });
 }
 
 // ===== CREATE =====

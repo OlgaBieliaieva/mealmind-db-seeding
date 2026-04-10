@@ -282,4 +282,26 @@ export class ProductRepository {
       })),
     });
   }
+
+  async findNutrientsByProductIds(productIds: string[]) {
+    return this.prisma.productNutrient
+      .findMany({
+        where: {
+          productId: {
+            in: productIds,
+          },
+        },
+        include: {
+          nutrient: true,
+        },
+      })
+      .then((rows) =>
+        rows.map((r) => ({
+          product_id: r.productId,
+          nutrient_id: r.nutrientId,
+          value: r.valuePer100g,
+          unit: r.unit ?? "g",
+        })),
+      );
+  }
 }

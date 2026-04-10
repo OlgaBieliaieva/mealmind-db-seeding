@@ -7,6 +7,7 @@ export type RecipeFormInput = {
   recipeTypeId?: string;
 
   servings: number;
+  output_weight_mode: "auto" | "manual";
   outputWeight?: number;
   containerWeight?: number;
 

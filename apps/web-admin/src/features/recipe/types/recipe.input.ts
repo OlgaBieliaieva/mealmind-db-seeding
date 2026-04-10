@@ -8,6 +8,7 @@ export type RecipeInput = {
     recipe_type_id?: string;
 
     base_servings: number;
+    output_weight_mode: "auto" | "manual";
     base_output_weight_g: number;
 
     difficulty?: RecipeDifficulty | null;
