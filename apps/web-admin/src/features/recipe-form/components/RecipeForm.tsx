@@ -1,41 +1,25 @@
 "use client";
 
-import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { FormProvider } from "react-hook-form";
-
 import { useRecipeForm } from "../hooks/useRecipeForm";
 import { RecipeFormContext } from "../forms/recipe-form.context";
 import { RECIPE_FORM_SECTIONS } from "../forms/recipe-form.registry";
+import { RecipeCreateInput } from "../schemas/recipe.create.schema";
+import { getRecipeDraft } from "@/shared/lib/recipe/recipe-draft";
 
 export function RecipeForm() {
   const { form, onSubmit } = useRecipeForm();
 
-  const { handleSubmit, formState } = form;
-  const params = useSearchParams();
-  const router = useRouter();
-  const { setValue, getValues } = form;
+  const { handleSubmit, formState, reset, getValues, setValue } = form;
 
   useEffect(() => {
-    const productId = params.get("addIngredient");
+    const draft = getRecipeDraft<RecipeCreateInput>();
 
-    if (!productId) return;
-
-    const current = getValues("ingredients") || [];
-
-    setValue("ingredients", [
-      ...current,
-      {
-        product_id: productId,
-        quantity_g: 0,
-        is_optional: false,
-        order_index: current.length + 1,
-      },
-    ]);
-
-    // очищаємо URL
-    router.replace("/admin/recipes/new");
-  }, [params]);
+    if (draft) {
+      reset(draft);
+    }
+  }, [reset]);
 
   return (
     <FormProvider {...form}>

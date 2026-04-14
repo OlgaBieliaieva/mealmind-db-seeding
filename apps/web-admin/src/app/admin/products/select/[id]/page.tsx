@@ -8,21 +8,18 @@ import { MacrosBlock } from "@/features/product-select/components/MacrosBlock";
 import { NutrientsList } from "@/features/product-select/components/NutrientsList";
 
 import {
-  getSelectedProducts,
-  upsertSelectedProduct,
-  setSelectedProducts,
+  getSelection,
+  upsertSelection,
+  removeSelection,
 } from "@/shared/lib/selection/recipe-selection";
 
 export default function ProductSelectDetailsPage() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
-  //   const params = useSearchParams();
-  //   const mode = params.get("mode");
-  //   const index = params.get("index");
-  const { data, isLoading } = useProductDetails();
-
-  const selectedMap = getSelectedProducts();
+  const selectedMap = getSelection();
   const existing = selectedMap[id];
+  
+  const { data, isLoading } = useProductDetails();
 
   const [quantity, setQuantity] = useState(existing?.quantity_g ?? 100);
 
@@ -48,7 +45,7 @@ export default function ProductSelectDetailsPage() {
   // ===== ACTIONS =====
 
   function handleSave() {
-    upsertSelectedProduct({
+    upsertSelection({
       product_id: product.id,
       quantity_g: quantity,
       name: product.name.ua,
@@ -60,10 +57,7 @@ export default function ProductSelectDetailsPage() {
   }
 
   function handleRemove() {
-    const current = getSelectedProducts();
-    delete current[product.id];
-
-    setSelectedProducts(current);
+    removeSelection(product.id);
 
     router.push("/admin/products/select");
   }

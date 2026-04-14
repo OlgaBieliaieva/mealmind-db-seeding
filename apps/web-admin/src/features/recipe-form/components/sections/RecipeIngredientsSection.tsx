@@ -1,57 +1,35 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import Link from "next/link";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import { RecipeCreateInput } from "../../schemas/recipe.create.schema";
 import { FormSection } from "@/shared/ui/form/FormSection";
 import { IngredientRow } from "../ingredients/IngredientRow";
 import { RECIPE_FORM_SECTION_CONTENT } from "../../forms/recipe.form.labels";
-
-import {
-  getSelectedProducts,
-  clearSelectedProducts,
-} from "@/shared/lib/selection/recipe-selection";
+import { setRecipeDraft } from "@/shared/lib/recipe/recipe-draft";
 
 export function RecipeIngredientsSection() {
-  const { control } = useFormContext<RecipeCreateInput>();
+  const { control, getValues } = useFormContext<RecipeCreateInput>();
 
-  const params = useSearchParams();
+  
   const router = useRouter();
 
-  const fromSelect = params.get("fromSelect");
+  
 
-  const { fields, append, remove } = useFieldArray({
+  const { fields,  remove } = useFieldArray({
     control,
     name: "ingredients",
   });
 
-  const processedRef = useRef(false);
+  
 
-  useEffect(() => {
-    if (!fromSelect || processedRef.current) return;
+  function handleAddIngredientClick() {
+    const values = getValues();
 
-    processedRef.current = true;
+    setRecipeDraft(values);
 
-    const selected = Object.values(getSelectedProducts());
-
-    append(
-      selected.map((p, index) => ({
-        product_id: p.product_id,
-        quantity_g: p.quantity_g,
-        product_name: p.name,
-        product_brand: p.brand,
-        product_unit: p.unit,
-        is_optional: false,
-        order_index: fields.length + index + 1,
-      })),
-    );
-
-    clearSelectedProducts();
-
-    router.replace("/admin/recipes/new");
-  }, [fromSelect, append, router, fields.length]);
+    router.push("/admin/products/select");
+  }
 
   return (
     <FormSection
@@ -67,12 +45,13 @@ export function RecipeIngredientsSection() {
           />
         ))}
 
-        <Link
-          href="/admin/products/select"
+        <button
+          type="button"
+          onClick={handleAddIngredientClick}
           className="inline-block rounded border px-3 py-1 text-sm"
         >
           + Додати інгредієнт
-        </Link>
+        </button>
       </div>
     </FormSection>
   );

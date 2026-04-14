@@ -1,79 +1,71 @@
-import { ProductListItemDto } from "@/shared/api/products/products.types";
-
-const KEY = "recipe:selectedProducts";
+import { getRecipeDraft, setRecipeDraft } from "../recipe/recipe-draft";
+import { RecipeCreateInput } from "@/features/recipe-form/schemas/recipe.create.schema";
 
 export type SelectedProduct = {
   product_id: string;
-
   name: string;
   brand?: string | null;
   unit: string;
-
   quantity_g: number;
 };
 
-export type SelectedProductsMap = Record<string, SelectedProduct>;
+type Draft = RecipeCreateInput & {
+  selection?: Record<string, SelectedProduct>;
+};
 
-export function getSelectedProducts(): Record<string, SelectedProduct> {
-  if (typeof window === "undefined") return {};
-
-  const raw = sessionStorage.getItem(KEY);
-  return raw ? JSON.parse(raw) : {};
+export function getSelection(): Record<string, SelectedProduct> {
+  const draft = getRecipeDraft<Draft>();
+  return draft?.selection || {};
 }
 
-export function setSelectedProducts(data: Record<string, SelectedProduct>) {
-  sessionStorage.setItem(KEY, JSON.stringify(data));
-}
+export function toggleSelection(product: SelectedProduct) {
+  const draft = getRecipeDraft<Draft>() || ({} as Draft);
 
-export function upsertSelectedProduct(product: SelectedProduct) {
-  const current = getSelectedProducts();
+  const selection = { ...(draft.selection || {}) };
 
-  current[product.product_id] = product;
-
-  setSelectedProducts(current);
-}
-
-export function toggleSelectedProduct(product: ProductListItemDto) {
-  const current = getSelectedProducts();
-
-  if (current[product.product_id]) {
-    delete current[product.product_id];
+  if (selection[product.product_id]) {
+    delete selection[product.product_id];
   } else {
-    current[product.product_id] = {
-      product_id: product.product_id,
-      name: product.name_ua,
-      brand: product.brand,
-      unit: product.unit || "g",
-      quantity_g: 100,
-    };
+    selection[product.product_id] = product;
   }
 
-  setSelectedProducts(current);
+  setRecipeDraft({
+    ...draft,
+    selection,
+  });
 }
 
-export function toggleSelectedProductFromList(product: {
-  product_id: string;
-  name: string;
-  brand?: string | null;
-  unit: string;
-}) {
-  const current = getSelectedProducts();
+export function upsertSelection(product: SelectedProduct) {
+  const draft = getRecipeDraft<Draft>() || ({} as Draft);
 
-  if (current[product.product_id]) {
-    delete current[product.product_id];
-  } else {
-    current[product.product_id] = {
-      product_id: product.product_id,
-      quantity_g: 100,
-      name: product.name,
-      brand: product.brand,
-      unit: product.unit,
-    };
-  }
+  const selection = { ...(draft.selection || {}) };
 
-  setSelectedProducts(current);
+  selection[product.product_id] = product;
+
+  setRecipeDraft({
+    ...draft,
+    selection,
+  });
 }
 
-export function clearSelectedProducts() {
-  sessionStorage.removeItem(KEY);
+export function removeSelection(product_id: string) {
+  const draft = getRecipeDraft<Draft>() || ({} as Draft);
+
+  const selection = { ...(draft.selection || {}) };
+
+  delete selection[product_id];
+
+  setRecipeDraft({
+    ...draft,
+    selection,
+  });
+}
+
+export function clearSelection() {
+  const draft = getRecipeDraft<Draft>() || ({} as Draft);
+
+  setRecipeDraft({
+    ...draft,
+    selection: {},
+  });
 }
