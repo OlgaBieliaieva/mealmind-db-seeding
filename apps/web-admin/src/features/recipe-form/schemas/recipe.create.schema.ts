@@ -26,8 +26,28 @@ export const RecipeCreateSchema = z.object({
 
     prep_time_min: z.number().optional(),
     cook_time_min: z.number().optional(),
-  }),
 
+    photo_url: z.string().url().optional(),
+
+    photos: z
+      .array(
+        z.object({
+          url: z.string().url(),
+          objectName: z.string(),
+        }),
+      )
+      .optional(),
+  }),
+  videos: z
+    .array(
+      z.object({
+        id: z.string(), // для UI (uuid)
+        platform: z.enum(["youtube", "instagram", "tiktok", "other"]),
+        url: z.string().url().or(z.literal("")),
+        recipe_author_id: z.string().uuid().optional(),
+      }),
+    )
+    .optional(),
   ingredients: z.array(
     z.object({
       product_id: z.string().uuid(),

@@ -6,6 +6,7 @@ import { RecipeStepsSection } from "../components/sections/RecipeStepsSection";
 import { RecipeNutritionPreviewSection } from "../components/sections/RecipeNutritionPreviewSection";
 import { RecipePortionsSection } from "../components/sections/RecipePortionsSection";
 import { RecipeAuthorSection } from "../components/sections/RecipeAuthorSection";
+import { RecipeMediaSection } from "../components/sections/RecipeMediaSection";
 
 export const RECIPE_FORM_SECTIONS = [
   RecipeBasicSection,
@@ -16,4 +17,5 @@ export const RECIPE_FORM_SECTIONS = [
   RecipeNutritionPreviewSection,
   RecipeClassificationSection,
   RecipeAuthorSection,
+  RecipeMediaSection,
 ];

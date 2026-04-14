@@ -5,7 +5,8 @@ import Image from "next/image";
 type Props = {
   photo: {
     url: string;
-    type: string;
+    objectName?: string;
+    type?: string;
   };
   onRemove: () => void;
 };
@@ -15,7 +16,7 @@ export function PhotoCard({ photo, onRemove }: Props) {
     <div className="relative">
       <Image
         src={photo.url}
-        alt={photo.type}
+        alt={photo.type || "recipe photo"}
         width={160}
         height={160}
         className="h-32 w-full rounded object-cover"
