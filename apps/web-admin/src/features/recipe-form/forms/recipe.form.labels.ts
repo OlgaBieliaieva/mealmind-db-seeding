@@ -45,6 +45,11 @@ export const RECIPE_FORM_SECTION_CONTENT = {
     description: "Опишіть процес приготування",
   },
 
+  AUTHOR: {
+    title: "Автор рецепта",
+    description: "Оберіть або створіть автора",
+  },
+
   MEDIA: {
     title: "Фото",
     description: "Зображення рецепта",

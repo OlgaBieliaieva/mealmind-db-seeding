@@ -14,6 +14,8 @@ export const RecipeCreateSchema = z.object({
 
     recipe_type_id: z.string().uuid().optional(),
 
+    recipe_author_id: z.string().uuid().optional(),
+
     base_servings: z.number().min(1),
     output_weight_mode: z.enum(["auto", "manual"]).default("auto"),
     base_output_weight_g: z.number().min(0),

@@ -4,10 +4,10 @@ import { z } from "zod";
 
 import { RecipeCreateSchema } from "../schemas/recipe.create.schema";
 
-// 🔥 RHF працює з INPUT типом (де можливі undefined)
+
 export type RecipeFormInput = z.input<typeof RecipeCreateSchema>;
 
-// (опціонально, але корисно мати)
+
 export type RecipeFormOutput = z.output<typeof RecipeCreateSchema>;
 
 type RecipeFormContextValue = {

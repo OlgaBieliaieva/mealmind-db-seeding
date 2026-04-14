@@ -5,6 +5,7 @@ import { RecipeIngredientsSection } from "../components/sections/RecipeIngredien
 import { RecipeStepsSection } from "../components/sections/RecipeStepsSection";
 import { RecipeNutritionPreviewSection } from "../components/sections/RecipeNutritionPreviewSection";
 import { RecipePortionsSection } from "../components/sections/RecipePortionsSection";
+import { RecipeAuthorSection } from "../components/sections/RecipeAuthorSection";
 
 export const RECIPE_FORM_SECTIONS = [
   RecipeBasicSection,
@@ -13,7 +14,6 @@ export const RECIPE_FORM_SECTIONS = [
   RecipeIngredientsSection,
   RecipeStepsSection,
   RecipeNutritionPreviewSection,
-
   RecipeClassificationSection,
-  // далі додамо інші
+  RecipeAuthorSection,
 ];
