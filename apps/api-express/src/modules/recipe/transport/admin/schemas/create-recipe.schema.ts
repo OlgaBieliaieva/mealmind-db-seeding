@@ -21,6 +21,9 @@ export const createRecipeSchema = z.object({
 
     prep_time_min: z.number().optional(),
     cook_time_min: z.number().optional(),
+
+    recipe_author_id: z.string().uuid().optional(),
+    photo_url: z.string().url().optional(),
   }),
 
   ingredients: z.array(

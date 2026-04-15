@@ -4,9 +4,9 @@ import { useState } from "react";
 import { ProductPhotoType } from "../../domain/constants/product.constants";
 
 const OPTIONS: { value: ProductPhotoType; label: string }[] = [
-  { value: "packaging", label: "Packaging" },
-  { value: "ingredients", label: "Ingredients" },
-  { value: "other", label: "Other" },
+  { value: "packaging", label: "Пакування" },
+  { value: "ingredients", label: "Інгредієнти" },
+  { value: "other", label: "Інше" },
 ];
 
 type Props = {

@@ -4,7 +4,10 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { RecipeListItemDto } from "../types/recipe-list.types";
 import { Badge } from "@/shared/ui/badge/Badge";
-import { getRecipeStatusLabel, getRecipeStatusVariant } from "../adapters/recipe-status.adapter";
+import {
+  getRecipeStatusLabel,
+  getRecipeStatusVariant,
+} from "../adapters/recipe-status.adapter";
 
 type Props = {
   recipe: RecipeListItemDto;
@@ -14,6 +17,7 @@ export function RecipeListItem({ recipe }: Props) {
   const params = useSearchParams();
 
   const returnTo = `/admin/recipes?${params.toString()}`;
+  console.log(recipe);
 
   return (
     <Link

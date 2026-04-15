@@ -21,7 +21,7 @@ export type RecipeDTO = {
 
     base_servings: number;
     base_output_weight_g: number;
-
+    output_weight_mode: "auto" | "manual";
     recipe_author_id: string | null;
   };
 

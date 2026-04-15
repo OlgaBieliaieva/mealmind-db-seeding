@@ -1,7 +1,10 @@
 import { RecipeDTO } from "../types/recipe.dto";
 import { RecipeDetailsVM } from "../types/recipe-details.vm";
-import { RecipeFormInput } from "../types/recipe-form.input";
 import { RecipeInput } from "../types/recipe.input";
+import { z } from "zod";
+import { RecipeCreateSchema } from "@/features/recipe-form/schemas/recipe.create.schema";
+
+type FormInput = z.input<typeof RecipeCreateSchema>;
 
 export function mapRecipeDtoToVM(dto: RecipeDTO): RecipeDetailsVM {
   return {
@@ -22,6 +25,7 @@ export function mapRecipeDtoToVM(dto: RecipeDTO): RecipeDetailsVM {
 
     servings: dto.recipe.base_servings,
     outputWeight: dto.recipe.base_output_weight_g,
+    output_weight_mode: dto.recipe.output_weight_mode ?? "auto",
 
     ingredients: dto.ingredients.map((i) => ({
       id: i.id,
@@ -42,40 +46,48 @@ export function mapRecipeDtoToVM(dto: RecipeDTO): RecipeDetailsVM {
   };
 }
 
-export function mapRecipeFormToInput(form: RecipeFormInput): RecipeInput {
+export function mapRecipeFormToInput(form: FormInput): RecipeInput {
   return {
     recipe: {
-      title: form.title,
-      description: form.description,
+      title: form.recipe.title,
+      description: form.recipe.description ?? "",
 
-      recipe_type_id: form.recipeTypeId,
+      recipe_type_id: form.recipe.recipe_type_id,
+      recipe_author_id: form.recipe.recipe_author_id,
 
-      base_servings: form.servings,
-      base_output_weight_g: form.outputWeight ?? 0,
+      base_servings: form.recipe.base_servings,
+      output_weight_mode: form.recipe.output_weight_mode ?? "auto",
+      base_output_weight_g: form.recipe.base_output_weight_g ?? 0,
 
-      difficulty: form.difficulty,
+      difficulty: form.recipe.difficulty as
+        | RecipeInput["recipe"]["difficulty"]
+        | undefined,
 
-      prep_time_min: form.prepTime,
-      cook_time_min: form.cookTime,
+      prep_time_min: form.recipe.prep_time_min,
+      cook_time_min: form.recipe.cook_time_min,
+
+      photo_url: form.recipe.photo_url,
     },
 
     ingredients: form.ingredients
-      .filter((i) => i.productId && i.quantity > 0)
+      .filter((i) => i.product_id && i.quantity_g > 0)
       .map((i, index) => ({
-        product_id: i.productId!,
-        quantity_g: i.quantity,
-        is_optional: i.isOptional,
+        product_id: i.product_id,
+        quantity_g: i.quantity_g,
+        is_optional: i.is_optional,
         order_index: index + 1,
       })),
 
     steps: form.steps
-      .filter((s) => s.text.trim())
+      .filter((s) => s.instruction.trim())
       .map((s, index) => ({
         step_number: index + 1,
-        instruction: s.text.trim(),
+        instruction: s.instruction.trim(),
       })),
 
-    cuisine_ids: form.cuisineIds,
-    dietary_tag_ids: form.dietaryTagIds,
+    cuisine_ids: form.cuisine_ids ?? [],
+    dietary_tag_ids: form.dietary_tag_ids ?? [],
+
+    videos: form.videos ?? [],
   };
 }

@@ -67,5 +67,9 @@ export function ProductAdminRouter(controller: ProductAdminController) {
   controller.deletePhoto,
 );
 
+router.post(
+  "/nutrients",
+  controller.getNutrientsBatch,
+);
   return router;
 }

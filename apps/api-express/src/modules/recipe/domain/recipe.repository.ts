@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { RecipePersistenceAggregate } from "./persistence/recipe.prisma.types";
+import { CalculatedNutrient } from "./services/recipe-nutrition.calculator";
 
 export class RecipeRepository {
   constructor(private prisma: PrismaClient) {}
@@ -16,6 +17,36 @@ export class RecipeRepository {
     });
   }
 
+  async createNutrients(recipeId: string, nutrients: CalculatedNutrient[]) {
+    if (!nutrients.length) return;
+
+    await this.prisma.recipeNutrient.createMany({
+      data: nutrients.map((n) => ({
+        recipeId,
+        nutrientId: n.nutrientId,
+        valueTotal: n.valueTotal,
+        unit: n.unit,
+      })),
+    });
+  }
+
+  async replaceNutrients(recipeId: string, nutrients: CalculatedNutrient[]) {
+    await this.prisma.recipeNutrient.deleteMany({
+      where: { recipeId },
+    });
+
+    if (nutrients.length === 0) return;
+
+    await this.prisma.recipeNutrient.createMany({
+      data: nutrients.map((n) => ({
+        recipeId,
+        nutrientId: n.nutrientId,
+        valueTotal: n.valueTotal,
+        unit: n.unit,
+      })),
+    });
+  }
+
   async findByIdDetailed(
     id: string,
   ): Promise<RecipePersistenceAggregate | null> {
@@ -27,7 +58,7 @@ export class RecipeRepository {
           include: {
             product: {
               include: {
-                brand: true,
+                nutrients: true,
               },
             },
           },

@@ -17,6 +17,7 @@ export type ProductListItemDto = {
   product_id: string;
   name_en: string;
   name_ua: string;
+  unit: ProductUnit;
   type: ProductTypeDto;
   category: string | null;
   brand: string | null;

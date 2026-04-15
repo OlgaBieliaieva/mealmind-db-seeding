@@ -17,8 +17,12 @@ export function ProductPhotosSection() {
 
   const photos = watch("photos") ?? [];
 
-  const { upload, uploading } = usePhotoUpload();
-  const { remove } = usePhotoDelete();
+  const { upload, uploading } = usePhotoUpload({
+    bucket: "product-photos",
+    folder: "products",
+  });
+
+  const { remove } = usePhotoDelete("product-photos");
 
   async function handleFile(file: File, type: ProductPhotoType) {
     const result = await upload(file);

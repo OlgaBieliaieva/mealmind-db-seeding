@@ -1,6 +1,6 @@
 "use client";
 
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { useMemo, useTransition } from "react";
 import {
   PRODUCT_TYPES,
@@ -15,7 +15,13 @@ export type ProductFilters = {
   page?: number;
 };
 
-export function useProductFilters() {
+type Options = {
+  basePath?: string;
+};
+
+export function useProductFilters(options?: Options) {
+  const pathname = usePathname();
+  const basePath = options?.basePath ?? pathname;
   const params = useSearchParams();
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
@@ -57,7 +63,7 @@ export function useProductFilters() {
         newParams.delete("page");
       }
 
-      router.push(`/admin/products?${newParams.toString()}`);
+      router.push(`${basePath}?${newParams.toString()}`);
     });
   }
 

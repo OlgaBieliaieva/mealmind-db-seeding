@@ -10,15 +10,54 @@ import { Badge } from "@/shared/ui/badge/Badge";
 
 type Props = {
   product: ProductListItemDto;
+  mode?: "default" | "select";
+  checked?: boolean;
+
+  onToggleSelect?: (product: ProductListItemDto) => void;
 };
 
-export function ProductListItem({ product }: Props) {
+export function ProductListItem({
+  product,
+  mode = "default",
+  checked,
+  onToggleSelect,
+}: Props) {
   const params = useSearchParams();
 
-  const returnTo = `/admin/products?${params.toString()}`;
+  if (mode === "select") {
+    return (
+      <div className="flex items-center justify-between border px-4 py-3 hover:bg-gray-50">
+        <div 
+          onClick={() => onToggleSelect?.(product)}
+          className="flex items-center gap-3 cursor-pointer"
+        >
+          <input type="checkbox" checked={checked} readOnly />
+
+          <div>
+            <div className="font-medium">{product.name_ua}</div>
+            <div className="text-xs text-gray-500">{product.brand ?? "—"}</div>
+          </div>
+        </div>
+
+        {/* 👉 DETAILS */}
+        <Link
+          href={`/admin/products/select/${product.product_id}`}
+          className="text-sm text-blue-500"
+          onClick={(e) => e.stopPropagation()}
+        >
+          →
+        </Link>
+      </div>
+    );
+  }
+
+  // ===== DEFAULT MODE =====
+
   return (
     <Link
-      href={`/admin/products/${product.product_id}?returnTo=${encodeURIComponent(returnTo)}`}
+      href={`/admin/products/${product.product_id}?returnTo=${encodeURIComponent(
+        `/admin/products?${params.toString()}`,
+      )}`}
     >
       <div className="flex items-center justify-between border px-4 py-3 last:border-b-0 hover:bg-gray-50 cursor-pointer">
         <div className="flex items-center gap-1">
@@ -31,6 +70,7 @@ export function ProductListItem({ product }: Props) {
             </div>
           </div>
         </div>
+
         <div>
           <Badge variant={getProductStatusBadgeVariant(product.status)}>
             {getProductStatusLabel(product.status)}
@@ -40,4 +80,28 @@ export function ProductListItem({ product }: Props) {
       </div>
     </Link>
   );
+  // return (
+  // <Link
+  //   href={`/admin/products/${product.product_id}?returnTo=${encodeURIComponent(returnTo)}`}
+  // >
+  //   <div className="flex items-center justify-between border px-4 py-3 last:border-b-0 hover:bg-gray-50 cursor-pointer">
+  //     <div className="flex items-center gap-1">
+  //       <div>{product.is_verified ? "🟢" : "❌"}</div>
+  //       <div>
+  //         <div className="font-medium">{product.name_ua}</div>
+
+  //         <div className="text-xs text-gray-500">
+  //           {getProductTypeLabel(product.type)}
+  //         </div>
+  //       </div>
+  //     </div>
+  //     <div>
+  //       <Badge variant={getProductStatusBadgeVariant(product.status)}>
+  //         {getProductStatusLabel(product.status)}
+  //       </Badge>
+  //       <div className="text-sm text-gray-500">{product.brand ?? "—"}</div>
+  //     </div>
+  //   </div>
+  // </Link>
+  // );
 }

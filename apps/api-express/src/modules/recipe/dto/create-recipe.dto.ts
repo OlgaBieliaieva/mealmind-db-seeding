@@ -7,6 +7,9 @@ export type CreateRecipeDTO = {
 
     recipe_type_id?: string;
 
+    recipe_author_id?: string;
+    photo_url?: string;
+
     base_servings: number;
     base_output_weight_g: number;
 

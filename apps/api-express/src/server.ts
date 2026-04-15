@@ -10,6 +10,7 @@ import { createRecipeModule } from "./modules/recipe/recipe.module";
 import { createRecipeTypeModule } from "./modules/recipe-type/recipe-type.module";
 import { createCuisineModule } from "./modules/cuisine/cuisine.module";
 import { createDietaryTagModule } from "./modules/dietary-tag/dietary-tag.module";
+import { createRecipeAuthorModule } from "./modules/recipe-author/recipe-author.module";
 
 import { prisma } from "./db/prisma";
 
@@ -25,6 +26,7 @@ const recipeModule = createRecipeModule(prisma);
 const recipeTypeModule = createRecipeTypeModule(prisma);
 const cuisineModule = createCuisineModule(prisma);
 const dietaryTagModule = createDietaryTagModule(prisma);
+const recipeAuthorModule = createRecipeAuthorModule(prisma);
 
 app.use(cors());
 app.use(express.json());
@@ -37,6 +39,7 @@ app.use("/api/v1/admin/recipes", recipeModule.adminRouter);
 app.use("/api/v1/admin/recipe-types", recipeTypeModule.adminRouter);
 app.use("/api/v1/admin/cuisines", cuisineModule.adminRouter);
 app.use("/api/v1/admin/dietary-tags", dietaryTagModule.adminRouter);
+app.use("/api/v1/admin/recipe-authors", recipeAuthorModule.adminRouter);
 
 app.get("/health", (_req, res) => {
   res.json({

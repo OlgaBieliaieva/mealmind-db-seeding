@@ -5,15 +5,19 @@ export type RecipeInput = {
     title: string;
     description: string;
 
-    recipe_type_id?: number;
+    recipe_type_id?: string;
+    recipe_author_id?: string; // ✅ ДОДАТИ
 
     base_servings: number;
+    output_weight_mode: "auto" | "manual";
     base_output_weight_g: number;
 
     difficulty?: RecipeDifficulty | null;
 
     prep_time_min?: number;
     cook_time_min?: number;
+
+    photo_url?: string; // ✅ ДОДАТИ
   };
 
   ingredients: {
@@ -28,6 +32,12 @@ export type RecipeInput = {
     instruction: string;
   }[];
 
-  cuisine_ids: number[];
-  dietary_tag_ids: number[];
+  cuisine_ids: string[];
+  dietary_tag_ids: string[];
+
+  videos?: {
+    platform: "youtube" | "instagram" | "tiktok" | "other";
+    url: string;
+    recipe_author_id?: string;
+  }[];
 };

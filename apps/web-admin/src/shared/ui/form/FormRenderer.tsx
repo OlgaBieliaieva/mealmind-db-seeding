@@ -1,17 +1,11 @@
 "use client";
 
-import { FieldValues, Path } from "react-hook-form";
+import { FieldValues } from "react-hook-form";
 import { FormField } from "./FormField";
+import { FormFieldConfig } from "./form.types";
 
 type Props<T extends FieldValues> = {
-  fields: {
-    name: Path<T>;
-    label: string;
-    type: "input" | "select" | "textarea";
-    options?: { value: string; label: string }[];
-    placeholder?: string;
-    disabled?: boolean;
-  }[];
+  fields: FormFieldConfig<T>[];
 };
 
 export function FormRenderer<T extends FieldValues>({ fields }: Props<T>) {

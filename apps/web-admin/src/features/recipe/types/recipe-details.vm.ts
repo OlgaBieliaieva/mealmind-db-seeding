@@ -2,7 +2,6 @@ import { RecipeDifficulty } from "@/features/recipe/constants/recipe-difficulty.
 import { RecipeStatus } from "@/features/recipe/constants/recipe-status.constants";
 import { RecipeVisibility } from "@/features/recipe/constants/recipe-visibility.constants";
 
-
 export type RecipeDetailsVM = {
   id: string;
   title: string;
@@ -20,6 +19,7 @@ export type RecipeDetailsVM = {
   cookTime?: number | null;
 
   servings: number;
+  output_weight_mode: "auto" | "manual";
   outputWeight: number;
 
   ingredients: {
