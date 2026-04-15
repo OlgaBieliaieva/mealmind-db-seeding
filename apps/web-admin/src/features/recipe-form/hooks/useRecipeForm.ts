@@ -28,6 +28,7 @@ export function useRecipeForm() {
         base_output_weight_g: 0,
         container_weight_g: 0,
       },
+      videos: [],
       ingredients: [],
       steps: [],
       cuisine_ids: [],

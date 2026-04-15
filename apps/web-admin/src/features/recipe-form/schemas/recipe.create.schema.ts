@@ -28,15 +28,6 @@ export const RecipeCreateSchema = z.object({
     cook_time_min: z.number().optional(),
 
     photo_url: z.string().url().optional(),
-
-    photos: z
-      .array(
-        z.object({
-          url: z.string().url(),
-          objectName: z.string(),
-        }),
-      )
-      .optional(),
   }),
   videos: z
     .array(
