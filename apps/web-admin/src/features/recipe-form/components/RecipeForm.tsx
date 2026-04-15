@@ -11,7 +11,7 @@ import { getRecipeDraft } from "@/shared/lib/recipe/recipe-draft";
 export function RecipeForm() {
   const { form, onSubmit } = useRecipeForm();
 
-  const { handleSubmit, formState, reset, getValues, setValue } = form;
+  const { handleSubmit, formState, reset } = form;
 
   useEffect(() => {
     const draft = getRecipeDraft<RecipeCreateInput>();

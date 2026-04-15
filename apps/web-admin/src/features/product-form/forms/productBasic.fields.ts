@@ -1,6 +1,6 @@
 // SECTION ███ PRODUCT BASIC FIELDS CONFIG ███
 
-import { FormField } from "./form.types";
+import { FormFieldConfig } from "@/shared/ui/form/form.types";
 import { ProductFormInput } from "../schemas/product-form.schema";
 
 import {
@@ -13,7 +13,7 @@ import { PRODUCT_LABELS } from "./product.form.labels";
 
 export function getProductBasicFields(
   canEditType: boolean,
-): FormField<ProductFormInput>[] {
+): FormFieldConfig<ProductFormInput>[] {
   return [
     {
       type: "input",

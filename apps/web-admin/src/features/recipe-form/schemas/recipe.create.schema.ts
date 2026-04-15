@@ -18,7 +18,7 @@ export const RecipeCreateSchema = z.object({
 
     base_servings: z.number().min(1),
     output_weight_mode: z.enum(["auto", "manual"]).default("auto"),
-    base_output_weight_g: z.number().min(0),
+    base_output_weight_g: z.number().optional(),
 
     container_weight_g: z.number().optional(),
 
@@ -60,8 +60,8 @@ export const RecipeCreateSchema = z.object({
     }),
   ),
 
-  cuisine_ids: z.array(z.string().uuid()),
-  dietary_tag_ids: z.array(z.string().uuid()),
+  cuisine_ids: z.array(z.string().uuid()).optional(),
+  dietary_tag_ids: z.array(z.string().uuid()).optional(),
 });
 
 // export type RecipeCreateInput = z.infer<typeof RecipeCreateSchema>;

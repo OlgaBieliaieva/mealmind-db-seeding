@@ -1,6 +1,5 @@
 import { RecipeDTO } from "../types/recipe.dto";
 import { RecipeDetailsVM } from "../types/recipe-details.vm";
-import { RecipeFormInput } from "../types/recipe-form.input";
 import { RecipeInput } from "../types/recipe.input";
 import { z } from "zod";
 import { RecipeCreateSchema } from "@/features/recipe-form/schemas/recipe.create.schema";
@@ -54,15 +53,20 @@ export function mapRecipeFormToInput(form: FormInput): RecipeInput {
       description: form.recipe.description ?? "",
 
       recipe_type_id: form.recipe.recipe_type_id,
+      recipe_author_id: form.recipe.recipe_author_id,
 
       base_servings: form.recipe.base_servings,
       output_weight_mode: form.recipe.output_weight_mode ?? "auto",
       base_output_weight_g: form.recipe.base_output_weight_g ?? 0,
 
-      difficulty: form.recipe.difficulty as RecipeInput["recipe"]["difficulty"] | undefined,
+      difficulty: form.recipe.difficulty as
+        | RecipeInput["recipe"]["difficulty"]
+        | undefined,
 
       prep_time_min: form.recipe.prep_time_min,
       cook_time_min: form.recipe.cook_time_min,
+
+      photo_url: form.recipe.photo_url,
     },
 
     ingredients: form.ingredients
@@ -81,7 +85,9 @@ export function mapRecipeFormToInput(form: FormInput): RecipeInput {
         instruction: s.instruction.trim(),
       })),
 
-    cuisine_ids: form.cuisine_ids,
-    dietary_tag_ids: form.dietary_tag_ids,
+    cuisine_ids: form.cuisine_ids ?? [],
+    dietary_tag_ids: form.dietary_tag_ids ?? [],
+
+    videos: form.videos ?? [],
   };
 }

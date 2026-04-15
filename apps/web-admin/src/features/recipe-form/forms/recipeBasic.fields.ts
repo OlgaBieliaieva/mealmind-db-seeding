@@ -1,10 +1,10 @@
-import { FormField } from "@/features/product-form/forms/form.types";
+import { FormFieldConfig } from "@/shared/ui/form/form.types";
 import { RecipeCreateInput } from "../schemas/recipe.create.schema";
 import { RECIPE_FORM_LABELS } from "./recipe.form.labels";
 
 export function getRecipeBasicFields(
   recipeTypeOptions: { value: string; label: string }[],
-): FormField<RecipeCreateInput>[] {
+): FormFieldConfig<RecipeCreateInput>[] {
   return [
     {
       type: "input",

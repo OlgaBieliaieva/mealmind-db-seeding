@@ -8,6 +8,7 @@ import {
   NotFoundError,
 } from "../../../shared/errors/http-errors";
 import { CreateRecipeDTO } from "../dto/create-recipe.dto";
+import { RecipeNutritionCalculator } from "../domain/services/recipe-nutrition.calculator";
 
 export class RecipeService {
   constructor(
@@ -20,7 +21,7 @@ export class RecipeService {
       throw new BadRequestError("TITLE_REQUIRED", "Title is required");
     }
 
-    return this.repo.create({
+    const recipe = await this.repo.create({
       title: data.recipe.title,
       description: data.recipe.description,
 
@@ -32,41 +33,83 @@ export class RecipeService {
       prepTimeMin: data.recipe.prep_time_min,
       cookTimeMin: data.recipe.cook_time_min,
 
-      recipeType: data.recipe.recipe_type_id
-        ? {
-            connect: { id: data.recipe.recipe_type_id },
-          }
+      author: data.recipe.recipe_author_id
+        ? { connect: { id: data.recipe.recipe_author_id } }
         : undefined,
 
-      ingredients: {
-        create: data.ingredients.map((i) => ({
-          productId: i.product_id,
-          quantityG: i.quantity_g,
-          isOptional: i.is_optional,
-          orderIndex: i.order_index,
-        })),
-      },
+      photoUrl: data.recipe.photo_url,
 
-      steps: {
-        create: data.steps.map((s) => ({
-          stepNumber: s.step_number,
-          instruction: s.instruction,
-          timerSec: s.timer_sec,
-        })),
-      },
+      recipeType: data.recipe.recipe_type_id
+        ? { connect: { id: data.recipe.recipe_type_id } }
+        : undefined,
 
-      cuisines: {
-        create: data.cuisine_ids.map((id) => ({
-          cuisineId: id,
-        })),
-      },
+      ingredients:
+        data.ingredients.length > 0
+          ? {
+              create: data.ingredients.map((i) => ({
+                productId: i.product_id,
+                quantityG: i.quantity_g,
+                isOptional: i.is_optional,
+                orderIndex: i.order_index,
+              })),
+            }
+          : undefined,
 
-      dietaryTags: {
-        create: data.dietary_tag_ids.map((id) => ({
-          dietaryTagId: id,
-        })),
-      },
+      steps:
+        data.steps.length > 0
+          ? {
+              create: data.steps.map((s) => ({
+                stepNumber: s.step_number,
+                instruction: s.instruction,
+                timerSec: s.timer_sec,
+              })),
+            }
+          : undefined,
+
+      cuisines:
+        data.cuisine_ids.length > 0
+          ? {
+              create: data.cuisine_ids.map((id) => ({
+                cuisineId: id,
+              })),
+            }
+          : undefined,
+
+      dietaryTags:
+        data.dietary_tag_ids.length > 0
+          ? {
+              create: data.dietary_tag_ids.map((id) => ({
+                dietaryTagId: id,
+              })),
+            }
+          : undefined,
     });
+
+    // 🔥 1. дістаємо повний рецепт з нутрієнтами продуктів
+    const detailed = await this.repo.findByIdDetailed(recipe.id);
+
+    if (detailed) {
+      // 🔥 2. мапимо в формат calculator
+      const ingredientsForCalc = detailed.ingredients.map((i) => ({
+        quantityG: i.quantityG,
+        product: {
+          nutrients: i.product.nutrients.map((n) => ({
+            nutrientId: n.nutrientId,
+            valuePer100g: n.valuePer100g,
+            unit: n.unit,
+          })),
+        },
+      }));
+
+      // 🔥 3. рахуємо нутрієнти
+      const calculated =
+        RecipeNutritionCalculator.calculate(ingredientsForCalc);
+
+      // 🔥 4. зберігаємо
+      await this.repo.createNutrients(recipe.id, calculated);
+    }
+
+    return recipe;
   }
 
   async searchRecipes(filters: Filters) {

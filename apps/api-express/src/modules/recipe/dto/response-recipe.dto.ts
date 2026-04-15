@@ -21,4 +21,9 @@ export type RecipeDTO = {
   cook_time_min?: number;
 
   photo_url?: string | null;
+
+  author?: {
+    id: string;
+    display_name: string;
+  } | null;
 };

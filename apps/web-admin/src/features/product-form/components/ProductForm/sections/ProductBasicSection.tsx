@@ -19,7 +19,7 @@ export function ProductBasicSection() {
       title="Основна інформація"
       description="Назва, тип та одиниця виміру"
     >
-      <FormRenderer<ProductFormInput> fields={fields} />
+      <FormRenderer fields={fields} />
     </FormSection>
   );
 }

@@ -28,7 +28,7 @@ export function RecipePortionsSection() {
     >
       <FormRenderer fields={mainFields} />
 
-      <span className="text-sm font-medium ьи-1">Вага готової страви</span>
+      <span className="text-sm font-medium mb-1">Вага готової страви</span>
       {/* 🔘 TOGGLE */}
       <div className="flex gap-4 mb-3">
         <label className="flex items-center gap-2">

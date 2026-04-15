@@ -1,11 +1,8 @@
 "use client";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-
-import {
-  createRecipeAuthor,
-  CreateRecipeAuthorInput,
-} from "@/shared/api/recipe-authors/recipe-authors.api";
+import { createRecipeAuthor } from "@/shared/api/recipe-authors/recipe-authors.api";
+import { CreateRecipeAuthorInput } from "@/shared/domain/recipe-authors/recipe-authors.types";
 
 export function useCreateRecipeAuthor() {
   const queryClient = useQueryClient();
