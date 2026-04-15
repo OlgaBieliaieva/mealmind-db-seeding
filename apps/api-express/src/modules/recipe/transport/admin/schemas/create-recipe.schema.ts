@@ -10,6 +10,7 @@ export const createRecipeSchema = z.object({
 
     base_servings: z.number().min(1),
     base_output_weight_g: z.number().min(0),
+    output_weight_mode: z.enum(["auto", "manual"]).default("auto"),
 
     difficulty: z
       .enum([

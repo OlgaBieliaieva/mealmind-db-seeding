@@ -12,6 +12,7 @@ export type CreateRecipeDTO = {
 
     base_servings: number;
     base_output_weight_g: number;
+    output_weight_mode: "auto" | "manual";
 
     difficulty?: RecipeDifficulty;
 

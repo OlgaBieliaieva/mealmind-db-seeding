@@ -17,7 +17,6 @@ export function useRecipeFormFlow() {
   async function submit(values: RecipeCreateInput) {
     try {
       const payload = mapRecipeFormToInput(values);
-      console.log(payload);
 
       await createRecipeMutation.mutateAsync(payload);
 

@@ -17,6 +17,11 @@ export class RecipeSearchQuery {
         include: {
           recipeType: true,
           author: true,
+          nutrients: {
+            include: {
+              nutrient: true,
+            },
+          },
         },
       }),
       this.prisma.recipe.count({ where }),

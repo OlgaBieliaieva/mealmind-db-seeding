@@ -21,12 +21,23 @@ export class RecipeService {
       throw new BadRequestError("TITLE_REQUIRED", "Title is required");
     }
 
+    const isAuto = data.recipe.output_weight_mode !== "manual";
+
+    let baseOutputWeight = data.recipe.base_output_weight_g;
+
+    if (isAuto) {
+      baseOutputWeight = data.ingredients.reduce(
+        (sum, i) => sum + i.quantity_g,
+        0,
+      );
+    }
+
     const recipe = await this.repo.create({
       title: data.recipe.title,
       description: data.recipe.description,
 
       baseServings: data.recipe.base_servings,
-      baseOutputWeightG: data.recipe.base_output_weight_g,
+      baseOutputWeightG: baseOutputWeight,
 
       difficulty: data.recipe.difficulty,
 

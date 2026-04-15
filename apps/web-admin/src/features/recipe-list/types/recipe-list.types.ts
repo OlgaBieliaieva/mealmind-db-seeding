@@ -3,8 +3,19 @@ export type RecipeListItemDto = {
   title: string;
   status: string;
   visibility: string;
-  photo_url?: string | null;
-  recipe_type_name?: string | null;
+
+  recipe_type: string | null;
+  difficulty: string | null;
+
+  prep_time_min: number | null;
+  cook_time_min: number | null;
+
+  photo_url: string | null;
+  author: string | null;
+
+  created_at: string;
+
+  calories_per_100g: number | null;
 };
 
 export type RecipeListResponse = {
