@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { RecipeListItemDto } from "../types/recipe-list.types";
 import { Badge } from "@/shared/ui/badge/Badge";
@@ -17,7 +18,6 @@ export function RecipeListItem({ recipe }: Props) {
   const params = useSearchParams();
 
   const returnTo = `/admin/recipes?${params.toString()}`;
-  console.log(recipe);
 
   return (
     <Link
@@ -27,8 +27,11 @@ export function RecipeListItem({ recipe }: Props) {
         {/* LEFT */}
         <div className="flex items-center gap-3">
           {recipe.photo_url ? (
-            <img
+            <Image
               src={recipe.photo_url}
+              alt={recipe.title}
+              width={40}
+              height={40}
               className="h-10 w-10 rounded object-cover"
             />
           ) : (
@@ -39,7 +42,10 @@ export function RecipeListItem({ recipe }: Props) {
             <div className="font-medium">{recipe.title}</div>
 
             <div className="text-xs text-gray-500">
-              {recipe.recipe_type_name ?? "—"}
+              {recipe.recipe_type ?? "—"}
+              {recipe.calories_per_100g && (
+                <> • {Math.round(recipe.calories_per_100g)} kcal/100г</>
+              )}
             </div>
           </div>
         </div>

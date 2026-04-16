@@ -9,6 +9,7 @@ export type RecipeFilters = {
   cuisine_id?: string;
   dietary_tag_id?: string;
   status?: string;
+  author_id?: string;
   page?: number;
 };
 
@@ -24,6 +25,7 @@ export function useRecipeFilters() {
       cuisine_id: params.get("cuisine_id") ?? undefined,
       dietary_tag_id: params.get("dietary_tag_id") ?? undefined,
       status: params.get("status") ?? undefined,
+      author_id: params.get("author_id") ?? undefined,
       page: params.get("page") ? Number(params.get("page")) : 1,
     };
   }, [params]);
@@ -43,7 +45,8 @@ export function useRecipeFilters() {
         next.recipe_type_id !== undefined ||
         next.cuisine_id !== undefined ||
         next.dietary_tag_id !== undefined ||
-        next.status !== undefined
+        next.status !== undefined ||
+        next.author_id !== undefined
       ) {
         newParams.delete("page");
       }
