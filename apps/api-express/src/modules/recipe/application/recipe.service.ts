@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client";
+import { Prisma, RecipeStatus } from "@prisma/client";
 import { RecipeRepository } from "../domain/recipe.repository";
 import { RecipeSearchQuery } from "../domain/queries/recipe-search.query";
 import { RecipeSearchQuery as Filters } from "../transport/admin/schemas/recipe-search.query.schema";
@@ -187,6 +187,18 @@ export class RecipeService {
     }
 
     return recipe;
+  }
+
+  async publish(id: string) {
+    return this.repo.updateStatus(id, RecipeStatus.published);
+  }
+
+  async archive(id: string) {
+    return this.repo.updateStatus(id, RecipeStatus.archived);
+  }
+
+  async restore(id: string) {
+    return this.repo.updateStatus(id, RecipeStatus.draft);
   }
 
   async deleteHard(id: string) {

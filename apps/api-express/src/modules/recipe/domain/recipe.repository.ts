@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, RecipeStatus } from "@prisma/client";
 import { RecipePersistenceAggregate } from "./persistence/recipe.prisma.types";
 import { CalculatedNutrient } from "./services/recipe-nutrition.calculator";
 
@@ -80,6 +80,13 @@ export class RecipeRepository {
     });
   }
 
+  async updateStatus(id: string, status: RecipeStatus) {
+    return this.prisma.recipe.update({
+      where: { id },
+      data: { status },
+    });
+  }
+
   async deleteHard(id: string) {
     return this.prisma.$transaction(async (tx) => {
       await tx.recipeIngredient.deleteMany({ where: { recipeId: id } });
@@ -87,6 +94,8 @@ export class RecipeRepository {
       await tx.recipeCuisine.deleteMany({ where: { recipeId: id } });
       await tx.recipeDietaryTag.deleteMany({ where: { recipeId: id } });
       await tx.recipeVideo.deleteMany({ where: { recipeId: id } });
+
+      await tx.recipeNutrient.deleteMany({ where: { recipeId: id } });
 
       await tx.recipe.delete({ where: { id } });
     });

@@ -41,6 +41,26 @@ export function createRecipe(body: RecipeInput) {
   });
 }
 
+// ===== STATUS ACTIONS =====
+
+export function publishRecipe(id: string) {
+  return apiFetch<void>(`/recipes/${id}/publish`, {
+    method: "POST",
+  });
+}
+
+export function archiveRecipe(id: string) {
+  return apiFetch<void>(`/recipes/${id}/archive`, {
+    method: "POST",
+  });
+}
+
+export function restoreRecipe(id: string) {
+  return apiFetch<void>(`/recipes/${id}/restore`, {
+    method: "POST",
+  });
+}
+
 // ===== DELETE =====
 
 export function deleteRecipeHard(id: string) {

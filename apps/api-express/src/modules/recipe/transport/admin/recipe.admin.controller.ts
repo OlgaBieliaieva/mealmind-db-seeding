@@ -43,6 +43,36 @@ export class RecipeAdminController {
     }
   };
 
+  publish = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { id } = req.params as RecipeIdParams;
+      await this.service.publish(id);
+      res.sendStatus(204);
+    } catch (e) {
+      next(e);
+    }
+  };
+
+  archive = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { id } = req.params as RecipeIdParams;
+      await this.service.archive(id);
+      res.sendStatus(204);
+    } catch (e) {
+      next(e);
+    }
+  };
+
+  restore = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { id } = req.params as RecipeIdParams;
+      await this.service.restore(id);
+      res.sendStatus(204);
+    } catch (e) {
+      next(e);
+    }
+  };
+
   deleteHard = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params as RecipeIdParams;

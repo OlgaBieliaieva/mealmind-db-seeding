@@ -27,6 +27,24 @@ export function RecipeAdminRouter(controller: RecipeAdminController) {
     controller.getDetails,
   );
 
+  router.post(
+  "/:id/publish",
+  validateParams(RecipeIdParamsSchema),
+  controller.publish,
+);
+
+router.post(
+  "/:id/archive",
+  validateParams(RecipeIdParamsSchema),
+  controller.archive,
+);
+
+router.post(
+  "/:id/restore",
+  validateParams(RecipeIdParamsSchema),
+  controller.restore,
+);
+
   router.delete(
     "/:id/hard",
     validateParams(RecipeIdParamsSchema),
