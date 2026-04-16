@@ -59,6 +59,7 @@ export class RecipeRepository {
             product: {
               include: {
                 nutrients: true,
+                brand: true,
               },
             },
           },

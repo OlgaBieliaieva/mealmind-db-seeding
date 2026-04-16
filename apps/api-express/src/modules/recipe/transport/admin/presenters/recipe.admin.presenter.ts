@@ -29,7 +29,11 @@ export function presentRecipeDetails(recipe: RecipePersistenceAggregate) {
       id: i.id,
       product_id: i.productId,
       product_name: i.product.nameUa,
-      brand_name: i.product.brand?.nameUa ?? null,
+      brand_name: i.product.brand
+        ? i.product.brand.country?.toLocaleLowerCase() === "україна"
+          ? i.product.brand.nameUa
+          : i.product.brand.nameEn
+        : null,
       quantity_g: i.quantityG,
       is_optional: i.isOptional,
       order: i.orderIndex,

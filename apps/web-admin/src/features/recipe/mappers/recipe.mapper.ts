@@ -10,41 +10,72 @@ export function mapRecipeDtoToVM(dto: RecipeDTO): RecipeDetailsVM {
   return {
     id: dto.recipe.recipe_id,
     title: dto.recipe.title,
-    description: dto.recipe.description,
+    description: dto.recipe.description ?? "",
 
     status: dto.recipe.status,
     visibility: dto.recipe.visibility,
 
-    photoUrl: dto.recipe.photo_url,
+    photoUrl: dto.recipe.photo_url ?? null,
 
-    type: dto.recipe.recipe_type_name,
-    difficulty: dto.recipe.difficulty,
+    type: dto.recipe.recipe_type_name ?? null,
+    difficulty: dto.recipe.difficulty ?? null,
 
-    prepTime: dto.recipe.prep_time_min,
-    cookTime: dto.recipe.cook_time_min,
+    prepTime: dto.recipe.prep_time_min ?? null,
+    cookTime: dto.recipe.cook_time_min ?? null,
 
     servings: dto.recipe.base_servings,
     outputWeight: dto.recipe.base_output_weight_g,
     output_weight_mode: dto.recipe.output_weight_mode ?? "auto",
 
+    // ✅ AUTHOR
+    author: dto.author
+      ? {
+          name: dto.author.display_name,
+          avatarUrl: dto.author.avatar_url,
+          profileUrl: dto.author.profile_url,
+          type: dto.author.type,
+        }
+      : null,
+
+    // ✅ TAGS
+    cuisines: dto.cuisines.map((c) => c.name),
+    dietaryTags: dto.dietary_tags.map((d) => d.name),
+
+    // ✅ INGREDIENTS
     ingredients: dto.ingredients.map((i) => ({
       id: i.id,
       name: i.product_name,
+      brand: i.brand_name ?? null,
       quantity: i.quantity_g,
       isOptional: i.is_optional,
     })),
 
+    // ✅ STEPS
     steps: dto.steps.map((s) => ({
       id: s.id,
       text: s.text,
     })),
 
-    cuisines: dto.cuisines.map((c) => c.name),
-    dietaryTags: dto.dietary_tags.map((d) => d.name),
+    // ✅ NUTRIENTS (вже нормалізовані бекендом)
+    nutrients: dto.nutrients ?? {},
 
-    nutrients: dto.nutrients,
+    // ✅ VIDEOS
+    videos:
+      dto.videos?.map((v) => ({
+        id: v.recipe_video_id,
+        platform: v.platform,
+        url: v.url,
+        author: v.author
+          ? {
+              name: v.author.display_name,
+              profileUrl: v.author.profile_url,
+            }
+          : undefined,
+      })) ?? [],
   };
 }
+
+/* ========================================================= */
 
 export function mapRecipeFormToInput(form: FormInput): RecipeInput {
   return {
@@ -72,7 +103,7 @@ export function mapRecipeFormToInput(form: FormInput): RecipeInput {
     ingredients: form.ingredients
       .filter((i) => i.product_id && i.quantity_g > 0)
       .map((i, index) => ({
-        product_id: i.product_id,
+        product_id: i.product_id!,
         quantity_g: i.quantity_g,
         is_optional: i.is_optional,
         order_index: index + 1,
