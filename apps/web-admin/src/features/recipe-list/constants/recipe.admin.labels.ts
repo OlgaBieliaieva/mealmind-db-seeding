@@ -9,6 +9,7 @@ export const RECIPE_ADMIN_LABELS = {
     cuisine: "Кухня",
     dietary: "Дієта",
     status: "Статус",
+    author: "Автор рецепта",
   },
 
   empty: {

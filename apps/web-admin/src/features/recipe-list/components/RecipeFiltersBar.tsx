@@ -6,11 +6,12 @@ import { useRecipeFilters } from "../hooks/useRecipeFilters";
 import { useRecipeTypes } from "@/shared/hooks/useRecipeTypes";
 import { useCuisines } from "@/shared/hooks/useCuisines";
 import { useDietaryTags } from "@/shared/hooks/useDietaryTags";
-
+import { useRecipeAuthors } from "@/shared/hooks/useRecipeAuthors";
 import {
   mapRecipeTypesToOptions,
   mapCuisinesToOptions,
   mapDietaryTagsToOptions,
+  mapRecipeAuthorsToOptions,
 } from "../adapters/recipe-options.adapter";
 
 import { RECIPE_ADMIN_LABELS } from "../constants/recipe.admin.labels";
@@ -21,6 +22,7 @@ export function RecipeFiltersBar() {
   const { data: recipeTypes } = useRecipeTypes();
   const { data: cuisines } = useCuisines();
   const { data: dietaryTags } = useDietaryTags();
+  const { data: authors } = useRecipeAuthors();
 
   // ===== OPTIONS =====
 
@@ -36,8 +38,12 @@ export function RecipeFiltersBar() {
     return dietaryTags ? mapDietaryTagsToOptions(dietaryTags) : [];
   }, [dietaryTags]);
 
+  const authorOptions = useMemo(() => {
+    return authors ? mapRecipeAuthorsToOptions(authors) : [];
+  }, [authors]);
+
   return (
-    <div className="grid gap-3 md:grid-cols-5">
+    <div className="flex flex-col gap-3 ">
       {/* SEARCH */}
       <input
         value={filters.query ?? ""}
@@ -123,6 +129,25 @@ export function RecipeFiltersBar() {
         <option value="ready">Готовий</option>
         <option value="published">Опубліковано</option>
         <option value="archived">Архів</option>
+      </select>
+
+      {/* AUTHOR */}
+      <select
+        value={filters.author_id ?? ""}
+        onChange={(e) =>
+          updateFilters({
+            author_id: e.target.value || undefined,
+          })
+        }
+        className="rounded border px-3 py-2"
+      >
+        <option value="">{RECIPE_ADMIN_LABELS.filters.author}</option>
+
+        {authorOptions.map((opt) => (
+          <option key={opt.id} value={opt.id}>
+            {opt.label}
+          </option>
+        ))}
       </select>
 
       {isPending && (
