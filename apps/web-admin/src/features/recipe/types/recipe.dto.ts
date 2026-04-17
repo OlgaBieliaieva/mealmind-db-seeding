@@ -12,7 +12,7 @@ export type RecipeDTO = {
     visibility: RecipeVisibility;
     photo_url?: string | null;
 
-    recipe_type_id: number | null;
+    recipe_type_id: string | null;
     recipe_type_name: string | null;
 
     difficulty: RecipeDifficulty | null;

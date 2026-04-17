@@ -12,7 +12,7 @@ import { useProductFormFlow } from "../../hooks/useProductFormFlow";
 import { useDirtyGuard } from "../../hooks/useDirtyGuard";
 import { FormStatus } from "@/shared/ui/form/FormStatus";
 import { PRODUCT_FORM_SECTIONS } from "../../forms/productForm.registry";
-import { ProductEditNavigation } from "@/features/product-details/components/ProductEditNavigation";
+import { FormEditNavigation } from "@/shared/ui/form/FormEditNavigation";
 
 type Props = {
   mode?: "create" | "edit";
@@ -96,7 +96,12 @@ export function ProductForm({
           setAllowParentEdit,
         }}
       >
-        {mode === "edit" && <ProductEditNavigation />}
+        {mode === "edit" && (
+          <FormEditNavigation
+            confirmTitle="Є незбережені зміни продукту"
+            confirmDescription="Ви впевнені, що хочете покинути сторінку? Зміни продукту будуть втрачені."
+          />
+        )}
 
         <form
           onSubmit={handleSubmit(onSubmit, onInvalid)}

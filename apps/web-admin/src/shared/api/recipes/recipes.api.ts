@@ -68,3 +68,12 @@ export function deleteRecipeHard(id: string) {
     method: "DELETE",
   });
 }
+
+// ===== UPDATE =====
+
+export function updateRecipe(id: string, body: RecipeInput) {
+  return apiFetch<void>(`/recipes/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify(body),
+  });
+}

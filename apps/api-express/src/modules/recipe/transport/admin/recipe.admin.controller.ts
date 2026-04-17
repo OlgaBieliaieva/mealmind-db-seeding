@@ -84,4 +84,16 @@ export class RecipeAdminController {
       next(err);
     }
   };
+
+  update = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { id } = req.params as { id: string };
+
+      await this.service.update(id, req.body);
+
+      res.sendStatus(204);
+    } catch (e) {
+      next(e);
+    }
+  };
 }
