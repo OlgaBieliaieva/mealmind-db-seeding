@@ -1,9 +1,13 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
+
 import { useProductStatusActions } from "../../hooks/useProductStatusActions";
 import { useDeleteProduct } from "@/features/product-form/hooks/useDeleteProduct";
 import { ProductDetailsDto } from "@/shared/api/products/products.types";
+
+import { ConfirmModal } from "@/shared/ui/modal/ConfirmModal";
 
 type Props = {
   product: ProductDetailsDto;
@@ -11,61 +15,82 @@ type Props = {
 
 export function ProductDetailsFooterActions({ product }: Props) {
   const router = useRouter();
+
   const { archive, activate, restore } = useProductStatusActions();
   const { mutate, isPending } = useDeleteProduct();
 
+  const [confirmOpen, setConfirmOpen] = useState(false);
+
+  function handleDelete() {
+    mutate(product.id);
+  }
+
   return (
-    <div className="mt-10 border-t pt-6">
-      <div className="flex justify-end gap-3">
-        <button
-          onClick={() => router.push(`/admin/products/${product.id}/edit`)}
-          className="text-sm border px-3 py-1 rounded"
-        >
-          Змінити
-        </button>
-
-        {/* ---------- STATUS ACTIONS ---------- */}
-
-        {product.status === "draft" && (
+    <>
+      <div className="mt-10 border-t pt-6">
+        <div className="flex justify-end gap-3">
+          {/* EDIT */}
           <button
-            className="text-sm border px-3 py-1 rounded bg-green-100 text-green-700"
-            onClick={() => activate.mutate(product.id)}
-            disabled={activate.isPending}
+            onClick={() => router.push(`/admin/products/${product.id}/edit`)}
+            className="text-sm border px-3 py-1 rounded"
           >
-            Опублікувати
+            Змінити
           </button>
-        )}
 
-        {product.status === "active" && (
-          <button
-            className="text-sm border px-3 py-1 rounded bg-gray-100 text-gray-700"
-            onClick={() => archive.mutate(product.id)}
-            disabled={archive.isPending}
-          >
-            Архівувати
-          </button>
-        )}
+          {/* STATUS ACTIONS */}
 
-        {product.status === "archived" && (
-          <>
+          {product.status === "draft" && (
             <button
-              className="text-sm border px-3 py-1 rounded bg-gray-100 text-gray-700 bg-yellow-100 text-yellow-700"
-              onClick={() => restore.mutate(product.id)}
-              disabled={restore.isPending}
+              className="text-sm border px-3 py-1 rounded bg-green-100 text-green-700"
+              onClick={() => activate.mutate(product.id)}
+              disabled={activate.isPending}
             >
-              Відновити
+              Опублікувати
             </button>
+          )}
 
+          {product.status === "active" && (
             <button
-              className="text-sm border px-3 py-1 rounded bg-gray-100 text-gray-700 bg-red-100 text-red-700"
-              onClick={() => mutate(product.id)}
-              disabled={isPending}
+              className="text-sm border px-3 py-1 rounded bg-gray-100 text-gray-700"
+              onClick={() => archive.mutate(product.id)}
+              disabled={archive.isPending}
             >
-              Видалити
+              Архівувати
             </button>
-          </>
-        )}
+          )}
+
+          {product.status === "archived" && (
+            <>
+              <button
+                className="text-sm border px-3 py-1 rounded bg-yellow-100 text-yellow-700"
+                onClick={() => restore.mutate(product.id)}
+                disabled={restore.isPending}
+              >
+                Відновити
+              </button>
+
+              <button
+                onClick={() => setConfirmOpen(true)}
+                className="text-sm border px-3 py-1 rounded bg-red-100 text-red-700"
+              >
+                Видалити
+              </button>
+            </>
+          )}
+        </div>
       </div>
-    </div>
+
+      {/* 🔥 CONFIRM MODAL */}
+      <ConfirmModal
+        open={confirmOpen}
+        title="Видалити продукт?"
+        description="Цю дію неможливо скасувати"
+        confirmText="Видалити"
+        cancelText="Скасувати"
+        isLoading={isPending}
+        onCancel={() => setConfirmOpen(false)}
+        onConfirm={handleDelete}
+      />
+    </>
   );
 }

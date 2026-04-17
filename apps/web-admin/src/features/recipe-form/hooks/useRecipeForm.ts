@@ -10,11 +10,21 @@ import { useRecipeFormFlow } from "./useRecipeFormFlow";
 type FormInput = z.input<typeof RecipeCreateSchema>;
 type FormOutput = z.output<typeof RecipeCreateSchema>;
 
-export function useRecipeForm() {
-  const form = useForm<FormInput, FormOutput>({
+type Props = {
+  defaultValues?: FormInput;
+  onSubmit?: (values: FormInput) => Promise<void> | void;
+  isSubmitting?: boolean;
+};
+
+export function useRecipeForm({
+  defaultValues,
+  onSubmit,
+  isSubmitting: externalSubmitting,
+}: Props = {}) {
+  const form = useForm<FormInput, unknown, FormOutput>({
     resolver: zodResolver(RecipeCreateSchema),
 
-    defaultValues: {
+    defaultValues: defaultValues ?? {
       recipe: {
         title: "",
         description: "",
@@ -33,9 +43,11 @@ export function useRecipeForm() {
 
   const flow = useRecipeFormFlow();
 
+  const submitHandler = onSubmit ?? flow.submit;
+
   return {
     form,
-    onSubmit: flow.submit,
-    isSubmitting: flow.isSubmitting,
+    onSubmit: submitHandler,
+    isSubmitting: externalSubmitting ?? flow.isSubmitting,
   };
 }

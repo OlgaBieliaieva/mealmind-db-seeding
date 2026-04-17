@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client";
+import { Prisma, RecipeStatus } from "@prisma/client";
 import { RecipeRepository } from "../domain/recipe.repository";
 import { RecipeSearchQuery } from "../domain/queries/recipe-search.query";
 import { RecipeSearchQuery as Filters } from "../transport/admin/schemas/recipe-search.query.schema";
@@ -189,6 +189,18 @@ export class RecipeService {
     return recipe;
   }
 
+  async publish(id: string) {
+    return this.repo.updateStatus(id, RecipeStatus.published);
+  }
+
+  async archive(id: string) {
+    return this.repo.updateStatus(id, RecipeStatus.archived);
+  }
+
+  async restore(id: string) {
+    return this.repo.updateStatus(id, RecipeStatus.draft);
+  }
+
   async deleteHard(id: string) {
     const recipe = await this.repo.findByIdDetailed(id);
 
@@ -204,5 +216,70 @@ export class RecipeService {
     }
 
     await this.repo.deleteHard(id);
+  }
+
+  async update(id: string, data: CreateRecipeDTO) {
+    const existing = await this.repo.findByIdDetailed(id);
+
+    if (!existing) {
+      throw new NotFoundError("RECIPE_NOT_FOUND", "Recipe not found");
+    }
+
+    // 🔥 1. оновлюємо основні дані
+    await this.repo.update(id, {
+      title: data.recipe.title,
+      description: data.recipe.description,
+
+      baseServings: data.recipe.base_servings,
+      baseOutputWeightG: data.recipe.base_output_weight_g,
+
+      difficulty: data.recipe.difficulty,
+
+      prepTimeMin: data.recipe.prep_time_min,
+      cookTimeMin: data.recipe.cook_time_min,
+
+      photoUrl: data.recipe.photo_url,
+
+      recipeType: data.recipe.recipe_type_id
+        ? { connect: { id: data.recipe.recipe_type_id } }
+        : { disconnect: true },
+
+      author: data.recipe.recipe_author_id
+        ? { connect: { id: data.recipe.recipe_author_id } }
+        : { disconnect: true },
+    });
+
+    // 🔥 2. replace ingredients
+    await this.repo.replaceIngredients(id, data.ingredients);
+
+    // 🔥 3. replace steps
+    await this.repo.replaceSteps(id, data.steps);
+
+    // 🔥 4. replace cuisines
+    await this.repo.replaceCuisines(id, data.cuisine_ids);
+
+    // 🔥 5. replace dietary tags
+    await this.repo.replaceDietaryTags(id, data.dietary_tag_ids);
+
+    // 🔥 6. перерахунок нутрієнтів
+    const detailed = await this.repo.findByIdDetailed(id);
+
+    if (detailed) {
+      const ingredientsForCalc = detailed.ingredients.map((i) => ({
+        quantityG: i.quantityG,
+        product: {
+          nutrients: i.product.nutrients.map((n) => ({
+            nutrientId: n.nutrientId,
+            valuePer100g: n.valuePer100g,
+            unit: n.unit,
+          })),
+        },
+      }));
+
+      const calculated =
+        RecipeNutritionCalculator.calculate(ingredientsForCalc);
+
+      await this.repo.replaceNutrients(id, calculated);
+    }
   }
 }

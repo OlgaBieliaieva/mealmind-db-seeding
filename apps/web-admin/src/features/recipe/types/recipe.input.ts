@@ -6,7 +6,7 @@ export type RecipeInput = {
     description: string;
 
     recipe_type_id?: string;
-    recipe_author_id?: string; // ✅ ДОДАТИ
+    recipe_author_id?: string; 
 
     base_servings: number;
     output_weight_mode: "auto" | "manual";
@@ -17,7 +17,7 @@ export type RecipeInput = {
     prep_time_min?: number;
     cook_time_min?: number;
 
-    photo_url?: string; // ✅ ДОДАТИ
+    photo_url?: string; 
   };
 
   ingredients: {
