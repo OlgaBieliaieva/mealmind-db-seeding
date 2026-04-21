@@ -5,6 +5,7 @@
   "workspaces": [
     "apps/*"
   ],
+  
   "scripts": {
     "dev": "turbo run dev",
     "dev:api": "npm run dev --workspace=api-express",
@@ -22,6 +23,7 @@
   "engines": {
     "node": "20.x"
   },
+  "packageManager": "npm@10.8.2",
   "dependencies": {
     "@google-cloud/storage": "^7.18.0",
     "@hookform/resolvers": "^5.2.2",
