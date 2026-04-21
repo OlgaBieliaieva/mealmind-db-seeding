@@ -1,0 +1,25 @@
+{
+  "name": "@mealmind/db",
+  "version": "1.0.0",
+  "main": "src/client.ts",
+  "types": "src/client.ts",
+  "exports": {
+    ".": "./src/client.ts",
+    "./types": "./src/types.ts"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@prisma/client": "^7.7.0",
+    "@prisma/adapter-pg": "^7.5.0",
+    "pg": "^8.20.0"
+  },
+  "devDependencies": {
+    "prisma": "^7.7.0"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
