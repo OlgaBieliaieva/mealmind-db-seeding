@@ -12,7 +12,7 @@ import { createCuisineModule } from "./modules/cuisine/cuisine.module";
 import { createDietaryTagModule } from "./modules/dietary-tag/dietary-tag.module";
 import { createRecipeAuthorModule } from "./modules/recipe-author/recipe-author.module";
 
-import { prisma } from "./db/prisma";
+import { prisma } from "@mealmind/db";
 
 const PORT = 4000;
 
