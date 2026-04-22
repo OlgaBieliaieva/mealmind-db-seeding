@@ -40,5 +40,3 @@ export type MealPlanDTO = {
   };
   days: DayDTO[];
 };
-
-export type ViewMode = "meal" | "user";

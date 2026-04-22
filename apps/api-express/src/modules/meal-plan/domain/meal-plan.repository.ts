@@ -41,9 +41,38 @@ export class MealPlanRepository {
         },
       },
       include: {
-        mealType: true,
-        recipe: true,
-        product: true,
+        mealType: {
+          select: {
+            id: true,
+            nameUa: true,
+            orderIndex: true,
+          },
+        },
+
+        user: {
+          select: {
+            id: true,
+            firstName: true,
+            avatarUrl: true,
+          },
+        },
+
+        recipe: {
+          select: {
+            id: true,
+            title: true,
+            baseServings: true, 
+            baseOutputWeightG: true
+          },
+        },
+
+        product: {
+          select: {
+            id: true,
+            nameUa: true,
+            unit: true,
+          },
+        },
       },
     });
   }

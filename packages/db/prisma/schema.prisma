@@ -257,6 +257,7 @@ model MealEntry {
   date       DateTime @db.Date
 
   userId String @db.Uuid
+  user   User   @relation(fields: [userId], references: [id])
 
   mealTypeId String @db.Uuid
 
@@ -300,6 +301,7 @@ model User {
   dislikedProducts    UserDislikedProduct[]
   mealSettings        UserMealSetting[]
   nutrientTargets     UserNutrientTarget[]
+  mealEntries         MealEntry[]
 }
 
 model UserBodyMetric {

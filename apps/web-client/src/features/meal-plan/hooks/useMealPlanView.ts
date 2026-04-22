@@ -8,6 +8,7 @@ import { groupMeals } from "@/shared/lib/groupMeals";
 export function useMealPlanView() {
   const { data, isLoading } = useMealPlan();
   const { selectedDays, isMulti } = usePlanParams();
+  console.log(data);
 
   if (!data) {
     return {
