@@ -40,6 +40,11 @@ export class MealPlanRepository {
           lte: to,
         },
       },
+      include: {
+        mealType: true,
+        recipe: true,
+        product: true,
+      },
     });
   }
 
