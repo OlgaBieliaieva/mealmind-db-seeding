@@ -1,7 +1,7 @@
 "use client";
 
 import { useMealPlanView } from "../hooks/useMealPlanView";
-import { useMealPlanViewMode } from "../hooks/useMealPlanViewMode";
+import { usePlanParams } from "../hooks/usePlanParams";
 import { ViewModeSwitch } from "./ViewModeSwitch";
 import { groupMeals } from "@/shared/lib/groupMeals";
 import { groupByUser } from "@/shared/lib/groupByUser";
@@ -9,18 +9,15 @@ import { MealSection } from "./MealSection";
 import { UserSection } from "./UserSection";
 
 export default function PlanContent() {
-  const { days, aggregatedMeals, isLoading, isEmpty } = useMealPlanView();
-
-  const { viewMode, setViewMode } = useMealPlanViewMode();
+  const { aggregatedMeals, isLoading, isEmpty } = useMealPlanView();
+  const { viewMode, setViewMode } = usePlanParams();
 
   if (isLoading) {
-    return <div className="p-4 text-sm text-gray-400">Loading...</div>;
+    return <div className="p-4 text-sm text-gray-400">Завантажується...</div>;
   }
 
   return (
     <div>
-      <ViewModeSwitch value={viewMode} onChange={setViewMode} />
-
       {isEmpty && (
         <div className="p-4 text-sm text-gray-400">
           Немає запланованих прийомів їжі

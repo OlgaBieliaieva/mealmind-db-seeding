@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { usePlanParams } from "../hooks/usePlanParams";
+import { useFamily } from "@/features/family/hooks/useFamily";
 import { getWeekStart, generateWeek, formatWeekLabel } from "../lib/date";
 import PlanDaySelector from "./PlanDaySelector";
 
@@ -16,6 +17,7 @@ export default function PlanHeader() {
   } = usePlanParams();
 
   const [isOpen, setIsOpen] = useState(false);
+  const { data } = useFamily();
 
   const weekStart = getWeekStart(activeDate);
   const fullWeek = generateWeek(weekStart);
@@ -26,7 +28,9 @@ export default function PlanHeader() {
       {/* ROW 1 */}
       <div className="px-4 py-3 flex justify-between items-center">
         <div>
-          <div className="text-lg font-semibold text-gray-900">Родина</div>
+          <div className="text-lg font-semibold text-gray-900">
+            {data?.name ?? "…"}
+          </div>
         </div>
 
         <div className="flex items-center gap-4">

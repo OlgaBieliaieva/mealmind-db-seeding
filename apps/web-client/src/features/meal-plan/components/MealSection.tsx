@@ -4,9 +4,11 @@ type Props = {
 };
 
 export function MealSection({ meal }: Props) {
+  console.log(meal);
+
   return (
     <div>
-      <div className="font-medium mb-1">{meal.mealTypeId}</div>
+      <div className="font-medium mb-1">{meal.mealTypeName}</div>
 
       <div className="space-y-1">
         {meal.entries.map((e) => (

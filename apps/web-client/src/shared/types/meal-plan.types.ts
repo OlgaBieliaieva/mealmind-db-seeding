@@ -8,6 +8,7 @@ export type MealEntryDTO = {
 
 export type MealDTO = {
   mealTypeId: string;
+  mealTypeName: string;
   entries: MealEntryDTO[];
 };
 

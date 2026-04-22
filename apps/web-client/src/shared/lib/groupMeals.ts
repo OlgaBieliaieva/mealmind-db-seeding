@@ -9,6 +9,7 @@ export function groupMeals(meals: MealDTO[]): MealDTO[] {
     if (!existing) {
       map.set(meal.mealTypeId, {
         mealTypeId: meal.mealTypeId,
+        mealTypeName: meal.mealTypeName,
         entries: [...meal.entries],
       });
     } else {

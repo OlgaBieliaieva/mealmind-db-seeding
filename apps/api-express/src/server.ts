@@ -1,6 +1,7 @@
 import "dotenv/config";
 import express from "express";
 import cors from "cors";
+
 import { errorHandler } from "./middleware/error-handler";
 import { createProductModule } from "./modules/product/product.module";
 import { createCategoryModule } from "./modules/category/category.module";
@@ -12,6 +13,7 @@ import { createCuisineModule } from "./modules/cuisine/cuisine.module";
 import { createDietaryTagModule } from "./modules/dietary-tag/dietary-tag.module";
 import { createRecipeAuthorModule } from "./modules/recipe-author/recipe-author.module";
 import { createMealPlanModule } from "./modules/meal-plan/meal-plan.module";
+import { createFamilyModule } from "./modules/family/family.module";
 
 import { prisma } from "@mealmind/db";
 
@@ -32,6 +34,7 @@ const recipeAuthorModule = createRecipeAuthorModule(prisma);
 
 // CLIENT
 const mealPlanModule = createMealPlanModule(prisma);
+const familyModule = createFamilyModule(prisma);
 
 app.use(cors());
 app.use(express.json());
@@ -49,6 +52,7 @@ app.use("/api/v1/admin/recipe-authors", recipeAuthorModule.adminRouter);
 
 // CLIENT
 app.use("/api/v1/client/meal-plans", mealPlanModule.router);
+app.use("/api/v1/client/families", familyModule.router);
 
 app.get("/health", (_req, res) => {
   res.json({
