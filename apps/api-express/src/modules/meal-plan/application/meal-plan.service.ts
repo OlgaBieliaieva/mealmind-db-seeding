@@ -1,4 +1,5 @@
 import { MealPlanRepository } from "../domain/meal-plan.repository";
+import { mapToWeekView } from "../transport/client/mappers/meal-plan.mapper";
 
 export class MealPlanService {
   constructor(private repo: MealPlanRepository) {}
@@ -45,7 +46,7 @@ export class MealPlanService {
 
     const entries = await this.repo.findEntries(plan.id, from, to);
 
-    return { plan, entries };
+    return mapToWeekView(entries, from);
   }
 
   // =========================

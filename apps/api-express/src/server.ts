@@ -11,6 +11,7 @@ import { createRecipeTypeModule } from "./modules/recipe-type/recipe-type.module
 import { createCuisineModule } from "./modules/cuisine/cuisine.module";
 import { createDietaryTagModule } from "./modules/dietary-tag/dietary-tag.module";
 import { createRecipeAuthorModule } from "./modules/recipe-author/recipe-author.module";
+import { createMealPlanModule } from "./modules/meal-plan/meal-plan.module";
 
 import { prisma } from "@mealmind/db";
 
@@ -18,6 +19,7 @@ const PORT = 4000;
 
 const app = express();
 
+// ADMIN
 const productModule = createProductModule(prisma);
 const categoryModule = createCategoryModule(prisma);
 const brandModule = createBrandModule(prisma);
@@ -28,9 +30,13 @@ const cuisineModule = createCuisineModule(prisma);
 const dietaryTagModule = createDietaryTagModule(prisma);
 const recipeAuthorModule = createRecipeAuthorModule(prisma);
 
+// CLIENT
+const mealPlanModule = createMealPlanModule(prisma);
+
 app.use(cors());
 app.use(express.json());
 
+// ADMIN
 app.use("/api/v1/admin/products", productModule.adminRouter);
 app.use("/api/v1/admin/categories", categoryModule.adminRouter);
 app.use("/api/v1/admin/brands", brandModule.adminRouter);
@@ -40,6 +46,9 @@ app.use("/api/v1/admin/recipe-types", recipeTypeModule.adminRouter);
 app.use("/api/v1/admin/cuisines", cuisineModule.adminRouter);
 app.use("/api/v1/admin/dietary-tags", dietaryTagModule.adminRouter);
 app.use("/api/v1/admin/recipe-authors", recipeAuthorModule.adminRouter);
+
+// CLIENT
+app.use("api/v1/client/meal-plans", mealPlanModule.router);
 
 app.get("/health", (_req, res) => {
   res.json({
