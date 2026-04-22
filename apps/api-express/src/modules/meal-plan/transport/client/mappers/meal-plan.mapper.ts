@@ -2,8 +2,22 @@ type MealEntryRaw = {
   id: string;
   date: Date;
   mealTypeId: string;
+  mealType: {
+    id: string;
+    nameUa: string;
+    nameEn: string;
+  };
   recipeId?: string | null;
   productId?: string | null;
+  recipe?: {
+    id: string;
+    title: string;
+  } | null;
+  product?: {
+    id: string;
+    nameUa: string;
+  } | null;
+  userId: string;
   amount: number;
 };
 
@@ -28,15 +42,23 @@ export function mapToWeekView(entries: MealEntryRaw[], weekStart: Date) {
     }
 
     const meals = Array.from(mealsMap.entries()).map(
-      ([mealTypeId, entries]) => ({
-        mealTypeId,
-        entries: entries.map((e) => ({
-          id: e.id,
-          type: e.recipeId ? "recipe" : "product",
-          refId: e.recipeId ?? e.productId,
-          amount: e.amount,
-        })),
-      }),
+      ([mealTypeId, entries]) => {
+        const first = entries[0];
+
+        return {
+          mealTypeId,
+          mealTypeName: first.mealType.nameUa, // 🔥
+
+          entries: entries.map((e) => ({
+            id: e.id,
+            type: e.recipeId ? "recipe" : "product",
+            refId: e.recipeId ?? e.productId,
+            name: e.recipe ? e.recipe.title : (e.product?.nameUa ?? "—"), // 🔥
+            userId: e.userId, // 🔥
+            amount: e.amount,
+          })),
+        };
+      },
     );
 
     return {
