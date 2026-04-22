@@ -1,4 +1,5 @@
 import { apiFetch } from "@/shared/lib/api/fetcher";
+import { MealPlanDTO } from "@/shared/types/meal-plan.types";
 
 export function getMealPlan(params: { date: string; days?: string[] }) {
   const qs = new URLSearchParams();
@@ -9,5 +10,5 @@ export function getMealPlan(params: { date: string; days?: string[] }) {
     qs.set("days", params.days.join(","));
   }
 
-  return apiFetch(`/meal-plans?${qs.toString()}`);
+  return apiFetch<MealPlanDTO>(`/meal-plans?${qs.toString()}`);
 }

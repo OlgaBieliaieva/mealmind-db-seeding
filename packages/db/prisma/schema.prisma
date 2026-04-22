@@ -39,6 +39,7 @@ model Product {
   allergies          UserAllergy[]
   dislikedByUsers    UserDislikedProduct[]
   recipeIngredients  RecipeIngredient[]
+  mealEntries MealEntry[]
 
   @@index([type])
   @@index([categoryId])
@@ -131,6 +132,7 @@ model Recipe {
   dietaryTags RecipeDietaryTag[]
   videos      RecipeVideo[]
   nutrients   RecipeNutrient[]
+  mealEntries MealEntry[]
 
   @@index([status])
   @@index([recipeTypeId])
@@ -267,6 +269,8 @@ model MealEntry {
 
   mealPlan MealPlan @relation(fields: [mealPlanId], references: [id])
   mealType MealType @relation(fields: [mealTypeId], references: [id])
+  recipe  Recipe?  @relation(fields: [recipeId], references: [id])
+  product Product? @relation(fields: [productId], references: [id])
 
   @@index([mealPlanId])
   @@index([date])

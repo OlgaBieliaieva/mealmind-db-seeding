@@ -1,6 +1,8 @@
 import { Request, Response, NextFunction } from "express";
 import { MealPlanService } from "../../application/meal-plan.service";
 
+const DEMO_FAMILY_ID = "c1d8e7f4-3b29-4a6c-8e15-7f0a2b9d6e33";
+
 export class MealPlanController {
   constructor(private service: MealPlanService) {}
 
@@ -8,7 +10,7 @@ export class MealPlanController {
     try {
       const { date } = req.query;
 
-      const familyId = "demo-family";
+      const familyId = DEMO_FAMILY_ID;
 
       const result = await this.service.getPlanEntries(familyId, String(date));
 

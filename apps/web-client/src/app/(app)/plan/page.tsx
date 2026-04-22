@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import PlanHeader from "@/features/meal-plan/components/PlanHeader";
+import PlanContent from "@/features/meal-plan/components/PlanContent";
 
 type Props = {
   searchParams: Promise<{
@@ -19,10 +20,7 @@ export default async function PlanPage({ searchParams }: Props) {
     <div className="pb-24">
       <PlanHeader />
 
-      {/* тимчасовий контент */}
-      <div className="p-4 text-sm text-gray-500">
-        Meal plan content coming next...
-      </div>
+      <PlanContent />
     </div>
   );
 }
