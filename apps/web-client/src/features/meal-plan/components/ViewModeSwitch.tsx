@@ -9,7 +9,7 @@ type Props = {
 
 export function ViewModeSwitch({ value, onChange }: Props) {
   return (
-    <div className="flex items-center justify-end px-4 pt-2">
+    <div className="flex items-center justify-end">
       <div className="flex bg-gray-100 rounded-full p-1">
         <button
           onClick={() => onChange("meal")}

@@ -18,20 +18,12 @@ export default function PlanDaySelector({
   onSelect,
 }: Props) {
   return (
-    <div className="flex justify-between">
+    <div className="flex justify-between gap-2">
       {days.map((day, index) => {
         const isActive = day === activeDate;
         const isSelected = selectedDays.includes(day);
 
-        let cls = "bg-gray-100 text-gray-700";
-
-        if (!isMulti && isActive) {
-          cls = "bg-black text-white";
-        }
-
-        if (isMulti && isSelected) {
-          cls = "bg-black text-white";
-        }
+        const selected = isMulti ? isSelected : isActive;
 
         const date = new Date(day);
 
@@ -39,17 +31,14 @@ export default function PlanDaySelector({
           <button
             key={day}
             onClick={() => onSelect(day)}
-            className="flex flex-col items-center gap-1"
+            className={`flex flex-col items-center justify-center px-2 py-2 rounded-full text-sm transition
+              ${
+                selected ? "bg-black text-white" : "bg-gray-100 text-gray-600"
+              }`}
           >
-            {/* Day of week */}
-            <span className="text-xs text-gray-400">{WEEK_DAYS_UA[index]}</span>
+            <span className="text-xs opacity-70">{WEEK_DAYS_UA[index]}</span>
 
-            {/* Date */}
-            <div
-              className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium ${cls}`}
-            >
-              {date.getDate()}
-            </div>
+            <span className="text-sm font-medium">{date.getDate()}</span>
           </button>
         );
       })}
