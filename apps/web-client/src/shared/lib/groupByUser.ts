@@ -1,11 +1,11 @@
-import { AggregatedMealItem } from "../types/meal-plan.types";
+import { AggregatedMealItemDTO } from "../types/meal-plan.types";
 
 type UserGroup = {
   userId: string;
-  meals: AggregatedMealItem[];
+  meals: AggregatedMealItemDTO[];
 };
 
-export function groupByUser(meals: AggregatedMealItem[]): UserGroup[] {
+export function groupByUser(meals: AggregatedMealItemDTO[]): UserGroup[] {
   const map = new Map<string, UserGroup>();
 
   for (const meal of meals) {

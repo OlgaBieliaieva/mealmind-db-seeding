@@ -7,10 +7,10 @@
     "build": "tsc",
     "start": "node dist/server.js"
   },
-  "prisma": {
-    "schema": "prisma/schema.prisma"
-  },
   "dependencies": {
+    "@mealmind/db": "*",
+    "@prisma/client": "^7.7.0",
+    "@prisma/adapter-pg": "^7.5.0",
     "@supabase/supabase-js": "^2.100.0",
     "cors": "^2.8.6",
     "dotenv": "^17.3.1",

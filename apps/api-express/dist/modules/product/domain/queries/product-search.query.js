@@ -1,0 +1,61 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ProductSearchQuery = void 0;
+class ProductSearchQuery {
+    prisma;
+    constructor(prisma) {
+        this.prisma = prisma;
+    }
+    async searchProducts(where, page, limit, options) {
+        if (!options?.includeArchived) {
+            where.status = "active";
+        }
+        const [items, total] = await this.prisma.$transaction([
+            this.prisma.product.findMany({
+                where,
+                orderBy: { createdAt: "desc" },
+                skip: (page - 1) * limit,
+                take: limit,
+                include: {
+                    brand: true,
+                    category: true,
+                },
+            }),
+            this.prisma.product.count({ where }),
+        ]);
+        return { items, total };
+    }
+    async searchGeneric(query) {
+        return this.prisma.product.findMany({
+            where: {
+                type: "generic",
+                OR: [
+                    { nameEn: { contains: query, mode: "insensitive" } },
+                    { nameUa: { contains: query, mode: "insensitive" } },
+                ],
+            },
+            take: 10,
+            orderBy: { nameEn: "asc" },
+            select: {
+                id: true,
+                nameEn: true,
+                nameUa: true,
+                categoryId: true,
+                rawOrCookedDefault: true,
+            },
+        });
+    }
+    async loadCategorySubtreeIds(categoryId) {
+        const ids = [categoryId];
+        const children = await this.prisma.category.findMany({
+            where: { parentId: categoryId },
+            select: { id: true },
+        });
+        for (const child of children) {
+            const childIds = await this.loadCategorySubtreeIds(child.id);
+            ids.push(...childIds);
+        }
+        return ids;
+    }
+}
+exports.ProductSearchQuery = ProductSearchQuery;

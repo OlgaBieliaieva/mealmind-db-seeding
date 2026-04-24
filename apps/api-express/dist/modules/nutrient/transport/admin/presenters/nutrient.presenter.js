@@ -1,0 +1,18 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.presentNutrientReference = presentNutrientReference;
+function presentNutrientReference(n) {
+    return {
+        nutrient_id: n.id,
+        code: n.code,
+        name: {
+            en: n.nameEn,
+            ua: n.nameUa,
+        },
+        default_unit: n.defaultUnit,
+        nutrient_group: n.nutrientGroup,
+        sort_order: n.sortOrder,
+        rda_value: n.rdaValue,
+        rda_unit: n.rdaUnit,
+    };
+}
