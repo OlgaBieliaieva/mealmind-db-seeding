@@ -5,6 +5,9 @@
     "declaration": true,
     "module": "Node16",
     "target": "ES2022",
-    "esModuleInterop": true
-  }
+    "esModuleInterop": true,
+    "strict": true
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "prisma"]
 }
