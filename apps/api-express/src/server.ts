@@ -19,6 +19,13 @@ import { prisma } from "@mealmind/db";
 
 const PORT = process.env.PORT || 4000;
 
+const allowedOrigins = [
+  "http://localhost:3000", // локально
+  "http://localhost:3001",
+  "https://mealmind-web-client.vercel.app", // прод
+  "https://mealmind-db-seeding.vercel.app",
+];
+
 const app = express();
 
 // ADMIN
@@ -36,7 +43,21 @@ const recipeAuthorModule = createRecipeAuthorModule(prisma);
 const mealPlanModule = createMealPlanModule(prisma);
 const familyModule = createFamilyModule(prisma);
 
-app.use(cors());
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      // дозволяємо запити без origin (наприклад Postman)
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      return callback(new Error("Not allowed by CORS"));
+    },
+    credentials: true,
+  }),
+);
 app.use(express.json());
 
 // ADMIN
