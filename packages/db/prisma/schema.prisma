@@ -260,18 +260,25 @@ model MealEntry {
   user   User   @relation(fields: [userId], references: [id])
 
   mealTypeId String @db.Uuid
+  mealType   MealType @relation(fields: [mealTypeId], references: [id])
 
   recipeId  String? @db.Uuid
   productId String? @db.Uuid
 
+  recipe  Recipe?  @relation(fields: [recipeId], references: [id])
+  product Product? @relation(fields: [productId], references: [id])
+
   amount Float
+
+  unit MealEntryUnit 
+
+  amountInGrams Float
+
+  status MealEntryStatus @default(planned)
 
   createdAt DateTime @default(now())
 
   mealPlan MealPlan @relation(fields: [mealPlanId], references: [id])
-  mealType MealType @relation(fields: [mealTypeId], references: [id])
-  recipe  Recipe?  @relation(fields: [recipeId], references: [id])
-  product Product? @relation(fields: [productId], references: [id])
 
   @@index([mealPlanId])
   @@index([date])
@@ -622,4 +629,15 @@ enum RecipeVideoPlatform {
   instagram
   tiktok
   other
+}
+
+enum MealEntryStatus {
+  planned
+  prepared
+}
+
+enum MealEntryUnit {
+  g
+  ml
+  portion
 }

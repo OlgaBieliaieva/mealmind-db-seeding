@@ -21,7 +21,6 @@ type MealEntryRaw = Prisma.MealEntryGetPayload<{
         orderIndex: true;
       };
     };
-
     user: {
       select: {
         id: true;
@@ -29,7 +28,6 @@ type MealEntryRaw = Prisma.MealEntryGetPayload<{
         avatarUrl: true;
       };
     };
-
     recipe: {
       select: {
         id: true;
@@ -38,7 +36,6 @@ type MealEntryRaw = Prisma.MealEntryGetPayload<{
         baseOutputWeightG: true;
       };
     };
-
     product: {
       select: {
         id: true;
@@ -74,7 +71,7 @@ export function mapToWeekView(
   weekStart: Date,
 ): MealPlanDTO {
   // =========================
-  // PRE-GROUP BY DATE (O(n))
+  // GROUP BY DATE
   // =========================
 
   const entriesByDate = new Map<string, MealEntryRaw[]>();
@@ -123,7 +120,6 @@ export function mapToWeekView(
       .sort(([, a], [, b]) => {
         const orderA = a[0]?.mealType.orderIndex ?? 0;
         const orderB = b[0]?.mealType.orderIndex ?? 0;
-
         return orderA - orderB;
       })
       .map(([mealTypeId, mealEntries]) => {
@@ -135,32 +131,47 @@ export function mapToWeekView(
 
           entries: mealEntries
             .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime())
-            .map((e) => ({
-              id: e.id,
-              type: getEntryType(e),
-              amount: e.amount,
+            .map((e) => {
+              const isRecipe = !!e.recipe;
 
-              user: mapUser(e.user as UserRaw),
+              return {
+                id: e.id,
 
-              recipe: e.recipe
-                ? {
-                    id: e.recipe.id,
-                    name: e.recipe.title,
-                    weightPerServing:
-                      e.recipe.baseServings > 0
-                        ? e.recipe.baseOutputWeightG / e.recipe.baseServings
-                        : 0,
-                  }
-                : undefined,
+                // 🔥 ФІКС ТИПУ
+                type: getEntryType(e),
 
-              product: e.product
-                ? {
-                    id: e.product.id,
-                    name: e.product.nameUa,
-                    unit: e.product.unit,
-                  }
-                : undefined,
-            })),
+                // INPUT
+                amount: e.amount,
+
+                // NORMALIZED
+                amountInGrams: e.amountInGrams,
+
+                // 🔥 ОБОВ'ЯЗКОВО
+                unit: isRecipe ? "g" : e.product!.unit,
+
+                // USER
+                user: mapUser(e.user),
+
+                // RECIPE
+                recipe: isRecipe
+                  ? {
+                      id: e.recipe!.id,
+                      title: e.recipe!.title,
+                      baseServings: e.recipe!.baseServings,
+                      baseOutputWeightG: e.recipe!.baseOutputWeightG,
+                    }
+                  : undefined,
+
+                // PRODUCT
+                product: !isRecipe
+                  ? {
+                      id: e.product!.id,
+                      nameUa: e.product!.nameUa,
+                      unit: e.product!.unit,
+                    }
+                  : undefined,
+              };
+            }),
         };
       });
 

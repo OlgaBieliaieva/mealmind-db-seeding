@@ -2,7 +2,6 @@
 
 import { useMealPlanView } from "../hooks/useMealPlanView";
 import { usePlanParams } from "../hooks/usePlanParams";
-import { groupMeals } from "@/shared/lib/groupMeals";
 import { groupByUser } from "@/shared/lib/groupByUser";
 import { MealSection } from "./MealSection";
 import { UserSection } from "./UserSection";
@@ -26,8 +25,8 @@ export default function PlanContent() {
       {!isEmpty && (
         <div className="p-4 space-y-6">
           {viewMode === "meal" &&
-            groupMeals(aggregatedMeals).map((meal) => (
-              <MealSection key={meal.mealTypeId} meal={meal} />
+            aggregatedMeals.map((item) => (
+              <MealSection key={item.id} item={item} />
             ))}
 
           {viewMode === "user" &&

@@ -1,23 +1,27 @@
-import { MealDTO } from "@/shared/types/meal-plan.types";
+import { AggregatedMealItem } from "@/shared/types/meal-plan.types";
+
 type Props = {
-  meal: MealDTO;
+  item: AggregatedMealItem;
 };
 
-export function MealSection({ meal }: Props) {
-  console.log(meal);
-
+export function MealSection({ item }: Props) {
   return (
-    <div>
-      <div className="font-medium mb-1">{meal.mealTypeName}</div>
+    <div className="bg-white rounded-xl border p-3 flex justify-between items-center">
+      <div>
+        <div className="text-sm font-medium">{item.name}</div>
 
-      <div className="space-y-1">
-        {meal.entries.map((e) => (
+        <div className="text-xs text-gray-400">
+          {item.portions} порцій · {Math.round(item.totalWeight)} г
+        </div>
+      </div>
+
+      <div className="flex items-center gap-2">
+        {item.users.map((u) => (
           <div
-            key={e.id}
-            className="text-sm flex justify-between bg-gray-50 rounded px-3 py-2"
+            key={u.id}
+            className="w-6 h-6 rounded-full bg-gray-200 text-xs flex items-center justify-center"
           >
-            <span>{e.name ?? e.type}</span>
-            <span className="text-gray-500">{e.amount}</span>
+            {u.firstName[0]}
           </div>
         ))}
       </div>

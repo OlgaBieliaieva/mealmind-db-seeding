@@ -1,40 +1,28 @@
-import { MealDTO, MealEntryDTO } from "../types/meal-plan.types";
+import { AggregatedMealItem } from "../types/meal-plan.types";
 
 type UserGroup = {
   userId: string;
-  meals: MealDTO[];
+  meals: AggregatedMealItem[];
 };
 
-export function groupByUser(meals: MealDTO[]): UserGroup[] {
+export function groupByUser(meals: AggregatedMealItem[]): UserGroup[] {
   const map = new Map<string, UserGroup>();
 
   for (const meal of meals) {
-    for (const entry of meal.entries) {
-      const userId =
-        (entry as MealEntryDTO & { userId?: string }).userId ?? "unknown";
-
-      if (!map.has(userId)) {
-        map.set(userId, {
-          userId,
+    for (const user of meal.users) {
+      if (!map.has(user.id)) {
+        map.set(user.id, {
+          userId: user.id,
           meals: [],
         });
       }
 
-      const userGroup = map.get(userId)!;
+      const group = map.get(user.id)!;
 
-      let mealGroup = userGroup.meals.find(
-        (m) => m.mealTypeId === meal.mealTypeId,
-      );
-
-      if (!mealGroup) {
-        mealGroup = {
-          mealTypeId: meal.mealTypeId,
-          entries: [],
-        };
-        userGroup.meals.push(mealGroup);
-      }
-
-      mealGroup.entries.push(entry);
+      group.meals.push({
+        ...meal,
+        users: [user], // 🔥 важливо: тільки цей юзер
+      });
     }
   }
 

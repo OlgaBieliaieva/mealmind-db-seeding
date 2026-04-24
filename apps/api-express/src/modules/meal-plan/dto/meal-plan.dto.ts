@@ -1,7 +1,15 @@
 export type MealEntryDTO = {
   id: string;
   type: "recipe" | "product";
+
+  // 🔥 INPUT
   amount: number;
+
+  // 🔥 NORMALIZED
+  amountInGrams: number;
+
+  // 🔥 NEW
+  unit: string;
 
   user: {
     id: string;
@@ -11,13 +19,14 @@ export type MealEntryDTO = {
 
   recipe?: {
     id: string;
-    name: string;
-    weightPerServing: number;
+    title: string;
+    baseServings: number;
+    baseOutputWeightG: number;
   };
 
   product?: {
     id: string;
-    name: string;
+    nameUa: string;
     unit: string;
   };
 };

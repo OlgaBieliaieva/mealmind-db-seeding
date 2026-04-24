@@ -1,9 +1,9 @@
-import { MealDTO } from "@/shared/types/meal-plan.types";
+import { AggregatedMealItem } from "@/shared/types/meal-plan.types";
 import { MealSection } from "./MealSection";
 
 type Props = {
   userId: string;
-  meals: MealDTO[];
+  meals: AggregatedMealItem[];
 };
 
 export function UserSection({ userId, meals }: Props) {
@@ -11,8 +11,8 @@ export function UserSection({ userId, meals }: Props) {
     <div className="space-y-3">
       <div className="font-semibold">{userId}</div>
 
-      {meals.map((meal) => (
-        <MealSection key={meal.mealTypeId} meal={meal} />
+      {meals.map((item) => (
+        <MealSection key={item.id} item={item} />
       ))}
     </div>
   );

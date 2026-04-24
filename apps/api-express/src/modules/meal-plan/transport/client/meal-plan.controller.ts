@@ -45,4 +45,28 @@ export class MealPlanController {
       next(e);
     }
   };
+
+  toggleStatus = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { id } = req.params as { id: string };
+
+      const result = await this.service.toggleEntryStatus(id);
+
+      res.json(result);
+    } catch (e) {
+      next(e);
+    }
+  };
+
+  toggleBulk = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { ids } = req.body as { ids: string[] };
+
+      await this.service.toggleEntries(ids);
+
+      res.json({ success: true });
+    } catch (e) {
+      next(e);
+    }
+  };
 }

@@ -32,6 +32,22 @@ export function MealPlanRouter(controller: MealPlanController) {
   );
 
   // =========================
+  // UPDATE ENTRY
+  // =========================
+
+  router.patch(
+    "/entries/:id/toggle",
+    validateParams(MealEntryParamsSchema),
+    controller.toggleStatus,
+  );
+
+  router.patch(
+    "/entries/toggle-bulk",
+
+    controller.toggleBulk,
+  );
+
+  // =========================
   // DELETE ENTRY
   // =========================
 
