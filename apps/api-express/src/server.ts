@@ -17,7 +17,7 @@ import { createFamilyModule } from "./modules/family/family.module";
 
 import { prisma } from "@mealmind/db";
 
-const PORT = 4000;
+const PORT = process.env.PORT || 4000;
 
 const app = express();
 
