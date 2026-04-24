@@ -8,7 +8,7 @@ export function useMealPlan() {
   const { activeDate, selectedDays } = usePlanParams();
 
   return useQuery({
-    queryKey: ["meal-plan", activeDate, selectedDays],
+    queryKey: ["meal-plan", activeDate, selectedDays.join(",")],
     queryFn: () =>
       getMealPlan({
         date: activeDate,

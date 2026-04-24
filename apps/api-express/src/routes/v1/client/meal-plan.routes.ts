@@ -2,6 +2,7 @@ import { Router } from "express";
 import { validateBody } from "../../../middleware/validate-body";
 import { validateQuery } from "../../../middleware/validate-query";
 import { validateParams } from "../../../middleware/validate-params";
+import { withFamily } from "../../../middleware/with-family";
 
 import { MealPlanController } from "../../../modules/meal-plan/transport/client/meal-plan.controller";
 
@@ -11,6 +12,8 @@ import { MealEntryParamsSchema } from "../../../modules/meal-plan/transport/clie
 
 export function MealPlanRouter(controller: MealPlanController) {
   const router = Router();
+
+  router.use(withFamily);
 
   // =========================
   // GET PLAN
@@ -26,6 +29,22 @@ export function MealPlanRouter(controller: MealPlanController) {
     "/entries",
     validateBody(MealEntryCreateSchema),
     controller.createEntry,
+  );
+
+  // =========================
+  // UPDATE ENTRY
+  // =========================
+
+  router.patch(
+    "/entries/:id/toggle",
+    validateParams(MealEntryParamsSchema),
+    controller.toggleStatus,
+  );
+
+  router.patch(
+    "/entries/toggle-bulk",
+
+    controller.toggleBulk,
   );
 
   // =========================

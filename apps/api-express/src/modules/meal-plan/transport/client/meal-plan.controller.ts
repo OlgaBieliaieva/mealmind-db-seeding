@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { MealPlanService } from "../../application/meal-plan.service";
+import { RequestWithContext } from "../../../../shared/types/request-with-context";
 
 export class MealPlanController {
   constructor(private service: MealPlanService) {}
@@ -8,7 +9,7 @@ export class MealPlanController {
     try {
       const { date } = req.query;
 
-      const familyId = "demo-family";
+      const { familyId } = (req as RequestWithContext).context;
 
       const result = await this.service.getPlanEntries(familyId, String(date));
 
@@ -20,7 +21,7 @@ export class MealPlanController {
 
   createEntry = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const familyId = "demo-family";
+      const { familyId } = (req as RequestWithContext).context;
 
       const entry = await this.service.addEntry({
         familyId,
@@ -36,7 +37,33 @@ export class MealPlanController {
   deleteEntry = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params as { id: string };
+
       await this.service.removeEntry(id);
+
+      res.json({ success: true });
+    } catch (e) {
+      next(e);
+    }
+  };
+
+  toggleStatus = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { id } = req.params as { id: string };
+
+      const result = await this.service.toggleEntryStatus(id);
+
+      res.json(result);
+    } catch (e) {
+      next(e);
+    }
+  };
+
+  toggleBulk = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { ids } = req.body as { ids: string[] };
+
+      await this.service.toggleEntries(ids);
+
       res.json({ success: true });
     } catch (e) {
       next(e);
