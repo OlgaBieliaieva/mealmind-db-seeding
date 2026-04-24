@@ -26,6 +26,19 @@ export function mapToAggregatedMealPlan(
       map.set(key, {
         id: isRecipe ? entry.recipe!.id : entry.product!.id,
         type: isRecipe ? "recipe" : "product",
+        categoryId: entry.recipe?.recipeTypeId ?? undefined,
+        categoryCode: entry.recipe?.recipeType?.id,
+        categoryName: entry.recipe?.recipeType?.nameUa,
+
+        photoUrl: isRecipe ? (entry.recipe!.photoUrl ?? undefined) : undefined,
+
+        totalTime: isRecipe
+          ? (entry.recipe!.prepTimeMin ?? 0) + (entry.recipe!.cookTimeMin ?? 0)
+          : undefined,
+
+        difficulty: isRecipe
+          ? (entry.recipe!.difficulty ?? undefined)
+          : undefined,
 
         name: isRecipe ? entry.recipe!.title : entry.product!.nameUa,
 
@@ -36,6 +49,7 @@ export function mapToAggregatedMealPlan(
         users: [] as AggregatedMealItemDTO["users"],
 
         mealTypeId: entry.mealTypeId,
+        mealTypeName: entry.mealType.nameUa,
 
         // 🔥 FIX: типізуємо
         entryIds: [] as string[],
@@ -74,6 +88,7 @@ export function mapToAggregatedMealPlan(
       item.users.push({
         id: entry.user.id,
         firstName: entry.user.firstName,
+        sex: entry.user.sex,
         avatarUrl: entry.user.avatarUrl,
       });
     }

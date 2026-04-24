@@ -1,7 +1,7 @@
-import { AggregatedMealItem } from "@/shared/types/meal-plan.types";
+import { AggregatedMealItemDTO } from "@/shared/types/meal-plan.types";
 
 type Props = {
-  item: AggregatedMealItem;
+  item: AggregatedMealItemDTO;
 };
 
 export function MealSection({ item }: Props) {

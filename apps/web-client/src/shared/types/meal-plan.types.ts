@@ -48,16 +48,26 @@ export type AggregatedMealItemDTO = {
 
   name: string;
 
+  photoUrl?: string;
+  totalTime?: number;
+  difficulty?: Difficulty;
+  categoryId?: string;
+  categoryCode?: string;
+  categoryName?: string;
+
   totalWeight: number;
   portions: number;
+  unit: string;
 
   users: {
     id: string;
     firstName: string;
+    sex: string;
     avatarUrl: string | null;
   }[];
 
   mealTypeId: string;
+  mealTypeName: string;
 
   entryIds: string[];
 
@@ -75,24 +85,24 @@ export type AggregatedMealPlanDTO = {
   items: AggregatedMealItemDTO[];
 };
 
-export type AggregatedMealItem = {
-  id: string;
-  mealTypeId: string;
-  name: string;
-  type: "recipe" | "product";
+// export type AggregatedMealItem = {
+//   id: string;
+//   mealTypeId: string;
+//   name: string;
+//   type: "recipe" | "product";
 
-  portions: number;
-  totalWeight: number;
+//   portions: number;
+//   totalWeight: number;
 
-  entryIds: string[];
-  isPrepared: boolean;
+//   entryIds: string[];
+//   isPrepared: boolean;
 
-  users: {
-    id: string;
-    firstName: string;
-    avatarUrl?: string | null;
-  }[];
-};
+//   users: {
+//     id: string;
+//     firstName: string;
+//     avatarUrl?: string | null;
+//   }[];
+// };
 
 export type MealPlanResponseDTO = {
   week: WeekDTO;
@@ -108,3 +118,5 @@ export type MealPlanDTO = {
 };
 
 export type ViewMode = "meal" | "user";
+
+export type Difficulty = "easy" | "medium" | "hard";

@@ -9,6 +9,7 @@ import { toDateKey } from "../../../../../shared/helpers/toDateKey";
 type UserRaw = {
   id: string;
   firstName: string;
+  sex: string;
   avatarUrl: string | null;
 };
 
@@ -25,6 +26,7 @@ type MealEntryRaw = Prisma.MealEntryGetPayload<{
       select: {
         id: true;
         firstName: true;
+        sex: true;
         avatarUrl: true;
       };
     };
@@ -58,6 +60,7 @@ function mapUser(u: UserRaw) {
   return {
     id: u.id,
     firstName: u.firstName,
+    sex: u.sex,
     avatarUrl: u.avatarUrl,
   };
 }

@@ -12,6 +12,7 @@ export const mealEntryInclude = {
     select: {
       id: true,
       firstName: true,
+      sex: true,
       avatarUrl: true,
     },
   },
@@ -19,8 +20,21 @@ export const mealEntryInclude = {
     select: {
       id: true,
       title: true,
+      photoUrl: true,
+      difficulty: true,
+      recipeTypeId: true,
       baseServings: true,
       baseOutputWeightG: true,
+      prepTimeMin: true,
+      cookTimeMin: true,
+
+      recipeType: {
+        select: {
+          id: true,
+          code: true,
+          nameUa: true,
+        },
+      },
     },
   },
   product: {

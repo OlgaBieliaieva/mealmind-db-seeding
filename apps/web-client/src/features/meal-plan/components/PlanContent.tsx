@@ -2,42 +2,18 @@
 
 import { useMealPlanView } from "../hooks/useMealPlanView";
 import { usePlanParams } from "../hooks/usePlanParams";
-import { groupByUser } from "@/shared/lib/groupByUser";
-import { MealSection } from "./MealSection";
-import { UserSection } from "./UserSection";
+import { MealView } from "./MealView";
 
 export default function PlanContent() {
-  const { aggregatedMeals, isLoading, isEmpty } = useMealPlanView();
+  const { aggregatedMeals, summary, isLoading } = useMealPlanView();
   const { viewMode } = usePlanParams();
 
-  if (isLoading) {
-    return <div className="p-4 text-sm text-gray-400">Завантажується...</div>;
-  }
+  if (isLoading) return <div className="p-4">Завантаження...</div>;
 
   return (
-    <div>
-      {isEmpty && (
-        <div className="p-4 text-sm text-gray-400">
-          Немає запланованих прийомів їжі
-        </div>
-      )}
-
-      {!isEmpty && (
-        <div className="p-4 space-y-6">
-          {viewMode === "meal" &&
-            aggregatedMeals.map((item) => (
-              <MealSection key={item.id} item={item} />
-            ))}
-
-          {viewMode === "user" &&
-            groupByUser(aggregatedMeals).map((user) => (
-              <UserSection
-                key={user.userId}
-                userId={user.userId}
-                meals={user.meals}
-              />
-            ))}
-        </div>
+    <div className="pt-4">
+      {viewMode === "meal" && (
+        <MealView items={aggregatedMeals} summary={summary} />
       )}
     </div>
   );

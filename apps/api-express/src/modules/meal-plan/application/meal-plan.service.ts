@@ -68,7 +68,7 @@ export class MealPlanService {
   // =========================
 
   async getPlanEntries(familyId: string, date: string) {
-    const { from, to, weekStart } = this.getPeriod(date);
+    const { weekStart } = this.getPeriod(date);
 
     // 1️⃣ знайти план
     let plan = await this.repo.findByFamilyAndWeek(familyId, weekStart);
@@ -80,7 +80,6 @@ export class MealPlanService {
 
     // 3️⃣ використовуємо planId
     const entries = await this.repo.findEntries(plan.id);
-    console.log(entries);
 
     return {
       week: mapToWeekView(entries, weekStart),
@@ -104,56 +103,52 @@ export class MealPlanService {
   }) {
     const dateObj = new Date(input.date);
 
-  const { weekStart } = this.getPeriod(input.date);
+    const { weekStart } = this.getPeriod(input.date);
 
-  // 1️⃣ план
-  let plan = await this.repo.findByFamilyAndWeek(
-    input.familyId,
-    weekStart,
-  );
+    // 1️⃣ план
+    let plan = await this.repo.findByFamilyAndWeek(input.familyId, weekStart);
 
-  if (!plan) {
-    plan = await this.repo.createPlan(input.familyId, weekStart);
-  }
-
-  // 2️⃣ нормалізація
-  let amountInGrams = input.amount;
-
-  if (input.unit === "portion") {
-    if (!input.recipeId) {
-      throw new Error("Portion unit allowed only for recipe");
+    if (!plan) {
+      plan = await this.repo.createPlan(input.familyId, weekStart);
     }
 
-    const recipe = await this.repo.getRecipe(input.recipeId);
+    // 2️⃣ нормалізація
+    let amountInGrams = input.amount;
 
-    if (!recipe) {
-      throw new Error("Recipe not found");
+    if (input.unit === "portion") {
+      if (!input.recipeId) {
+        throw new Error("Portion unit allowed only for recipe");
+      }
+
+      const recipe = await this.repo.getRecipe(input.recipeId);
+
+      if (!recipe) {
+        throw new Error("Recipe not found");
+      }
+
+      const weightPerServing = recipe.baseOutputWeightG / recipe.baseServings;
+
+      amountInGrams = input.amount * weightPerServing;
     }
 
-    const weightPerServing =
-      recipe.baseOutputWeightG / recipe.baseServings;
+    if (input.unit === "ml") {
+      amountInGrams = input.amount; // поки 1:1
+    }
 
-    amountInGrams = input.amount * weightPerServing;
+    // 3️⃣ create
+    return this.repo.createEntry({
+      mealPlanId: plan.id,
+      date: dateObj,
+      userId: input.userId,
+      mealTypeId: input.mealTypeId,
+      recipeId: input.recipeId,
+      productId: input.productId,
+
+      amount: input.amount,
+      unit: input.unit,
+      amountInGrams,
+    });
   }
-
-  if (input.unit === "ml") {
-    amountInGrams = input.amount; // поки 1:1
-  }
-
-  // 3️⃣ create
-  return this.repo.createEntry({
-    mealPlanId: plan.id,
-    date: dateObj,
-    userId: input.userId,
-    mealTypeId: input.mealTypeId,
-    recipeId: input.recipeId,
-    productId: input.productId,
-
-    amount: input.amount,
-    unit: input.unit,
-    amountInGrams,
-  });
-}
 
   // =========================
   // DELETE

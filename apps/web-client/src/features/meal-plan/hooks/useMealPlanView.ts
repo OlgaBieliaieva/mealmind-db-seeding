@@ -2,12 +2,11 @@
 
 import { useMealPlan } from "./useMealPlan";
 import { usePlanParams } from "./usePlanParams";
-import { AggregatedMealItem } from "@/shared/types/meal-plan.types";
+import { AggregatedMealItemDTO } from "@/shared/types/meal-plan.types";
 
 export function useMealPlanView() {
   const { data, isLoading } = useMealPlan();
   const { selectedDays, viewMode } = usePlanParams();
-  console.log(data);
 
   if (!data) {
     return {
@@ -15,7 +14,11 @@ export function useMealPlanView() {
       isEmpty: true,
       aggregatedMeals: [],
       weekDays: [],
-      summary: null,
+      summary: {
+        totalItems: 0,
+        preparedItems: 0,
+        progress: 0,
+      },
     };
   }
 
@@ -23,7 +26,7 @@ export function useMealPlanView() {
   // MEAL VIEW (NEW)
   // =========================
 
-  const aggregatedMeals: AggregatedMealItem[] = data.aggregated.items;
+  const aggregatedMeals: AggregatedMealItemDTO[] = data.aggregated.items;
 
   // =========================
   // USER VIEW (OLD)

@@ -1,6 +1,5 @@
 import { PrismaClient, MealEntryStatus } from "@prisma/client";
 import { mealEntryInclude } from "../transport/client/types/meal-plan.types";
-import { MealEntryWithRelations } from "../transport/client/types/meal-plan.types";
 
 export class MealPlanRepository {
   constructor(private prisma: PrismaClient) {}

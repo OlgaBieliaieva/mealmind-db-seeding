@@ -14,6 +14,7 @@ export type MealEntryDTO = {
   user: {
     id: string;
     firstName: string;
+    sex: string;
     avatarUrl?: string | null;
   };
 

@@ -4,18 +4,27 @@ export type AggregatedMealItemDTO = {
 
   name: string;
 
+  photoUrl?: string;
+  totalTime?: number;
+  difficulty?: string;
+  categoryId?: string;
+  categoryCode?: string;
+  categoryName?: string;
+
   totalWeight: number;
   portions: number;
 
-  unit: string; // 🔥 ДОДАТИ
+  unit: string;
 
   users: {
     id: string;
     firstName: string;
+    sex: string;
     avatarUrl: string | null;
   }[];
 
   mealTypeId: string;
+  mealTypeName: string;
 
   entryIds: string[];
 
@@ -25,7 +34,7 @@ export type AggregatedMealItemDTO = {
 export type AggregatedSummaryDTO = {
   totalItems: number;
   preparedItems: number;
-  progress: number; // 0-1
+  progress: number;
 };
 
 export type AggregatedMealPlanDTO = {
