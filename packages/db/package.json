@@ -1,15 +1,15 @@
 {
   "name": "@mealmind/db",
   "version": "1.0.0",
-  "main": "src/client.ts",
-  "types": "src/client.ts",
+  "main": "dist/client.js",
+  "types": "dist/client.d.ts",
   "exports": {
-    ".": "./src/client.ts",
-    "./types": "./src/types.ts"
+    ".": "./dist/client.js",
+    "./types": "./dist/types.js"
   },
   "scripts": {
-    "generate": "prisma generate",
-    "build": "prisma generate"
+    "build": "tsc && prisma generate",
+    "generate": "prisma generate"
   },
   "dependencies": {
     "@prisma/client": "^7.7.0",
