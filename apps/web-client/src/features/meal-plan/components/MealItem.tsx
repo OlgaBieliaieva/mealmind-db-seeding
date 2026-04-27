@@ -25,27 +25,6 @@ const categoryIcons: Record<string, string> = {
   medical: "⚕️",
 };
 
-function DifficultyStars({ level }: { level: "easy" | "medium" | "hard" }) {
-  const map = {
-    easy: 1,
-    medium: 2,
-    hard: 3,
-  };
-
-  return (
-    <div className="flex gap-[2px]">
-      {[1, 2, 3].map((i) => (
-        <span
-          key={i}
-          className={i <= map[level] ? "text-yellow-400" : "text-gray-300"}
-        >
-          ★
-        </span>
-      ))}
-    </div>
-  );
-}
-
 function DifficultySignal({ level }: { level: "easy" | "medium" | "hard" }) {
   const map = {
     easy: 2,
@@ -78,8 +57,11 @@ export function MealItem({ item }: Props) {
 
   return (
     <div
-      onClick={() => mutate(item.entryIds)}
-      className="bg-white rounded-2xl p-3 flex gap-3 border shadow-sm active:scale-[0.98] transition"
+      onClick={() => {
+        console.log("open recipe", item.id);
+        // 👉 router.push(`/recipes/${item.id}`)
+      }}
+      className="bg-white rounded-2xl p-3 flex gap-3 border shadow-sm active:scale-[0.98] transition hover:bg-gray-50 transition"
     >
       {/* IMAGE */}
       <div className="relative w-16 h-16 rounded-xl overflow-hidden bg-gray-100 shrink-0">
@@ -148,11 +130,33 @@ export function MealItem({ item }: Props) {
       </div>
 
       {/* CHECK */}
-      <input
+      <div
+        onClick={(e) => {
+          e.stopPropagation();
+          mutate(item.entryIds);
+        }}
+        className={`
+          self-center
+    w-6 h-6 rounded-full border-2 flex items-center justify-center
+    transition
+    ${
+      item.isPrepared
+        ? "bg-green-500 border-green-500"
+        : "border-gray-300 bg-white"
+    }
+  `}
+      >
+        {item.isPrepared && (
+          <span className="text-white text-sm leading-none">✓</span>
+        )}
+      </div>
+      {/* <input
         type="checkbox"
         checked={item.isPrepared}
+        onClick={(e) => e.stopPropagation()}
         onChange={() => mutate(item.entryIds)}
-      />
+        className="w-5 h-5 rounded-full accent-green-500 cursor-pointer"
+      /> */}
     </div>
   );
 }

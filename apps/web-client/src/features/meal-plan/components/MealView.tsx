@@ -4,6 +4,7 @@ import { useState } from "react";
 import { MealSummary } from "./MealSummary";
 import { MealTypeTabs } from "./MealTypeTabs";
 import { MealItem } from "./MealItem";
+import { Plus } from "lucide-react";
 
 import {
   AggregatedMealItemDTO,
@@ -31,7 +32,7 @@ export function MealView({ items, summary }: Props) {
       : items.filter((i) => i.mealTypeId === activeMealType);
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 pb-20">
       <MealSummary
         total={summary.totalItems}
         prepared={summary.preparedItems}
@@ -47,6 +48,28 @@ export function MealView({ items, summary }: Props) {
         {filtered.map((item) => (
           <MealItem key={item.id} item={item} />
         ))}
+      </div>
+
+      {/* 👉 STICKY CTA */}
+      <div className="fixed right-5 bottom-24 z-50">
+        <button
+          onClick={() => {
+            console.log("search food", activeMealType);
+          }}
+          className="
+      w-14 h-14
+      rounded-full
+      bg-green-600
+      text-white
+      text-2xl
+      flex items-center justify-center
+      shadow-lg
+      active:scale-95
+      transition
+    "
+        >
+          <Plus />
+        </button>
       </div>
     </div>
   );
