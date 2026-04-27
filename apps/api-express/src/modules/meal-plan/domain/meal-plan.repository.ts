@@ -70,8 +70,7 @@ export class MealPlanRepository {
   }
 
   async findEntriesByDates(planId: string, dates: Date[]) {
-    console.log(planId);
-    console.log(dates);
+    
     
     
     return this.prisma.mealEntry.findMany({
