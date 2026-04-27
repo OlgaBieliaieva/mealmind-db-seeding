@@ -12,3 +12,9 @@ export function getMealPlan(params: { date: string; days?: string[] }) {
 
   return apiFetch<MealPlanResponseDTO>(`/meal-plans?${qs.toString()}`);
 }
+export async function toggleMealEntries(ids: string[]) {
+  return apiFetch("/meal-plans/entries/toggle-bulk", {
+    method: "PATCH",
+    body: JSON.stringify({ ids }),
+  });
+}

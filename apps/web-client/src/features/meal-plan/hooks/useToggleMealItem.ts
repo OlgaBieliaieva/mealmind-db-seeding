@@ -1,16 +1,12 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toggleMealEntries } from "@/shared/api/meal-plan/meal-plan.api";
 
 export function useToggleMealItem() {
   const qc = useQueryClient();
 
   return useMutation({
-    mutationFn: async (ids: string[]) => {
-      await fetch("/api/meal-plan/entries/toggle-bulk", {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ids }),
-      });
-    },
+    mutationFn: (ids: string[]) => toggleMealEntries(ids),
+
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["meal-plan"] });
     },
