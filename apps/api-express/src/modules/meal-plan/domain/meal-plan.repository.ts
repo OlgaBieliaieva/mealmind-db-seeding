@@ -69,6 +69,22 @@ export class MealPlanRepository {
     });
   }
 
+  async findEntriesByDates(planId: string, dates: Date[]) {
+    console.log(planId);
+    console.log(dates);
+    
+    
+    return this.prisma.mealEntry.findMany({
+      where: {
+        mealPlanId: planId,
+        date: {
+          in: dates,
+        },
+      },
+      include: mealEntryInclude,
+    });
+  }
+
   async createEntry(data: {
     mealPlanId: string;
     date: Date;

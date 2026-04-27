@@ -7,11 +7,15 @@ export class MealPlanController {
 
   getPlan = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { date } = req.query;
+      const { date, days } = req.query;
 
       const { familyId } = (req as RequestWithContext).context;
 
-      const result = await this.service.getPlanEntries(familyId, String(date));
+      const result = await this.service.getPlanEntries(
+        familyId,
+        String(date),
+        days ? String(days) : undefined,
+      );
 
       res.json(result);
     } catch (e) {
