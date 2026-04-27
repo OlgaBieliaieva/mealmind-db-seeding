@@ -67,19 +67,34 @@ export class MealPlanService {
   // READ
   // =========================
 
-  async getPlanEntries(familyId: string, date: string) {
+  async getPlanEntries(
+  familyId: string,
+  date: string,
+  days?: string,
+) {
     const { weekStart } = this.getPeriod(date);
 
-    // 1️⃣ знайти план
-    let plan = await this.repo.findByFamilyAndWeek(familyId, weekStart);
+// план
+let plan = await this.repo.findByFamilyAndWeek(familyId, weekStart);
+if (!plan) {
+  plan = await this.repo.createPlan(familyId, weekStart);
+}
 
-    // 2️⃣ якщо нема — створити
-    if (!plan) {
-      plan = await this.repo.createPlan(familyId, weekStart);
-    }
+// =========================
+// 🔥 FILTER LOGIC
+// =========================
 
-    // 3️⃣ використовуємо planId
-    const entries = await this.repo.findEntries(plan.id);
+let entries;
+
+if (days) {
+  const selectedDates = days.split(",").map(toUTCDateOnly);
+
+  entries = await this.repo.findEntriesByDates(plan.id, selectedDates);
+} else {
+  const selectedDate = toUTCDateOnly(date);
+
+  entries = await this.repo.findEntriesByDates(plan.id, [selectedDate]);
+}
 
     return {
       week: mapToWeekView(entries, weekStart),
