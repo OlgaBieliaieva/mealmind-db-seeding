@@ -8,9 +8,9 @@ class MealPlanController {
     }
     getPlan = async (req, res, next) => {
         try {
-            const { date } = req.query;
+            const { date, days } = req.query;
             const { familyId } = req.context;
-            const result = await this.service.getPlanEntries(familyId, String(date));
+            const result = await this.service.getPlanEntries(familyId, String(date), days ? String(days) : undefined);
             res.json(result);
         }
         catch (e) {

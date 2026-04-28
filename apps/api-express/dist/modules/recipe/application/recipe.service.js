@@ -200,5 +200,25 @@ class RecipeService {
             await this.repo.replaceNutrients(id, calculated);
         }
     }
+    // CLIENT
+    async searchRecipesClient(filters) {
+        const { query, page = 1, limit = 20 } = filters;
+        const where = {
+            status: "published",
+        };
+        if (query) {
+            where.OR = [
+                { title: { contains: query, mode: "insensitive" } },
+                { description: { contains: query, mode: "insensitive" } },
+            ];
+        }
+        const { items, total } = await this.searchQuery.searchRecipes(where, page, limit);
+        return {
+            items,
+            total,
+            page,
+            limit,
+        };
+    }
 }
 exports.RecipeService = RecipeService;
