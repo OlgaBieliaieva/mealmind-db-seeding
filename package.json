@@ -8,6 +8,7 @@
   ],
   "scripts": {
     "dev": "turbo run dev",
+    "build:turbo": "turbo run build",
     "dev:api": "npm run dev --workspace=api-express",
     "dev:web": "npm run dev --workspace=web-client",
     "dev:admin": "npm run dev --workspace=web-admin",

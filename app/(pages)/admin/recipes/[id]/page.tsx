@@ -1,6 +1,6 @@
-import { notFound } from "next/navigation";
-import { getRecipeById } from "@/lib/v1/recipes/getRecipeById";
-import RecipePageClient from "@/components/recipe/RecipePage";
+// import { notFound } from "next/navigation";
+// import { getRecipeById } from "@/lib/v1/recipes/getRecipeById";
+// import RecipePageClient from "@/components/recipe/RecipePage";
 
 type Props = {
   params: Promise<{
@@ -9,13 +9,14 @@ type Props = {
 };
 
 export default async function RecipePage({ params }: Props) {
-  const { id } = await params;
+  // const { id } = await params;
 
-  const data = await getRecipeById(id);
+  // const data = await getRecipeById(id);
 
-  if (!data) {
-    notFound();
-  }
+  // if (!data) {
+  //   notFound();
+  // }
 
-  return <RecipePageClient data={data} />;
+  return null;
+  // <RecipePageClient data={data} />;
 }

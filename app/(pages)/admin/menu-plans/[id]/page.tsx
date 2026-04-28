@@ -19,8 +19,8 @@ export default async function MenuPlanDetailsPage({
   params,
   searchParams,
 }: Props) {
-  const { id } = await params;
-  const { date } = await searchParams;
+  // const { id } = await params;
+  // const { date } = await searchParams;
 
   //   const plan = await getMenuPlanDetails(id, date);
   //   const mealTypes = await getMealTypes();
@@ -39,25 +39,24 @@ export default async function MenuPlanDetailsPage({
 
   //   const activeDate = date ?? fullWeek[0];
 
-  return (
-    <>
-      <p>{id}</p>
-      <p>{date}</p>
-      {/* <PlanHeader
-        familyName="Родина Шаповал"
-        fullWeek={fullWeek}
-        activeDate={activeDate}
-      />
+  return null;
+  // <>
+  //   <p>{id}</p>
+  //   <p>{date}</p>
+  //   <PlanHeader
+  //     familyName="Родина Шаповал"
+  //     fullWeek={fullWeek}
+  //     activeDate={activeDate}
+  //   />
 
-      <PlanLayout
-        planId={plan.menu_plan_id}
-        members={members}
-        mealTypes={mealTypes}
-        entries={plan.entries}
-        recipesMap={plan.recipesMap}
-        productsMap={plan.productsMap}
-        activeDate={activeDate}
-      /> */}
-    </>
-  );
+  //   <PlanLayout
+  //     planId={plan.menu_plan_id}
+  //     members={members}
+  //     mealTypes={mealTypes}
+  //     entries={plan.entries}
+  //     recipesMap={plan.recipesMap}
+  //     productsMap={plan.productsMap}
+  //     activeDate={activeDate}
+  //   />
+  // </>
 }

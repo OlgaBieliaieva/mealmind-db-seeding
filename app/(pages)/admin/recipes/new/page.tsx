@@ -1,5 +1,6 @@
-import { RecipeForm } from "@/components/recipe/RecipeForm";
+// import { RecipeForm } from "@/components/recipe/RecipeForm";
 
 export default function CreateRecipePage() {
-  return <RecipeForm mode="create" />;
+  return null;
+  // <RecipeForm mode="create" />;
 }
