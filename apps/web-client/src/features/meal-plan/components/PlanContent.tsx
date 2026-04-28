@@ -16,11 +16,7 @@ export default function PlanContent() {
       {viewMode === "meal" && (
         <>
           {isEmpty ? (
-            <EmptyMealPlan
-              onAdd={() => {
-                console.log("open add flow");
-              }}
-            />
+            <EmptyMealPlan />
           ) : (
             <MealView items={aggregatedMeals} summary={summary} />
           )}
