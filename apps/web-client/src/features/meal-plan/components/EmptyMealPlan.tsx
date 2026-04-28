@@ -1,10 +1,10 @@
 "use client";
 
-type Props = {
-  onAdd: () => void;
-};
+import { useAddToPlanNavigation } from "../hooks/useAddToPlanNavigation";
 
-export function EmptyMealPlan({ onAdd }: Props) {
+export function EmptyMealPlan() {
+  const navigateToAdd = useAddToPlanNavigation();
+
   return (
     <div className="flex flex-col items-center justify-center py-16 px-6 text-center">
       {/* ICON */}
@@ -22,7 +22,7 @@ export function EmptyMealPlan({ onAdd }: Props) {
 
       {/* BUTTON */}
       <button
-        onClick={onAdd}
+        onClick={() => navigateToAdd()}
         className="mt-6 px-5 py-2.5 rounded-xl bg-black text-white text-sm font-medium active:scale-95 transition"
       >
         ➕ Додати страву

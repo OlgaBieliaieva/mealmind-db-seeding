@@ -1,10 +1,15 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Plus } from "lucide-react";
+
 import { MealSummary } from "./MealSummary";
 import { MealTypeTabs } from "./MealTypeTabs";
 import { MealItem } from "./MealItem";
-import { Plus } from "lucide-react";
+
+import { usePlanParams } from "../hooks/usePlanParams";
+import { useAddToPlanNavigation } from "../hooks/useAddToPlanNavigation";
 
 import {
   AggregatedMealItemDTO,
@@ -17,7 +22,11 @@ type Props = {
 };
 
 export function MealView({ items, summary }: Props) {
+  const router = useRouter();
+  const { activeDate } = usePlanParams();
+
   const [activeMealType, setActiveMealType] = useState("all");
+  const navigateToAdd = useAddToPlanNavigation();
 
   const mealTypes = [
     { id: "all", name: "Всі" },
@@ -30,6 +39,10 @@ export function MealView({ items, summary }: Props) {
     activeMealType === "all"
       ? items
       : items.filter((i) => i.mealTypeId === activeMealType);
+
+  const handleAdd = () => {
+    navigateToAdd(activeMealType);
+  };
 
   return (
     <div className="space-y-4 pb-20">
@@ -50,23 +63,20 @@ export function MealView({ items, summary }: Props) {
         ))}
       </div>
 
-      {/* 👉 STICKY CTA */}
+      {/* 👉 FLOATING ADD BUTTON */}
       <div className="fixed right-5 bottom-24 z-50">
         <button
-          onClick={() => {
-            console.log("search food", activeMealType);
-          }}
+          onClick={handleAdd}
           className="
-      w-14 h-14
-      rounded-full
-      bg-green-600
-      text-white
-      text-2xl
-      flex items-center justify-center
-      shadow-lg
-      active:scale-95
-      transition
-    "
+            w-14 h-14
+            rounded-full
+            bg-green-600
+            text-white
+            flex items-center justify-center
+            shadow-lg
+            active:scale-95
+            transition
+          "
         >
           <Plus />
         </button>
