@@ -5,17 +5,16 @@ export default function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="border-b bg-white">
-        <div className="mx-auto max-w-xl px-4 py-3 flex items-center gap-4">
-          <Link href="/" className="text-lg font-semibold text-gray-900">
-            MealMind
-          </Link>
-        </div>
-      </header>
+  return null;
+  // <div className="min-h-screen bg-gray-50">
+  //   <header className="border-b bg-white">
+  //     <div className="mx-auto max-w-xl px-4 py-3 flex items-center gap-4">
+  //       <Link href="/" className="text-lg font-semibold text-gray-900">
+  //         MealMind
+  //       </Link>
+  //     </div>
+  //   </header>
 
-      <main className="mx-auto max-w-xl px-4 py-6">{children}</main>
-    </div>
-  );
+  //   <main className="mx-auto max-w-xl px-4 py-6">{children}</main>
+  // </div>
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 
 import { AddEntryHeader } from "@/features/meal-plan/add/components/AddEntryHeader";
 import { AddTabs } from "@/features/meal-plan/add/components/AddTabs";
@@ -10,7 +10,7 @@ import { UserPickerSheet } from "@/features/meal-plan/add/components/UserPickerS
 import { MealTypePickerSheet } from "@/features/meal-plan/add/components/MealTypePickerSheet";
 import { TabType } from "@/features/meal-plan/add/types/add-meal-plan.types";
 
-export default function AddMealPage() {
+function AddMealPageContent() {
   const params = useSearchParams();
 
   const date = params.get("date") ?? "";
@@ -94,5 +94,13 @@ export default function AddMealPage() {
         }}
       />
     </div>
+  );
+}
+
+export default function AddMealPage() {
+  return (
+    <Suspense fallback={null}>
+      <AddMealPageContent />
+    </Suspense>
   );
 }

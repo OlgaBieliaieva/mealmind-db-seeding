@@ -1,13 +1,13 @@
 export const dynamic = "force-dynamic";
 
-import { getRecipeById } from "@/lib/v1/recipes/getRecipeById";
-import { getMealTypes } from "@/lib/v1/meal-types/meal-types.read";
-import { getFamilyMembers } from "@/lib/v1/families/family-members.read";
-import { getMenuPlanDetails } from "@/lib/v1/menu-plans/menu-plan-details.read";
-import { formatDateDDMMYY } from "@/lib/v1/date/format";
-import { getWeekRangeFromDate, generateFullWeek } from "@/lib/v1/date/week";
+// import { getRecipeById } from "@/lib/v1/recipes/getRecipeById";
+// import { getMealTypes } from "@/lib/v1/meal-types/meal-types.read";
+// import { getFamilyMembers } from "@/lib/v1/families/family-members.read";
+// import { getMenuPlanDetails } from "@/lib/v1/menu-plans/menu-plan-details.read";
+// import { formatDateDDMMYY } from "@/lib/v1/date/format";
+// import { getWeekRangeFromDate, generateFullWeek } from "@/lib/v1/date/week";
 
-import RecipeEntryDetailsClient from "@/components/menu-plan/recipe-entry/RecipeEntryDetailsClient";
+// import RecipeEntryDetailsClient from "@/components/menu-plan/recipe-entry/RecipeEntryDetailsClient";
 
 type Props = {
   params: {
@@ -24,53 +24,52 @@ export default async function RecipeEntryDetailsPage({
   params,
   searchParams,
 }: Props) {
-  const { planId, recipeId } = await params;
-  const { date, mealTypeId } = await searchParams;
+  // const { planId, recipeId } = await params;
+  // const { date, mealTypeId } = await searchParams;
 
-  if (!date) {
-    return <div className="p-4">Date is required</div>;
-  }
+  // if (!date) {
+  //   return <div className="p-4">Date is required</div>;
+  // }
 
-  const recipeFull = await getRecipeById(recipeId);
-  if (!recipeFull) {
-    return <div className="p-4">Recipe not found</div>;
-  }
+  // const recipeFull = await getRecipeById(recipeId);
+  // if (!recipeFull) {
+  //   return <div className="p-4">Recipe not found</div>;
+  // }
 
-  // 🟣 Meal types
-  const mealTypes = await getMealTypes();
+  // // 🟣 Meal types
+  // const mealTypes = await getMealTypes();
 
-  const initialMealTypeId = mealTypeId
-    ? Number(mealTypeId)
-    : (mealTypes[0]?.meal_type_id ?? 1);
+  // const initialMealTypeId = mealTypeId
+  //   ? Number(mealTypeId)
+  //   : (mealTypes[0]?.meal_type_id ?? 1);
 
-  // const mealType = mealTypes.find((m) => m.meal_type_id === initialMealTypeId);
+  // // const mealType = mealTypes.find((m) => m.meal_type_id === initialMealTypeId);
 
-  // const mealName = mealType?.name_ua ?? "Прийом їжі";
+  // // const mealName = mealType?.name_ua ?? "Прийом їжі";
 
-  // 🟣 Plan → family → members
-  const plan = await getMenuPlanDetails(planId);
-  if (!plan) {
-    return <div className="p-4">Plan not found</div>;
-  }
+  // // 🟣 Plan → family → members
+  // const plan = await getMenuPlanDetails(planId);
+  // if (!plan) {
+  //   return <div className="p-4">Plan not found</div>;
+  // }
 
-  const members = await getFamilyMembers(plan.family_id);
+  // const members = await getFamilyMembers(plan.family_id);
 
-  // 🟣 Week
-  const { start, end } = getWeekRangeFromDate(date);
-  const fullWeek = generateFullWeek(start);
+  // // 🟣 Week
+  // const { start, end } = getWeekRangeFromDate(date);
+  // const fullWeek = generateFullWeek(start);
 
-  return (
-    <RecipeEntryDetailsClient
-      formMode="create"
-      planId={planId}
-      recipeFull={recipeFull}
-      date={date}
-      mealTypes={mealTypes}
-      initialMealTypeId={initialMealTypeId}
-      // mealName={mealName}
-      weekLabel={`${formatDateDDMMYY(start)} – ${formatDateDDMMYY(end)}`}
-      members={members}
-      fullWeek={fullWeek}
-    />
-  );
+  return null;
+  // <RecipeEntryDetailsClient
+  //   formMode="create"
+  //   planId={planId}
+  //   recipeFull={recipeFull}
+  //   date={date}
+  //   mealTypes={mealTypes}
+  //   initialMealTypeId={initialMealTypeId}
+  //   // mealName={mealName}
+  //   weekLabel={`${formatDateDDMMYY(start)} – ${formatDateDDMMYY(end)}`}
+  //   members={members}
+  //   fullWeek={fullWeek}
+  // />
 }
