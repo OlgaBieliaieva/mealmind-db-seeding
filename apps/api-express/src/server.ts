@@ -71,6 +71,8 @@ app.use("/api/v1/admin/recipe-authors", recipeAuthorModule.adminRouter);
 // CLIENT
 app.use("/api/v1/client/meal-plans", mealPlanModule.router);
 app.use("/api/v1/client/families", familyModule.router);
+app.use("/api/v1/client/recipes", recipeModule.clientRouter);
+app.use("/api/v1/client/products", productModule.clientRouter);
 
 app.get("/health", (_req, res) => {
   res.json({

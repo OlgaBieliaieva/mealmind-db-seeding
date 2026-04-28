@@ -275,4 +275,41 @@ export class ProductService {
 
     return result;
   }
+
+  // CLIENT
+
+  async searchProductsClient(filters: {
+    query?: string;
+    page: number;
+    limit: number;
+  }) {
+    const { query, page = 1, limit = 20 } = filters;
+
+    const where: Prisma.ProductWhereInput = {
+      status: "active",
+    };
+
+    if (query) {
+      where.OR = [
+        { nameEn: { contains: query, mode: "insensitive" } },
+        { nameUa: { contains: query, mode: "insensitive" } },
+      ];
+    }
+
+    const { items, total } = await this.searchQuery.searchProducts(
+      where,
+      page,
+      limit,
+      {
+        includeArchived: false,
+      },
+    );
+
+    return {
+      items,
+      total,
+      page,
+      limit,
+    };
+  }
 }

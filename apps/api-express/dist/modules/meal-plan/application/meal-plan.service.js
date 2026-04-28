@@ -56,16 +56,25 @@ class MealPlanService {
     // =========================
     // READ
     // =========================
-    async getPlanEntries(familyId, date) {
+    async getPlanEntries(familyId, date, days) {
         const { weekStart } = this.getPeriod(date);
-        // 1️⃣ знайти план
+        // план
         let plan = await this.repo.findByFamilyAndWeek(familyId, weekStart);
-        // 2️⃣ якщо нема — створити
         if (!plan) {
             plan = await this.repo.createPlan(familyId, weekStart);
         }
-        // 3️⃣ використовуємо planId
-        const entries = await this.repo.findEntries(plan.id);
+        // =========================
+        // 🔥 FILTER LOGIC
+        // =========================
+        let entries;
+        if (days) {
+            const selectedDates = days.split(",").map(toDateKey_1.toUTCDateOnly);
+            entries = await this.repo.findEntriesByDates(plan.id, selectedDates);
+        }
+        else {
+            const selectedDate = (0, toDateKey_1.toUTCDateOnly)(date);
+            entries = await this.repo.findEntriesByDates(plan.id, [selectedDate]);
+        }
         return {
             week: (0, meal_plan_mapper_1.mapToWeekView)(entries, weekStart),
             aggregated: (0, aggregated_meal_plan_mapper_1.mapToAggregatedMealPlan)(entries),

@@ -182,5 +182,27 @@ class ProductService {
         }
         return result;
     }
+    // CLIENT
+    async searchProductsClient(filters) {
+        const { query, page = 1, limit = 20 } = filters;
+        const where = {
+            status: "active",
+        };
+        if (query) {
+            where.OR = [
+                { nameEn: { contains: query, mode: "insensitive" } },
+                { nameUa: { contains: query, mode: "insensitive" } },
+            ];
+        }
+        const { items, total } = await this.searchQuery.searchProducts(where, page, limit, {
+            includeArchived: false,
+        });
+        return {
+            items,
+            total,
+            page,
+            limit,
+        };
+    }
 }
 exports.ProductService = ProductService;
