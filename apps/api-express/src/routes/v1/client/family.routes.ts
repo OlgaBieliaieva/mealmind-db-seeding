@@ -1,18 +1,14 @@
 import { Router } from "express";
 import { withFamily } from "../../../middleware/with-family";
+import { FamilyClientController } from "../../../modules/family/transport/client/family.client.controller";
 
-import { FamilyController } from "../../../modules/family/transport/client/family.controller";
-
-export function FamilyRouter(controller: FamilyController) {
+export function FamilyClientRouter(controller: FamilyClientController) {
   const router = Router();
 
   router.use(withFamily);
 
-  // =========================
-  // GET FAMILY
-  // =========================
-
   router.get("/", controller.getFamily);
+  router.get("/members", controller.getMembers);
 
   return router;
 }

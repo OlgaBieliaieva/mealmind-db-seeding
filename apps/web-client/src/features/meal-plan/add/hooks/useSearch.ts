@@ -1,27 +1,37 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { searchProducts, searchRecipes } from "@/shared/api/search/search.api";
+import {
+  searchProducts,
+  searchRecipes,
+  searchCookbook,
+} from "@/shared/api/search/search.api";
 import { TabType } from "../types/add-meal-plan.types";
 
 type Params = {
   tab: TabType;
   query?: string;
+  page: number;
 };
 
-export function useSearch({ tab, query }: Params) {
+export function useSearch({ tab, query, page }: Params) {
   return useQuery({
-    queryKey: ["search", tab, query],
+    queryKey: ["search", tab, query, page],
 
     queryFn: async () => {
-      if (tab === "products") {
-        return searchProducts(query);
-      }
+      switch (tab) {
+        case "products":
+          return searchProducts(query, page);
 
-      // cookbook поки що теж recipes
-      return searchRecipes(query);
+        case "cookbook":
+          return searchCookbook(query, page);
+
+        case "recipes":
+        default:
+          return searchRecipes(query, page);
+      }
     },
 
-    enabled: !!tab, // safeguard
+    placeholderData: (prev) => prev,
   });
 }

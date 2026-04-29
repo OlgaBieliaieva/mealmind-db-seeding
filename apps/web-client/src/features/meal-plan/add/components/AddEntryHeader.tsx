@@ -3,6 +3,7 @@
 import { X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { AddMealType, AddUser } from "../types/add-meal-plan.types";
+import { formatDateDDMMYYYY } from "@/shared/lib/formatDate";
 
 type Props = {
   users: AddUser[];
@@ -54,7 +55,7 @@ export function AddEntryHeader({
               Додати до плану
             </span>
             <span className="text-sm font-medium uppercase text-stone-400">
-              {date}
+              📅 {formatDateDDMMYYYY(date)}
             </span>
           </div>
 

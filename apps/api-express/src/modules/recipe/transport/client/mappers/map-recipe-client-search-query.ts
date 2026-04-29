@@ -4,6 +4,7 @@ type RawQuery = {
   query?: string;
   page?: string;
   limit?: string;
+  
 };
 
 export function mapRecipeClientSearchQuery(

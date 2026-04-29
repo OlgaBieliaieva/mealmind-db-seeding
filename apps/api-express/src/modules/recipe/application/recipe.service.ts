@@ -9,6 +9,7 @@ import {
 } from "../../../shared/errors/http-errors";
 import { CreateRecipeDTO } from "../dto/create-recipe.dto";
 import { RecipeNutritionCalculator } from "../domain/services/recipe-nutrition.calculator";
+import { buildRecipeSearchWhere } from "../domain/queries/recipe-search.helper";
 
 export class RecipeService {
   constructor(
@@ -292,16 +293,53 @@ export class RecipeService {
   }) {
     const { query, page = 1, limit = 20 } = filters;
 
-    const where: Prisma.RecipeWhereInput = {
+    const baseWhere: Prisma.RecipeWhereInput = {
       status: "published",
     };
 
-    if (query) {
-      where.OR = [
-        { title: { contains: query, mode: "insensitive" } },
-        { description: { contains: query, mode: "insensitive" } },
-      ];
-    }
+    const where = buildRecipeSearchWhere(baseWhere, query);
+
+    const { items, total } = await this.searchQuery.searchRecipes(
+      where,
+      page,
+      limit,
+    );
+
+    return {
+      items,
+      total,
+      page,
+      limit,
+    };
+  }
+
+  async getCookbookRecipes(filters: {
+    query?: string;
+    page?: number;
+    limit?: number;
+    familyId: string;
+  }) {
+    const { query, page = 1, limit = 20, familyId } = filters;
+
+    const baseWhere: Prisma.RecipeWhereInput = {
+      OR: [
+        // 🔹 створені членами сім'ї
+        {
+          familyId: familyId,
+        },
+
+        // 🔹 додані в обране членами сім'ї
+        // {
+        //   favorites: {
+        //     some: {
+        //       familyId: familyId,
+        //     },
+        //   },
+        // },
+      ],
+    };
+
+    const where = buildRecipeSearchWhere(baseWhere, query);
 
     const { items, total } = await this.searchQuery.searchRecipes(
       where,

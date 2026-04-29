@@ -14,21 +14,31 @@ export type SearchResponse = {
   limit: number;
 };
 
-export function searchRecipes(query?: string) {
+export function searchRecipes(query?: string, page = 1) {
   const params = new URLSearchParams();
 
   if (query) params.append("query", query);
-  params.append("page", "1");
+  params.append("page", String(page));
   params.append("limit", "20");
 
   return apiFetch<SearchResponse>(`/recipes/search?${params.toString()}`);
 }
 
-export function searchProducts(query?: string) {
+export function searchCookbook(query?: string, page = 1) {
   const params = new URLSearchParams();
 
   if (query) params.append("query", query);
-  params.append("page", "1");
+  params.append("page", String(page));
+  params.append("limit", "20");
+
+  return apiFetch<SearchResponse>(`/recipes/cookbook?${params.toString()}`);
+}
+
+export function searchProducts(query?: string, page = 1) {
+  const params = new URLSearchParams();
+
+  if (query) params.append("query", query);
+  params.append("page", String(page));
   params.append("limit", "20");
 
   return apiFetch<SearchResponse>(`/products/search?${params.toString()}`);

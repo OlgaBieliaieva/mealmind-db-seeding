@@ -17,6 +17,7 @@ import { finalizeProductPhotos } from "../domain/product-media.service";
 import { generateProductPhotoVariants } from "../../product-media/product-media.worker";
 
 import { TempProductPhoto } from "../../product-media/types/product-media.types";
+import { buildProductSearchWhere } from "../domain/queries/product-search.helper";
 
 export class ProductService {
   constructor(
@@ -285,16 +286,9 @@ export class ProductService {
   }) {
     const { query, page = 1, limit = 20 } = filters;
 
-    const where: Prisma.ProductWhereInput = {
-      status: "active",
-    };
+    const baseWhere: Prisma.ProductWhereInput = {};
 
-    if (query) {
-      where.OR = [
-        { nameEn: { contains: query, mode: "insensitive" } },
-        { nameUa: { contains: query, mode: "insensitive" } },
-      ];
-    }
+    const where = buildProductSearchWhere(baseWhere, query);
 
     const { items, total } = await this.searchQuery.searchProducts(
       where,

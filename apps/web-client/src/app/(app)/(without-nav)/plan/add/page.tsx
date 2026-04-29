@@ -3,16 +3,22 @@
 import { useSearchParams } from "next/navigation";
 import { Suspense, useState } from "react";
 
+import { useDebounce } from "@/shared/lib/hooks/useDebounce";
+import { useMealTypes } from "@/shared/lib/hooks/useMealTypes";
+import { useFamilyMembers } from "@/shared/lib/hooks/useFamilyMembers";
+
 import { AddEntryHeader } from "@/features/meal-plan/add/components/AddEntryHeader";
 import { AddTabs } from "@/features/meal-plan/add/components/AddTabs";
 import { SearchList } from "@/features/meal-plan/add/components/SearchList";
 import { UserPickerSheet } from "@/features/meal-plan/add/components/UserPickerSheet";
 import { MealTypePickerSheet } from "@/features/meal-plan/add/components/MealTypePickerSheet";
 import { TabType } from "@/features/meal-plan/add/types/add-meal-plan.types";
+import { SelectedItem } from "@/features/meal-plan/add/types/add-meal-plan.types";
 
 function AddMealPageContent() {
+  const [query, setQuery] = useState("");
   const params = useSearchParams();
-
+  const debouncedQuery = useDebounce(query, 300);
   const date = params.get("date") ?? "";
   const initialMealTypeId = params.get("mealTypeId");
 
@@ -24,29 +30,32 @@ function AddMealPageContent() {
     initialMealTypeId,
   );
 
-  const [selectedItems, setSelectedItems] = useState<string[]>([]);
+  const [selectedItems, setSelectedItems] = useState<SelectedItem[]>([]);
 
   const [isUserSheetOpen, setUserSheetOpen] = useState(false);
   const [isMealSheetOpen, setMealSheetOpen] = useState(false);
   const canConfirm = Boolean(userId && mealTypeId && selectedItems.length > 0);
 
-  // 🔥 MOCK (потім API)
-  const users = [
-    { id: "1", name: "Оля", avatarUrl: "" },
-    { id: "2", name: "Іван", avatarUrl: "" },
-  ];
+  const { data: mealTypes } = useMealTypes();
+  const mappedMealTypes =
+    mealTypes?.map((m) => ({
+      id: m.id,
+      name: m.name,
+    })) ?? [];
 
-  const mealTypes = [
-    { id: "breakfast", name: "Сніданок" },
-    { id: "lunch", name: "Обід" },
-    { id: "dinner", name: "Вечеря" },
-  ];
+  const { data: users } = useFamilyMembers();
+  const mappedUsers =
+    users?.map((u) => ({
+      id: u.id,
+      name: u.name,
+      avatarUrl: u.avatarUrl ?? "",
+    })) ?? [];
 
   return (
     <div className="min-h-screen bg-gray-50 pb-20">
       <AddEntryHeader
-        users={users}
-        mealTypes={mealTypes}
+        users={mappedUsers}
+        mealTypes={mappedMealTypes}
         selectedUserId={userId}
         selectedMealTypeId={mealTypeId}
         date={date}
@@ -61,20 +70,47 @@ function AddMealPageContent() {
 
       <AddTabs active={activeTab} onChange={setActiveTab} />
 
+      <div className=" pt-3">
+        <input
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Пошук страв або продуктів..."
+          className="
+      w-full
+      rounded-xl
+      border
+      px-3 py-2
+      text-sm
+      outline-none
+      focus:ring-2 focus:ring-green-500
+    "
+        />
+      </div>
       <SearchList
+        key={`${activeTab}-${debouncedQuery}`}
         activeTab={activeTab}
+        query={debouncedQuery}
         selectedItems={selectedItems}
-        onToggle={(id) => {
-          setSelectedItems((prev) =>
-            prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id],
-          );
+        onToggle={(item) => {
+          setSelectedItems((prev) => {
+            const exists = prev.some(
+              (i) => i.id === item.id && i.type === item.type,
+            );
+
+            if (exists) {
+              return prev.filter(
+                (i) => !(i.id === item.id && i.type === item.type),
+              );
+            }
+
+            return [...prev, item];
+          });
         }}
       />
 
-      {/* 🔥 USER PICKER */}
       <UserPickerSheet
         open={isUserSheetOpen}
-        users={users}
+        users={mappedUsers}
         selectedUserId={userId}
         onClose={() => setUserSheetOpen(false)}
         onSelect={(id) => {
@@ -85,7 +121,7 @@ function AddMealPageContent() {
 
       <MealTypePickerSheet
         open={isMealSheetOpen}
-        mealTypes={mealTypes}
+        mealTypes={mappedMealTypes}
         selectedMealTypeId={mealTypeId}
         onClose={() => setMealSheetOpen(false)}
         onSelect={(id) => {
