@@ -153,5 +153,29 @@ class RecipeRepository {
             })),
         });
     }
+    async toggleFavorite(recipeId, familyId, userId) {
+        const existing = await this.prisma.recipeFavorite.findUnique({
+            where: {
+                recipeId_familyId: {
+                    recipeId,
+                    familyId,
+                },
+            },
+        });
+        if (existing) {
+            await this.prisma.recipeFavorite.delete({
+                where: { id: existing.id },
+            });
+            return false;
+        }
+        await this.prisma.recipeFavorite.create({
+            data: {
+                recipeId,
+                familyId,
+                createdBy: userId,
+            },
+        });
+        return true;
+    }
 }
 exports.RecipeRepository = RecipeRepository;

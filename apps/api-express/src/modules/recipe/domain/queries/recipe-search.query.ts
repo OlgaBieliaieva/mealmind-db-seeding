@@ -7,6 +7,10 @@ export class RecipeSearchQuery {
     where: Prisma.RecipeWhereInput,
     page: number,
     limit: number,
+    context?: {
+      familyId: string;
+      userId: string;
+    },
   ) {
     const [items, total] = await this.prisma.$transaction([
       this.prisma.recipe.findMany({
@@ -27,6 +31,15 @@ export class RecipeSearchQuery {
               nutrient: true,
             },
           },
+          ...(context && {
+            favorites: {
+              where: {
+                familyId: context.familyId,
+                createdBy: context.userId,
+              },
+              select: { id: true },
+            },
+          }),
         },
       }),
       this.prisma.recipe.count({ where }),

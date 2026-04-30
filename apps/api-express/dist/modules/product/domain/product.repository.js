@@ -240,5 +240,29 @@ class ProductRepository {
             unit: r.unit ?? "g",
         })));
     }
+    async toggleFavorite(productId, familyId, userId) {
+        const existing = await this.prisma.productFavorite.findUnique({
+            where: {
+                productId_familyId: {
+                    productId,
+                    familyId,
+                },
+            },
+        });
+        if (existing) {
+            await this.prisma.productFavorite.delete({
+                where: { id: existing.id },
+            });
+            return false;
+        }
+        await this.prisma.productFavorite.create({
+            data: {
+                productId,
+                familyId,
+                createdBy: userId,
+            },
+        });
+        return true;
+    }
 }
 exports.ProductRepository = ProductRepository;

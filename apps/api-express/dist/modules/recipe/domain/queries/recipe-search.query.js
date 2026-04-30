@@ -6,7 +6,7 @@ class RecipeSearchQuery {
     constructor(prisma) {
         this.prisma = prisma;
     }
-    async searchRecipes(where, page, limit) {
+    async searchRecipes(where, page, limit, context) {
         const [items, total] = await this.prisma.$transaction([
             this.prisma.recipe.findMany({
                 where,
@@ -16,11 +16,25 @@ class RecipeSearchQuery {
                 include: {
                     recipeType: true,
                     author: true,
+                    cuisines: {
+                        include: {
+                            cuisine: true,
+                        },
+                    },
                     nutrients: {
                         include: {
                             nutrient: true,
                         },
                     },
+                    ...(context && {
+                        favorites: {
+                            where: {
+                                familyId: context.familyId,
+                                createdBy: context.userId,
+                            },
+                            select: { id: true },
+                        },
+                    }),
                 },
             }),
             this.prisma.recipe.count({ where }),

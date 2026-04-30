@@ -5,6 +5,7 @@ const http_errors_1 = require("../../../shared/errors/http-errors");
 const product_admin_presenter_1 = require("../transport/admin/presenters/product.admin.presenter");
 const product_media_service_1 = require("../domain/product-media.service");
 const product_media_worker_1 = require("../../product-media/product-media.worker");
+const product_search_helper_1 = require("../domain/queries/product-search.helper");
 class ProductService {
     repo;
     searchQuery;
@@ -184,25 +185,21 @@ class ProductService {
     }
     // CLIENT
     async searchProductsClient(filters) {
-        const { query, page = 1, limit = 20 } = filters;
-        const where = {
-            status: "active",
-        };
-        if (query) {
-            where.OR = [
-                { nameEn: { contains: query, mode: "insensitive" } },
-                { nameUa: { contains: query, mode: "insensitive" } },
-            ];
-        }
+        const { query, page = 1, limit = 20, userId, familyId } = filters;
+        const baseWhere = {};
+        const where = (0, product_search_helper_1.buildProductSearchWhere)(baseWhere, query);
         const { items, total } = await this.searchQuery.searchProducts(where, page, limit, {
             includeArchived: false,
-        });
+        }, { userId, familyId });
         return {
             items,
             total,
             page,
             limit,
         };
+    }
+    async toggleFavorite(productId, familyId, userId) {
+        return this.repo.toggleFavorite(productId, familyId, userId);
     }
 }
 exports.ProductService = ProductService;

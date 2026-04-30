@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.presentRecipeListItemClient = presentRecipeListItemClient;
-function presentRecipeListItemClient(recipe) {
+exports.presentRecipeListItemInMealPlanClient = presentRecipeListItemInMealPlanClient;
+function presentRecipeListItemInMealPlanClient(recipe) {
     return {
         id: recipe.id,
         type: "recipe",

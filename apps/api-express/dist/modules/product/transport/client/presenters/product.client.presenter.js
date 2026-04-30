@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.presentProductListItemClient = presentProductListItemClient;
-function presentProductListItemClient(product) {
+exports.presentProductListItemInMealPlanClient = presentProductListItemInMealPlanClient;
+function presentProductListItemInMealPlanClient(product) {
     return {
         id: product.id,
         type: "product",
