@@ -18,6 +18,7 @@ const dietary_tag_module_1 = require("./modules/dietary-tag/dietary-tag.module")
 const recipe_author_module_1 = require("./modules/recipe-author/recipe-author.module");
 const meal_plan_module_1 = require("./modules/meal-plan/meal-plan.module");
 const family_module_1 = require("./modules/family/family.module");
+const meal_type_module_1 = require("./modules/meal-type/meal-type.module");
 const db_1 = require("@mealmind/db");
 const PORT = process.env.PORT || 4000;
 const app = (0, express_1.default)();
@@ -34,6 +35,7 @@ const recipeAuthorModule = (0, recipe_author_module_1.createRecipeAuthorModule)(
 // CLIENT
 const mealPlanModule = (0, meal_plan_module_1.createMealPlanModule)(db_1.prisma);
 const familyModule = (0, family_module_1.createFamilyModule)(db_1.prisma);
+const mealTypeModule = (0, meal_type_module_1.createMealTypeModule)(db_1.prisma);
 const allowedOrigins = [
     "http://localhost:3000",
     "http://localhost:3001",
@@ -64,9 +66,10 @@ app.use("/api/v1/admin/dietary-tags", dietaryTagModule.adminRouter);
 app.use("/api/v1/admin/recipe-authors", recipeAuthorModule.adminRouter);
 // CLIENT
 app.use("/api/v1/client/meal-plans", mealPlanModule.router);
-app.use("/api/v1/client/families", familyModule.router);
+app.use("/api/v1/client/families", familyModule.clientRouter);
 app.use("/api/v1/client/recipes", recipeModule.clientRouter);
 app.use("/api/v1/client/products", productModule.clientRouter);
+app.use("/api/v1/client/meal-types", mealTypeModule.clientRouter);
 app.get("/health", (_req, res) => {
     res.json({
         status: "ok",

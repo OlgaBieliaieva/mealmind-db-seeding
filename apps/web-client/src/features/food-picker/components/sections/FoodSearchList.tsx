@@ -6,6 +6,7 @@ import {
   TabType,
   SelectedItem,
 } from "../../../meal-plan/add/types/add-meal-plan.types";
+import { SearchItemDTO } from "@/shared/types/search.types";
 import { FoodSearchItem } from "./FoodSearchItem";
 import { Pagination } from "@/shared/ui/table/Pagination";
 
@@ -14,6 +15,7 @@ type Props = {
   query?: string;
   selectedItems: SelectedItem[];
   onToggle: (item: SelectedItem) => void;
+  onFavoriteToggle: (item: SearchItemDTO) => void;
 };
 
 export function FoodSearchList({
@@ -21,6 +23,7 @@ export function FoodSearchList({
   query,
   selectedItems,
   onToggle,
+  onFavoriteToggle,
 }: Props) {
   const [page, setPage] = useState(1);
 
@@ -58,6 +61,7 @@ export function FoodSearchList({
             })
           }
           onOpen={() => console.log("open details", i)}
+          onFavoriteToggle={() => onFavoriteToggle(i)}
         />
       ))}
 

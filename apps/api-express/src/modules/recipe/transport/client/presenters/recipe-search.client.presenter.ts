@@ -33,6 +33,8 @@ type RecipeListItem = {
     };
     valueTotal: number;
   }[];
+
+  favorites: { id: string }[];
 };
 
 function mapMacros(
@@ -70,9 +72,7 @@ function mapMacros(
   return { calories, proteins, fats, carbs };
 }
 
-export function presentRecipeListItemInSearchClient(
-  recipe: RecipeListItem,
-) {
+export function presentRecipeListItemInSearchClient(recipe: RecipeListItem) {
   const { calories, proteins, fats, carbs } = mapMacros(
     recipe.nutrients,
     recipe.baseOutputWeightG,
@@ -108,6 +108,6 @@ export function presentRecipeListItemInSearchClient(
         }
       : undefined,
 
-    isFavorite: false,
+    isFavorite: recipe.favorites.length > 0,
   };
 }

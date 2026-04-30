@@ -13,7 +13,7 @@ function mapToAggregatedMealPlan(entries) {
                 id: isRecipe ? entry.recipe.id : entry.product.id,
                 type: isRecipe ? "recipe" : "product",
                 categoryId: entry.recipe?.recipeTypeId ?? undefined,
-                categoryCode: entry.recipe?.recipeType?.id,
+                categoryCode: entry.recipe?.recipeType?.code,
                 categoryName: entry.recipe?.recipeType?.nameUa,
                 photoUrl: isRecipe ? (entry.recipe.photoUrl ?? undefined) : undefined,
                 totalTime: isRecipe

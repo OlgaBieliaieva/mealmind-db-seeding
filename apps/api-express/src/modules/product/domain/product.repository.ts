@@ -304,4 +304,33 @@ export class ProductRepository {
         })),
       );
   }
+
+  async toggleFavorite(productId: string, familyId: string, userId: string) {
+  const existing = await this.prisma.productFavorite.findUnique({
+    where: {
+      productId_familyId: {
+        productId,
+        familyId,
+      },
+    },
+  });
+
+  if (existing) {
+    await this.prisma.productFavorite.delete({
+      where: { id: existing.id },
+    });
+
+    return false;
+  }
+
+  await this.prisma.productFavorite.create({
+    data: {
+      productId,
+      familyId,
+      createdBy: userId,
+    },
+  });
+
+  return true;
+}
 }

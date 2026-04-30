@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useDebounce } from "@/shared/lib/hooks/useDebounce";
-
+import { useToggleFavorite } from "../hooks/useToggleFavorite";
 import { FoodSearchInput } from "./sections/FoodSearchInput";
 import { FoodTabs } from "./sections/FoodTabs";
 import { FoodSearchList } from "./sections/FoodSearchList";
@@ -19,10 +19,9 @@ type Props = {
 
 export function FoodPicker({ selectedItems, onChange }: Props) {
   const [query, setQuery] = useState("");
-  const debouncedQuery = useDebounce(query, 300);
-
   const [activeTab, setActiveTab] = useState<TabType>("cookbook");
-
+  const debouncedQuery = useDebounce(query, 300);
+  const { mutate: toggleFavorite } = useToggleFavorite();
   function toggleItem(item: SelectedItem) {
     const exists = selectedItems.some(
       (i) => i.id === item.id && i.type === item.type,
@@ -51,6 +50,12 @@ export function FoodPicker({ selectedItems, onChange }: Props) {
         query={debouncedQuery}
         selectedItems={selectedItems}
         onToggle={toggleItem}
+        onFavoriteToggle={(item) =>
+          toggleFavorite({
+            id: item.id,
+            type: item.type,
+          })
+        }
       />
     </div>
   );

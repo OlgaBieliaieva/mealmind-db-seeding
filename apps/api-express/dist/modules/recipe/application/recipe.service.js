@@ -5,6 +5,7 @@ const client_1 = require("@prisma/client");
 const recipe_list_presenter_1 = require("../transport/admin/presenters/recipe.list.presenter");
 const http_errors_1 = require("../../../shared/errors/http-errors");
 const recipe_nutrition_calculator_1 = require("../domain/services/recipe-nutrition.calculator");
+const recipe_search_helper_1 = require("../domain/queries/recipe-search.helper");
 class RecipeService {
     repo;
     searchQuery;
@@ -202,23 +203,48 @@ class RecipeService {
     }
     // CLIENT
     async searchRecipesClient(filters) {
-        const { query, page = 1, limit = 20 } = filters;
-        const where = {
+        const { query, page = 1, limit = 20, userId, familyId } = filters;
+        const baseWhere = {
             status: "published",
         };
-        if (query) {
-            where.OR = [
-                { title: { contains: query, mode: "insensitive" } },
-                { description: { contains: query, mode: "insensitive" } },
-            ];
-        }
-        const { items, total } = await this.searchQuery.searchRecipes(where, page, limit);
+        const where = (0, recipe_search_helper_1.buildRecipeSearchWhere)(baseWhere, query);
+        const { items, total } = await this.searchQuery.searchRecipes(where, page, limit, { userId, familyId });
         return {
             items,
             total,
             page,
             limit,
         };
+    }
+    async getCookbookRecipes(filters) {
+        const { query, page = 1, limit = 20, userId, familyId } = filters;
+        const baseWhere = {
+            OR: [
+                // 🔹 створені членами сім'ї
+                {
+                    familyId: familyId,
+                },
+                // 🔹 додані в обране членами сім'ї
+                // {
+                //   favorites: {
+                //     some: {
+                //       familyId: familyId,
+                //     },
+                //   },
+                // },
+            ],
+        };
+        const where = (0, recipe_search_helper_1.buildRecipeSearchWhere)(baseWhere, query);
+        const { items, total } = await this.searchQuery.searchRecipes(where, page, limit, { userId, familyId });
+        return {
+            items,
+            total,
+            page,
+            limit,
+        };
+    }
+    async toggleFavorite(recipeId, familyId, userId) {
+        return this.repo.toggleFavorite(recipeId, familyId, userId);
     }
 }
 exports.RecipeService = RecipeService;

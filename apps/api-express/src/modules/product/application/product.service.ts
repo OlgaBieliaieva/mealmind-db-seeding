@@ -283,8 +283,10 @@ export class ProductService {
     query?: string;
     page: number;
     limit: number;
+    userId: string;
+    familyId: string;
   }) {
-    const { query, page = 1, limit = 20 } = filters;
+    const { query, page = 1, limit = 20, userId, familyId } = filters;
 
     const baseWhere: Prisma.ProductWhereInput = {};
 
@@ -294,9 +296,11 @@ export class ProductService {
       where,
       page,
       limit,
+
       {
         includeArchived: false,
       },
+      { userId, familyId },
     );
 
     return {
@@ -305,5 +309,9 @@ export class ProductService {
       page,
       limit,
     };
+  }
+
+  async toggleFavorite(productId: string, familyId: string, userId: string) {
+    return this.repo.toggleFavorite(productId, familyId, userId);
   }
 }

@@ -16,5 +16,9 @@ class FamilyService {
             name: family.name,
         };
     }
+    async getMembers(familyId) {
+        const members = await this.repo.findMembers(familyId);
+        return members;
+    }
 }
 exports.FamilyService = FamilyService;

@@ -37,3 +37,15 @@ export function searchProducts(query?: string, page = 1) {
 
   return apiFetch<SearchResponse>(`/products/search?${params.toString()}`);
 }
+
+export function toggleRecipeFavorite(id: string) {
+  return apiFetch<{ isFavorite: boolean }>(`/recipes/${id}/favorite`, {
+    method: "POST",
+  });
+}
+
+export function toggleProductFavorite(id: string) {
+  return apiFetch<{ isFavorite: boolean }>(`/products/${id}/favorite`, {
+    method: "POST",
+  });
+}

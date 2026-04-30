@@ -21,6 +21,8 @@ type ProductListItem = {
     };
     valuePer100g: number;
   }[];
+
+  favorites: { id: string }[];
 };
 
 function mapProductMacros(nutrients: ProductListItem["nutrients"]) {
@@ -76,7 +78,7 @@ export function presentProductListItemInSearchClient(product: ProductListItem) {
     fats,
     carbs,
 
-    isFavorite: false,
+    isFavorite: product.favorites.length > 0,
   };
 }
 

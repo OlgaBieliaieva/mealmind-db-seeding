@@ -290,8 +290,10 @@ export class RecipeService {
     query?: string;
     page: number;
     limit: number;
+    userId: string;
+    familyId: string;
   }) {
-    const { query, page = 1, limit = 20 } = filters;
+    const { query, page = 1, limit = 20, userId, familyId } = filters;
 
     const baseWhere: Prisma.RecipeWhereInput = {
       status: "published",
@@ -303,6 +305,7 @@ export class RecipeService {
       where,
       page,
       limit,
+      { userId, familyId },
     );
 
     return {
@@ -315,11 +318,12 @@ export class RecipeService {
 
   async getCookbookRecipes(filters: {
     query?: string;
-    page?: number;
-    limit?: number;
+    page: number;
+    limit: number;
+    userId: string;
     familyId: string;
   }) {
-    const { query, page = 1, limit = 20, familyId } = filters;
+    const { query, page = 1, limit = 20, userId, familyId } = filters;
 
     const baseWhere: Prisma.RecipeWhereInput = {
       OR: [
@@ -345,6 +349,7 @@ export class RecipeService {
       where,
       page,
       limit,
+      { userId, familyId }
     );
 
     return {
@@ -353,5 +358,9 @@ export class RecipeService {
       page,
       limit,
     };
+  }
+
+  async toggleFavorite(recipeId: string, familyId: string, userId: string) {
+    return this.repo.toggleFavorite(recipeId, familyId, userId);
   }
 }

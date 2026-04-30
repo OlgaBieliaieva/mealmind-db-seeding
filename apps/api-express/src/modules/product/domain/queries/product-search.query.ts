@@ -10,6 +10,10 @@ export class ProductSearchQuery {
     options?: {
       includeArchived?: boolean;
     },
+    context?: {
+      familyId: string;
+      userId: string;
+    },
   ) {
     if (!options?.includeArchived) {
       where.status = "active";
@@ -29,6 +33,15 @@ export class ProductSearchQuery {
             },
           },
           photos: true,
+          ...(context && {
+            favorites: {
+              where: {
+                familyId: context.familyId,
+                createdBy: context.userId,
+              },
+              select: { id: true },
+            },
+          }),
         },
       }),
       this.prisma.product.count({ where }),

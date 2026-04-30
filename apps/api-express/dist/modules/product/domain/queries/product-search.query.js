@@ -6,7 +6,7 @@ class ProductSearchQuery {
     constructor(prisma) {
         this.prisma = prisma;
     }
-    async searchProducts(where, page, limit, options) {
+    async searchProducts(where, page, limit, options, context) {
         if (!options?.includeArchived) {
             where.status = "active";
         }
@@ -19,6 +19,21 @@ class ProductSearchQuery {
                 include: {
                     brand: true,
                     category: true,
+                    nutrients: {
+                        include: {
+                            nutrient: true,
+                        },
+                    },
+                    photos: true,
+                    ...(context && {
+                        favorites: {
+                            where: {
+                                familyId: context.familyId,
+                                createdBy: context.userId,
+                            },
+                            select: { id: true },
+                        },
+                    }),
                 },
             }),
             this.prisma.product.count({ where }),
