@@ -1,9 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { useSearch } from "../hooks/useSearch";
-import { TabType, SelectedItem } from "../types/add-meal-plan.types";
-import { SearchItem } from "./SearchItem";
+import { useSearch } from "../../hooks/useSearch";
+import {
+  TabType,
+  SelectedItem,
+} from "../../../meal-plan/add/types/add-meal-plan.types";
+import { FoodSearchItem } from "./FoodSearchItem";
 import { Pagination } from "@/shared/ui/table/Pagination";
 
 type Props = {
@@ -13,7 +16,7 @@ type Props = {
   onToggle: (item: SelectedItem) => void;
 };
 
-export function SearchList({
+export function FoodSearchList({
   activeTab,
   query,
   selectedItems,
@@ -44,13 +47,9 @@ export function SearchList({
         <div className="p-4 text-sm text-gray-400">Нічого не знайдено</div>
       )}
       {data?.items.map((i) => (
-        <SearchItem
+        <FoodSearchItem
           key={`${i.type}-${i.id}`}
-          item={{
-            id: i.id,
-            type: i.type,
-            title: i.name,
-          }}
+          item={i}
           selected={selectedSet.has(`${i.type}-${i.id}`)}
           onQuickAdd={() =>
             onToggle({
@@ -68,5 +67,3 @@ export function SearchList({
     </div>
   );
 }
-
-

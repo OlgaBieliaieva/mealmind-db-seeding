@@ -1,11 +1,5 @@
 import { apiFetch } from "@/shared/lib/api/fetcher";
-
-export type SearchItemDTO = {
-  id: string;
-  type: "recipe" | "product";
-  name: string;
-  photoUrl?: string;
-};
+import { SearchItemDTO } from "@/shared/types/search.types";
 
 export type SearchResponse = {
   items: SearchItemDTO[];

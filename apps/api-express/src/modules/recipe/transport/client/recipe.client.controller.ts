@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { RecipeService } from "../../application/recipe.service";
 import { mapRecipeClientSearchQuery } from "./mappers/map-recipe-client-search-query";
-import { presentRecipeListItemClient } from "./presenters/recipe.client.presenter";
+import { presentRecipeListItemInSearchClient } from "./presenters/recipe-search.client.presenter";
 import { RequestWithContext } from "../../../../shared/types/request-with-context";
 
 export class RecipeClientController {
@@ -15,7 +15,7 @@ export class RecipeClientController {
 
       res.json({
         ...result,
-        items: result.items.map(presentRecipeListItemClient),
+        items: result.items.map(presentRecipeListItemInSearchClient),
       });
     } catch (e) {
       next(e);
@@ -35,7 +35,7 @@ export class RecipeClientController {
 
       res.json({
         ...result,
-        items: result.items.map(presentRecipeListItemClient),
+        items: result.items.map(presentRecipeListItemInSearchClient),
       });
     } catch (e) {
       next(e);

@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { ProductService } from "../../application/product.service";
-import { presentProductListItemClient } from "./presenters/product.client.presenter";
+import { presentProductListItemInSearchClient } from "./presenters/product-search.client.presenter";
 import { ProductClientSearchQuery } from "./schemas/product-client-search.query.schema";
 
 export class ProductClientController {
@@ -18,39 +18,10 @@ export class ProductClientController {
 
       res.json({
         ...result,
-        items: result.items.map(presentProductListItemClient),
+        items: result.items.map(presentProductListItemInSearchClient),
       });
     } catch (e) {
       next(e);
     }
   };
 }
-
-// import { Request, Response, NextFunction } from "express";
-// import { ProductService } from "../../application/product.service";
-// import { presentProductListItemClient } from "./presenters/product.client.presenter";
-// import { ProductClientSearchQuery } from "./schemas/product-client-search.query.schema";
-
-// type SearchRequest = Request<
-//   Record<string, never>,
-//   Record<string, never>,
-//   Record<string, never>,
-//   ProductClientSearchQuery
-// >;
-
-// export class ProductClientController {
-//   constructor(private service: ProductService) {}
-
-//   search = async (req: SearchRequest, res: Response, next: NextFunction) => {
-//     try {
-//       const result = await this.service.searchProductsClient(req.query);
-
-//       res.json({
-//         ...result,
-//         items: result.items.map(presentProductListItemClient),
-//       });
-//     } catch (e) {
-//       next(e);
-//     }
-//   };
-// }

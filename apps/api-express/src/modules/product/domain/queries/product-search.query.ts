@@ -23,6 +23,12 @@ export class ProductSearchQuery {
         include: {
           brand: true,
           category: true,
+          nutrients: {
+            include: {
+              nutrient: true,
+            },
+          },
+          photos: true,
         },
       }),
       this.prisma.product.count({ where }),

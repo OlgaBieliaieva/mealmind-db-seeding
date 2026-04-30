@@ -6,7 +6,7 @@ import {
   searchRecipes,
   searchCookbook,
 } from "@/shared/api/search/search.api";
-import { TabType } from "../types/add-meal-plan.types";
+import { TabType } from "../../meal-plan/add/types/add-meal-plan.types";
 
 type Params = {
   tab: TabType;

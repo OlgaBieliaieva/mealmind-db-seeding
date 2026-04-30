@@ -3,26 +3,21 @@
 import { useSearchParams } from "next/navigation";
 import { Suspense, useState } from "react";
 
-import { useDebounce } from "@/shared/lib/hooks/useDebounce";
 import { useMealTypes } from "@/shared/lib/hooks/useMealTypes";
 import { useFamilyMembers } from "@/shared/lib/hooks/useFamilyMembers";
 
 import { AddEntryHeader } from "@/features/meal-plan/add/components/AddEntryHeader";
-import { AddTabs } from "@/features/meal-plan/add/components/AddTabs";
-import { SearchList } from "@/features/meal-plan/add/components/SearchList";
+import { FoodPicker } from "@/features/food-picker/components/FoodPicker";
+
 import { UserPickerSheet } from "@/features/meal-plan/add/components/UserPickerSheet";
 import { MealTypePickerSheet } from "@/features/meal-plan/add/components/MealTypePickerSheet";
-import { TabType } from "@/features/meal-plan/add/types/add-meal-plan.types";
 import { SelectedItem } from "@/features/meal-plan/add/types/add-meal-plan.types";
 
 function AddMealPageContent() {
-  const [query, setQuery] = useState("");
   const params = useSearchParams();
-  const debouncedQuery = useDebounce(query, 300);
+
   const date = params.get("date") ?? "";
   const initialMealTypeId = params.get("mealTypeId");
-
-  const [activeTab, setActiveTab] = useState<TabType>("cookbook");
 
   // 🔥 CONTEXT STATE
   const [userId, setUserId] = useState<string | null>(null);
@@ -68,45 +63,7 @@ function AddMealPageContent() {
         }
       />
 
-      <AddTabs active={activeTab} onChange={setActiveTab} />
-
-      <div className=" pt-3">
-        <input
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="Пошук страв або продуктів..."
-          className="
-      w-full
-      rounded-xl
-      border
-      px-3 py-2
-      text-sm
-      outline-none
-      focus:ring-2 focus:ring-green-500
-    "
-        />
-      </div>
-      <SearchList
-        key={`${activeTab}-${debouncedQuery}`}
-        activeTab={activeTab}
-        query={debouncedQuery}
-        selectedItems={selectedItems}
-        onToggle={(item) => {
-          setSelectedItems((prev) => {
-            const exists = prev.some(
-              (i) => i.id === item.id && i.type === item.type,
-            );
-
-            if (exists) {
-              return prev.filter(
-                (i) => !(i.id === item.id && i.type === item.type),
-              );
-            }
-
-            return [...prev, item];
-          });
-        }}
-      />
+      <FoodPicker selectedItems={selectedItems} onChange={setSelectedItems} />
 
       <UserPickerSheet
         open={isUserSheetOpen}
