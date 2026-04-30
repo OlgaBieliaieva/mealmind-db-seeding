@@ -13,7 +13,7 @@ export type ProductListItemClientDTO = {
   unit: string;
 };
 
-export function presentProductListItemClient(
+export function presentProductListItemInMealPlanClient(
   product: ProductListItem,
 ): ProductListItemClientDTO {
   return {

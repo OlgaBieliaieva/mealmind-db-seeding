@@ -17,6 +17,11 @@ export class RecipeSearchQuery {
         include: {
           recipeType: true,
           author: true,
+          cuisines: {
+            include: {
+              cuisine: true,
+            },
+          },
           nutrients: {
             include: {
               nutrient: true,

@@ -1,6 +1,6 @@
 "use client";
 
-import { TabType } from "../types/add-meal-plan.types";
+import { TabType } from "../../../meal-plan/add/types/add-meal-plan.types";
 
 type Props = {
   active: TabType;
@@ -13,7 +13,7 @@ const tabs: { key: TabType; label: string }[] = [
   { key: "products", label: "Продукти" },
 ];
 
-export function AddTabs({ active, onChange }: Props) {
+export function FoodTabs({ active, onChange }: Props) {
   return (
     <div className="bg-white border-b">
       <div className="flex overflow-x-auto px-4">

@@ -14,6 +14,7 @@ import { createDietaryTagModule } from "./modules/dietary-tag/dietary-tag.module
 import { createRecipeAuthorModule } from "./modules/recipe-author/recipe-author.module";
 import { createMealPlanModule } from "./modules/meal-plan/meal-plan.module";
 import { createFamilyModule } from "./modules/family/family.module";
+import { createMealTypeModule } from "./modules/meal-type/meal-type.module";
 
 import { prisma } from "@mealmind/db";
 
@@ -35,6 +36,7 @@ const recipeAuthorModule = createRecipeAuthorModule(prisma);
 // CLIENT
 const mealPlanModule = createMealPlanModule(prisma);
 const familyModule = createFamilyModule(prisma);
+const mealTypeModule = createMealTypeModule(prisma);
 
 const allowedOrigins = [
   "http://localhost:3000",
@@ -70,9 +72,10 @@ app.use("/api/v1/admin/recipe-authors", recipeAuthorModule.adminRouter);
 
 // CLIENT
 app.use("/api/v1/client/meal-plans", mealPlanModule.router);
-app.use("/api/v1/client/families", familyModule.router);
+app.use("/api/v1/client/families", familyModule.clientRouter);
 app.use("/api/v1/client/recipes", recipeModule.clientRouter);
 app.use("/api/v1/client/products", productModule.clientRouter);
+app.use("/api/v1/client/meal-types", mealTypeModule.clientRouter);
 
 app.get("/health", (_req, res) => {
   res.json({

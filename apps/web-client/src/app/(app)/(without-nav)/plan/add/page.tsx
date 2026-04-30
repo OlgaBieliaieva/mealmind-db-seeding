@@ -3,12 +3,15 @@
 import { useSearchParams } from "next/navigation";
 import { Suspense, useState } from "react";
 
+import { useMealTypes } from "@/shared/lib/hooks/useMealTypes";
+import { useFamilyMembers } from "@/shared/lib/hooks/useFamilyMembers";
+
 import { AddEntryHeader } from "@/features/meal-plan/add/components/AddEntryHeader";
-import { AddTabs } from "@/features/meal-plan/add/components/AddTabs";
-import { SearchList } from "@/features/meal-plan/add/components/SearchList";
+import { FoodPicker } from "@/features/food-picker/components/FoodPicker";
+
 import { UserPickerSheet } from "@/features/meal-plan/add/components/UserPickerSheet";
 import { MealTypePickerSheet } from "@/features/meal-plan/add/components/MealTypePickerSheet";
-import { TabType } from "@/features/meal-plan/add/types/add-meal-plan.types";
+import { SelectedItem } from "@/features/meal-plan/add/types/add-meal-plan.types";
 
 function AddMealPageContent() {
   const params = useSearchParams();
@@ -16,37 +19,38 @@ function AddMealPageContent() {
   const date = params.get("date") ?? "";
   const initialMealTypeId = params.get("mealTypeId");
 
-  const [activeTab, setActiveTab] = useState<TabType>("cookbook");
-
   // 🔥 CONTEXT STATE
   const [userId, setUserId] = useState<string | null>(null);
   const [mealTypeId, setMealTypeId] = useState<string | null>(
     initialMealTypeId,
   );
 
-  const [selectedItems, setSelectedItems] = useState<string[]>([]);
+  const [selectedItems, setSelectedItems] = useState<SelectedItem[]>([]);
 
   const [isUserSheetOpen, setUserSheetOpen] = useState(false);
   const [isMealSheetOpen, setMealSheetOpen] = useState(false);
   const canConfirm = Boolean(userId && mealTypeId && selectedItems.length > 0);
 
-  // 🔥 MOCK (потім API)
-  const users = [
-    { id: "1", name: "Оля", avatarUrl: "" },
-    { id: "2", name: "Іван", avatarUrl: "" },
-  ];
+  const { data: mealTypes } = useMealTypes();
+  const mappedMealTypes =
+    mealTypes?.map((m) => ({
+      id: m.id,
+      name: m.name,
+    })) ?? [];
 
-  const mealTypes = [
-    { id: "breakfast", name: "Сніданок" },
-    { id: "lunch", name: "Обід" },
-    { id: "dinner", name: "Вечеря" },
-  ];
+  const { data: users } = useFamilyMembers();
+  const mappedUsers =
+    users?.map((u) => ({
+      id: u.id,
+      name: u.name,
+      avatarUrl: u.avatarUrl ?? "",
+    })) ?? [];
 
   return (
     <div className="min-h-screen bg-gray-50 pb-20">
       <AddEntryHeader
-        users={users}
-        mealTypes={mealTypes}
+        users={mappedUsers}
+        mealTypes={mappedMealTypes}
         selectedUserId={userId}
         selectedMealTypeId={mealTypeId}
         date={date}
@@ -59,22 +63,11 @@ function AddMealPageContent() {
         }
       />
 
-      <AddTabs active={activeTab} onChange={setActiveTab} />
+      <FoodPicker selectedItems={selectedItems} onChange={setSelectedItems} />
 
-      <SearchList
-        activeTab={activeTab}
-        selectedItems={selectedItems}
-        onToggle={(id) => {
-          setSelectedItems((prev) =>
-            prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id],
-          );
-        }}
-      />
-
-      {/* 🔥 USER PICKER */}
       <UserPickerSheet
         open={isUserSheetOpen}
-        users={users}
+        users={mappedUsers}
         selectedUserId={userId}
         onClose={() => setUserSheetOpen(false)}
         onSelect={(id) => {
@@ -85,7 +78,7 @@ function AddMealPageContent() {
 
       <MealTypePickerSheet
         open={isMealSheetOpen}
-        mealTypes={mealTypes}
+        mealTypes={mappedMealTypes}
         selectedMealTypeId={mealTypeId}
         onClose={() => setMealSheetOpen(false)}
         onSelect={(id) => {

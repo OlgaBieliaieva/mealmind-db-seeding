@@ -15,4 +15,10 @@ export class FamilyService {
       name: family.name,
     };
   }
+
+  async getMembers(familyId: string) {
+    const members = await this.repo.findMembers(familyId);
+
+    return members;
+  }
 }

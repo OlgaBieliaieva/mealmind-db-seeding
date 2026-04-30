@@ -12,7 +12,7 @@ type RecipeListItem = {
   } | null;
 };
 
-export function presentRecipeListItemClient(recipe: RecipeListItem) {
+export function presentRecipeListItemInMealPlanClient(recipe: RecipeListItem) {
   return {
     id: recipe.id,
     type: "recipe",

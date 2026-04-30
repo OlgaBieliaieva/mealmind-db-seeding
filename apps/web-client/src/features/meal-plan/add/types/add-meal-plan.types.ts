@@ -10,3 +10,8 @@ export type AddMealType = {
   id: string;
   name: string;
 };
+
+export type SelectedItem = {
+  id: string;
+  type: "recipe" | "product";
+};
