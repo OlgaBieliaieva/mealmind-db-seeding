@@ -17,6 +17,18 @@ export function ProductClientRouter(controller: ProductClientController) {
     controller.search,
   );
 
+  router.get(
+    "/:id",
+    validateParams(ProductIdParamsSchema),
+    controller.getDetails,
+  );
+
+  router.get(
+    "/:id/recipes",
+    validateParams(ProductIdParamsSchema),
+    controller.getProductRecipes,
+  );
+
   router.post(
     "/:id/favorite",
     validateParams(ProductIdParamsSchema),

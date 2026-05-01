@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useSearch } from "../../hooks/useSearch";
 import {
   TabType,
@@ -26,6 +27,7 @@ export function FoodSearchList({
   onFavoriteToggle,
 }: Props) {
   const [page, setPage] = useState(1);
+  const router = useRouter();
 
   const { data, isLoading, error } = useSearch({
     tab: activeTab,
@@ -60,8 +62,13 @@ export function FoodSearchList({
               type: i.type,
             })
           }
-          onOpen={() => console.log("open details", i)}
+          onOpen={() => {
+            router.push(`/food/${i.type}/${i.id}`);
+          }}
           onFavoriteToggle={() => onFavoriteToggle(i)}
+          // onMouseEnter={() => {
+          //   router.prefetch(`/food/${i.type}/${i.id}`);
+          // }}
         />
       ))}
 
