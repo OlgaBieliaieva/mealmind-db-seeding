@@ -72,5 +72,48 @@ class ProductSearchQuery {
         }
         return ids;
     }
+    async searchRecipesByProduct(params) {
+        const { productId, page, limit, familyId } = params;
+        const where = {
+            ingredients: {
+                some: {
+                    OR: [
+                        { productId: productId },
+                        {
+                            product: {
+                                parentProductId: productId,
+                            },
+                        },
+                    ],
+                },
+            },
+        };
+        const [items, total] = await this.prisma.$transaction([
+            this.prisma.recipe.findMany({
+                where,
+                orderBy: { createdAt: "desc" },
+                skip: (page - 1) * limit,
+                take: limit,
+                include: {
+                    recipeType: true,
+                    author: true,
+                    cuisines: {
+                        include: { cuisine: true },
+                    },
+                    nutrients: {
+                        include: { nutrient: true },
+                    },
+                    favorites: {
+                        where: {
+                            familyId,
+                        },
+                        select: { id: true },
+                    },
+                },
+            }),
+            this.prisma.recipe.count({ where }),
+        ]);
+        return { items, total };
+    }
 }
 exports.ProductSearchQuery = ProductSearchQuery;

@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { ProductService } from "../../application/product.service";
+import { ProductAdminService } from "../../application/product.admin.service";
 import { ProductIdParams } from "../shared/schemas/product-id.params.schema";
 import { AdminUpdateProductParams } from "./schemas/product.update.params.schema";
 import { AdminUpdateProductInput } from "./schemas/product.update.schema";
@@ -8,7 +8,7 @@ import { ProductPhotoParams } from "./schemas/product-photo.params";
 import { presentProductDetailsAdmin } from "./presenters/product.admin.presenter";
 
 export class ProductAdminController {
-  constructor(private service: ProductService) {}
+  constructor(private service: ProductAdminService) {}
   create = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const created = await this.service.create(req.body);

@@ -17,9 +17,8 @@ import { finalizeProductPhotos } from "../domain/product-media.service";
 import { generateProductPhotoVariants } from "../../product-media/product-media.worker";
 
 import { TempProductPhoto } from "../../product-media/types/product-media.types";
-import { buildProductSearchWhere } from "../domain/queries/product-search.helper";
 
-export class ProductService {
+export class ProductAdminService {
   constructor(
     private repo: ProductRepository,
     private searchQuery: ProductSearchQuery,
@@ -278,40 +277,4 @@ export class ProductService {
   }
 
   // CLIENT
-
-  async searchProductsClient(filters: {
-    query?: string;
-    page: number;
-    limit: number;
-    userId: string;
-    familyId: string;
-  }) {
-    const { query, page = 1, limit = 20, userId, familyId } = filters;
-
-    const baseWhere: Prisma.ProductWhereInput = {};
-
-    const where = buildProductSearchWhere(baseWhere, query);
-
-    const { items, total } = await this.searchQuery.searchProducts(
-      where,
-      page,
-      limit,
-
-      {
-        includeArchived: false,
-      },
-      { userId, familyId },
-    );
-
-    return {
-      items,
-      total,
-      page,
-      limit,
-    };
-  }
-
-  async toggleFavorite(productId: string, familyId: string, userId: string) {
-    return this.repo.toggleFavorite(productId, familyId, userId);
-  }
 }
