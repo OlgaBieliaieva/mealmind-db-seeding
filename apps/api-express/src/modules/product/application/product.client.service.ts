@@ -42,7 +42,7 @@ export class ProductClientService {
   }
 
   async getProductDetails(id: string, context: { familyId: string }) {
-    const product = await this.repo.findByIdDetailed(id);
+    const product = await this.repo.findByIdDetailed(id, context.familyId);
 
     if (!product) {
       throw new NotFoundError("PRODUCT_NOT_FOUND", "Product not found");

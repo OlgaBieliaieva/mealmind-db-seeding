@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useProductRecipes } from "../../hooks/useProductRecipes";
 import { RecipeSearchItem } from "@/features/food-picker/components/sections/RecipeSearchItem";
+import { ProductRecipesEmpty } from "./ProductRecipesEmpty";
 import { Pagination } from "@/shared/ui/table/Pagination";
 
 export function ProductRecipes({ productId }: { productId: string }) {
@@ -15,7 +16,13 @@ export function ProductRecipes({ productId }: { productId: string }) {
   }
 
   if (!data || data.items.length === 0) {
-    return <div className="p-4 text-sm text-gray-400">Немає рецептів</div>;
+    return (
+      <ProductRecipesEmpty
+        onCreate={() => {
+          console.log("create recipe with product", productId);
+        }}
+      />
+    );
   }
 
   const totalPages = Math.ceil(data.total / data.limit);
@@ -26,8 +33,6 @@ export function ProductRecipes({ productId }: { productId: string }) {
         <RecipeSearchItem
           key={recipe.id}
           item={recipe}
-          selected={false}
-          onToggle={() => {}}
           onOpen={() => console.log("open", recipe.id)}
         />
       ))}

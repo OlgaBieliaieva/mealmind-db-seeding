@@ -5,7 +5,7 @@ import { Home, Calendar, Book, ShoppingCart, User } from "lucide-react";
 
 export default function BottomNav() {
   return (
-    <div className="fixed inset-x-0 bottom-0 z-50 px-4 pb-4">
+    <div className="absolute inset-x-0 bottom-0 z-50 px-4 pb-4">
       <div
         className="
           mx-auto

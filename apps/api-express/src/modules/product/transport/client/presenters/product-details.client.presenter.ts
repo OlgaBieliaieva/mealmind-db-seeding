@@ -1,3 +1,5 @@
+import { presentNutrient } from "../../../../nutrient/transport/client/presenters/nutrient.client.presenter";
+
 type ProductDetailsAggregate = {
   id: string;
 
@@ -25,10 +27,14 @@ type ProductDetailsAggregate = {
       code: string;
       nameUa: string;
       nameEn: string;
+      nutrientGroup: string;
+      sortOrder: number;
     };
     valuePer100g: number;
     unit?: string | null;
   }[];
+
+  favorites?: { id: string }[];
 };
 
 export function presentProductDetails(product: ProductDetailsAggregate) {
@@ -51,14 +57,11 @@ export function presentProductDetails(product: ProductDetailsAggregate) {
         }
       : undefined,
 
-    nutrients: product.nutrients.map((n) => ({
-      code: n.nutrient.code,
-      name: n.nutrient.nameUa,
-      value: n.valuePer100g,
-      unit: n.unit ?? "g",
-    })),
+    nutrients: product.nutrients.map(presentNutrient),
 
     macros,
+
+    isFavorite: (product.favorites?.length ?? 0) > 0,
   };
 }
 

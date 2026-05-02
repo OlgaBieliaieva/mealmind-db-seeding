@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useProductDetails } from "../hooks/useProductDetails";
-
+import { ProductContentSheet } from "./sections/ProductContentSheet";
 import { ProductHero } from "./sections/ProductHero";
 import { ProductHeaderCard } from "./sections/ProductHeaderCard";
 import { ProductTabs } from "./sections/ProductTabs";
@@ -22,15 +22,20 @@ export function ProductDetailsPage({ id }: { id: string }) {
   }
 
   return (
-    <div className="pb-24 bg-gray-50 min-h-screen">
+    <div className="relative flex h-full min-h-0 flex-col overflow-hidden bg-gray-50">
       <ProductHero product={data} />
-      <ProductHeaderCard product={data} />
+      <ProductContentSheet>
+        <ProductHeaderCard product={data} />
 
-      <ProductTabs active={tab} onChange={setTab} />
-
-      {tab === "overview" && <ProductOverview product={data} />}
-      {tab === "nutrients" && <ProductNutrients product={data} />}
-      {tab === "recipes" && <ProductRecipes productId={id} />}
+        <div className="sticky top-0 bg-white z-10">
+          <ProductTabs active={tab} onChange={setTab} />
+        </div>
+        <div className="flex-1 min-h-0 overflow-y-auto pb-16">
+          {tab === "overview" && <ProductOverview product={data} />}
+          {tab === "nutrients" && <ProductNutrients product={data} />}
+          {tab === "recipes" && <ProductRecipes productId={id} />}
+        </div>
+      </ProductContentSheet>
 
       <FoodActionButton onClick={() => setActionOpen(true)} />
 

@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.presentProductDetails = presentProductDetails;
+const nutrient_client_presenter_1 = require("../../../../nutrient/transport/client/presenters/nutrient.client.presenter");
 function presentProductDetails(product) {
     const macros = mapMacros(product.nutrients);
     return {
@@ -15,13 +16,9 @@ function presentProductDetails(product) {
                 country: product.brand.country ?? undefined,
             }
             : undefined,
-        nutrients: product.nutrients.map((n) => ({
-            code: n.nutrient.code,
-            name: n.nutrient.nameUa,
-            value: n.valuePer100g,
-            unit: n.unit ?? "g",
-        })),
+        nutrients: product.nutrients.map(nutrient_client_presenter_1.presentNutrient),
         macros,
+        isFavorite: (product.favorites?.length ?? 0) > 0,
     };
 }
 function mapMacros(nutrients) {

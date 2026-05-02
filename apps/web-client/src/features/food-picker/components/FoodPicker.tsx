@@ -39,24 +39,26 @@ export function FoodPicker({ selectedItems, onChange }: Props) {
   }
 
   return (
-    <div className="pt-3">
+    <div className="flex h-full min-h-0 flex-col overflow-hidden pt-3">
       <FoodTabs active={activeTab} onChange={setActiveTab} />
 
       <FoodSearchInput value={query} onChange={setQuery} />
 
-      <FoodSearchList
-        key={`${activeTab}-${debouncedQuery}`}
-        activeTab={activeTab}
-        query={debouncedQuery}
-        selectedItems={selectedItems}
-        onToggle={toggleItem}
-        onFavoriteToggle={(item) =>
-          toggleFavorite({
-            id: item.id,
-            type: item.type,
-          })
-        }
-      />
+      <div className="flex-1 min-h-0 overflow-hidden">
+        <FoodSearchList
+          key={`${activeTab}-${debouncedQuery}`}
+          activeTab={activeTab}
+          query={debouncedQuery}
+          selectedItems={selectedItems}
+          onToggle={toggleItem}
+          onFavoriteToggle={(item) =>
+            toggleFavorite({
+              id: item.id,
+              type: item.type,
+            })
+          }
+        />
+      </div>
     </div>
   );
 }

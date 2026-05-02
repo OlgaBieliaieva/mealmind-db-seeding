@@ -23,10 +23,12 @@ export default async function PlanPage({ searchParams }: Props) {
   }
 
   return (
-    <div className="pb-24">
+    <div className="relative flex h-full min-h-0 flex-col overflow-hidden">
       <PlanHeader />
       <PlanControls />
-      <PlanContent />
+      <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain pb-24">
+        <PlanContent />
+      </div>
     </div>
   );
 }
