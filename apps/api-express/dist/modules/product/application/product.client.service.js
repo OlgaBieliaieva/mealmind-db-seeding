@@ -21,7 +21,7 @@ class ProductClientService {
         return this.repo.toggleFavorite(productId, familyId, userId);
     }
     async getProductDetails(id, context) {
-        const product = await this.repo.findByIdDetailed(id);
+        const product = await this.repo.findByIdDetailed(id, context.familyId);
         if (!product) {
             throw new http_errors_1.NotFoundError("PRODUCT_NOT_FOUND", "Product not found");
         }

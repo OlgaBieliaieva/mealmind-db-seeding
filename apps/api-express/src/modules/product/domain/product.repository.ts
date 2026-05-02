@@ -127,6 +127,7 @@ export class ProductRepository {
 
   async findByIdDetailed(
     id: string,
+    familyId?: string,
   ): Promise<ProductPersistenceAggregate | null> {
     return this.prisma.product.findUnique({
       where: { id },
@@ -136,6 +137,15 @@ export class ProductRepository {
         parentProduct: true,
         nutrients: { include: { nutrient: true } },
         photos: true,
+
+        ...(familyId && {
+          favorites: {
+            where: {
+              familyId,
+            },
+            select: { id: true },
+          },
+        }),
       },
     });
   }
@@ -306,31 +316,31 @@ export class ProductRepository {
   }
 
   async toggleFavorite(productId: string, familyId: string, userId: string) {
-  const existing = await this.prisma.productFavorite.findUnique({
-    where: {
-      productId_familyId: {
-        productId,
-        familyId,
+    const existing = await this.prisma.productFavorite.findUnique({
+      where: {
+        productId_familyId: {
+          productId,
+          familyId,
+        },
       },
-    },
-  });
-
-  if (existing) {
-    await this.prisma.productFavorite.delete({
-      where: { id: existing.id },
     });
 
-    return false;
+    if (existing) {
+      await this.prisma.productFavorite.delete({
+        where: { id: existing.id },
+      });
+
+      return false;
+    }
+
+    await this.prisma.productFavorite.create({
+      data: {
+        productId,
+        familyId,
+        createdBy: userId,
+      },
+    });
+
+    return true;
   }
-
-  await this.prisma.productFavorite.create({
-    data: {
-      productId,
-      familyId,
-      createdBy: userId,
-    },
-  });
-
-  return true;
-}
 }

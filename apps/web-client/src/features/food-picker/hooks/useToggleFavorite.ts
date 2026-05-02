@@ -1,20 +1,26 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient, QueryKey } from "@tanstack/react-query";
 import {
   toggleRecipeFavorite,
   toggleProductFavorite,
   SearchResponse,
 } from "@/shared/api/search/search.api";
+import { ProductDetailsDTO } from "@/features/product-details/types/product-details.types";
 
 type Input = {
   id: string;
   type: "recipe" | "product";
 };
 
+type Context = {
+  prevSearch: [QueryKey, SearchResponse | undefined][];
+  prevProduct?: ProductDetailsDTO;
+};
+
 export function useToggleFavorite() {
   const queryClient = useQueryClient();
 
-  return useMutation({
-    mutationFn: async ({ id, type }: Input) => {
+  return useMutation<{ isFavorite: boolean }, Error, Input, Context>({
+    mutationFn: async ({ id, type }) => {
       return type === "recipe"
         ? toggleRecipeFavorite(id)
         : toggleProductFavorite(id);
@@ -22,12 +28,21 @@ export function useToggleFavorite() {
 
     // 🔥 OPTIMISTIC UPDATE
     onMutate: async ({ id, type }) => {
+      // 1. cancel search queries
       await queryClient.cancelQueries({ queryKey: ["search"] });
 
-      const prev = queryClient.getQueriesData<SearchResponse>({
+      // 2. snapshot search cache
+      const prevSearch = queryClient.getQueriesData<SearchResponse>({
         queryKey: ["search"],
       });
 
+      // 3. snapshot product details (якщо відкрито)
+      const prevProduct = queryClient.getQueryData<ProductDetailsDTO>([
+        "product",
+        id,
+      ]);
+
+      // 4. optimistic update search
       queryClient.setQueriesData<SearchResponse>(
         { queryKey: ["search"] },
         (old) => {
@@ -44,18 +59,40 @@ export function useToggleFavorite() {
         },
       );
 
-      return { prev };
+      // 5. optimistic update product details
+      queryClient.setQueryData<ProductDetailsDTO>(["product", id], (old) => {
+        if (!old) return old;
+
+        return {
+          ...old,
+          isFavorite: !old.isFavorite,
+        };
+      });
+
+      return { prevSearch, prevProduct };
     },
 
-    // ❌ rollback
-    onError: (_err, _vars, context) => {
-      context?.prev?.forEach(([key, data]) => {
+    // ❌ ROLLBACK
+    onError: (_err, variables, context) => {
+      if (!context) return;
+
+      // rollback search
+      context.prevSearch.forEach(([key, data]) => {
         queryClient.setQueryData(key, data);
       });
+
+      // rollback product
+      if (context.prevProduct) {
+        queryClient.setQueryData(
+          ["product", variables.id],
+          context.prevProduct,
+        );
+      }
     },
 
-    // ✅ sync з беком
+    // ✅ SYNC З БЕКОМ
     onSuccess: (data, { id, type }) => {
+      // update search
       queryClient.setQueriesData<SearchResponse>(
         { queryKey: ["search"] },
         (old) => {
@@ -71,6 +108,16 @@ export function useToggleFavorite() {
           };
         },
       );
+
+      // 🔥 update product details
+      queryClient.setQueryData<ProductDetailsDTO>(["product", id], (old) => {
+        if (!old) return old;
+
+        return {
+          ...old,
+          isFavorite: data.isFavorite,
+        };
+      });
     },
   });
 }

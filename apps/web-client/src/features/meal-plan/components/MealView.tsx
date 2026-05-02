@@ -64,7 +64,7 @@ export function MealView({ items, summary }: Props) {
       </div>
 
       {/* 👉 FLOATING ADD BUTTON */}
-      <div className="fixed right-5 bottom-24 z-50">
+      <div className="absolute right-5 bottom-24 z-50">
         <button
           onClick={handleAdd}
           className="

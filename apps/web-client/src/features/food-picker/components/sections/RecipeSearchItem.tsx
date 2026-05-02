@@ -34,8 +34,8 @@ type Props = {
     isFavorite?: boolean;
   };
 
-  selected: boolean;
-  onToggle: () => void;
+  selected?: boolean;
+  onToggle?: () => void;
   onFavoriteToggle?: () => void;
   onOpen: () => void;
 };
@@ -195,19 +195,23 @@ export function RecipeSearchItem({
       </div>
 
       {/* SELECT BUTTON */}
-      <div
-        onClick={(e) => {
-          e.stopPropagation();
-          onToggle();
-        }}
-        className={`self-center w-6 h-6 rounded-full border-2 flex items-center justify-center transition ${
-          selected
-            ? "bg-green-500 border-green-500"
-            : "border-gray-300 bg-white"
-        }`}
-      >
-        {selected && <span className="text-white text-sm leading-none">✓</span>}
-      </div>
+      {onToggle && (
+        <div
+          onClick={(e) => {
+            e.stopPropagation();
+            onToggle();
+          }}
+          className={`self-center w-6 h-6 rounded-full border-2 flex items-center justify-center transition ${
+            selected
+              ? "bg-green-500 border-green-500"
+              : "border-gray-300 bg-white"
+          }`}
+        >
+          {selected && (
+            <span className="text-white text-sm leading-none">✓</span>
+          )}
+        </div>
+      )}
     </div>
   );
 }

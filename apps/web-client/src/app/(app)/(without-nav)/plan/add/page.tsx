@@ -47,7 +47,7 @@ function AddMealPageContent() {
     })) ?? [];
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-20">
+    <div className="flex h-full min-h-0 flex-col overflow-hidden bg-gray-50">
       <AddEntryHeader
         users={mappedUsers}
         mealTypes={mappedMealTypes}
@@ -63,7 +63,9 @@ function AddMealPageContent() {
         }
       />
 
-      <FoodPicker selectedItems={selectedItems} onChange={setSelectedItems} />
+      <div className="flex-1 min-h-0 overflow-hidden">
+        <FoodPicker selectedItems={selectedItems} onChange={setSelectedItems} />
+      </div>
 
       <UserPickerSheet
         open={isUserSheetOpen}

@@ -96,7 +96,7 @@ class ProductRepository {
             },
         });
     }
-    async findByIdDetailed(id) {
+    async findByIdDetailed(id, familyId) {
         return this.prisma.product.findUnique({
             where: { id },
             include: {
@@ -105,6 +105,14 @@ class ProductRepository {
                 parentProduct: true,
                 nutrients: { include: { nutrient: true } },
                 photos: true,
+                ...(familyId && {
+                    favorites: {
+                        where: {
+                            familyId,
+                        },
+                        select: { id: true },
+                    },
+                }),
             },
         });
     }

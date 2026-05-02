@@ -19,6 +19,9 @@ export type ProductDetailsDTO = {
     name: string;
     value: number;
     unit: string;
+    group: string;
+    sortOrder: number;
+    uiGroup: string;
   }[];
 
   macros: {
@@ -27,6 +30,8 @@ export type ProductDetailsDTO = {
     fats: number;
     carbs: number;
   };
+
+  isFavorite: boolean;
 };
 
 export type ProductRecipesResponse = {
@@ -34,4 +39,20 @@ export type ProductRecipesResponse = {
   total: number;
   page: number;
   limit: number;
+};
+
+export type NutrientDTO = {
+  code: string;
+  name: string;
+  value: number;
+  unit: string;
+
+  group: string;
+  sortOrder: number;
+  uiGroup: string;
+};
+
+export type NutrientGroupDTO = {
+  group: string;
+  items: NutrientDTO[];
 };
