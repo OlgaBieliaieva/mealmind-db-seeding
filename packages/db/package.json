@@ -8,7 +8,7 @@
     "./types": "./dist/types.js"
   },
   "scripts": {
-    "build": "prisma generate && tsc",
+    "build": "prisma generate && tsc -p tsconfig.json",
     "generate": "prisma generate"
   },
   "dependencies": {
