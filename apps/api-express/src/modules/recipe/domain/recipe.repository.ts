@@ -50,6 +50,7 @@ export class RecipeRepository {
 
   async findByIdDetailed(
     id: string,
+    familyId?: string,
   ): Promise<RecipePersistenceAggregate | null> {
     return this.prisma.recipe.findUnique({
       where: { id },
@@ -72,11 +73,33 @@ export class RecipeRepository {
         dietaryTags: {
           include: { dietaryTag: true },
         },
-        author: true,
-        videos: {
-          include: { author: true },
+        author: {
+        include: {
+          links: {
+            orderBy: { orderIndex: "asc" }, 
+          },
         },
-        nutrients: true,
+      },
+        videos: {
+        include: {
+          author: {
+            include: {
+              links: true, 
+            },
+          },
+        },
+      },
+        nutrients: {
+          include: {
+            nutrient: true,
+          },
+        },
+        favorites: familyId
+          ? {
+              where: { familyId },
+              select: { id: true },
+            }
+          : false,
       },
     });
   }

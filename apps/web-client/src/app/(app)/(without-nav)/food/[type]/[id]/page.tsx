@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { ProductDetailsPage } from "@/features/product-details/components/ProductDetailsPage";
+import { RecipeDetailsPage } from "@/features/recipe-details/components/RecipeDetailsPage";
 
 export default async function FoodDetailsPage({
   params,
@@ -13,7 +14,7 @@ export default async function FoodDetailsPage({
   }
 
   if (type === "recipe") {
-    return <div>Recipe details</div>;
+    return <RecipeDetailsPage id={id} />;
   }
 
   return notFound();

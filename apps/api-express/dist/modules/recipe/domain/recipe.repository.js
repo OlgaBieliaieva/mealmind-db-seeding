@@ -44,7 +44,7 @@ class RecipeRepository {
             })),
         });
     }
-    async findByIdDetailed(id) {
+    async findByIdDetailed(id, familyId) {
         return this.prisma.recipe.findUnique({
             where: { id },
             include: {
@@ -66,11 +66,33 @@ class RecipeRepository {
                 dietaryTags: {
                     include: { dietaryTag: true },
                 },
-                author: true,
-                videos: {
-                    include: { author: true },
+                author: {
+                    include: {
+                        links: {
+                            orderBy: { orderIndex: "asc" },
+                        },
+                    },
                 },
-                nutrients: true,
+                videos: {
+                    include: {
+                        author: {
+                            include: {
+                                links: true,
+                            },
+                        },
+                    },
+                },
+                nutrients: {
+                    include: {
+                        nutrient: true,
+                    },
+                },
+                favorites: familyId
+                    ? {
+                        where: { familyId },
+                        select: { id: true },
+                    }
+                    : false,
             },
         });
     }
