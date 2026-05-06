@@ -363,4 +363,20 @@ export class RecipeService {
   async toggleFavorite(recipeId: string, familyId: string, userId: string) {
     return this.repo.toggleFavorite(recipeId, familyId, userId);
   }
+
+  async getRecipeDetails(
+  id: string,
+  context: { familyId: string; userId: string },
+) {
+  const recipe = await this.repo.findByIdDetailed(
+    id,
+    context.familyId,
+  );
+
+  if (!recipe) {
+    throw new NotFoundError("RECIPE_NOT_FOUND", "Recipe not found");
+  }
+
+  return recipe;
+}
 }

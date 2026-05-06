@@ -4,6 +4,7 @@ import { mapRecipeClientSearchQuery } from "./mappers/map-recipe-client-search-q
 import { presentRecipeListItemInSearchClient } from "./presenters/recipe-search.client.presenter";
 import { RequestWithContext } from "../../../../shared/types/request-with-context";
 import { RecipeIdParams } from "../admin/schemas/recipe-id.params.schema";
+import { presentRecipeDetails } from "./presenters/recipe-details.client.presenter";
 
 export class RecipeClientController {
   constructor(private service: RecipeService) {}
@@ -61,6 +62,22 @@ export class RecipeClientController {
       );
 
       res.json({ isFavorite });
+    } catch (e) {
+      next(e);
+    }
+  };
+
+  getDetails = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { id } = req.params as RecipeIdParams;
+      const { familyId, userId } = (req as RequestWithContext).context;
+
+      const recipe = await this.service.getRecipeDetails(id, {
+        familyId,
+        userId,
+      });
+
+      res.json(presentRecipeDetails(recipe));
     } catch (e) {
       next(e);
     }

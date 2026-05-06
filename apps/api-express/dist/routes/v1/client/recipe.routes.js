@@ -12,6 +12,7 @@ function RecipeClientRouter(controller) {
     router.use(with_family_1.withFamily);
     router.get("/search", (0, validate_query_1.validateQuery)(recipe_client_search_query_schema_1.RecipeClientSearchQuerySchema), controller.search);
     router.get("/cookbook", (0, validate_query_1.validateQuery)(recipe_client_search_query_schema_1.RecipeClientSearchQuerySchema), controller.cookbook);
+    router.get("/:id", (0, validate_params_1.validateParams)(recipe_id_params_schema_1.RecipeIdParamsSchema), controller.getDetails);
     router.post("/:id/favorite", (0, validate_params_1.validateParams)(recipe_id_params_schema_1.RecipeIdParamsSchema), controller.toggleFavorite);
     return router;
 }

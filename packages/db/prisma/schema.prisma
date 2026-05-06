@@ -101,6 +101,7 @@ model Recipe {
   id          String  @id @default(uuid()) @db.Uuid
   title       String
   description String?
+  fullDescription String? @map("full_description")
 
   status     RecipeStatus     @default(draft)
   visibility RecipeVisibility @default(private)
@@ -110,8 +111,11 @@ model Recipe {
   recipeTypeId String?     @map("recipe_type_id") @db.Uuid
   recipeType   RecipeType? @relation(fields: [recipeTypeId], references: [id])
 
+  authorId String? @db.Uuid
+  author   Author? @relation(fields: [authorId], references: [id])
+
   recipeAuthorId String?       @map("recipe_author_id") @db.Uuid
-  author         RecipeAuthor? @relation(fields: [recipeAuthorId], references: [id])
+  recipeAuthor   RecipeAuthor? @relation(fields: [recipeAuthorId], references: [id])
 
   familyId String? @map("family_id") @db.Uuid
 
@@ -206,15 +210,25 @@ model RecipeAuthor {
 
 model RecipeVideo {
   id String @id @default(uuid()) @db.Uuid
+  
 
   recipeId String @map("recipe_id") @db.Uuid
   recipe   Recipe @relation(fields: [recipeId], references: [id])
 
+  title        String?
+  thumbnailUrl String?
+  durationSec  Int?
+
+  authorId String? @db.Uuid
+  author   Author? @relation(fields: [authorId], references: [id])
+
   recipeAuthorId String?       @map("recipe_author_id") @db.Uuid
-  author         RecipeAuthor? @relation(fields: [recipeAuthorId], references: [id])
+  recipeAuthor   RecipeAuthor? @relation(fields: [recipeAuthorId], references: [id])
 
   platform RecipeVideoPlatform
   url      String
+
+  
 
   createdAt DateTime @default(now()) @map("created_at")
 
@@ -297,6 +311,38 @@ model MealEntry {
   @@index([mealPlanId])
   @@index([date])
   @@index([userId])
+}
+
+model Author {
+  id   String @id @default(uuid()) @db.Uuid
+  type AuthorType
+
+  displayName String
+  avatarUrl   String?
+  bio         String?
+
+  createdAt DateTime @default(now())  
+
+  links AuthorLink[]
+
+  isVerified Boolean @default(false)
+
+  recipes Recipe[]
+  videos  RecipeVideo[]
+}
+
+model AuthorLink {
+  id String @id @default(uuid()) @db.Uuid
+
+  authorId String @db.Uuid
+  author   Author @relation(fields: [authorId], references: [id])
+
+  type AuthorLinkType
+  url  String
+
+  orderIndex Int @default(0)
+
+  @@index([authorId])
 }
 
 model User {
@@ -582,6 +628,21 @@ enum ProductPhotoType {
   packaging
   ingredients
   other
+}
+
+enum AuthorType {
+  user
+  blogger
+  expert
+  brand
+  system
+}
+
+enum AuthorLinkType {
+  instagram
+  youtube
+  tiktok
+  website
 }
 
 enum UserSex {

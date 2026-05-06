@@ -22,7 +22,7 @@ export function presentRecipeDetails(recipe: RecipePersistenceAggregate) {
       base_servings: recipe.baseServings,
       base_output_weight_g: recipe.baseOutputWeightG,
 
-      recipe_author_id: recipe.recipeAuthorId ?? null,
+      // recipe_author_id: recipe.recipeAuthorId ?? null,
     },
 
     ingredients: recipe.ingredients.map((i) => ({
@@ -55,28 +55,28 @@ export function presentRecipeDetails(recipe: RecipePersistenceAggregate) {
       name: d.dietaryTag.nameUa,
     })),
 
-    author: recipe.author
-      ? {
-          recipe_author_id: recipe.author.id,
-          display_name: recipe.author.displayName,
-          type: recipe.author.type,
-          avatar_url: recipe.author.avatarUrl ?? null,
-          profile_url: recipe.author.profileUrl ?? null,
-        }
-      : null,
+    // author: recipe.author
+    //   ? {
+    //       recipe_author_id: recipe.author.id,
+    //       display_name: recipe.author.displayName,
+    //       type: recipe.author.type,
+    //       avatar_url: recipe.author.avatarUrl ?? null,
+    //       profile_url: recipe.author.profileUrl ?? null,
+    //     }
+    //   : null,
 
-    videos: recipe.videos.map((v) => ({
-      recipe_video_id: v.id,
-      platform: v.platform,
-      url: v.url,
-      author: v.author
-        ? {
-            recipe_author_id: v.author.id,
-            display_name: v.author.displayName,
-            profile_url: v.author.profileUrl ?? null,
-          }
-        : null,
-    })),
+    // videos: recipe.videos.map((v) => ({
+    //   recipe_video_id: v.id,
+    //   platform: v.platform,
+    //   url: v.url,
+    //   author: v.author
+    //     ? {
+    //         recipe_author_id: v.author.id,
+    //         display_name: v.author.displayName,
+    //         profile_url: v.author.profileUrl ?? null,
+    //       }
+    //     : null,
+    // })),
 
     nutrients: Object.fromEntries(
       recipe.nutrients.map((n) => [

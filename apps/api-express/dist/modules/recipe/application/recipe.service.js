@@ -246,5 +246,12 @@ class RecipeService {
     async toggleFavorite(recipeId, familyId, userId) {
         return this.repo.toggleFavorite(recipeId, familyId, userId);
     }
+    async getRecipeDetails(id, context) {
+        const recipe = await this.repo.findByIdDetailed(id, context.familyId);
+        if (!recipe) {
+            throw new http_errors_1.NotFoundError("RECIPE_NOT_FOUND", "Recipe not found");
+        }
+        return recipe;
+    }
 }
 exports.RecipeService = RecipeService;

@@ -23,6 +23,12 @@ export function RecipeClientRouter(controller: RecipeClientController) {
     controller.cookbook,
   );
 
+  router.get(
+    "/:id",
+    validateParams(RecipeIdParamsSchema),
+    controller.getDetails,
+  );
+
   router.post(
     "/:id/favorite",
     validateParams(RecipeIdParamsSchema),
