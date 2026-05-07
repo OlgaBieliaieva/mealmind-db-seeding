@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { Heart } from "lucide-react";
 import {
   normalizeCountryCode,
   getFlagEmoji,
@@ -164,7 +165,14 @@ export function ProductSearchItem({
               }}
               className="text-lg"
             >
-              {item.isFavorite ? "❤️" : "🤍"}
+              <Heart
+                size={20}
+                className={
+                  item.isFavorite
+                    ? "fill-red-500 text-red-500"
+                    : "text-gray-300"
+                }
+              />
             </button>
           )}
         </div>

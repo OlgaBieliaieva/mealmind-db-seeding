@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Heart } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useToggleFavorite } from "@/features/food-picker/hooks/useToggleFavorite";
 
@@ -24,30 +24,6 @@ const categoryIcons: Record<string, string> = {
   medical: "⚕️",
 };
 
-// function DifficultySignal({ level }: { level: "easy" | "medium" | "hard" }) {
-//   const map = {
-//     easy: 2,
-//     medium: 3,
-//     hard: 5,
-//   };
-
-//   const activeBars = map[level];
-
-//   return (
-//     <div className="flex items-end gap-[2px] h-4">
-//       {[1, 2, 3, 4, 5].map((i) => (
-//         <div
-//           key={i}
-//           className={`w-[3px] rounded-sm ${
-//             i <= activeBars ? "bg-gray-800" : "bg-gray-300"
-//           }`}
-//           style={{ height: `${i * 3}px` }}
-//         />
-//       ))}
-//     </div>
-//   );
-// }
-
 function getCuisineLabel(cuisines?: { name: string }[]) {
   if (!cuisines || cuisines.length === 0) return null;
 
@@ -55,12 +31,6 @@ function getCuisineLabel(cuisines?: { name: string }[]) {
 
   return `${cuisines[0].name} +${cuisines.length - 1}`;
 }
-
-// const difficultyLabels = {
-//   easy: "Легко",
-//   medium: "Середньо",
-//   hard: "Складно",
-// };
 
 export function RecipeHero({ recipe }: { recipe: RecipeDetailsDTO }) {
   const router = useRouter();
@@ -104,7 +74,12 @@ export function RecipeHero({ recipe }: { recipe: RecipeDetailsDTO }) {
           }}
           className="bg-black/40 text-white rounded-full p-2"
         >
-          {recipe.isFavorite ? "❤️" : "🤍"}
+          <Heart
+            size={18}
+            className={
+              recipe.isFavorite ? "fill-red-500 text-red-500" : "text-white"
+            }
+          />
         </button>
       </div>
 

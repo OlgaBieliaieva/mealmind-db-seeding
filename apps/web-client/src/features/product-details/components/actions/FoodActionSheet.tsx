@@ -22,6 +22,10 @@ export function FoodActionSheet({ open, onClose }: Props) {
         </button>
 
         <button className="w-full text-left p-3 rounded-xl hover:bg-gray-100">
+          🍽 Додати в щоденник
+        </button>
+
+        <button className="w-full text-left p-3 rounded-xl hover:bg-gray-100">
           🛒 Додати в покупки
         </button>
 
