@@ -333,13 +333,13 @@ export class RecipeService {
         },
 
         // 🔹 додані в обране членами сім'ї
-        // {
-        //   favorites: {
-        //     some: {
-        //       familyId: familyId,
-        //     },
-        //   },
-        // },
+        {
+          favorites: {
+            some: {
+              familyId: familyId,
+            },
+          },
+        },
       ],
     };
 
@@ -349,7 +349,7 @@ export class RecipeService {
       where,
       page,
       limit,
-      { userId, familyId }
+      { userId, familyId },
     );
 
     return {
@@ -365,18 +365,15 @@ export class RecipeService {
   }
 
   async getRecipeDetails(
-  id: string,
-  context: { familyId: string; userId: string },
-) {
-  const recipe = await this.repo.findByIdDetailed(
-    id,
-    context.familyId,
-  );
+    id: string,
+    context: { familyId: string; userId: string },
+  ) {
+    const recipe = await this.repo.findByIdDetailed(id, context.familyId);
 
-  if (!recipe) {
-    throw new NotFoundError("RECIPE_NOT_FOUND", "Recipe not found");
+    if (!recipe) {
+      throw new NotFoundError("RECIPE_NOT_FOUND", "Recipe not found");
+    }
+
+    return recipe;
   }
-
-  return recipe;
-}
 }

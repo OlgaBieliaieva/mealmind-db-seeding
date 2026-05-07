@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Heart } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useToggleFavorite } from "@/features/food-picker/hooks/useToggleFavorite";
 
@@ -122,7 +122,6 @@ export function ProductHero({ product }: { product: ProductDetailsDTO }) {
           <ArrowLeft size={18} />
         </button>
 
-        {/* <button className="bg-black/40 text-white rounded-full p-2">❤️</button> */}
         <button
           onClick={(e) => {
             e.stopPropagation();
@@ -133,7 +132,12 @@ export function ProductHero({ product }: { product: ProductDetailsDTO }) {
           }}
           className="bg-black/40 text-white rounded-full p-2"
         >
-          {product.isFavorite ? "❤️" : "🤍"}
+          <Heart
+            size={18}
+            className={
+              product.isFavorite ? "fill-red-500 text-red-500" : "text-white"
+            }
+          />
         </button>
       </div>
     </div>

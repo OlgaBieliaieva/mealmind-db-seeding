@@ -10,14 +10,6 @@ export function RecipeHeaderCard({ recipe }: { recipe: RecipeDetailsDTO }) {
         {recipe.name}
       </h1>
 
-      {/* META */}
-      {/* <div className="flex items-center gap-2 text-xs text-gray-500 flex-wrap">
-        {recipe.categoryName && <span>{recipe.categoryName}</span>}
-        {recipe.cuisines?.length > 0 && (
-          <span>• {recipe.cuisines[0].name}</span>
-        )}
-      </div> */}
-
       {/* DESCRIPTION */}
       {recipe.description && (
         <p className="text-sm text-gray-600 leading-relaxed">
@@ -27,13 +19,3 @@ export function RecipeHeaderCard({ recipe }: { recipe: RecipeDetailsDTO }) {
     </div>
   );
 }
-
-// export function RecipeHeaderCard({ recipe }: { recipe: RecipeDetailsDTO }) {
-//   return (
-//     <div className="space-y-2">
-//       <h1 className="text-xl font-semibold text-gray-900">{recipe.name}</h1>
-
-//       <div className="text-sm text-gray-500">{recipe.description}</div>
-//     </div>
-//   );
-// }

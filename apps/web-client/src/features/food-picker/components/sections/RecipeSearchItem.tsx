@@ -1,6 +1,8 @@
 "use client";
 
 import Image from "next/image";
+import { Heart } from "lucide-react";
+import { ChefHat } from "lucide-react";
 
 type Props = {
   item: {
@@ -135,7 +137,14 @@ export function RecipeSearchItem({
               }}
               className="text-lg"
             >
-              {item.isFavorite ? "❤️" : "🤍"}
+              <Heart
+                size={20}
+                className={
+                  item.isFavorite
+                    ? "fill-red-500 text-red-500"
+                    : "text-gray-300"
+                }
+              />
             </button>
           )}
         </div>
@@ -188,7 +197,8 @@ export function RecipeSearchItem({
 
           {item.author?.name && (
             <div className="flex items-center gap-2 text-gray-500">
-              👤 {item.author.name}
+              <ChefHat size={14} />
+              {item.author.name}
             </div>
           )}
         </div>
