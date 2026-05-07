@@ -55,6 +55,7 @@ class RecipeRepository {
                             include: {
                                 nutrients: true,
                                 brand: true,
+                                category: true,
                             },
                         },
                     },
