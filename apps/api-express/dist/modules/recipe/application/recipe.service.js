@@ -225,13 +225,13 @@ class RecipeService {
                     familyId: familyId,
                 },
                 // 🔹 додані в обране членами сім'ї
-                // {
-                //   favorites: {
-                //     some: {
-                //       familyId: familyId,
-                //     },
-                //   },
-                // },
+                {
+                    favorites: {
+                        some: {
+                            familyId: familyId,
+                        },
+                    },
+                },
             ],
         };
         const where = (0, recipe_search_helper_1.buildRecipeSearchWhere)(baseWhere, query);

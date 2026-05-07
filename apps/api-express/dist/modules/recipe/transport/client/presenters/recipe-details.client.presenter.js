@@ -17,6 +17,7 @@ function presentRecipeDetails(recipe) {
         baseServingWeightG: recipe.baseServings && recipe.baseServings > 0
             ? recipe.baseOutputWeightG / recipe.baseServings
             : 0,
+        baseOutputWeightG: recipe.baseOutputWeightG,
         difficulty: recipe.difficulty ?? undefined,
         categoryCode: recipe.recipeType?.code,
         categoryName: recipe.recipeType?.nameUa,
@@ -40,10 +41,21 @@ function presentRecipeDetails(recipe) {
             .sort((a, b) => a.orderIndex - b.orderIndex)
             .map((i) => ({
             id: i.id,
+            productId: i.product.id,
             name: i.product.nameUa,
             quantity: i.quantityG,
             unit: "г", // 🔥 поки просто g
             isOptional: i.isOptional,
+            category: {
+                name: i.product.category.nameUa,
+                code: normalizeCategoryCode(i.product.category.nameEn),
+            },
+            brand: i.product.brand
+                ? {
+                    name: getBrandName(i.product.brand),
+                    country: i.product.brand.country ?? undefined,
+                }
+                : undefined,
         })),
         steps: recipe.steps
             .sort((a, b) => a.stepNumber - b.stepNumber)
@@ -107,4 +119,20 @@ function mapMacros(nutrients, totalWeight) {
         }
     }
     return { calories, proteins, fats, carbs };
+}
+function isUkrainianBrand(country) {
+    if (!country)
+        return false;
+    const c = country.toLowerCase();
+    return c === "ua" || c === "ukraine" || c === "україна";
+}
+function getBrandName(brand) {
+    return isUkrainianBrand(brand.country) ? brand.nameUa : brand.nameEn;
+}
+function normalizeCategoryCode(nameEn) {
+    return nameEn
+        .toLowerCase()
+        .replace(/&/g, "")
+        .replace(/\s+/g, "_")
+        .replace(/[^a-z0-9_]/g, "");
 }

@@ -8,6 +8,7 @@ export type RecipeDetailsDTO = {
 
   baseServings?: number;
   baseServingWeightG: number;
+  baseOutputWeightG: number;
 
   prepTime?: number;
   cookTime?: number;
@@ -35,10 +36,19 @@ export type RecipeDetailsDTO = {
 
   ingredients: {
     id: string;
+    productId?: string;
     name: string;
     quantity: number;
     unit: string;
     isOptional: boolean;
+    category: {
+      name: string;
+      code: string;
+    };
+    brand?: {
+      name: string;
+      country?: string | null;
+    };
   }[];
 
   steps: {

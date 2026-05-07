@@ -9,7 +9,7 @@ import { RecipeHeaderCard } from "./sections/RecipeHeaderCard";
 import { RecipeTabs } from "./sections/RecipeTabs";
 
 import { RecipeOverview } from "./sections/RecipeOverview/RecipeOverview";
-import { RecipeIngredients } from "./sections/RecipeIngredients";
+import { RecipeIngredients } from "./sections/RecipeIngredients/RecipeIngredients";
 import { RecipeSteps } from "./sections/RecipeSteps";
 import { RecipeNutrients } from "./sections/RecipeNutrients";
 import { FoodActionButton } from "@/features/product-details/components/actions/FoodActionButton";

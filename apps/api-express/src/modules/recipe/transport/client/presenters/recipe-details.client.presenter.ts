@@ -1,6 +1,4 @@
-import { UINutrientGroup } from "../../../../nutrient/transport/client/types/nutrient.types";
 import { mapToUINutrientGroup } from "../../../../nutrient/transport/client/mappers/nutrient-ui-map";
-import { RecipePersistenceAggregate } from "../../../domain/persistence/recipe.prisma.types";
 
 type RecipeDetailsAggregate = {
   id: string;
@@ -46,8 +44,15 @@ type RecipeDetailsAggregate = {
     isOptional: boolean;
     orderIndex: number;
     product: {
+      id: string;
       nameUa: string;
       unit: string;
+      brand?: {
+        nameUa: string;
+        nameEn: string;
+        country?: string | null;
+      } | null;
+      category: { nameEn: string; nameUa: string };
     };
   }[];
 
@@ -104,6 +109,7 @@ export function presentRecipeDetails(recipe: RecipeDetailsAggregate) {
         ? recipe.baseOutputWeightG / recipe.baseServings
         : 0,
 
+    baseOutputWeightG: recipe.baseOutputWeightG,
     difficulty: recipe.difficulty ?? undefined,
 
     categoryCode: recipe.recipeType?.code,
@@ -131,10 +137,21 @@ export function presentRecipeDetails(recipe: RecipeDetailsAggregate) {
       .sort((a, b) => a.orderIndex - b.orderIndex)
       .map((i) => ({
         id: i.id,
+        productId: i.product.id,
         name: i.product.nameUa,
         quantity: i.quantityG,
         unit: "г", // 🔥 поки просто g
         isOptional: i.isOptional,
+        category: {
+          name: i.product.category.nameUa,
+          code: normalizeCategoryCode(i.product.category.nameEn),
+        },
+        brand: i.product.brand
+          ? {
+              name: getBrandName(i.product.brand),
+              country: i.product.brand.country ?? undefined,
+            }
+          : undefined,
       })),
 
     steps: recipe.steps
@@ -213,4 +230,28 @@ function mapMacros(
   }
 
   return { calories, proteins, fats, carbs };
+}
+
+function isUkrainianBrand(country?: string | null) {
+  if (!country) return false;
+
+  const c = country.toLowerCase();
+
+  return c === "ua" || c === "ukraine" || c === "україна";
+}
+
+function getBrandName(brand: {
+  nameUa: string;
+  nameEn: string;
+  country?: string | null;
+}) {
+  return isUkrainianBrand(brand.country) ? brand.nameUa : brand.nameEn;
+}
+
+function normalizeCategoryCode(nameEn: string): string {
+  return nameEn
+    .toLowerCase()
+    .replace(/&/g, "")
+    .replace(/\s+/g, "_")
+    .replace(/[^a-z0-9_]/g, "");
 }

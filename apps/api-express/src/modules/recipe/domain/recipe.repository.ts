@@ -62,6 +62,7 @@ export class RecipeRepository {
               include: {
                 nutrients: true,
                 brand: true,
+                category: true,
               },
             },
           },
@@ -74,21 +75,21 @@ export class RecipeRepository {
           include: { dietaryTag: true },
         },
         author: {
-        include: {
-          links: {
-            orderBy: { orderIndex: "asc" }, 
-          },
-        },
-      },
-        videos: {
-        include: {
-          author: {
-            include: {
-              links: true, 
+          include: {
+            links: {
+              orderBy: { orderIndex: "asc" },
             },
           },
         },
-      },
+        videos: {
+          include: {
+            author: {
+              include: {
+                links: true,
+              },
+            },
+          },
+        },
         nutrients: {
           include: {
             nutrient: true,

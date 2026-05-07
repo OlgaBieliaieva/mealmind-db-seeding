@@ -10,6 +10,7 @@ export type RecipePersistenceAggregate = Prisma.RecipeGetPayload<{
           include: {
             brand: true;
             nutrients: true;
+            category: true;
           };
         };
       };
