@@ -1,6 +1,6 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { Suspense, useState } from "react";
 
 import { useMealTypes } from "@/shared/lib/hooks/useMealTypes";
@@ -10,11 +10,13 @@ import { AddEntryHeader } from "@/features/meal-plan/add/components/AddEntryHead
 import { FoodPicker } from "@/features/food-picker/components/FoodPicker";
 
 import { UserPickerSheet } from "@/features/meal-plan/add/components/UserPickerSheet";
+import { useCreateMealEntries } from "@/features/meal-plan/add/hooks/useCreateMealEntries";
 import { MealTypePickerSheet } from "@/features/meal-plan/add/components/MealTypePickerSheet";
 import { SelectedItem } from "@/features/meal-plan/add/types/add-meal-plan.types";
 
 function AddMealPageContent() {
   const params = useSearchParams();
+  const router = useRouter();
 
   const date = params.get("date") ?? "";
   const initialMealTypeId = params.get("mealTypeId");
@@ -46,6 +48,33 @@ function AddMealPageContent() {
       avatarUrl: u.avatarUrl ?? "",
     })) ?? [];
 
+  const { mutate: createEntries } = useCreateMealEntries();
+
+  function handleConfirm() {
+    if (!userId || !mealTypeId) return;
+
+    const entries = selectedItems.map((item) => ({
+      date,
+      userId,
+      mealTypeId,
+
+      recipeId: item.type === "recipe" ? item.id : undefined,
+      productId: item.type === "product" ? item.id : undefined,
+
+      amount: 100,
+      unit: "g" as const,
+    }));
+
+    createEntries(
+      { entries },
+      {
+        onSuccess: () => {
+          router.back();
+        },
+      },
+    );
+  }
+
   return (
     <div className="flex h-full min-h-0 flex-col overflow-hidden bg-gray-50">
       <AddEntryHeader
@@ -58,9 +87,7 @@ function AddMealPageContent() {
         canConfirm={canConfirm}
         onUserClick={() => setUserSheetOpen(true)}
         onMealTypeClick={() => setMealSheetOpen(true)}
-        onConfirm={() =>
-          console.log("CONFIRM", { userId, mealTypeId, selectedItems })
-        }
+        onConfirm={handleConfirm}
       />
 
       <div className="flex-1 min-h-0 overflow-hidden">

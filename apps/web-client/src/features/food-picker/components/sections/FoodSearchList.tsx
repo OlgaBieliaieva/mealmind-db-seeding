@@ -63,6 +63,8 @@ export function FoodSearchList({
               onToggle({
                 id: i.id,
                 type: i.type,
+                amount: 100,
+                unit: "g",
               })
             }
             onOpen={() => {

@@ -30,6 +30,19 @@ class MealPlanController {
             next(e);
         }
     };
+    createEntriesBulk = async (req, res, next) => {
+        try {
+            const { familyId } = req.context;
+            const result = await this.service.addEntriesBulk({
+                familyId,
+                ...req.body,
+            });
+            res.json(result);
+        }
+        catch (e) {
+            next(e);
+        }
+    };
     deleteEntry = async (req, res, next) => {
         try {
             const { id } = req.params;

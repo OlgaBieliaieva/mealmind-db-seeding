@@ -14,4 +14,20 @@ export type AddMealType = {
 export type SelectedItem = {
   id: string;
   type: "recipe" | "product";
+  amount: number;
+  unit: "g";
+};
+
+export type CreateMealEntriesDTO = {
+  entries: {
+    date: string;
+    userId: string;
+    mealTypeId: string;
+
+    recipeId?: string;
+    productId?: string;
+
+    amount: number;
+    unit: "g" | "ml" | "portion";
+  }[];
 };

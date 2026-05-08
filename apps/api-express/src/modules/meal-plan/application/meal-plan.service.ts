@@ -7,17 +7,23 @@ export class MealPlanService {
   constructor(private repo: MealPlanRepository) {}
 
   // =========================
-  // UTILS
+  // UTILS (UTC SAFE)
   // =========================
 
   private getWeekStart(date: Date) {
     const d = new Date(date);
-    const day = d.getDay() || 7;
+
+    const day = d.getUTCDay() || 7;
+
     if (day !== 1) {
-      d.setDate(d.getDate() - (day - 1));
+      d.setUTCDate(d.getUTCDate() - (day - 1));
     }
-    return new Date(d.toISOString().split("T")[0]);
+
+    d.setUTCHours(0, 0, 0, 0);
+
+    return d;
   }
+
   private toDateKeyUTC(date: Date) {
     return date.toISOString().slice(0, 10);
   }
@@ -27,6 +33,7 @@ export class MealPlanService {
     d.setUTCDate(d.getUTCDate() + days);
     return this.toDateKeyUTC(d);
   }
+
   private getPeriod(date: string) {
     const base = toUTCDateOnly(date);
 
@@ -34,6 +41,7 @@ export class MealPlanService {
 
     const monday = new Date(base);
     monday.setUTCDate(base.getUTCDate() - day + 1);
+    monday.setUTCHours(0, 0, 0, 0);
 
     const weekStartStr = this.toDateKeyUTC(monday);
 
@@ -52,7 +60,8 @@ export class MealPlanService {
   // =========================
 
   async getOrCreatePlan(familyId: string, date: string) {
-    const weekStart = this.getWeekStart(new Date(date));
+    const baseDate = toUTCDateOnly(date);
+    const weekStart = this.getWeekStart(baseDate);
 
     let plan = await this.repo.findByFamilyAndWeek(familyId, weekStart);
 
@@ -67,34 +76,24 @@ export class MealPlanService {
   // READ
   // =========================
 
-  async getPlanEntries(
-  familyId: string,
-  date: string,
-  days?: string,
-) {
+  async getPlanEntries(familyId: string, date: string, days?: string) {
     const { weekStart } = this.getPeriod(date);
 
-// план
-let plan = await this.repo.findByFamilyAndWeek(familyId, weekStart);
-if (!plan) {
-  plan = await this.repo.createPlan(familyId, weekStart);
-}
+    let plan = await this.repo.findByFamilyAndWeek(familyId, weekStart);
 
-// =========================
-// 🔥 FILTER LOGIC
-// =========================
+    if (!plan) {
+      plan = await this.repo.createPlan(familyId, weekStart);
+    }
 
-let entries;
+    let entries;
 
-if (days) {
-  const selectedDates = days.split(",").map(toUTCDateOnly);
-
-  entries = await this.repo.findEntriesByDates(plan.id, selectedDates);
-} else {
-  const selectedDate = toUTCDateOnly(date);
-
-  entries = await this.repo.findEntriesByDates(plan.id, [selectedDate]);
-}
+    if (days) {
+      const selectedDates = days.split(",").map(toUTCDateOnly);
+      entries = await this.repo.findEntriesByDates(plan.id, selectedDates);
+    } else {
+      const selectedDate = toUTCDateOnly(date);
+      entries = await this.repo.findEntriesByDates(plan.id, [selectedDate]);
+    }
 
     return {
       week: mapToWeekView(entries, weekStart),
@@ -103,7 +102,45 @@ if (days) {
   }
 
   // =========================
-  // CREATE
+  // INTERNAL: NORMALIZATION
+  // =========================
+
+  private async normalizeAmount(
+    entry: {
+      recipeId?: string;
+      productId?: string;
+      amount: number;
+      unit: "g" | "ml" | "portion";
+    },
+  ) {
+    let amountInGrams = entry.amount;
+
+    if (entry.unit === "portion") {
+      if (!entry.recipeId) {
+        throw new Error("Portion unit allowed only for recipe");
+      }
+
+      const recipe = await this.repo.getRecipe(entry.recipeId);
+
+      if (!recipe) {
+        throw new Error("Recipe not found");
+      }
+
+      const weightPerServing =
+        recipe.baseOutputWeightG / recipe.baseServings;
+
+      amountInGrams = entry.amount * weightPerServing;
+    }
+
+    if (entry.unit === "ml") {
+      amountInGrams = entry.amount; // TODO: density later
+    }
+
+    return amountInGrams;
+  }
+
+  // =========================
+  // CREATE (SINGLE)
   // =========================
 
   async addEntry(input: {
@@ -116,41 +153,18 @@ if (days) {
     amount: number;
     unit: "g" | "ml" | "portion";
   }) {
-    const dateObj = new Date(input.date);
+    const dateObj = toUTCDateOnly(input.date);
 
     const { weekStart } = this.getPeriod(input.date);
 
-    // 1️⃣ план
     let plan = await this.repo.findByFamilyAndWeek(input.familyId, weekStart);
 
     if (!plan) {
       plan = await this.repo.createPlan(input.familyId, weekStart);
     }
 
-    // 2️⃣ нормалізація
-    let amountInGrams = input.amount;
+    const amountInGrams = await this.normalizeAmount(input);
 
-    if (input.unit === "portion") {
-      if (!input.recipeId) {
-        throw new Error("Portion unit allowed only for recipe");
-      }
-
-      const recipe = await this.repo.getRecipe(input.recipeId);
-
-      if (!recipe) {
-        throw new Error("Recipe not found");
-      }
-
-      const weightPerServing = recipe.baseOutputWeightG / recipe.baseServings;
-
-      amountInGrams = input.amount * weightPerServing;
-    }
-
-    if (input.unit === "ml") {
-      amountInGrams = input.amount; // поки 1:1
-    }
-
-    // 3️⃣ create
     return this.repo.createEntry({
       mealPlanId: plan.id,
       date: dateObj,
@@ -158,11 +172,57 @@ if (days) {
       mealTypeId: input.mealTypeId,
       recipeId: input.recipeId,
       productId: input.productId,
-
       amount: input.amount,
       unit: input.unit,
       amountInGrams,
     });
+  }
+
+  // =========================
+  // CREATE (BULK)
+  // =========================
+
+  async addEntriesBulk(input: {
+    familyId: string;
+    entries: {
+      date: string;
+      userId: string;
+      mealTypeId: string;
+      recipeId?: string;
+      productId?: string;
+      amount: number;
+      unit: "g" | "ml" | "portion";
+    }[];
+  }) {
+    if (!input.entries.length) return [];
+
+    const { weekStart } = this.getPeriod(input.entries[0].date);
+
+    let plan = await this.repo.findByFamilyAndWeek(input.familyId, weekStart);
+
+    if (!plan) {
+      plan = await this.repo.createPlan(input.familyId, weekStart);
+    }
+
+    const normalizedEntries = await Promise.all(
+      input.entries.map(async (e) => {
+        const amountInGrams = await this.normalizeAmount(e);
+
+        return {
+          mealPlanId: plan.id,
+          date: toUTCDateOnly(e.date),
+          userId: e.userId,
+          mealTypeId: e.mealTypeId,
+          recipeId: e.recipeId,
+          productId: e.productId,
+          amount: e.amount,
+          unit: e.unit,
+          amountInGrams,
+        };
+      }),
+    );
+
+    return this.repo.createManyEntries(normalizedEntries);
   }
 
   // =========================

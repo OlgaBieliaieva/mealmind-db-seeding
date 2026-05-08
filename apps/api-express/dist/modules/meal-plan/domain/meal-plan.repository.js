@@ -13,7 +13,7 @@ class MealPlanRepository {
     // =========================
     startOfDay(date) {
         const d = new Date(date);
-        d.setHours(0, 0, 0, 0);
+        d.setUTCHours(0, 0, 0, 0);
         return d;
     }
     nextDay(date) {
@@ -82,6 +82,14 @@ class MealPlanRepository {
                 date: this.startOfDay(data.date),
             },
         });
+    }
+    async createManyEntries(data) {
+        return this.prisma.$transaction(data.map((entry) => this.prisma.mealEntry.create({
+            data: {
+                ...entry,
+                date: this.startOfDay(entry.date),
+            },
+        })));
     }
     async deleteEntry(id) {
         return this.prisma.mealEntry.delete({
