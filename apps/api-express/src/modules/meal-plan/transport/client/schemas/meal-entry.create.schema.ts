@@ -11,6 +11,7 @@ export const MealEntryCreateSchema = z
     productId: z.string().uuid().optional(),
 
     amount: z.number().positive(),
+    unit: z.enum(["g", "ml", "portion"]),
   })
   .refine((data) => data.recipeId || data.productId, {
     message: "Either recipeId or productId is required",
@@ -18,3 +19,7 @@ export const MealEntryCreateSchema = z
   .refine((data) => !(data.recipeId && data.productId), {
     message: "Only one of recipeId or productId allowed",
   });
+
+export const MealEntriesBulkCreateSchema = z.object({
+  entries: z.array(MealEntryCreateSchema).min(1),
+});

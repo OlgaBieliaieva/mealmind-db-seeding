@@ -38,6 +38,25 @@ export class MealPlanController {
     }
   };
 
+  createEntriesBulk = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ) => {
+    try {
+      const { familyId } = (req as RequestWithContext).context;
+
+      const result = await this.service.addEntriesBulk({
+        familyId,
+        ...req.body,
+      });
+
+      res.json(result);
+    } catch (e) {
+      next(e);
+    }
+  };
+
   deleteEntry = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params as { id: string };

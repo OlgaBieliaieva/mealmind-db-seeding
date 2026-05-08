@@ -7,7 +7,10 @@ import { withFamily } from "../../../middleware/with-family";
 import { MealPlanController } from "../../../modules/meal-plan/transport/client/meal-plan.controller";
 
 import { MealPlanQuerySchema } from "../../../modules/meal-plan/transport/client/schemas/meal-plan.query.schema";
-import { MealEntryCreateSchema } from "../../../modules/meal-plan/transport/client/schemas/meal-entry.create.schema";
+import {
+  MealEntryCreateSchema,
+  MealEntriesBulkCreateSchema,
+} from "../../../modules/meal-plan/transport/client/schemas/meal-entry.create.schema";
 import { MealEntryParamsSchema } from "../../../modules/meal-plan/transport/client/schemas/meal-entry.params.schema";
 
 export function MealPlanRouter(controller: MealPlanController) {
@@ -29,6 +32,12 @@ export function MealPlanRouter(controller: MealPlanController) {
     "/entries",
     validateBody(MealEntryCreateSchema),
     controller.createEntry,
+  );
+
+  router.post(
+    "/entries/bulk",
+    validateBody(MealEntriesBulkCreateSchema),
+    controller.createEntriesBulk,
   );
 
   // =========================

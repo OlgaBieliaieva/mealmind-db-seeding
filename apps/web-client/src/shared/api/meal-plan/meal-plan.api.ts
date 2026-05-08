@@ -1,5 +1,6 @@
 import { apiFetch } from "@/shared/lib/api/fetcher";
 import { MealPlanResponseDTO } from "@/shared/types/meal-plan.types";
+import { CreateMealEntriesDTO } from "@/features/meal-plan/add/types/add-meal-plan.types";
 
 export function getMealPlan(params: { date: string; days?: string[] }) {
   const qs = new URLSearchParams();
@@ -12,9 +13,17 @@ export function getMealPlan(params: { date: string; days?: string[] }) {
 
   return apiFetch<MealPlanResponseDTO>(`/meal-plans?${qs.toString()}`);
 }
+
 export async function toggleMealEntries(ids: string[]) {
   return apiFetch("/meal-plans/entries/toggle-bulk", {
     method: "PATCH",
     body: JSON.stringify({ ids }),
+  });
+}
+
+export async function createMealEntries(data: CreateMealEntriesDTO) {
+  return apiFetch("/meal-plans/entries/bulk", {
+    method: "POST",
+    body: JSON.stringify(data),
   });
 }

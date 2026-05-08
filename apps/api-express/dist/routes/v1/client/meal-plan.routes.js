@@ -20,6 +20,7 @@ function MealPlanRouter(controller) {
     // CREATE ENTRY
     // =========================
     router.post("/entries", (0, validate_body_1.validateBody)(meal_entry_create_schema_1.MealEntryCreateSchema), controller.createEntry);
+    router.post("/entries/bulk", (0, validate_body_1.validateBody)(meal_entry_create_schema_1.MealEntriesBulkCreateSchema), controller.createEntriesBulk);
     // =========================
     // UPDATE ENTRY
     // =========================

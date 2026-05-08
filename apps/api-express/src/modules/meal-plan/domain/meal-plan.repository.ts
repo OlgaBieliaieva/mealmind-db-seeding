@@ -10,7 +10,7 @@ export class MealPlanRepository {
 
   private startOfDay(date: Date) {
     const d = new Date(date);
-    d.setHours(0, 0, 0, 0);
+    d.setUTCHours(0, 0, 0, 0);
     return d;
   }
 
@@ -70,9 +70,6 @@ export class MealPlanRepository {
   }
 
   async findEntriesByDates(planId: string, dates: Date[]) {
-    
-    
-    
     return this.prisma.mealEntry.findMany({
       where: {
         mealPlanId: planId,
@@ -102,6 +99,31 @@ export class MealPlanRepository {
         date: this.startOfDay(data.date),
       },
     });
+  }
+
+  async createManyEntries(
+    data: {
+      mealPlanId: string;
+      date: Date;
+      userId: string;
+      mealTypeId: string;
+      recipeId?: string;
+      productId?: string;
+      amount: number;
+      unit: "g" | "ml" | "portion";
+      amountInGrams: number;
+    }[],
+  ) {
+    return this.prisma.$transaction(
+      data.map((entry) =>
+        this.prisma.mealEntry.create({
+          data: {
+            ...entry,
+            date: this.startOfDay(entry.date),
+          },
+        }),
+      ),
+    );
   }
 
   async deleteEntry(id: string) {
