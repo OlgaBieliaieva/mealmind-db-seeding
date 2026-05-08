@@ -9,6 +9,8 @@ import { RecipeHeaderCard } from "./sections/RecipeHeaderCard";
 import { RecipeTabs } from "./sections/RecipeTabs";
 
 import { RecipeOverview } from "./sections/RecipeOverview/RecipeOverview";
+import { RecipeVideoSection } from "./sections/RecipeVideoSection/RecipeVideoSection";
+import { RecipeSourceSection } from "./sections/RecipeSourceSection/RecipeSourceSection";
 import { RecipeIngredients } from "./sections/RecipeIngredients/RecipeIngredients";
 import { RecipeSteps } from "./sections/RecipeSteps/RecipeSteps";
 import { RecipeNutrients } from "./sections/RecipeNutrients/RecipeNutrients";
@@ -36,7 +38,16 @@ export function RecipeDetailsPage({ id }: { id: string }) {
         </div>
 
         <div className="flex-1 min-h-0 overflow-y-auto">
-          {tab === "overview" && <RecipeOverview recipe={data} />}
+          {tab === "overview" && (
+            <div className="pb-16">
+              <RecipeOverview recipe={data} />
+              <RecipeVideoSection videos={data.videos} />
+              <RecipeSourceSection
+                sources={data.sources ? data.sources : undefined}
+                originalRecipe={data.originalRecipe}
+              />
+            </div>
+          )}
           {tab === "ingredients" && <RecipeIngredients recipe={data} />}
           {tab === "steps" && <RecipeSteps recipe={data} />}
           {tab === "nutrients" && <RecipeNutrients recipe={data} />}

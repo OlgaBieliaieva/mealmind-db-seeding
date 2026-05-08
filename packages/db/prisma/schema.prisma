@@ -128,6 +128,12 @@ model Recipe {
 
   photoUrl String? @map("photo_url")
 
+  originalRecipeId String? @map("original_recipe_id") @db.Uuid
+  originalRecipe   Recipe? @relation("RecipeDerivation", fields: [originalRecipeId], references: [id])
+  derivedRecipes   Recipe[] @relation("RecipeDerivation")
+
+  
+
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
@@ -139,9 +145,28 @@ model Recipe {
   nutrients   RecipeNutrient[]
   mealEntries MealEntry[]
   favorites   RecipeFavorite[]
+  sources     RecipeSource[]
 
   @@index([status])
   @@index([recipeTypeId])
+}
+
+model RecipeSource {
+  id String @id @default(uuid()) @db.Uuid
+
+  recipeId String @map("recipe_id") @db.Uuid
+  recipe   Recipe @relation(fields: [recipeId], references: [id])
+
+  type RecipeSourceType
+
+  title String?
+  url   String
+
+  platform RecipeVideoPlatform? 
+
+  createdAt DateTime @default(now())
+
+  @@index([recipeId])
 }
 
 model RecipeIngredient {
@@ -704,6 +729,11 @@ enum RecipeVideoPlatform {
   instagram
   tiktok
   other
+}
+
+enum RecipeSourceType {
+  external   
+  original   
 }
 
 enum MealEntryStatus {

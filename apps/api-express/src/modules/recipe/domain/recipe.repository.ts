@@ -101,6 +101,20 @@ export class RecipeRepository {
               select: { id: true },
             }
           : false,
+
+        // 🆕 SOURCE (external)
+        sources: {
+          orderBy: { createdAt: "asc" },
+        },
+
+        // 🆕 ORIGINAL RECIPE (internal relation)
+        originalRecipe: {
+          select: {
+            id: true,
+            title: true,
+            photoUrl: true,
+          },
+        },
       },
     });
   }

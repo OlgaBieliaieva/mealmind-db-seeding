@@ -20,6 +20,19 @@ type RecipeDetailsAggregate = {
     nameEn: string;
   } | null;
 
+  sources?: {
+    id: string;
+    title?: string | null;
+    url: string;
+    platform?: string | null;
+  }[];
+
+  originalRecipe?: {
+    id: string;
+    title: string;
+    photoUrl?: string | null;
+  } | null;
+
   author?: {
     displayName: string;
     bio: string | null;
@@ -95,74 +108,56 @@ export function presentRecipeDetails(recipe: RecipeDetailsAggregate) {
   return {
     id: recipe.id,
 
+    // 🔹 BASIC
     name: recipe.title,
-    description: recipe.description,
-    fullDescription: recipe.fullDescription,
+    description: recipe.description ?? undefined,
+    fullDescription: recipe.fullDescription ?? undefined,
     photoUrl: recipe.photoUrl ?? undefined,
 
-    prepTime: recipe.prepTimeMin,
-    cookTime: recipe.cookTimeMin,
+    // 🔹 TIME + PORTIONS
+    prepTime: recipe.prepTimeMin ?? undefined,
+    cookTime: recipe.cookTimeMin ?? undefined,
     totalTime: (recipe.prepTimeMin ?? 0) + (recipe.cookTimeMin ?? 0),
-    baseServings: recipe.baseServings,
+
+    baseServings: recipe.baseServings ?? undefined,
+    baseOutputWeightG: recipe.baseOutputWeightG,
     baseServingWeightG:
       recipe.baseServings && recipe.baseServings > 0
         ? recipe.baseOutputWeightG / recipe.baseServings
         : 0,
 
-    baseOutputWeightG: recipe.baseOutputWeightG,
     difficulty: recipe.difficulty ?? undefined,
 
+    // 🔹 CATEGORY
     categoryCode: recipe.recipeType?.code,
     categoryName: recipe.recipeType?.nameUa,
 
+    // 🔹 AUTHOR
     author: recipe.author
       ? {
           name: recipe.author.displayName,
           bio: recipe.author.bio ?? undefined,
           avatarUrl: recipe.author.avatarUrl ?? undefined,
           profileUrl: recipe.author.profileUrl ?? undefined,
-          links: recipe.author.links?.map((l) => ({
-            type: l.type,
-            url: l.url,
-          })),
+          links: recipe.author.links?.map(mapAuthorLink),
         }
       : undefined,
 
+    // 🔹 CUISINES
     cuisines: recipe.cuisines.map((c) => ({
       id: c.cuisine.id,
       name: c.cuisine.nameUa,
     })),
 
-    ingredients: recipe.ingredients
-      .sort((a, b) => a.orderIndex - b.orderIndex)
-      .map((i) => ({
-        id: i.id,
-        productId: i.product.id,
-        name: i.product.nameUa,
-        quantity: i.quantityG,
-        unit: "г", // 🔥 поки просто g
-        isOptional: i.isOptional,
-        category: {
-          name: i.product.category.nameUa,
-          code: normalizeCategoryCode(i.product.category.nameEn),
-        },
-        brand: i.product.brand
-          ? {
-              name: getBrandName(i.product.brand),
-              country: i.product.brand.country ?? undefined,
-            }
-          : undefined,
-      })),
+    // 🔹 INGREDIENTS
+    ingredients: recipe.ingredients.sort(sortByOrder).map(mapIngredient),
 
+    // 🔹 STEPS
     steps: recipe.steps
       .sort((a, b) => a.stepNumber - b.stepNumber)
-      .map((s) => ({
-        id: s.id,
-        stepNumber: s.stepNumber,
-        instruction: s.instruction,
-        timerSec: s.timerSec ?? undefined,
-      })),
+      .map(mapStep),
 
+    // 🔹 NUTRIENTS
     nutrients: recipe.nutrients.map((n) => ({
       code: n.nutrient.code,
       name: n.nutrient.nameUa,
@@ -178,23 +173,88 @@ export function presentRecipeDetails(recipe: RecipeDetailsAggregate) {
 
     macros,
 
-    isFavorite: (recipe.favorites?.length ?? 0) > 0,
+    isFavorite: Boolean(recipe.favorites?.length),
 
-    videos: recipe.videos?.map((v) => ({
-      id: v.id,
-      title: v.title ?? undefined,
-      thumbnailUrl: v.thumbnailUrl ?? undefined,
-      durationSec: v.durationSec ?? undefined,
-      platform: v.platform,
-      url: v.url,
+    // 🔹 VIDEOS
+    videos: recipe.videos?.map(mapVideo) ?? [],
 
-      author: v.author
-        ? {
-            name: v.author.displayName,
-          }
-        : undefined,
+    // 🆕 🔹 SOURCES
+    sources: recipe.sources?.map((s) => ({
+      id: s.id,
+      title: s.title ?? undefined,
+      url: s.url,
+      platform: s.platform ?? undefined,
     })),
+
+    // 🆕 🔹 ORIGINAL RECIPE
+    originalRecipe: recipe.originalRecipe
+      ? {
+          id: recipe.originalRecipe.id,
+          title: recipe.originalRecipe.title,
+          photoUrl: recipe.originalRecipe.photoUrl ?? undefined,
+        }
+      : undefined,
   };
+}
+
+function mapIngredient(i: RecipeDetailsAggregate["ingredients"][number]) {
+  return {
+    id: i.id,
+    productId: i.product.id,
+    name: i.product.nameUa,
+    quantity: i.quantityG,
+    unit: "г",
+    isOptional: i.isOptional,
+
+    category: {
+      name: i.product.category.nameUa,
+      code: normalizeCategoryCode(i.product.category.nameEn),
+    },
+
+    brand: i.product.brand
+      ? {
+          name: getBrandName(i.product.brand),
+          country: i.product.brand.country ?? undefined,
+        }
+      : undefined,
+  };
+}
+
+function mapStep(s: RecipeDetailsAggregate["steps"][number]) {
+  return {
+    id: s.id,
+    stepNumber: s.stepNumber,
+    instruction: s.instruction,
+    timerSec: s.timerSec ?? undefined,
+  };
+}
+
+function mapVideo(v: RecipeDetailsAggregate["videos"][number]) {
+  return {
+    id: v.id,
+    title: v.title ?? undefined,
+    thumbnailUrl: v.thumbnailUrl ?? undefined,
+    durationSec: v.durationSec ?? undefined,
+    platform: v.platform,
+    url: v.url,
+
+    author: v.author
+      ? {
+          name: v.author.displayName,
+        }
+      : undefined,
+  };
+}
+
+function mapAuthorLink(l: { type: string; url: string }) {
+  return {
+    type: l.type,
+    url: l.url,
+  };
+}
+
+function sortByOrder(a: { orderIndex: number }, b: { orderIndex: number }) {
+  return a.orderIndex - b.orderIndex;
 }
 
 function mapMacros(
