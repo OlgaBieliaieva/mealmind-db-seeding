@@ -1,8 +1,8 @@
 "use client";
 
 import { RecipeDetailsDTO } from "@/features/recipe-details/types/recipe-details.types";
-import { SectionTitle } from "./SectionTitle";
-import { StepItem } from "./StepItem";
+import { SectionTitle } from "./components/SectionTitle";
+import { StepItem } from "./components/StepItem";
 
 export function RecipeSteps({ recipe }: { recipe: RecipeDetailsDTO }) {
   const steps = [...recipe.steps].sort((a, b) => a.stepNumber - b.stepNumber);

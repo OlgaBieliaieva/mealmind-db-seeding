@@ -30,11 +30,29 @@ export type RecipePersistenceAggregate = Prisma.RecipeGetPayload<{
       };
     };
 
-    author: true;
+    author: {
+      include: {
+        links: true;
+      };
+    };
 
     videos: {
       include: {
-        author: true;
+        author: {
+          include: {
+            links: true;
+          };
+        };
+      };
+    };
+
+    sources: true;
+
+    originalRecipe: {
+      select: {
+        id: true;
+        title: true;
+        photoUrl: true;
       };
     };
 
@@ -43,5 +61,7 @@ export type RecipePersistenceAggregate = Prisma.RecipeGetPayload<{
         nutrient: true;
       };
     };
+
+    favorites: true;
   };
 }>;
