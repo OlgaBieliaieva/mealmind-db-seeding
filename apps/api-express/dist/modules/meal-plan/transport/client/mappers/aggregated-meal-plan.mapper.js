@@ -13,8 +13,12 @@ function mapToAggregatedMealPlan(entries) {
                 id: isRecipe ? entry.recipe.id : entry.product.id,
                 type: isRecipe ? "recipe" : "product",
                 categoryId: entry.recipe?.recipeTypeId ?? undefined,
-                categoryCode: entry.recipe?.recipeType?.code,
-                categoryName: entry.recipe?.recipeType?.nameUa,
+                categoryCode: isRecipe
+                    ? entry.recipe.recipeType?.code
+                    : normalizeCategoryCode(entry.product.category.nameEn),
+                categoryName: isRecipe
+                    ? entry.recipe.recipeType?.nameUa
+                    : entry.product.category.nameUa,
                 photoUrl: isRecipe ? (entry.recipe.photoUrl ?? undefined) : undefined,
                 totalTime: isRecipe
                     ? (entry.recipe.prepTimeMin ?? 0) + (entry.recipe.cookTimeMin ?? 0)
@@ -89,4 +93,11 @@ function mapToAggregatedMealPlan(entries) {
         },
         items,
     };
+}
+function normalizeCategoryCode(nameEn) {
+    return nameEn
+        .toLowerCase()
+        .replace(/&/g, "")
+        .replace(/\s+/g, "_")
+        .replace(/[^a-z0-9_]/g, "");
 }

@@ -42,7 +42,7 @@ export function ProductDetailsPage({ id }: { id: string }) {
       <FoodActionSheet
         open={isActionOpen}
         onClose={() => setActionOpen(false)}
-        // product={product}
+        productId={data.id}
       />
     </div>
   );

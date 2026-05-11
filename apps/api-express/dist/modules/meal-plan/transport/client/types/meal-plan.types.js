@@ -42,6 +42,13 @@ exports.mealEntryInclude = {
             id: true,
             nameUa: true,
             unit: true,
+            category: {
+                select: {
+                    id: true,
+                    nameEn: true,
+                    nameUa: true,
+                },
+            },
         },
     },
 };

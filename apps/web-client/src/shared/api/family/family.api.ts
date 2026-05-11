@@ -3,6 +3,7 @@ import { apiFetch } from "@/shared/lib/api/fetcher";
 export type FamilyMemberDTO = {
   id: string;
   name: string;
+  sex: string;
   avatarUrl: string | null;
 };
 

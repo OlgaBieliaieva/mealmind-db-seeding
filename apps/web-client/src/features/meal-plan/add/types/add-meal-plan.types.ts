@@ -6,6 +6,13 @@ export type AddUser = {
   avatarUrl?: string | null;
 };
 
+export type SelectedUserPortion = {
+  userId: string;
+  name: string;
+  avatarUrl?: string;
+  grams: number;
+};
+
 export type AddMealType = {
   id: string;
   name: string;
@@ -30,4 +37,10 @@ export type CreateMealEntriesDTO = {
     amount: number;
     unit: "g" | "ml" | "portion";
   }[];
+};
+
+export type User = {
+  id: string;
+  name: string;
+  avatarUrl?: string;
 };
