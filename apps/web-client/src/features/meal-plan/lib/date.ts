@@ -23,3 +23,29 @@ export function formatWeekLabel(days: string[]) {
     month: "long",
   })}`;
 }
+
+export function toUTCDateOnly(dateStr: string) {
+  const [year, month, day] = dateStr.split("-").map(Number);
+
+  return new Date(Date.UTC(year, month - 1, day));
+}
+
+export function getWeekDays(baseDateStr: string) {
+  const start = toUTCDateOnly(baseDateStr);
+
+  const day = start.getUTCDay() === 0 ? 7 : start.getUTCDay();
+
+  const monday = new Date(start);
+  monday.setUTCDate(start.getUTCDate() - day + 1);
+
+  return Array.from({ length: 7 }).map((_, i) => {
+    const d = new Date(monday);
+    d.setUTCDate(monday.getUTCDate() + i);
+
+    return {
+      date: d.toISOString().slice(0, 10),
+      label: d.toLocaleDateString("uk-UA", { weekday: "short" }),
+      day: d.getUTCDate(),
+    };
+  });
+}

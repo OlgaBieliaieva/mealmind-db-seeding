@@ -42,6 +42,13 @@ export const mealEntryInclude = {
       id: true,
       nameUa: true,
       unit: true,
+      category: {
+        select: {
+          id: true,
+          nameEn: true,
+          nameUa: true,
+        },
+      },
     },
   },
 } satisfies Prisma.MealEntryInclude;

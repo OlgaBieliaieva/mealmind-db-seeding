@@ -59,7 +59,7 @@ export function RecipeDetailsPage({ id }: { id: string }) {
       <FoodActionSheet
         open={isActionOpen}
         onClose={() => setActionOpen(false)}
-        // recipe={data}
+        recipeId={data.id}
       />
     </div>
   );
