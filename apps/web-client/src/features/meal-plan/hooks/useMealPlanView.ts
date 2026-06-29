@@ -12,13 +12,21 @@ export function useMealPlanView() {
     return {
       isLoading: true,
       isEmpty: true,
-      aggregatedMeals: [],
-      weekDays: [],
-      summary: {
-        totalItems: 0,
-        preparedItems: 0,
-        progress: 0,
+      aggregated: {
+        tabs: [{ id: "all", name: "Всі", orderIndex: -1 }],
+        views: {
+          all: {
+            summary: {
+              totalItems: 0,
+              preparedItems: 0,
+              progress: 0,
+            },
+            items: [],
+          },
+          byMealType: [],
+        },
       },
+      weekDays: [],
     };
   }
 
@@ -26,7 +34,7 @@ export function useMealPlanView() {
   // MEAL VIEW (NEW)
   // =========================
 
-  const aggregatedMeals: AggregatedMealItemDTO[] = data.aggregated.items;
+  // const aggregatedMeals: AggregatedMealItemDTO[] = data.aggregated.items;
 
   // =========================
   // USER VIEW (OLD)
@@ -39,15 +47,16 @@ export function useMealPlanView() {
   // =========================
 
   const isEmpty =
-    viewMode === "meal" ? aggregatedMeals.length === 0 : weekDays.length === 0;
+    viewMode === "meal"
+      ? data.aggregated.views.all.items.length === 0
+      : weekDays.length === 0;
 
   return {
     isLoading,
     isEmpty,
-
-    // data
-    aggregatedMeals,
+    aggregated: data.aggregated,
     weekDays,
-    summary: data.aggregated.summary,
+    // data
+    // summary: data.aggregated.summary,
   };
 }

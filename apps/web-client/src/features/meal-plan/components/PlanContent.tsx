@@ -6,7 +6,7 @@ import { EmptyMealPlan } from "./EmptyMealPlan";
 import { MealView } from "./MealView";
 
 export default function PlanContent() {
-  const { aggregatedMeals, summary, isLoading, isEmpty } = useMealPlanView();
+  const { aggregated, isLoading, isEmpty } = useMealPlanView();
   const { viewMode } = usePlanParams();
 
   if (isLoading) return <div className="p-4">Завантаження...</div>;
@@ -15,11 +15,7 @@ export default function PlanContent() {
     <div className="pt-4">
       {viewMode === "meal" && (
         <>
-          {isEmpty ? (
-            <EmptyMealPlan />
-          ) : (
-            <MealView items={aggregatedMeals} summary={summary} />
-          )}
+          {isEmpty ? <EmptyMealPlan /> : <MealView aggregated={aggregated} />}
         </>
       )}
     </div>

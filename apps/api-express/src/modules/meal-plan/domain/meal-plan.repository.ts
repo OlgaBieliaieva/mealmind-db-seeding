@@ -65,6 +65,11 @@ export class MealPlanRepository {
       where: {
         mealPlanId: planId,
       },
+      orderBy: [
+        { date: "asc" },
+        { mealType: { orderIndex: "asc" } },
+        { createdAt: "asc" },
+      ],
       include: mealEntryInclude,
     });
   }
@@ -77,6 +82,11 @@ export class MealPlanRepository {
           in: dates,
         },
       },
+      orderBy: [
+        { date: "asc" },
+        { mealType: { orderIndex: "asc" } },
+        { createdAt: "asc" },
+      ],
       include: mealEntryInclude,
     });
   }

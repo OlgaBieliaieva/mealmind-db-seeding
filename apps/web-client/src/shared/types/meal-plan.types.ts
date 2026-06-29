@@ -42,6 +42,12 @@ export type WeekDTO = {
   days: DayDTO[];
 };
 
+export type AggregatedMealTypeRefDTO = {
+  id: string;
+  name: string;
+  orderIndex: number;
+};
+
 export type AggregatedMealItemDTO = {
   id: string;
   type: "recipe" | "product";
@@ -66,12 +72,16 @@ export type AggregatedMealItemDTO = {
     avatarUrl: string | null;
   }[];
 
-  mealTypeId: string;
-  mealTypeName: string;
-
   entryIds: string[];
 
   isPrepared: boolean;
+
+  mealTypes: AggregatedMealTypeRefDTO[];
+
+  sort: {
+    firstCreatedAt: string;
+    firstMealTypeOrderIndex: number;
+  };
 };
 
 export type AggregatedSummaryDTO = {
@@ -80,29 +90,28 @@ export type AggregatedSummaryDTO = {
   progress: number;
 };
 
-export type AggregatedMealPlanDTO = {
+export type AggregatedMealListDTO = {
   summary: AggregatedSummaryDTO;
   items: AggregatedMealItemDTO[];
 };
 
-// export type AggregatedMealItem = {
-//   id: string;
-//   mealTypeId: string;
-//   name: string;
-//   type: "recipe" | "product";
+export type AggregatedMealTypeGroupDTO = {
+  mealType: AggregatedMealTypeRefDTO;
+  summary: AggregatedSummaryDTO;
+  items: AggregatedMealItemDTO[];
+};
 
-//   portions: number;
-//   totalWeight: number;
-
-//   entryIds: string[];
-//   isPrepared: boolean;
-
-//   users: {
-//     id: string;
-//     firstName: string;
-//     avatarUrl?: string | null;
-//   }[];
-// };
+export type AggregatedMealPlanDTO = {
+  tabs: Array<{
+    id: string;
+    name: string;
+    orderIndex: number;
+  }>;
+  views: {
+    all: AggregatedMealListDTO;
+    byMealType: AggregatedMealTypeGroupDTO[];
+  };
+};
 
 export type MealPlanResponseDTO = {
   week: WeekDTO;
