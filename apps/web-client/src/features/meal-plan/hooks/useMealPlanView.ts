@@ -2,7 +2,7 @@
 
 import { useMealPlan } from "./useMealPlan";
 import { usePlanParams } from "./usePlanParams";
-import { AggregatedMealItemDTO } from "@/shared/types/meal-plan.types";
+// import { AggregatedMealItemDTO } from "@/shared/types/meal-plan.types";
 
 export function useMealPlanView() {
   const { data, isLoading } = useMealPlan();

@@ -1,42 +1,43 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { ProductSearchItem } from "@/domains/product/types/product-search.dto";
+// import { useEffect, useState } from "react";
+// import { ProductSearchItem } from "@/domains/product/types/product-search.dto";
 
-type Props = {
-  onSelect: (product: ProductSearchItem | null) => void;
-};
+// type Props = {
+//   onSelect: (product: ProductSearchItem | null) => void;
+// };
 
-export function ProductSearch({ onSelect }: Props) {
-  const [query, setQuery] = useState("");
-  const [items, setItems] = useState<ProductSearchItem[]>([]);
-  const [loading, setLoading] = useState(false);
+export function ProductSearch() {
+// { onSelect }: Props
+  // const [query, setQuery] = useState("");
+  // const [items, setItems] = useState<ProductSearchItem[]>([]);
+  // const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    if (query.length < 2) {
-      setItems([]);
-      return;
-    }
+  // useEffect(() => {
+  //   if (query.length < 2) {
+  //     setItems([]);
+  //     return;
+  //   }
 
-    const timeout = setTimeout(async () => {
-      setLoading(true);
-      try {
-        const res = await fetch(
-          `/api/products/search?query=${encodeURIComponent(query)}`,
-        );
-        const data = await res.json();
-        setItems(data.items ?? []);
-      } finally {
-        setLoading(false);
-      }
-    }, 300);
+  //   const timeout = setTimeout(async () => {
+  //     setLoading(true);
+  //     try {
+  //       const res = await fetch(
+  //         `/api/products/search?query=${encodeURIComponent(query)}`,
+  //       );
+  //       const data = await res.json();
+  //       setItems(data.items ?? []);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   }, 300);
 
-    return () => clearTimeout(timeout);
-  }, [query]);
+  //   return () => clearTimeout(timeout);
+  // }, [query]);
 
   return (
     <div className="relative">
-      <input
+      {/* <input
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         placeholder="Пошук продукту…"
@@ -69,7 +70,7 @@ export function ProductSearch({ onSelect }: Props) {
             </li>
           ))}
         </ul>
-      )}
+      )} */}
     </div>
   );
 }

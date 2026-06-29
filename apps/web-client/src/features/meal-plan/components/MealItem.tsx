@@ -122,7 +122,7 @@ export function MealItem({ item }: Props) {
     <div className="bg-white rounded-2xl p-3 flex gap-3 border shadow-sm hover:bg-gray-50 transition">
       {/* CHECK */}
       <button
-        onClick={(e) => {
+        onClick={() => {
           mutate(item.entryIds);
         }}
         className={`
