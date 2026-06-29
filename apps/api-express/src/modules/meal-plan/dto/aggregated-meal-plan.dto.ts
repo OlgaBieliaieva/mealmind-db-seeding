@@ -41,6 +41,21 @@ export type AggregatedMealItemDTO = {
   };
 };
 
+export type AggregatedNutritionSnapshotDTO = {
+  energyKcal: number;
+  protein: number;
+  fat: number;
+  carbs: number;
+
+  proteinPercent: number;
+  fatPercent: number;
+  carbsPercent: number;
+
+  energyPercent?: number;
+  energyStatus?: "balanced" | "warning" | "critical";
+  issues?: string[];
+};
+
 export type AggregatedSummaryDTO = {
   totalItems: number;
   preparedItems: number;
@@ -58,14 +73,45 @@ export type AggregatedMealTypeGroupDTO = {
   items: AggregatedMealItemDTO[];
 };
 
-export type AggregatedMealPlanDTO = {
+export type AggregatedMemberMealTypeGroupDTO = {
+  mealType: AggregatedMealTypeRefDTO;
+  summary: AggregatedSummaryDTO;
+  nutrition?: AggregatedNutritionSnapshotDTO;
+  items: AggregatedMealItemDTO[];
+};
+
+export type AggregatedMemberRefDTO = {
+  id: string;
+  firstName: string;
+  sex: string;
+  avatarUrl: string | null;
+};
+
+export type AggregatedMemberGroupDTO = {
+  member: AggregatedMemberRefDTO;
+  summary: AggregatedSummaryDTO;
+  nutrition?: AggregatedNutritionSnapshotDTO;
+  byMealType: AggregatedMemberMealTypeGroupDTO[];
+};
+
+export type AggregatedMemberViewDTO = {
+  summary: AggregatedSummaryDTO;
+  members: AggregatedMemberGroupDTO[];
+};
+
+export type AggregatedMealViewDTO = {
   tabs: Array<{
     id: string;
     name: string;
     orderIndex: number;
   }>;
+  all: AggregatedMealListDTO;
+  byMealType: AggregatedMealTypeGroupDTO[];
+};
+
+export type AggregatedMealPlanDTO = {
   views: {
-    all: AggregatedMealListDTO;
-    byMealType: AggregatedMealTypeGroupDTO[];
+    meal: AggregatedMealViewDTO;
+    member: AggregatedMemberViewDTO;
   };
 };

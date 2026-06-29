@@ -1,22 +1,22 @@
 "use client";
 
-import Image from "next/image";
-import { useRouter, useSearchParams } from "next/navigation";
-import { MealType } from "@/lib/v1/meal-types/meal-types.read";
-import { FamilyMember } from "@/lib/v1/families/family-members.read";
-import { MenuEntry } from "@/types/menu-entry";
-import EnergyBattery from "../nutrition/EnergyBattery";
-import MacroSnapshot from "../nutrition/MacroSnapshot";
-import { BalanceResult } from "@/types/nutrition-balance";
-import { NutritionDisplayItem } from "@/lib/v1/nutrition/nutrition.adapter";
-import NutritionDetailsPopover from "../nutrition/NutritionDetailsPopover";
-import MealBlock from "./MealBlock";
+// import Image from "next/image";
+// import { useRouter, useSearchParams } from "next/navigation";
+// import { MealType } from "@/lib/v1/meal-types/meal-types.read";
+// import { FamilyMember } from "@/lib/v1/families/family-members.read";
+// import { MenuEntry } from "@/types/menu-entry";
+// import EnergyBattery from "../nutrition/EnergyBattery";
+// import MacroSnapshot from "../nutrition/MacroSnapshot";
+// import { BalanceResult } from "@/types/nutrition-balance";
+// import { NutritionDisplayItem } from "@/lib/v1/nutrition/nutrition.adapter";
+// import NutritionDetailsPopover from "../nutrition/NutritionDetailsPopover";
+// import MealBlock from "./MealBlock";
 
 type Props = {
   planId: string;
-  member: FamilyMember;
-  mealTypes: MealType[];
-  entries: MenuEntry[];
+  // member: FamilyMember;
+  // mealTypes: MealType[];
+  // entries: MenuEntry[];
   activeDayId?: string;
   selectedDays: string[];
   isMultiMode: boolean;
@@ -24,50 +24,52 @@ type Props = {
   productsMap: Record<string, string>;
   recipeWeightMap: Record<string, number>;
   productUnitMap: Record<string, string>;
-  balance: BalanceResult;
-  nutrition: NutritionDisplayItem[];
+  // balance: BalanceResult;
+  // nutrition: NutritionDisplayItem[];
   targets: Record<string, number>;
-  memberMealNutritionMap: Record<
-    string,
-    Record<number, NutritionDisplayItem[]>
-  >;
-  memberDishNutritionMap: Record<
-    string,
-    Record<string, NutritionDisplayItem[]>
-  >;
+  // memberMealNutritionMap: Record<
+  //   string,
+  //   Record<number, NutritionDisplayItem[]>
+  // >;
+  // memberDishNutritionMap: Record<
+  //   string,
+  //   Record<string, NutritionDisplayItem[]>
+  // >;
 };
 
-export default function MemberCard({
-  planId,
-  member,
-  mealTypes,
-  entries,
-  activeDayId,
-  selectedDays,
-  isMultiMode,
-  recipesMap,
-  productsMap,
-  recipeWeightMap,
-  productUnitMap,
-  balance,
-  nutrition,
-  targets,
-  memberMealNutritionMap,
-  memberDishNutritionMap,
-}: Props) {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const view = searchParams.get("view") ?? "members";
+export default function MemberCard(
+  {
+    // planId,
+    // member,
+    // mealTypes,
+    // entries,
+    // activeDayId,
+    // selectedDays,
+    // isMultiMode,
+    // recipesMap,
+    // productsMap,
+    // recipeWeightMap,
+    // productUnitMap,
+    // balance,
+    // nutrition,
+    // targets,
+    // memberMealNutritionMap,
+    // memberDishNutritionMap,
+  }: Props,
+) {
+  // const router = useRouter();
+  // const searchParams = useSearchParams();
+  // const view = searchParams.get("view") ?? "members";
 
-  const defaultAvatar =
-    member.sex === "female"
-      ? "/avatars/default-female.jpg"
-      : "/avatars/default-male.jpg";
+  // const defaultAvatar =
+  //   member.sex === "female"
+  //     ? "/avatars/default-female.jpg"
+  //     : "/avatars/default-male.jpg";
 
-  const src = member.avatar_url || defaultAvatar;
+  // const src = member.avatar_url || defaultAvatar;
 
-  const periodDays = selectedDays.length;
-  const isMulti = periodDays > 1;
+  // const periodDays = selectedDays.length;
+  // const isMulti = periodDays > 1;
 
   return (
     <div className="rounded-2xl overflow-hidden border bg-white">
@@ -76,20 +78,20 @@ export default function MemberCard({
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-3">
             <div className="relative w-8 h-8">
-              <Image
+              {/* <Image
                 src={src}
                 alt={member.first_name}
                 fill
                 className="rounded-full object-cover"
-              />
+              /> */}
             </div>
 
-            <span className="font-medium text-gray-800">
+            {/* <span className="font-medium text-gray-800">
               {member.first_name}
-            </span>
+            </span> */}
           </div>
 
-          <NutritionDetailsPopover
+          {/* <NutritionDetailsPopover
             nutrition={nutrition}
             balance={balance}
             targets={targets}
@@ -100,11 +102,11 @@ export default function MemberCard({
                 status={balance.status}
               />
             }
-          />
+          /> */}
         </div>
 
         <div className="flex justify-between items-center">
-          <div className="flex flex-col gap-1">
+          {/* <div className="flex flex-col gap-1">
             <MacroSnapshot
               protein={balance.macroPercents.protein}
               fat={balance.macroPercents.fat}
@@ -116,9 +118,9 @@ export default function MemberCard({
                 ~ середньодобове · За {periodDays} дн.
               </div>
             )}
-          </div>
+          </div> */}
 
-          {balance.issues.length > 0 && (
+          {/* {balance.issues.length > 0 && (
             <div className="text-xs space-y-1">
               {balance.issues.map((issue, index) => (
                 <div key={index} className="text-red-600">
@@ -126,12 +128,12 @@ export default function MemberCard({
                 </div>
               ))}
             </div>
-          )}
+          )} */}
         </div>
       </div>
 
       {/* ================= MEALS ================= */}
-      <div className="px-4">
+      {/* <div className="px-4">
         {mealTypes.map((meal) => {
           const filteredEntries = entries.filter((entry) => {
             const isDateMatch = isMultiMode
@@ -201,7 +203,7 @@ export default function MemberCard({
             />
           );
         })}
-      </div>
+      </div> */}
     </div>
   );
 }

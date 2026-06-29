@@ -2,24 +2,26 @@ import { MealEntryWithRelations } from "../types/meal-plan.types";
 import {
   AggregatedMealItemDTO,
   AggregatedMealPlanDTO,
+  AggregatedMealTypeGroupDTO,
+  AggregatedMealTypeRefDTO,
+  AggregatedMemberGroupDTO,
   AggregatedSummaryDTO,
 } from "../../../dto/aggregated-meal-plan.dto";
 
 type AggregateMode = "all" | "mealType";
 
+type AggregatedItemInternal = AggregatedMealItemDTO & {
+  preparedCount: number;
+  totalCount: number;
+  firstCreatedAtMs: number;
+  firstMealTypeOrderIndex: number;
+};
+
 function buildAggregatedItems(
   entries: MealEntryWithRelations[],
   mode: AggregateMode,
 ): AggregatedMealItemDTO[] {
-  const map = new Map<
-    string,
-    AggregatedMealItemDTO & {
-      preparedCount: number;
-      totalCount: number;
-      firstCreatedAtMs: number;
-      firstMealTypeOrderIndex: number;
-    }
-  >();
+  const map = new Map<string, AggregatedItemInternal>();
 
   for (const entry of entries) {
     const isRecipe = !!entry.recipe;
@@ -160,10 +162,10 @@ function makeSummary(items: AggregatedMealItemDTO[]): AggregatedSummaryDTO {
   };
 }
 
-export function mapToAggregatedMealPlan(
+function getMealTypes(
   entries: MealEntryWithRelations[],
-): AggregatedMealPlanDTO {
-  const mealTypes = Array.from(
+): AggregatedMealTypeRefDTO[] {
+  return Array.from(
     new Map(
       entries.map((entry) => [
         entry.mealType.id,
@@ -175,10 +177,15 @@ export function mapToAggregatedMealPlan(
       ]),
     ).values(),
   ).sort((a, b) => a.orderIndex - b.orderIndex);
+}
 
+function buildMealView(
+  entries: MealEntryWithRelations[],
+): AggregatedMealPlanDTO["views"]["meal"] {
+  const mealTypes = getMealTypes(entries);
   const allItems = buildAggregatedItems(entries, "all");
 
-  const byMealType = mealTypes.map((mealType) => {
+  const byMealType: AggregatedMealTypeGroupDTO[] = mealTypes.map((mealType) => {
     const items = buildAggregatedItems(
       entries.filter((entry) => entry.mealTypeId === mealType.id),
       "mealType",
@@ -193,166 +200,93 @@ export function mapToAggregatedMealPlan(
 
   return {
     tabs: [{ id: "all", name: "Всі", orderIndex: -1 }, ...mealTypes],
-    views: {
-      all: {
-        summary: makeSummary(allItems),
-        items: allItems,
-      },
-      byMealType,
+    all: {
+      summary: makeSummary(allItems),
+      items: allItems,
     },
+    byMealType,
   };
 }
 
-// export function mapToAggregatedMealPlan(
-//   entries: MealEntryWithRelations[],
-// ): AggregatedMealPlanDTO {
-//   const map = new Map<
-//     string,
-//     AggregatedMealItemDTO & {
-//       preparedCount: number;
-//       totalCount: number;
-//       sortCreatedAt: number;
-//     }
-//   >();
+function buildMemberView(
+  entries: MealEntryWithRelations[],
+): AggregatedMealPlanDTO["views"]["member"] {
+  const members = Array.from(
+    new Map(
+      entries.map((entry) => [
+        entry.user.id,
+        {
+          id: entry.user.id,
+          firstName: entry.user.firstName,
+          sex: entry.user.sex,
+          avatarUrl: entry.user.avatarUrl,
+        },
+      ]),
+    ).values(),
+  ).sort((a, b) => a.firstName.localeCompare(b.firstName, "uk"));
 
-//   for (const entry of entries) {
-//     const isRecipe = !!entry.recipe;
+  const mealTypes = getMealTypes(entries);
 
-//     const key = isRecipe
-//       ? `recipe-${entry.recipe!.id}-${entry.mealTypeId}`
-//       : `product-${entry.product!.id}-${entry.mealTypeId}`;
+  const memberGroups: AggregatedMemberGroupDTO[] = members.map((member) => {
+    const memberEntries = entries.filter((entry) => entry.userId === member.id);
 
-//     if (!map.has(key)) {
-//       map.set(key, {
-//         id: isRecipe ? entry.recipe!.id : entry.product!.id,
-//         type: isRecipe ? "recipe" : "product",
-//         categoryId: entry.recipe?.recipeTypeId ?? undefined,
-//         categoryCode: isRecipe
-//           ? entry.recipe!.recipeType?.code
-//           : normalizeCategoryCode(entry.product!.category.nameEn),
-//         categoryName: isRecipe
-//           ? entry.recipe!.recipeType?.nameUa
-//           : entry.product!.category.nameUa,
+    const byMealType = mealTypes
+      .map((mealType) => {
+        const mealEntries = memberEntries.filter(
+          (entry) => entry.mealTypeId === mealType.id,
+        );
 
-//         photoUrl: isRecipe ? (entry.recipe!.photoUrl ?? undefined) : undefined,
+        const items = buildAggregatedItems(mealEntries, "mealType");
 
-//         totalTime: isRecipe
-//           ? (entry.recipe!.prepTimeMin ?? 0) + (entry.recipe!.cookTimeMin ?? 0)
-//           : undefined,
+        return {
+          mealType,
+          summary: makeSummary(items),
+          nutrition: undefined,
+          items,
+        };
+      })
+      .filter((group) => group.items.length > 0);
 
-//         difficulty: isRecipe
-//           ? (entry.recipe!.difficulty ?? undefined)
-//           : undefined,
+    const memberItems = buildAggregatedItems(memberEntries, "all");
 
-//         name: isRecipe ? entry.recipe!.title : entry.product!.nameUa,
+    return {
+      member,
+      summary: makeSummary(memberItems),
+      nutrition: undefined,
+      byMealType,
+    };
+  });
 
-//         totalWeight: 0,
-//         portions: 0,
+  const totalItems = memberGroups.reduce(
+    (sum, group) => sum + group.summary.totalItems,
+    0,
+  );
 
-//         // 🔥 FIX: users типізуємо явно
-//         users: [] as AggregatedMealItemDTO["users"],
+  const preparedItems = memberGroups.reduce(
+    (sum, group) => sum + group.summary.preparedItems,
+    0,
+  );
 
-//         mealTypeId: entry.mealTypeId,
-//         mealTypeName: entry.mealType.nameUa,
-//         mealTypeOrderIndex: entry.mealType.orderIndex,
+  return {
+    summary: {
+      totalItems,
+      preparedItems,
+      progress: totalItems === 0 ? 0 : preparedItems / totalItems,
+    },
+    members: memberGroups,
+  };
+}
 
-//         // 🔥 FIX: типізуємо
-//         entryIds: [] as string[],
-
-//         // 🔥 NEW
-//         unit: isRecipe ? "g" : entry.product!.unit,
-
-//         isPrepared: false,
-
-//         preparedCount: 0,
-//         totalCount: 0,
-//         sortCreatedAt: entry.createdAt.getTime(),
-//       });
-//     }
-
-//     const item = map.get(key)!;
-//     item.sortCreatedAt = Math.min(
-//       item.sortCreatedAt,
-//       entry.createdAt.getTime(),
-//     );
-
-//     // =========================
-//     // PORTIONS
-//     // =========================
-
-//     item.portions += 1;
-
-//     // =========================
-//     // WEIGHT
-//     // =========================
-
-//     const weight = entry.amountInGrams ?? 0; // 🔥 safety
-
-//     item.totalWeight += weight;
-
-//     // =========================
-//     // USERS
-//     // =========================
-
-//     if (!item.users.find((u) => u.id === entry.user.id)) {
-//       item.users.push({
-//         id: entry.user.id,
-//         firstName: entry.user.firstName,
-//         sex: entry.user.sex,
-//         avatarUrl: entry.user.avatarUrl,
-//       });
-//     }
-
-//     // =========================
-//     // ENTRY IDS
-//     // =========================
-
-//     item.entryIds.push(entry.id);
-
-//     // =========================
-//     // STATUS
-//     // =========================
-
-//     item.totalCount += 1;
-
-//     if (entry.status === "prepared") {
-//       item.preparedCount += 1;
-//     }
-//   }
-
-//   const items: AggregatedMealItemDTO[] = Array.from(map.values())
-//     .sort((a, b) => {
-//       const mealTypeOrder = a.mealTypeName.localeCompare(b.mealTypeName, "uk");
-
-//       if (mealTypeOrder !== 0) {
-//         return mealTypeOrder;
-//       }
-
-//       return a.sortCreatedAt - b.sortCreatedAt;
-//     })
-//     .map(({ preparedCount, totalCount, sortCreatedAt, ...rest }) => ({
-//       ...rest,
-//       isPrepared: preparedCount === totalCount,
-//     }));
-
-//   // =========================
-//   // SUMMARY
-//   // =========================
-
-//   const totalItems = items.length;
-//   const preparedItems = items.filter((i) => i.isPrepared).length;
-
-//   const progress = totalItems === 0 ? 0 : preparedItems / totalItems;
-
-//   return {
-//     summary: {
-//       totalItems,
-//       preparedItems,
-//       progress,
-//     },
-//     items,
-//   };
-// }
+export function mapToAggregatedMealPlan(
+  entries: MealEntryWithRelations[],
+): AggregatedMealPlanDTO {
+  return {
+    views: {
+      meal: buildMealView(entries),
+      member: buildMemberView(entries),
+    },
+  };
+}
 
 function normalizeCategoryCode(nameEn: string): string {
   return nameEn
