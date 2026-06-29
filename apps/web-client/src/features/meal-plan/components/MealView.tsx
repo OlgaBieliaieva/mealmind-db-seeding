@@ -1,44 +1,43 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { Plus } from "lucide-react";
 
 import { MealSummary } from "./MealSummary";
 import { MealTypeTabs } from "./MealTypeTabs";
 import { MealItem } from "./MealItem";
 
-import { usePlanParams } from "../hooks/usePlanParams";
+// import { usePlanParams } from "../hooks/usePlanParams";
 import { useAddToPlanNavigation } from "../hooks/useAddToPlanNavigation";
 
-import {
-  AggregatedMealItemDTO,
-  AggregatedSummaryDTO,
-} from "@/shared/types/meal-plan.types";
+import { AggregatedMealPlanDTO } from "@/shared/types/meal-plan.types";
 
 type Props = {
-  items: AggregatedMealItemDTO[];
-  summary: AggregatedSummaryDTO;
+  aggregated: AggregatedMealPlanDTO;
 };
 
-export function MealView({ items, summary }: Props) {
-  const router = useRouter();
-  const { activeDate } = usePlanParams();
-
+export function MealView({ aggregated }: Props) {
   const [activeMealType, setActiveMealType] = useState("all");
   const navigateToAdd = useAddToPlanNavigation();
 
-  const mealTypes = [
-    { id: "all", name: "Всі" },
-    ...Array.from(
-      new Map(items.map((i) => [i.mealTypeId, i.mealTypeName])),
-    ).map(([id, name]) => ({ id, name })),
-  ];
+  const { tabs, views } = aggregated;
 
-  const filtered =
+  const activeView =
     activeMealType === "all"
-      ? items
-      : items.filter((i) => i.mealTypeId === activeMealType);
+      ? views.all
+      : views.byMealType.find((group) => group.mealType.id === activeMealType);
+
+  const items = activeView?.items ?? [];
+  const summary = activeView?.summary ?? {
+    totalItems: 0,
+    preparedItems: 0,
+    progress: 0,
+  };
+
+  const mealTypes = tabs.map((tab) => ({
+    id: tab.id,
+    name: tab.name,
+  }));
 
   const handleAdd = () => {
     navigateToAdd(activeMealType);
@@ -57,11 +56,14 @@ export function MealView({ items, summary }: Props) {
         onChange={setActiveMealType}
       />
 
-      <div className="space-y-3">
-        {filtered.map((item) => (
-          <MealItem key={item.id} item={item} />
+      <ul className="space-y-3">
+        {items.map((item) => (
+          <MealItem
+            key={`${item.type}-${item.id}-${activeMealType}`}
+            item={item}
+          />
         ))}
-      </div>
+      </ul>
 
       {/* 👉 FLOATING ADD BUTTON */}
       <div className="absolute right-5 bottom-24 z-50">

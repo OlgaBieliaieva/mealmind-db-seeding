@@ -1,3 +1,9 @@
+export type AggregatedMealTypeRefDTO = {
+  id: string;
+  name: string;
+  orderIndex: number;
+};
+
 export type AggregatedMealItemDTO = {
   id: string;
   type: "recipe" | "product";
@@ -23,12 +29,16 @@ export type AggregatedMealItemDTO = {
     avatarUrl: string | null;
   }[];
 
-  mealTypeId: string;
-  mealTypeName: string;
-
   entryIds: string[];
 
   isPrepared: boolean;
+
+  mealTypes: AggregatedMealTypeRefDTO[];
+
+  sort: {
+    firstCreatedAt: string;
+    firstMealTypeOrderIndex: number;
+  };
 };
 
 export type AggregatedSummaryDTO = {
@@ -37,7 +47,25 @@ export type AggregatedSummaryDTO = {
   progress: number;
 };
 
-export type AggregatedMealPlanDTO = {
+export type AggregatedMealListDTO = {
   summary: AggregatedSummaryDTO;
   items: AggregatedMealItemDTO[];
+};
+
+export type AggregatedMealTypeGroupDTO = {
+  mealType: AggregatedMealTypeRefDTO;
+  summary: AggregatedSummaryDTO;
+  items: AggregatedMealItemDTO[];
+};
+
+export type AggregatedMealPlanDTO = {
+  tabs: Array<{
+    id: string;
+    name: string;
+    orderIndex: number;
+  }>;
+  views: {
+    all: AggregatedMealListDTO;
+    byMealType: AggregatedMealTypeGroupDTO[];
+  };
 };

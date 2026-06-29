@@ -1,432 +1,437 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
-import { generateUUID } from "@/domains/shared/utils/uuid";
-import { nanoid } from "nanoid";
+// import { useState, useMemo, useEffect } from "react";
+// import { generateUUID } from "@/domains/shared/utils/uuid";
+// import { nanoid } from "nanoid";
 
-import { useProductNutrients } from "@/lib/v1/hooks/useProductNutrients";
-import { useNutrientsReference } from "@/lib/v1/hooks/useNutrientsReference";
-import { useRecipeTypes } from "@/lib/v1/hooks/useRecipeTypes";
-import { useCuisines } from "@/lib/v1/hooks/useCuisines";
-import { useDietaryTags } from "@/lib/v1/hooks/useDietaryTags";
-import { useRecipeAuthors } from "@/lib/v1/hooks/useRecipeAuthors";
-import { RecipeCreatePayload } from "@/types/recipe";
-import { RecipeFull } from "@/types/recipe-views";
-import { RecipeIngredientDraft } from "@/types/recipe-ingredient";
-import { IngredientRow } from "@/components/recipe/IngredientRow";
-import { RecipeStepDraft } from "@/types/recipe-step";
-import { StepRow } from "@/components/recipe/StepRow";
-import { aggregateRecipeNutrients } from "@/lib/v1/recipe-nutrients.aggregate";
-import { RecipePreview } from "@/components/recipe/RecipePreview";
-import { validateRecipeForPublish } from "@/lib/v1/recipe-validation";
-import { RecipePhotoUploader } from "@/components/recipe/RecipePhotoUploader";
-import { CuisineSelector } from "@/components/recipe/CuisineSelector";
-import { DietaryTagSelector } from "@/components/recipe/DietaryTagSelector";
-import { RecipeVideoDraft } from "@/types/recipe-video";
-import { RecipeAuthorSelector } from "@/components/recipe/RecipeAuthorSelector";
-import { RecipeAuthor } from "@/types/recipe-author";
+// import { useProductNutrients } from "@/lib/v1/hooks/useProductNutrients";
+// import { useNutrientsReference } from "@/lib/v1/hooks/useNutrientsReference";
+// import { useRecipeTypes } from "@/lib/v1/hooks/useRecipeTypes";
+// import { useCuisines } from "@/lib/v1/hooks/useCuisines";
+// import { useDietaryTags } from "@/lib/v1/hooks/useDietaryTags";
+// import { useRecipeAuthors } from "@/lib/v1/hooks/useRecipeAuthors";
+// import { RecipeCreatePayload } from "@/types/recipe";
+// import { RecipeFull } from "@/types/recipe-views";
+// import { RecipeIngredientDraft } from "@/types/recipe-ingredient";
+// import { IngredientRow } from "@/components/recipe/IngredientRow";
+// import { RecipeStepDraft } from "@/types/recipe-step";
+// import { StepRow } from "@/components/recipe/StepRow";
+// import { aggregateRecipeNutrients } from "@/lib/v1/recipe-nutrients.aggregate";
+// import { RecipePreview } from "@/components/recipe/RecipePreview";
+// import { validateRecipeForPublish } from "@/lib/v1/recipe-validation";
+// import { RecipePhotoUploader } from "@/components/recipe/RecipePhotoUploader";
+// import { CuisineSelector } from "@/components/recipe/CuisineSelector";
+// import { DietaryTagSelector } from "@/components/recipe/DietaryTagSelector";
+// import { RecipeVideoDraft } from "@/types/recipe-video";
+// import { RecipeAuthorSelector } from "@/components/recipe/RecipeAuthorSelector";
+// import { RecipeAuthor } from "@/types/recipe-author";
 
 type Props = {
   mode: "create" | "edit";
-  initialData?: RecipeFull;
+  // initialData?: RecipeFull;
 };
 
-export function RecipeForm({ mode, initialData }: Props) {
-  const isEdit = mode === "edit";
+export function RecipeForm(
+  {
+    // mode,
+    // nitialData
+  }: Props,
+) {
+  // const isEdit = mode === "edit";
 
   // =============================
   // 1️⃣ STATE
   // =============================
 
-  const [form, setForm] = useState<RecipeCreatePayload>({
-    recipe_id: undefined,
-    title: "",
-    description: "",
-    recipe_type_id: null,
-    base_servings: 1,
-    base_output_weight_g: 0,
-    container_weight_g: null,
-    visibility: "private",
-    status: "draft",
-    family_id: null,
-    recipe_author_id: null,
-  });
+  // const [form, setForm] = useState<RecipeCreatePayload>({
+  //   recipe_id: undefined,
+  //   title: "",
+  //   description: "",
+  //   recipe_type_id: null,
+  //   base_servings: 1,
+  //   base_output_weight_g: 0,
+  //   container_weight_g: null,
+  //   visibility: "private",
+  //   status: "draft",
+  //   family_id: null,
+  //   recipe_author_id: null,
+  // });
 
-  const [ingredients, setIngredients] = useState<RecipeIngredientDraft[]>([]);
-  const [steps, setSteps] = useState<RecipeStepDraft[]>([]);
-  const [videos, setVideos] = useState<RecipeVideoDraft[]>([]);
-  const [cuisineIds, setCuisineIds] = useState<number[]>([]);
-  const [dietaryTagIds, setDietaryTagIds] = useState<number[]>([]);
-  const [recipeAuthorId, setRecipeAuthorId] = useState<string | null>(null);
-  const [recipeAuthors, setRecipeAuthors] = useState<RecipeAuthor[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [saveError, setSaveError] = useState<string | null>(null);
-  const [saveSuccess, setSaveSuccess] = useState<string | null>(null);
+  // const [ingredients, setIngredients] = useState<RecipeIngredientDraft[]>([]);
+  // const [steps, setSteps] = useState<RecipeStepDraft[]>([]);
+  // const [videos, setVideos] = useState<RecipeVideoDraft[]>([]);
+  // const [cuisineIds, setCuisineIds] = useState<number[]>([]);
+  // const [dietaryTagIds, setDietaryTagIds] = useState<number[]>([]);
+  // const [recipeAuthorId, setRecipeAuthorId] = useState<string | null>(null);
+  // const [recipeAuthors, setRecipeAuthors] = useState<RecipeAuthor[]>([]);
+  // const [loading, setLoading] = useState(false);
+  // const [saveError, setSaveError] = useState<string | null>(null);
+  // const [saveSuccess, setSaveSuccess] = useState<string | null>(null);
 
-  const [publishError, setPublishError] = useState<string | null>(null);
-  const [publishSuccess, setPublishSuccess] = useState<string | null>(null);
-  const [publishErrors, setPublishErrors] = useState<string[]>([]);
+  // const [publishError, setPublishError] = useState<string | null>(null);
+  // const [publishSuccess, setPublishSuccess] = useState<string | null>(null);
+  // const [publishErrors, setPublishErrors] = useState<string[]>([]);
 
-  const { items: nutrientRefs } = useNutrientsReference(); //
-  const { items: recipeTypes } = useRecipeTypes(); //
-  const { items: cuisines, loading: cuisinesLoading } = useCuisines(); //
-  const { items: dietaryTags, loading: dietaryTagsLoading } = useDietaryTags(); //
-  const { items: recipeAuthorsFromApi } = useRecipeAuthors(); //
+  // const { items: nutrientRefs } = useNutrientsReference(); //
+  // const { items: recipeTypes } = useRecipeTypes(); //
+  // const { items: cuisines, loading: cuisinesLoading } = useCuisines(); //
+  // const { items: dietaryTags, loading: dietaryTagsLoading } = useDietaryTags(); //
+  // const { items: recipeAuthorsFromApi } = useRecipeAuthors(); //
 
   // =============================
   // 2️⃣ HYDRATE FOR EDIT
   // =============================
 
-  useEffect(() => {
-    if (!isEdit || !initialData) return;
+  // useEffect(() => {
+  //   if (!isEdit || !initialData) return;
 
-    setForm({
-      recipe_id: initialData.recipe.recipe_id,
-      title: initialData.recipe.title,
-      description: initialData.recipe.description,
-      recipe_type_id: initialData.recipe.recipe_type_id,
-      base_servings: initialData.recipe.base_servings,
-      base_output_weight_g: initialData.recipe.base_output_weight_g,
-      container_weight_g: null,
-      visibility: initialData.recipe.visibility,
-      status: initialData.recipe.status,
-      family_id: null,
-      recipe_author_id: initialData.recipe.recipe_author_id,
-      prep_time_min: initialData.recipe.prep_time_min ?? undefined,
-      cook_time_min: initialData.recipe.cook_time_min ?? undefined,
-      difficulty: initialData.recipe.difficulty ?? undefined,
-      photo_url: initialData.recipe.photo_url ?? undefined,
-      photos: initialData.recipe.photo_url
-        ? [
-            {
-              url: initialData.recipe.photo_url,
-              objectName: initialData.recipe.title,
-            },
-          ]
-        : [],
-    });
+  //   setForm({
+  //     recipe_id: initialData.recipe.recipe_id,
+  //     title: initialData.recipe.title,
+  //     description: initialData.recipe.description,
+  //     recipe_type_id: initialData.recipe.recipe_type_id,
+  //     base_servings: initialData.recipe.base_servings,
+  //     base_output_weight_g: initialData.recipe.base_output_weight_g,
+  //     container_weight_g: null,
+  //     visibility: initialData.recipe.visibility,
+  //     status: initialData.recipe.status,
+  //     family_id: null,
+  //     recipe_author_id: initialData.recipe.recipe_author_id,
+  //     prep_time_min: initialData.recipe.prep_time_min ?? undefined,
+  //     cook_time_min: initialData.recipe.cook_time_min ?? undefined,
+  //     difficulty: initialData.recipe.difficulty ?? undefined,
+  //     photo_url: initialData.recipe.photo_url ?? undefined,
+  //     photos: initialData.recipe.photo_url
+  //       ? [
+  //           {
+  //             url: initialData.recipe.photo_url,
+  //             objectName: initialData.recipe.title,
+  //           },
+  //         ]
+  //       : [],
+  //   });
 
-    setRecipeAuthorId(initialData.recipe.recipe_author_id ?? null);
+  //   setRecipeAuthorId(initialData.recipe.recipe_author_id ?? null);
 
-    setIngredients(
-      initialData.ingredients.map((i) => ({
-        id: i.id,
-        product_id: i.product_id,
-        quantity_g: i.quantity_g,
-        is_optional: i.is_optional,
-        product_name: i.product_name,
-      })),
-    );
+  //   setIngredients(
+  //     initialData.ingredients.map((i) => ({
+  //       id: i.id,
+  //       product_id: i.product_id,
+  //       quantity_g: i.quantity_g,
+  //       is_optional: i.is_optional,
+  //       product_name: i.product_name,
+  //     })),
+  //   );
 
-    setSteps(
-      initialData.steps.map((s) => ({
-        id: s.id,
-        order: s.order,
-        text: s.text,
-      })),
-    );
+  //   setSteps(
+  //     initialData.steps.map((s) => ({
+  //       id: s.id,
+  //       order: s.order,
+  //       text: s.text,
+  //     })),
+  //   );
 
-    setCuisineIds(initialData.cuisines.map((c) => c.cuisine_id));
-    setDietaryTagIds(initialData.dietary_tags.map((d) => d.dietary_tag_id));
+  //   setCuisineIds(initialData.cuisines.map((c) => c.cuisine_id));
+  //   setDietaryTagIds(initialData.dietary_tags.map((d) => d.dietary_tag_id));
 
-    setVideos(
-      initialData.videos.map((v) => ({
-        id: v.recipe_video_id,
-        platform: v.platform,
-        url: v.url,
-        recipe_author_id: v.author?.recipe_author_id ?? null,
-      })),
-    );
-  }, [isEdit, initialData]);
+  //   setVideos(
+  //     initialData.videos.map((v) => ({
+  //       id: v.recipe_video_id,
+  //       platform: v.platform,
+  //       url: v.url,
+  //       recipe_author_id: v.author?.recipe_author_id ?? null,
+  //     })),
+  //   );
+  // }, [isEdit, initialData]);
 
-  useEffect(() => {
-    setRecipeAuthors(recipeAuthorsFromApi);
-  }, [recipeAuthorsFromApi]);
+  // useEffect(() => {
+  //   setRecipeAuthors(recipeAuthorsFromApi);
+  // }, [recipeAuthorsFromApi]);
 
-  function addIngredient() {
-    setIngredients((prev) => [
-      ...prev,
-      {
-        id: nanoid(),
-        product_id: null,
-        quantity_g: 0,
-        is_optional: false,
-      },
-    ]);
-  }
+  // function addIngredient() {
+  //   setIngredients((prev) => [
+  //     ...prev,
+  //     {
+  //       id: nanoid(),
+  //       product_id: null,
+  //       quantity_g: 0,
+  //       is_optional: false,
+  //     },
+  //   ]);
+  // }
 
-  function mapIngredientsForApi(
-    recipeId: string,
-    ingredients: RecipeIngredientDraft[],
-  ) {
-    return {
-      recipe_id: recipeId,
-      ingredients: ingredients
-        .filter((i) => i.product_id && i.quantity_g > 0)
-        .map((i, index) => ({
-          product_id: i.product_id!,
-          quantity_g: i.quantity_g,
-          is_optional: i.is_optional,
-          order_index: index + 1,
-        })),
-    };
-  }
+  // function mapIngredientsForApi(
+  //   recipeId: string,
+  //   ingredients: RecipeIngredientDraft[],
+  // ) {
+  //   return {
+  //     recipe_id: recipeId,
+  //     ingredients: ingredients
+  //       .filter((i) => i.product_id && i.quantity_g > 0)
+  //       .map((i, index) => ({
+  //         product_id: i.product_id!,
+  //         quantity_g: i.quantity_g,
+  //         is_optional: i.is_optional,
+  //         order_index: index + 1,
+  //       })),
+  //   };
+  // }
 
-  function addStep() {
-    setSteps((prev) => [
-      ...prev,
-      {
-        id: nanoid(),
-        order: prev.length + 1,
-        text: "",
-      },
-    ]);
-  }
+  // function addStep() {
+  //   setSteps((prev) => [
+  //     ...prev,
+  //     {
+  //       id: nanoid(),
+  //       order: prev.length + 1,
+  //       text: "",
+  //     },
+  //   ]);
+  // }
 
-  function removeStep(stepId: string) {
-    setSteps((prev) =>
-      prev
-        .filter((s) => s.id !== stepId)
-        .map((s, index) => ({
-          ...s,
-          order: index + 1,
-        })),
-    );
-  }
+  // function removeStep(stepId: string) {
+  //   setSteps((prev) =>
+  //     prev
+  //       .filter((s) => s.id !== stepId)
+  //       .map((s, index) => ({
+  //         ...s,
+  //         order: index + 1,
+  //       })),
+  //   );
+  // }
 
-  function mapStepsForApi(recipeId: string, steps: RecipeStepDraft[]) {
-    return {
-      recipe_id: recipeId,
-      steps: steps
-        .filter((s) => s.text.trim().length > 0)
-        .map((s, index) => ({
-          step_number: index + 1,
-          instruction: s.text.trim(),
-          timer_sec: null,
-        })),
-    };
-  }
+  // function mapStepsForApi(recipeId: string, steps: RecipeStepDraft[]) {
+  //   return {
+  //     recipe_id: recipeId,
+  //     steps: steps
+  //       .filter((s) => s.text.trim().length > 0)
+  //       .map((s, index) => ({
+  //         step_number: index + 1,
+  //         instruction: s.text.trim(),
+  //         timer_sec: null,
+  //       })),
+  //   };
+  // }
 
-  const productIds = useMemo(
-    () => ingredients.map((i) => i.product_id).filter(Boolean) as string[],
-    [ingredients],
-  );
+  // const productIds = useMemo(
+  //   () => ingredients.map((i) => i.product_id).filter(Boolean) as string[],
+  //   [ingredients],
+  // );
 
-  const productNutrientsMap = useProductNutrients(productIds);
+  // const productNutrientsMap = useProductNutrients(productIds);
 
-  const recipeNutrients = useMemo(
-    () =>
-      aggregateRecipeNutrients(
-        ingredients.map((i) => ({
-          product_id: i.product_id!,
-          quantity_g: i.quantity_g,
-        })),
-        productNutrientsMap,
-      ),
-    [ingredients, productNutrientsMap],
-  );
+  // const recipeNutrients = useMemo(
+  //   () =>
+  //     aggregateRecipeNutrients(
+  //       ingredients.map((i) => ({
+  //         product_id: i.product_id!,
+  //         quantity_g: i.quantity_g,
+  //       })),
+  //       productNutrientsMap,
+  //     ),
+  //   [ingredients, productNutrientsMap],
+  // );
 
-  const calculatedWeight = useMemo(
-    () => ingredients.reduce((sum, i) => sum + (i.quantity_g || 0), 0),
-    [ingredients],
-  );
+  // const calculatedWeight = useMemo(
+  //   () => ingredients.reduce((sum, i) => sum + (i.quantity_g || 0), 0),
+  //   [ingredients],
+  // );
 
-  const effectiveOutputWeight = useMemo(() => {
-    // 1. Беремо базову вагу (якщо введена) або суму інгредієнтів
-    const rawWeight =
-      form.base_output_weight_g && form.base_output_weight_g > 0
-        ? form.base_output_weight_g
-        : calculatedWeight;
+  // const effectiveOutputWeight = useMemo(() => {
+  //   // 1. Беремо базову вагу (якщо введена) або суму інгредієнтів
+  //   const rawWeight =
+  //     form.base_output_weight_g && form.base_output_weight_g > 0
+  //       ? form.base_output_weight_g
+  //       : calculatedWeight;
 
-    // 2. Якщо є контейнер — віднімаємо
-    if (form.container_weight_g && form.container_weight_g > 0) {
-      return Math.max(rawWeight - form.container_weight_g, 0);
-    }
+  //   // 2. Якщо є контейнер — віднімаємо
+  //   if (form.container_weight_g && form.container_weight_g > 0) {
+  //     return Math.max(rawWeight - form.container_weight_g, 0);
+  //   }
 
-    return rawWeight;
-  }, [form.base_output_weight_g, form.container_weight_g, calculatedWeight]);
+  //   return rawWeight;
+  // }, [form.base_output_weight_g, form.container_weight_g, calculatedWeight]);
 
-  async function handleSubmit() {
-    setLoading(true);
+  // async function handleSubmit() {
+  //   setLoading(true);
 
-    setSaveError(null);
-    setSaveSuccess(null);
-    setPublishError(null);
-    setPublishSuccess(null);
-    setPublishErrors([]);
+  //   setSaveError(null);
+  //   setSaveSuccess(null);
+  //   setPublishError(null);
+  //   setPublishSuccess(null);
+  //   setPublishErrors([]);
 
-    try {
-      const recipePayload: RecipeCreatePayload = {
-        ...form,
-        recipe_author_id: recipeAuthorId,
-        base_output_weight_g:
-          form.base_output_weight_g && form.base_output_weight_g > 0
-            ? form.base_output_weight_g
-            : effectiveOutputWeight,
-      };
+  //   try {
+  //     const recipePayload: RecipeCreatePayload = {
+  //       ...form,
+  //       recipe_author_id: recipeAuthorId,
+  //       base_output_weight_g:
+  //         form.base_output_weight_g && form.base_output_weight_g > 0
+  //           ? form.base_output_weight_g
+  //           : effectiveOutputWeight,
+  //     };
 
-      const recipeId = await saveRecipeMeta(recipePayload);
+  //     const recipeId = await saveRecipeMeta(recipePayload);
 
-      if (isEdit) {
-        await resetChildren(recipeId);
-      }
+  //     if (isEdit) {
+  //       await resetChildren(recipeId);
+  //     }
 
-      await saveChildren(recipeId);
-      await fetch(`/api/recipes/${recipeId}/recalculate-nutrients`, {
-        method: "POST",
-      });
+  //     await saveChildren(recipeId);
+  //     await fetch(`/api/recipes/${recipeId}/recalculate-nutrients`, {
+  //       method: "POST",
+  //     });
 
-      setSaveSuccess(
-        isEdit ? "Рецепт успішно оновлено" : "Рецепт успішно створено",
-      );
-    } catch (error) {
-      setSaveError(
-        error instanceof Error ? error.message : "Помилка збереження рецепта",
-      );
-    } finally {
-      setLoading(false);
-    }
-  }
+  //     setSaveSuccess(
+  //       isEdit ? "Рецепт успішно оновлено" : "Рецепт успішно створено",
+  //     );
+  //   } catch (error) {
+  //     setSaveError(
+  //       error instanceof Error ? error.message : "Помилка збереження рецепта",
+  //     );
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // }
 
-  async function saveRecipeMeta(payload: RecipeCreatePayload): Promise<string> {
-    if (isEdit) {
-      await fetch(`/api/recipes/${payload.recipe_id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
+  // async function saveRecipeMeta(payload: RecipeCreatePayload): Promise<string> {
+  //   if (isEdit) {
+  //     await fetch(`/api/recipes/${payload.recipe_id}`, {
+  //       method: "PUT",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify(payload),
+  //     });
 
-      return payload.recipe_id!;
-    }
+  //     return payload.recipe_id!;
+  //   }
 
-    const res = await fetch("/api/recipes", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
+  //   const res = await fetch("/api/recipes", {
+  //     method: "POST",
+  //     headers: { "Content-Type": "application/json" },
+  //     body: JSON.stringify(payload),
+  //   });
 
-    const data = await res.json();
+  //   const data = await res.json();
 
-    if (!data.recipe_id) {
-      throw new Error("Recipe ID not returned");
-    }
+  //   if (!data.recipe_id) {
+  //     throw new Error("Recipe ID not returned");
+  //   }
 
-    setForm((prev) => ({
-      ...prev,
-      recipe_id: data.recipe_id,
-    }));
+  //   setForm((prev) => ({
+  //     ...prev,
+  //     recipe_id: data.recipe_id,
+  //   }));
 
-    return data.recipe_id;
-  }
+  //   return data.recipe_id;
+  // }
 
-  async function resetChildren(recipeId: string) {
-    await fetch(`/api/recipes/${recipeId}/reset-children`, {
-      method: "POST",
-    });
-  }
+  // async function resetChildren(recipeId: string) {
+  //   await fetch(`/api/recipes/${recipeId}/reset-children`, {
+  //     method: "POST",
+  //   });
+  // }
 
-  async function saveChildren(recipeId: string) {
-    // Cuisines
-    if (cuisineIds.length > 0) {
-      await fetch("/api/recipes/cuisines", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          recipe_id: recipeId,
-          cuisine_ids: cuisineIds,
-        }),
-      });
-    }
+  // async function saveChildren(recipeId: string) {
+  //   // Cuisines
+  //   if (cuisineIds.length > 0) {
+  //     await fetch("/api/recipes/cuisines", {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify({
+  //         recipe_id: recipeId,
+  //         cuisine_ids: cuisineIds,
+  //       }),
+  //     });
+  //   }
 
-    // Ingredients
-    if (ingredients.length > 0) {
-      const ingredientsPayload = mapIngredientsForApi(recipeId, ingredients);
+  //   // Ingredients
+  //   if (ingredients.length > 0) {
+  //     const ingredientsPayload = mapIngredientsForApi(recipeId, ingredients);
 
-      await fetch("/api/recipes/ingredients", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(ingredientsPayload),
-      });
-    }
+  //     await fetch("/api/recipes/ingredients", {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify(ingredientsPayload),
+  //     });
+  //   }
 
-    // Steps
-    if (steps.length > 0) {
-      const stepsPayload = mapStepsForApi(recipeId, steps);
+  //   // Steps
+  //   if (steps.length > 0) {
+  //     const stepsPayload = mapStepsForApi(recipeId, steps);
 
-      await fetch("/api/recipes/steps", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(stepsPayload),
-      });
-    }
+  //     await fetch("/api/recipes/steps", {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify(stepsPayload),
+  //     });
+  //   }
 
-    // Dietary tags
-    if (dietaryTagIds.length > 0) {
-      await fetch("/api/recipes/dietary-tags", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          recipe_id: recipeId,
-          dietary_tag_ids: dietaryTagIds,
-        }),
-      });
-    }
+  //   // Dietary tags
+  //   if (dietaryTagIds.length > 0) {
+  //     await fetch("/api/recipes/dietary-tags", {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify({
+  //         recipe_id: recipeId,
+  //         dietary_tag_ids: dietaryTagIds,
+  //       }),
+  //     });
+  //   }
 
-    // Videos
-    if (videos.length > 0) {
-      await fetch("/api/recipe-videos", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          recipe_id: recipeId,
-          videos: videos
-            .filter((v) => v.url.trim().length > 0)
-            .map((v) => ({
-              platform: v.platform,
-              url: v.url.trim(),
-              recipe_author_id: v.recipe_author_id ?? recipeAuthorId,
-            })),
-        }),
-      });
-    }
-  }
+  //   // Videos
+  //   if (videos.length > 0) {
+  //     await fetch("/api/recipe-videos", {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify({
+  //         recipe_id: recipeId,
+  //         videos: videos
+  //           .filter((v) => v.url.trim().length > 0)
+  //           .map((v) => ({
+  //             platform: v.platform,
+  //             url: v.url.trim(),
+  //             recipe_author_id: v.recipe_author_id ?? recipeAuthorId,
+  //           })),
+  //       }),
+  //     });
+  //   }
+  // }
 
-  async function handlePublish() {
-    setPublishError(null);
-    setPublishSuccess(null);
-    setSaveError(null);
+  // async function handlePublish() {
+  //   setPublishError(null);
+  //   setPublishSuccess(null);
+  //   setSaveError(null);
 
-    const result = validateRecipeForPublish(form, ingredients, steps, {
-      cuisineIds,
-      dietaryTagIds,
-    });
+  //   const result = validateRecipeForPublish(form, ingredients, steps, {
+  //     cuisineIds,
+  //     dietaryTagIds,
+  //   });
 
-    if (!result.valid) {
-      setPublishErrors(result.errors);
-      return;
-    }
+  //   if (!result.valid) {
+  //     setPublishErrors(result.errors);
+  //     return;
+  //   }
 
-    if (!form.recipe_id) {
-      setPublishError("Спочатку збережіть рецепт");
-      return;
-    }
+  //   if (!form.recipe_id) {
+  //     setPublishError("Спочатку збережіть рецепт");
+  //     return;
+  //   }
 
-    try {
-      await fetch("/api/recipes/publish", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          recipe_id: form.recipe_id,
-        }),
-      });
+  //   try {
+  //     await fetch("/api/recipes/publish", {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify({
+  //         recipe_id: form.recipe_id,
+  //       }),
+  //     });
 
-      setPublishSuccess("Рецепт успішно опубліковано");
-    } catch (err) {
-      setPublishError(
-        err instanceof Error ? err.message : "Помилка публікації рецепта",
-      );
-    }
-  }
+  //     setPublishSuccess("Рецепт успішно опубліковано");
+  //   } catch (err) {
+  //     setPublishError(
+  //       err instanceof Error ? err.message : "Помилка публікації рецепта",
+  //     );
+  //   }
+  // }
 
   return (
     <div className="max-w-3xl space-y-6">
@@ -437,15 +442,15 @@ export function RecipeForm({ mode, initialData }: Props) {
         <input
           className="w-full rounded border px-3 py-2"
           placeholder="Recipe title"
-          value={form.title}
-          onChange={(e) => setForm({ ...form, title: e.target.value })}
+          // value={form.title}
+          // onChange={(e) => setForm({ ...form, title: e.target.value })}
         />
 
         <textarea
           className="w-full rounded border px-3 py-2"
           placeholder="Description"
-          value={form.description}
-          onChange={(e) => setForm({ ...form, description: e.target.value })}
+          // value={form.description}
+          // onChange={(e) => setForm({ ...form, description: e.target.value })}
         />
       </div>
 
@@ -460,13 +465,13 @@ export function RecipeForm({ mode, initialData }: Props) {
             min={0}
             placeholder="Підготовка (хв)"
             className="rounded border px-3 py-2"
-            value={form.prep_time_min ?? ""}
-            onChange={(e) =>
-              setForm({
-                ...form,
-                prep_time_min: Number(e.target.value) || undefined,
-              })
-            }
+            // value={form.prep_time_min ?? ""}
+            // onChange={(e) =>
+            //   setForm({
+            //     ...form,
+            //     prep_time_min: Number(e.target.value) || undefined,
+            //   })
+            // }
           />
 
           <input
@@ -474,28 +479,28 @@ export function RecipeForm({ mode, initialData }: Props) {
             min={0}
             placeholder="Приготування (хв)"
             className="rounded border px-3 py-2"
-            value={form.cook_time_min ?? ""}
-            onChange={(e) =>
-              setForm({
-                ...form,
-                cook_time_min: Number(e.target.value) || undefined,
-              })
-            }
+            // value={form.cook_time_min ?? ""}
+            // onChange={(e) =>
+            //   setForm({
+            //     ...form,
+            //     cook_time_min: Number(e.target.value) || undefined,
+            //   })
+            // }
           />
         </div>
 
         {/* Difficulty */}
         <select
           className="w-full rounded border px-3 py-2"
-          value={form.difficulty ?? ""}
-          onChange={(e) => {
-            const value = e.target.value as "" | "easy" | "medium" | "hard";
+          // value={form.difficulty ?? ""}
+          // onChange={(e) => {
+          //   const value = e.target.value as "" | "easy" | "medium" | "hard";
 
-            setForm({
-              ...form,
-              difficulty: value === "" ? undefined : value,
-            });
-          }}
+          //   setForm({
+          //     ...form,
+          //     difficulty: value === "" ? undefined : value,
+          //   });
+          // }}
         >
           <option value="">Складність</option>
           <option value="easy">Легко</option>
@@ -504,7 +509,7 @@ export function RecipeForm({ mode, initialData }: Props) {
         </select>
 
         {/* Photo */}
-        <RecipePhotoUploader
+        {/* <RecipePhotoUploader
           photos={form.photos}
           onChange={(photos) =>
             setForm((prev) => ({
@@ -518,30 +523,30 @@ export function RecipeForm({ mode, initialData }: Props) {
               photo_url: url || undefined,
             }))
           }
-        />
+        /> */}
       </div>
 
-      {!cuisinesLoading && (
+      {/* {!cuisinesLoading && (
         <CuisineSelector
           items={cuisines}
           value={cuisineIds}
           onChange={setCuisineIds}
         />
-      )}
+      )} */}
 
       <select
-        value={form.recipe_type_id ?? ""}
-        onChange={(e) =>
-          setForm({ ...form, recipe_type_id: Number(e.target.value) })
-        }
+        // value={form.recipe_type_id ?? ""}
+        // onChange={(e) =>
+        //   setForm({ ...form, recipe_type_id: Number(e.target.value) })
+        // }
         className="w-full rounded border px-3 py-2"
       >
         <option value="">Тип страви</option>
-        {recipeTypes.map((type) => (
+        {/* {recipeTypes.map((type) => (
           <option key={type.recipe_type_id} value={type.recipe_type_id}>
             {type.name.ua}
           </option>
-        ))}
+        ))} */}
       </select>
       {/* Portions */}
       <div className="grid grid-cols-3 gap-3">
@@ -550,13 +555,13 @@ export function RecipeForm({ mode, initialData }: Props) {
           min={1}
           className="rounded border px-3 py-2"
           placeholder="Servings"
-          value={form.base_servings}
-          onChange={(e) =>
-            setForm({
-              ...form,
-              base_servings: Number(e.target.value),
-            })
-          }
+          // value={form.base_servings}
+          // onChange={(e) =>
+          //   setForm({
+          //     ...form,
+          //     base_servings: Number(e.target.value),
+          //   })
+          // }
         />
 
         <input
@@ -564,13 +569,13 @@ export function RecipeForm({ mode, initialData }: Props) {
           min={0}
           className="rounded border px-3 py-2"
           placeholder="Output weight (g)"
-          value={form.base_output_weight_g}
-          onChange={(e) =>
-            setForm({
-              ...form,
-              base_output_weight_g: Number(e.target.value),
-            })
-          }
+          // value={form.base_output_weight_g}
+          // onChange={(e) =>
+          //   setForm({
+          //     ...form,
+          //     base_output_weight_g: Number(e.target.value),
+          //   })
+          // }
         />
 
         <input
@@ -578,27 +583,27 @@ export function RecipeForm({ mode, initialData }: Props) {
           min={0}
           className="rounded border px-3 py-2"
           placeholder="Container weight (g)"
-          value={form.container_weight_g ?? ""}
-          onChange={(e) =>
-            setForm({
-              ...form,
-              container_weight_g: Number(e.target.value),
-            })
-          }
+          // value={form.container_weight_g ?? ""}
+          // onChange={(e) =>
+          //   setForm({
+          //     ...form,
+          //     container_weight_g: Number(e.target.value),
+          //   })
+          // }
         />
       </div>
-      {form.container_weight_g && form.container_weight_g > 0 && (
+      {/* {form.container_weight_g && form.container_weight_g > 0 && (
         <div className="text-sm text-gray-500">
           Фактична вага страви:{" "}
           <span className="font-medium">{effectiveOutputWeight} г</span>
           <span className="ml-1">(без контейнера)</span>
         </div>
-      )}
+      )} */}
       {/* === Інгредієнти === */}
       <div className="space-y-3">
         <h2 className="font-medium">Інгредієнти</h2>
 
-        {ingredients.map((ingredient) => (
+        {/* {ingredients.map((ingredient) => (
           <IngredientRow
             key={ingredient.id}
             ingredient={ingredient}
@@ -613,11 +618,11 @@ export function RecipeForm({ mode, initialData }: Props) {
               )
             }
           />
-        ))}
+        ))} */}
 
         <button
           type="button"
-          onClick={addIngredient}
+          // onClick={addIngredient}
           className="rounded border px-3 py-1 text-sm"
         >
           + Додати інгредієнт
@@ -627,7 +632,7 @@ export function RecipeForm({ mode, initialData }: Props) {
       <div className="space-y-3">
         <h2 className="font-medium">Кроки приготування</h2>
 
-        {steps.map((step) => (
+        {/* {steps.map((step) => (
           <StepRow
             key={step.id}
             step={step}
@@ -636,11 +641,11 @@ export function RecipeForm({ mode, initialData }: Props) {
             }
             onRemove={() => removeStep(step.id)}
           />
-        ))}
+        ))} */}
 
         <button
           type="button"
-          onClick={addStep}
+          // onClick={addStep}
           className="rounded border px-3 py-1 text-sm"
         >
           + Додати крок
@@ -648,7 +653,7 @@ export function RecipeForm({ mode, initialData }: Props) {
       </div>
 
       {/* === Попередній перегляд рецепта === */}
-      {ingredients.length > 0 &&
+      {/* {ingredients.length > 0 &&
         form.base_servings > 0 &&
         Object.keys(recipeNutrients).length > 0 && (
           <RecipePreview
@@ -665,10 +670,10 @@ export function RecipeForm({ mode, initialData }: Props) {
           value={dietaryTagIds}
           onChange={setDietaryTagIds}
         />
-      )}
+      )} */}
 
       {/* === Автор рецепта === */}
-      <RecipeAuthorSelector
+      {/* <RecipeAuthorSelector
         value={recipeAuthorId}
         items={recipeAuthors}
         onChange={setRecipeAuthorId}
@@ -676,10 +681,10 @@ export function RecipeForm({ mode, initialData }: Props) {
           setRecipeAuthors((prev) => [...prev, author]);
           setRecipeAuthorId(author.recipe_author_id);
         }}
-      />
+      /> */}
 
       {/* === Відео рецепта === */}
-      <div className="space-y-3">
+      {/* <div className="space-y-3">
         <h2 className="font-medium">Відео рецепта</h2>
 
         {videos.map((video) => (
@@ -729,9 +734,9 @@ export function RecipeForm({ mode, initialData }: Props) {
               ✕
             </button>
           </div>
-        ))}
+        ))} */}
 
-        <button
+      {/* <button
           type="button"
           onClick={() =>
             setVideos((prev) => [
@@ -747,11 +752,11 @@ export function RecipeForm({ mode, initialData }: Props) {
           className="rounded border px-3 py-1 text-sm"
         >
           + Додати відео
-        </button>
-      </div>
+        </button> */}
+      {/* </div> */}
 
       {/* Actions */}
-      <div className="flex gap-3">
+      {/* <div className="flex gap-3">
         <button
           onClick={handleSubmit}
           disabled={loading}
@@ -766,37 +771,37 @@ export function RecipeForm({ mode, initialData }: Props) {
         >
           Опублікувати
         </button>
-      </div>
+      </div> */}
       {/* Save success */}
-      {saveSuccess && (
+      {/* {saveSuccess && (
         <div className="rounded border border-green-300 bg-green-50 p-3 text-sm text-green-700">
           {saveSuccess}
         </div>
-      )}
+      )} */}
 
       {/* Save error */}
-      {saveError && (
+      {/* {saveError && (
         <div className="rounded border border-red-300 bg-red-50 p-3 text-sm text-red-700">
           {saveError}
         </div>
-      )}
+      )} */}
 
       {/* Publish success */}
-      {publishSuccess && (
+      {/* {publishSuccess && (
         <div className="rounded border border-green-300 bg-green-50 p-3 text-sm text-green-700">
           {publishSuccess}
         </div>
-      )}
+      )} */}
 
       {/* Publish error */}
-      {publishError && (
+      {/* {publishError && (
         <div className="rounded border border-red-300 bg-red-50 p-3 text-sm text-red-700">
           {publishError}
         </div>
-      )}
+      )} */}
 
       {/* Validation errors */}
-      {publishErrors.length > 0 && (
+      {/* {publishErrors.length > 0 && (
         <div className="rounded border border-red-300 bg-red-50 p-3 text-sm">
           <ul className="list-disc pl-5">
             {publishErrors.map((err) => (
@@ -804,7 +809,7 @@ export function RecipeForm({ mode, initialData }: Props) {
             ))}
           </ul>
         </div>
-      )}
+      )} */}
     </div>
   );
 }
