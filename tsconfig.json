@@ -29,7 +29,21 @@
     "**/*.ts",
     "**/*.tsx"
   ],
-  "exclude": ["node_modules", "apps/api-express", "packages/db/dist", "**/dist"]
+  "exclude": [
+    "node_modules",
+    "apps/api-express",
+    "apps/web-admin",
+    "apps/web-client",
+    "packages/db/dist",
+    "**/dist",
+    "components",
+    "lib",
+    "domains",
+    "app",
+    "hooks",
+    "types",
+    "scripts"
+  ]
 }
 // {
 //   "compilerOptions": {
