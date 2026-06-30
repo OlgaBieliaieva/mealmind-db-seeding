@@ -1,7 +1,11 @@
 "use client";
 
 import Image from "next/image";
+
 import { MemberMealTypeSection } from "./MemberMealTypeSection";
+import { MemberNutritionCard } from "./MemberNutritionCard";
+import EnergyBattery from "./nutrition/EnergyBattery";
+
 import {
   AggregatedMemberMealTypeGroupDTO,
   AggregatedMemberRefDTO,
@@ -14,6 +18,7 @@ type Props = {
   summary: AggregatedSummaryDTO;
   nutrition?: AggregatedNutritionSnapshotDTO;
   byMealType: AggregatedMemberMealTypeGroupDTO[];
+  compact?: boolean;
 };
 
 export function MemberSectionCard({
@@ -21,6 +26,7 @@ export function MemberSectionCard({
   summary,
   nutrition,
   byMealType,
+  compact = false,
 }: Props) {
   const defaultAvatar =
     member.sex === "female"
@@ -31,11 +37,11 @@ export function MemberSectionCard({
     summary.totalItems === 0 ? 0 : summary.preparedItems / summary.totalItems;
 
   return (
-    <section className="rounded-2xl border bg-white shadow-sm overflow-hidden">
-      <div className="px-4 py-4 border-b bg-gray-50 space-y-3">
+    <section className="overflow-hidden rounded-2xl border bg-white shadow-sm">
+      <div className="space-y-3 border-b bg-gray-50 px-4 py-4">
         <div className="flex items-center justify-between gap-4">
-          <div className="flex items-center gap-3 min-w-0">
-            <div className="relative w-10 h-10 rounded-full overflow-hidden bg-gray-100 shrink-0">
+          <div className="flex min-w-0 items-center gap-3">
+            <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-full bg-gray-100">
               <Image
                 src={member.avatarUrl || defaultAvatar}
                 alt={member.firstName}
@@ -46,51 +52,61 @@ export function MemberSectionCard({
             </div>
 
             <div className="min-w-0">
-              <div className="font-medium text-gray-900 truncate">
+              <div className="truncate font-medium text-gray-900">
                 {member.firstName}
               </div>
               <div className="text-xs text-gray-500">
-                {summary.preparedItems}/{summary.totalItems} готово
+                {byMealType.length} прийом(и) їжі • {summary.totalItems} позицій
               </div>
             </div>
           </div>
 
-          <div className="w-20 shrink-0">
-            <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-              <div
-                className="h-full bg-green-500 transition-all"
-                style={{ width: `${progress * 100}%` }}
+          {nutrition?.energyPercent !== undefined &&
+          nutrition.energyStatus !== undefined ? (
+            <div className="w-28 shrink-0">
+              <EnergyBattery
+                percent={nutrition.energyPercent}
+                status={nutrition.energyStatus}
+                label="Енергія"
               />
             </div>
-          </div>
+          ) : (
+            <div className="w-20 shrink-0">
+              <div className="h-2 overflow-hidden rounded-full bg-gray-200">
+                <div
+                  className="h-full bg-green-500 transition-all"
+                  style={{ width: `${progress * 100}%` }}
+                />
+              </div>
+            </div>
+          )}
         </div>
-
-        {nutrition && (
-          <div className="flex flex-wrap gap-2 text-xs text-gray-600">
-            <span className="rounded-full bg-white px-2.5 py-1 border">
-              {Math.round(nutrition.energyKcal)} ккал
-            </span>
-            <span className="rounded-full bg-white px-2.5 py-1 border">
-              Б {nutrition.protein.toFixed(0)} г
-            </span>
-            <span className="rounded-full bg-white px-2.5 py-1 border">
-              Ж {nutrition.fat.toFixed(0)} г
-            </span>
-            <span className="rounded-full bg-white px-2.5 py-1 border">
-              В {nutrition.carbs.toFixed(0)} г
-            </span>
-          </div>
-        )}
       </div>
 
-      <div className="p-3 space-y-3">
-        {byMealType.map((group) => (
-          <MemberMealTypeSection
-            key={group.mealType.id}
-            group={group}
-            memberId={member.id}
-          />
-        ))}
+      <div className="space-y-3 p-3">
+        <MemberNutritionCard nutrition={nutrition} compact={compact} />
+
+        {compact ? (
+          <div className="flex flex-wrap gap-2">
+            {byMealType.map((group) => (
+              <span
+                key={group.mealType.id}
+                className="rounded-full border border-green-100 bg-green-50 px-3 py-1 text-xs text-green-800"
+              >
+                {group.mealType.name}:{" "}
+                {Math.round(group.nutrition?.energyKcal ?? 0)} ккал
+              </span>
+            ))}
+          </div>
+        ) : (
+          byMealType.map((group) => (
+            <MemberMealTypeSection
+              key={group.mealType.id}
+              group={group}
+              memberId={member.id}
+            />
+          ))
+        )}
       </div>
     </section>
   );

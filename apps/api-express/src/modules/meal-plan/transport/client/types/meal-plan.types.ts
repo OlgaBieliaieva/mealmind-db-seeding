@@ -4,6 +4,7 @@ export const mealEntryInclude = {
   mealType: {
     select: {
       id: true,
+      code: true,
       nameUa: true,
       orderIndex: true,
     },
@@ -13,7 +14,47 @@ export const mealEntryInclude = {
       id: true,
       firstName: true,
       sex: true,
+      birthDate: true,
+      heightCm: true,
       avatarUrl: true,
+
+      nutrientTargets: {
+        select: {
+          targetValue: true,
+          calculated: true,
+          nutrient: {
+            select: {
+              code: true,
+            },
+          },
+        },
+      },
+
+      bodyMetrics: {
+        orderBy: {
+          createdAt: "desc",
+        },
+        take: 1,
+        select: {
+          weightKg: true,
+          activityLevel: true,
+          goal: true,
+          goalRate: true,
+          createdAt: true,
+        },
+      },
+
+      mealSettings: {
+        orderBy: {
+          createdAt: "desc",
+        },
+        take: 1,
+        select: {
+          mealsPerDay: true,
+          snacksEnabled: true,
+          createdAt: true,
+        },
+      },
     },
   },
   recipe: {
@@ -35,6 +76,18 @@ export const mealEntryInclude = {
           nameUa: true,
         },
       },
+
+      nutrients: {
+        select: {
+          valueTotal: true,
+          unit: true,
+          nutrient: {
+            select: {
+              code: true,
+            },
+          },
+        },
+      },
     },
   },
   product: {
@@ -47,6 +100,17 @@ export const mealEntryInclude = {
           id: true,
           nameEn: true,
           nameUa: true,
+        },
+      },
+      nutrients: {
+        select: {
+          valuePer100g: true,
+          unit: true,
+          nutrient: {
+            select: {
+              code: true,
+            },
+          },
         },
       },
     },

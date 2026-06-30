@@ -5,8 +5,13 @@ import {
   AggregatedMealTypeGroupDTO,
   AggregatedMealTypeRefDTO,
   AggregatedMemberGroupDTO,
+  AggregatedMemberMealTypeGroupDTO,
   AggregatedSummaryDTO,
 } from "../../../dto/aggregated-meal-plan.dto";
+import {
+  makeMealTypeNutritionSnapshot,
+  makeNutritionSnapshot,
+} from "../../../domain/nutrition/member-nutrition.helpers";
 
 type AggregateMode = "all" | "mealType";
 
@@ -50,9 +55,11 @@ function buildAggregatedItems(
           : entry.product!.category.nameUa,
 
         photoUrl: isRecipe ? (entry.recipe!.photoUrl ?? undefined) : undefined,
+
         totalTime: isRecipe
           ? (entry.recipe!.prepTimeMin ?? 0) + (entry.recipe!.cookTimeMin ?? 0)
           : undefined,
+
         difficulty: isRecipe
           ? (entry.recipe!.difficulty ?? undefined)
           : undefined,
@@ -230,7 +237,7 @@ function buildMemberView(
   const memberGroups: AggregatedMemberGroupDTO[] = members.map((member) => {
     const memberEntries = entries.filter((entry) => entry.userId === member.id);
 
-    const byMealType = mealTypes
+    const byMealType: AggregatedMemberMealTypeGroupDTO[] = mealTypes
       .map((mealType) => {
         const mealEntries = memberEntries.filter(
           (entry) => entry.mealTypeId === mealType.id,
@@ -241,7 +248,7 @@ function buildMemberView(
         return {
           mealType,
           summary: makeSummary(items),
-          nutrition: undefined,
+          nutrition: makeMealTypeNutritionSnapshot(mealEntries),
           items,
         };
       })
@@ -252,7 +259,7 @@ function buildMemberView(
     return {
       member,
       summary: makeSummary(memberItems),
-      nutrition: undefined,
+      nutrition: makeNutritionSnapshot(memberEntries),
       byMealType,
     };
   });
