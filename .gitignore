@@ -44,3 +44,10 @@ next-env.d.ts
 /lib/generated/prisma
 prisma/generated
 BACKLOG.md
+/app
+/components
+/hooks
+/types
+/next.config.ts
+/next-env.d.ts
+/postcss.config.mjs
