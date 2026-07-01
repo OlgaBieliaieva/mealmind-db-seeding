@@ -217,6 +217,7 @@ function buildMealView(
 
 function buildMemberView(
   entries: MealEntryWithRelations[],
+  periodDaysCount: number,
 ): AggregatedMealPlanDTO["views"]["member"] {
   const members = Array.from(
     new Map(
@@ -248,7 +249,10 @@ function buildMemberView(
         return {
           mealType,
           summary: makeSummary(items),
-          nutrition: makeMealTypeNutritionSnapshot(mealEntries),
+          nutrition: makeMealTypeNutritionSnapshot(
+            mealEntries,
+            periodDaysCount,
+          ),
           items,
         };
       })
@@ -259,7 +263,7 @@ function buildMemberView(
     return {
       member,
       summary: makeSummary(memberItems),
-      nutrition: makeNutritionSnapshot(memberEntries),
+      nutrition: makeNutritionSnapshot(memberEntries, periodDaysCount),
       byMealType,
     };
   });
@@ -286,11 +290,12 @@ function buildMemberView(
 
 export function mapToAggregatedMealPlan(
   entries: MealEntryWithRelations[],
+  periodDaysCount: number,
 ): AggregatedMealPlanDTO {
   return {
     views: {
       meal: buildMealView(entries),
-      member: buildMemberView(entries),
+      member: buildMemberView(entries, periodDaysCount),
     },
   };
 }
