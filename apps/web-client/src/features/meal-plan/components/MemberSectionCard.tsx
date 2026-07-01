@@ -2,10 +2,6 @@
 
 import Image from "next/image";
 
-import { MemberMealTypeSection } from "./MemberMealTypeSection";
-import { MemberNutritionCard } from "./MemberNutritionCard";
-import EnergyBattery from "./nutrition/EnergyBattery";
-
 import {
   AggregatedMemberMealTypeGroupDTO,
   AggregatedMemberRefDTO,
@@ -13,12 +9,16 @@ import {
   AggregatedSummaryDTO,
 } from "@/shared/types/meal-plan.types";
 
+import { InfoTooltip } from "./InfoTooltip";
+import { MemberMealTypeSection } from "./MemberMealTypeSection";
+import { MemberNutritionOverview } from "./MemberNutritionOverview";
+
 type Props = {
   member: AggregatedMemberRefDTO;
   summary: AggregatedSummaryDTO;
   nutrition?: AggregatedNutritionSnapshotDTO;
   byMealType: AggregatedMemberMealTypeGroupDTO[];
-  compact?: boolean;
+  selectedDays: string[];
 };
 
 export function MemberSectionCard({
@@ -26,15 +26,12 @@ export function MemberSectionCard({
   summary,
   nutrition,
   byMealType,
-  compact = false,
+  selectedDays,
 }: Props) {
   const defaultAvatar =
     member.sex === "female"
       ? "/avatars/default-female.jpg"
       : "/avatars/default-male.jpg";
-
-  const progress =
-    summary.totalItems === 0 ? 0 : summary.preparedItems / summary.totalItems;
 
   return (
     <section className="overflow-hidden rounded-2xl border bg-white shadow-sm">
@@ -56,56 +53,46 @@ export function MemberSectionCard({
                 {member.firstName}
               </div>
               <div className="text-xs text-gray-500">
+                {selectedDays.length === 1 ? "1 день" : `${selectedDays.length} днів`} •{" "}
                 {byMealType.length} прийом(и) їжі • {summary.totalItems} позицій
               </div>
             </div>
           </div>
 
-          {nutrition?.energyPercent !== undefined &&
-          nutrition.energyStatus !== undefined ? (
-            <div className="w-28 shrink-0">
-              <EnergyBattery
-                percent={nutrition.energyPercent}
-                status={nutrition.energyStatus}
-                label="Енергія"
-              />
-            </div>
-          ) : (
-            <div className="w-20 shrink-0">
-              <div className="h-2 overflow-hidden rounded-full bg-gray-200">
-                <div
-                  className="h-full bg-green-500 transition-all"
-                  style={{ width: `${progress * 100}%` }}
-                />
-              </div>
-            </div>
-          )}
+          <InfoTooltip
+            title="Профіль члена родини"
+            description="Тут показано загальну оцінку плану для конкретної людини, а нижче - деталізацію по прийомах їжі."
+            align="right"
+            side="bottom"
+          />
         </div>
       </div>
 
-      <div className="space-y-3 p-3">
-        <MemberNutritionCard nutrition={nutrition} compact={compact} />
+      <div className="space-y-4 p-3">
+        <MemberNutritionOverview
+          nutrition={nutrition}
+          selectedDays={selectedDays}
+        />
 
-        {compact ? (
-          <div className="flex flex-wrap gap-2">
-            {byMealType.map((group) => (
-              <span
-                key={group.mealType.id}
-                className="rounded-full border border-green-100 bg-green-50 px-3 py-1 text-xs text-green-800"
-              >
-                {group.mealType.name}:{" "}
-                {Math.round(group.nutrition?.energyKcal ?? 0)} ккал
-              </span>
-            ))}
+        {!!byMealType.length && (
+          <div className="px-1 text-sm font-medium text-gray-900">
+            По прийомах їжі
           </div>
-        ) : (
-          byMealType.map((group) => (
-            <MemberMealTypeSection
-              key={group.mealType.id}
-              group={group}
-              memberId={member.id}
-            />
-          ))
+        )}
+
+        {byMealType.map((group) => (
+          <MemberMealTypeSection
+            key={group.mealType.id}
+            group={group}
+            memberId={member.id}
+          />
+        ))}
+
+        {!byMealType.length && (
+          <div className="rounded-2xl border border-dashed border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-500">
+            У вибраному періоді ще немає запланованих прийомів їжі для цього
+            члена родини.
+          </div>
         )}
       </div>
     </section>

@@ -1,19 +1,33 @@
 "use client";
 
-import { useMemo, useState } from "react";
-
-import { MemberTabs } from "./MemberTabs";
-import { MemberViewSummary } from "./MemberViewSummary";
-import { MemberSectionCard } from "./MemberSectionCard";
+import { useMemo, useRef, useState } from "react";
 
 import { AggregatedMemberViewDTO } from "@/shared/types/meal-plan.types";
+
+import { usePlanParams } from "../hooks/usePlanParams";
+
+import { FamilyMembersOverview } from "./FamilyMembersOverview";
+import { MemberOverviewCard } from "./MemberOverviewCard";
+import { MemberSectionCard } from "./MemberSectionCard";
+import { MemberTabs } from "./MemberTabs";
 
 type Props = {
   aggregated: AggregatedMemberViewDTO;
 };
 
 export function MemberView({ aggregated }: Props) {
+  const { selectedDays } = usePlanParams();
   const [activeMemberId, setActiveMemberId] = useState("all");
+  const containerRef = useRef<HTMLDivElement | null>(null);
+
+  const handleChangeMember = (memberId: string) => {
+    containerRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+
+    setActiveMemberId(memberId);
+  };
 
   const tabs = useMemo(
     () => [
@@ -32,47 +46,31 @@ export function MemberView({ aggregated }: Props) {
       : aggregated.members.find((group) => group.member.id === activeMemberId);
 
   return (
-    <div className="space-y-4 pb-20">
+    <div ref={containerRef} className="space-y-4 pb-20">
       <MemberTabs
         tabs={tabs}
         active={activeMemberId}
-        onChange={setActiveMemberId}
+        onChange={handleChangeMember}
       />
 
       {activeMember ? (
-        <>
-          <MemberViewSummary
-            mode="single"
-            memberName={activeMember.member.firstName}
-            summary={activeMember.summary}
-            nutrition={activeMember.nutrition}
-            mealTypesCount={activeMember.byMealType.length}
-          />
-
-          <MemberSectionCard
-            member={activeMember.member}
-            summary={activeMember.summary}
-            nutrition={activeMember.nutrition}
-            byMealType={activeMember.byMealType}
-          />
-        </>
+        <MemberSectionCard
+          member={activeMember.member}
+          summary={activeMember.summary}
+          nutrition={activeMember.nutrition}
+          byMealType={activeMember.byMealType}
+          selectedDays={selectedDays}
+        />
       ) : (
         <>
-          <MemberViewSummary
-            mode="all"
-            members={aggregated.members}
-            summary={aggregated.summary}
-          />
+          <FamilyMembersOverview members={aggregated.members} />
 
           <div className="space-y-3">
             {aggregated.members.map((group) => (
-              <MemberSectionCard
+              <MemberOverviewCard
                 key={group.member.id}
-                member={group.member}
-                summary={group.summary}
-                nutrition={group.nutrition}
-                byMealType={group.byMealType}
-                compact
+                group={group}
+                onOpen={handleChangeMember}
               />
             ))}
           </div>

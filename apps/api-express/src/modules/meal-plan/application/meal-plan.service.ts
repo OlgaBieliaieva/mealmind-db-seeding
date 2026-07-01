@@ -95,9 +95,11 @@ export class MealPlanService {
       entries = await this.repo.findEntriesByDates(plan.id, [selectedDate]);
     }
 
+    const periodDaysCount = days ? days.split(",").filter(Boolean).length : 1;
+
     return {
       week: mapToWeekView(entries, weekStart),
-      aggregated: mapToAggregatedMealPlan(entries),
+      aggregated: mapToAggregatedMealPlan(entries, periodDaysCount),
     };
   }
 
@@ -105,14 +107,12 @@ export class MealPlanService {
   // INTERNAL: NORMALIZATION
   // =========================
 
-  private async normalizeAmount(
-    entry: {
-      recipeId?: string;
-      productId?: string;
-      amount: number;
-      unit: "g" | "ml" | "portion";
-    },
-  ) {
+  private async normalizeAmount(entry: {
+    recipeId?: string;
+    productId?: string;
+    amount: number;
+    unit: "g" | "ml" | "portion";
+  }) {
     let amountInGrams = entry.amount;
 
     if (entry.unit === "portion") {
@@ -126,8 +126,7 @@ export class MealPlanService {
         throw new Error("Recipe not found");
       }
 
-      const weightPerServing =
-        recipe.baseOutputWeightG / recipe.baseServings;
+      const weightPerServing = recipe.baseOutputWeightG / recipe.baseServings;
 
       amountInGrams = entry.amount * weightPerServing;
     }

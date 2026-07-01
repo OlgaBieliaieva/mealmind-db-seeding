@@ -15,6 +15,7 @@ export type UserNutritionContext = {
   user: MealEntryWithRelations["user"];
   targets: UserTargetsMap;
   mealDistribution: MealDistributionMap;
+  periodDaysCount: number;
 };
 
 export type UserProfileForTargets = {

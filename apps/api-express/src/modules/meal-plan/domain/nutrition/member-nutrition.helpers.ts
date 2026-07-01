@@ -175,6 +175,7 @@ function evaluateAgainstTargets(
 
 export function buildUserNutritionContext(
   entries: MealEntryWithRelations[],
+  periodDaysCount: number,
 ): UserNutritionContext | undefined {
   const user = entries[0]?.user;
 
@@ -184,20 +185,26 @@ export function buildUserNutritionContext(
     user,
     targets: resolveUserTargets(user),
     mealDistribution: resolveMealDistribution(user),
+    periodDaysCount,
   };
 }
 
 export function makeNutritionSnapshot(
   entries: MealEntryWithRelations[],
+  periodDaysCount: number,
 ): AggregatedNutritionSnapshotDTO | undefined {
   if (!entries.length) return undefined;
 
   const totals = sumEntryMacros(entries);
   const percents = getMacroPercents(totals);
-  const context = buildUserNutritionContext(entries);
+  const context = buildUserNutritionContext(entries, periodDaysCount);
 
-  const evaluation = context
-    ? evaluateAgainstTargets(totals, context.targets)
+  const periodTargets = context
+    ? scaleTargetsForPeriod(context.targets, context.periodDaysCount)
+    : undefined;
+
+  const evaluation = periodTargets
+    ? evaluateAgainstTargets(totals, periodTargets)
     : {
         energyPercent: undefined,
         energyStatus: undefined,
@@ -220,12 +227,13 @@ export function makeNutritionSnapshot(
 
 export function makeMealTypeNutritionSnapshot(
   entries: MealEntryWithRelations[],
+  periodDaysCount: number,
 ): AggregatedNutritionSnapshotDTO | undefined {
   if (!entries.length) return undefined;
 
   const totals = sumEntryMacros(entries);
   const percents = getMacroPercents(totals);
-  const context = buildUserNutritionContext(entries);
+  const context = buildUserNutritionContext(entries, periodDaysCount);
 
   if (!context) {
     return {
@@ -248,11 +256,13 @@ export function makeMealTypeNutritionSnapshot(
     fallbackMealsPerDay,
   );
 
+  const periodTargets = scaleTargetsForPeriod(
+    context.targets,
+    context.periodDaysCount,
+  );
+
   const adjustedTargets = Object.fromEntries(
-    Object.entries(context.targets).map(([code, value]) => [
-      code,
-      value * share,
-    ]),
+    Object.entries(periodTargets).map(([code, value]) => [code, value * share]),
   );
 
   const evaluation = evaluateAgainstTargets(totals, adjustedTargets);
@@ -269,4 +279,16 @@ export function makeMealTypeNutritionSnapshot(
     energyStatus: evaluation.energyStatus,
     issues: evaluation.issues,
   };
+}
+
+function scaleTargetsForPeriod(
+  targets: Record<string, number>,
+  periodDaysCount: number,
+) {
+  return Object.fromEntries(
+    Object.entries(targets).map(([code, value]) => [
+      code,
+      value * periodDaysCount,
+    ]),
+  );
 }
