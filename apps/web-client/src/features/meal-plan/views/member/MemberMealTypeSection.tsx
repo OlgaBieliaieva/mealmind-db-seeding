@@ -5,8 +5,8 @@ import { useState } from "react";
 
 import { AggregatedMemberMealTypeGroupDTO } from "@/shared/types/meal-plan.types";
 
-import { MemberNutritionItemCard } from "./MemberNutritionItemCard";
-import EnergyBattery from "./nutrition/EnergyBattery";
+import { MemberNutritionItemCard } from "@/features/meal-plan/views/member/MemberNutritionItemCard";
+import EnergyBattery from "@/features/meal-plan/views/member/nutrition/EnergyBattery";
 
 type Props = {
   group: AggregatedMemberMealTypeGroupDTO;

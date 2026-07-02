@@ -1,0 +1,19 @@
+
+> api-express@1.0.0 lint
+> eslint src
+
+Pages directory cannot be found at C:\Users\Admin\my\projects\meal_mind\mealmind-db-seeding\apps\api-express\pages or C:\Users\Admin\my\projects\meal_mind\mealmind-db-seeding\apps\api-express\src\pages. If using a custom path, please configure with the `no-html-link-for-pages` rule in your eslint config file.
+
+C:\Users\Admin\my\projects\meal_mind\mealmind-db-seeding\apps\api-express\src\middleware\error-handler.ts
+  4:73  warning  'next' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Admin\my\projects\meal_mind\mealmind-db-seeding\apps\api-express\src\modules\product\application\product.client.service.ts
+  5:3  warning  'BadRequestError' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Admin\my\projects\meal_mind\mealmind-db-seeding\apps\api-express\src\types\express.d.ts
+  5:5  warning  'P' is defined but never used        @typescript-eslint/no-unused-vars
+  6:5  warning  'ResBody' is defined but never used  @typescript-eslint/no-unused-vars
+  7:5  warning  'ReqBody' is defined but never used  @typescript-eslint/no-unused-vars
+
+✖ 5 problems (0 errors, 5 warnings)
+

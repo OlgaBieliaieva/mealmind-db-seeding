@@ -1,6 +1,6 @@
 "use client";
 
-import { useAddToPlanNavigation } from "../hooks/useAddToPlanNavigation";
+import { useAddToPlanNavigation } from "@/features/meal-plan/hooks/useAddToPlanNavigation";
 
 export function EmptyMealPlan() {
   const navigateToAdd = useAddToPlanNavigation();

@@ -3,9 +3,13 @@
 import { useState } from "react";
 import { usePlanParams } from "../hooks/usePlanParams";
 import { useFamily } from "@/features/family/hooks/useFamily";
-import { getWeekStart, generateWeek, formatWeekLabel } from "../lib/date";
-import PlanDaySelector from "./PlanDaySelector";
-import DatePicker from "./DatePicker";
+import {
+  getWeekStart,
+  generateWeek,
+  formatWeekLabel,
+} from "@/features/meal-plan/shared/lib/date";
+import PlanDaySelector from "@/features/meal-plan/shell/PlanDaySelector";
+import DatePicker from "@/features/meal-plan/shell/DatePicker";
 
 export default function PlanHeader() {
   const { activeDate, selectedDays, isMulti, toggleDay, goToToday, setDate } =

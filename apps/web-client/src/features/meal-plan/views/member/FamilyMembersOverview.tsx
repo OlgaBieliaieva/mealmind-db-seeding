@@ -2,7 +2,7 @@
 
 import { AggregatedMemberGroupDTO } from "@/shared/types/meal-plan.types";
 
-import { InfoTooltip } from "./InfoTooltip";
+import { InfoTooltip } from "@/features/meal-plan/shared/components/InfoTooltip";
 
 type Props = {
   members: AggregatedMemberGroupDTO[];

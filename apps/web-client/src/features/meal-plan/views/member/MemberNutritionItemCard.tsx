@@ -5,7 +5,10 @@ import { ShoppingCart, CookingPot } from "lucide-react";
 
 import { AggregatedMealItemDTO } from "@/shared/types/meal-plan.types";
 // import { useOpenAdvancedMealPlanEditor } from "../hooks/useOpenAdvancedMealPlanEditor";
-import { RecipeCategoryIcons, productCategoryIcons } from "./MealItem";
+import {
+  RecipeCategoryIcons,
+  ProductCategoryIcons,
+} from "@/features/meal-plan/shared/constants/icon-constants";
 
 type Props = {
   item: AggregatedMealItemDTO;
@@ -14,7 +17,7 @@ type Props = {
 };
 
 export function MemberNutritionItemCard({ item, memberId, mealTypeId }: Props) {
-//   const openEditor = useOpenAdvancedMealPlanEditor();
+  //   const openEditor = useOpenAdvancedMealPlanEditor();
 
   const averagePortionGrams =
     item.portions > 0 ? Math.round(item.totalWeight / item.portions) : 0;
@@ -48,7 +51,7 @@ export function MemberNutritionItemCard({ item, memberId, mealTypeId }: Props) {
           </div>
         ) : (
           <div className="flex items-center justify-center h-full text-2xl">
-            {productCategoryIcons[item.categoryCode ?? ""] ?? "🥕"}
+            {ProductCategoryIcons[item.categoryCode ?? ""] ?? "🥕"}
           </div>
         )}
       </div>
