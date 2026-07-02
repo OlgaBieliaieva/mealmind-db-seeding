@@ -1,5 +1,48 @@
 import { Prisma } from "@prisma/client";
 
+export const mealPlanUserSelect = {
+  id: true,
+  firstName: true,
+  sex: true,
+  birthDate: true,
+  heightCm: true,
+  avatarUrl: true,
+  nutrientTargets: {
+    select: {
+      targetValue: true,
+      calculated: true,
+      nutrient: {
+        select: {
+          code: true,
+          nameUa: true,
+          defaultUnit: true,
+          nutrientGroup: true,
+        },
+      },
+    },
+  },
+  bodyMetrics: {
+    orderBy: { createdAt: "desc" },
+    take: 1,
+    select: {
+      weightKg: true,
+      activityLevel: true,
+      goal: true,
+      goalRate: true,
+      createdAt: true,
+    },
+  },
+  mealSettings: {
+    orderBy: { createdAt: "desc" },
+    take: 1,
+    select: {
+      mealsPerDay: true,
+      snacksEnabled: true,
+      createdAt: true,
+    },
+  },
+} satisfies Prisma.UserSelect;
+
 export const mealEntryInclude = {
   mealType: {
     select: {
@@ -10,52 +53,7 @@ export const mealEntryInclude = {
     },
   },
   user: {
-    select: {
-      id: true,
-      firstName: true,
-      sex: true,
-      birthDate: true,
-      heightCm: true,
-      avatarUrl: true,
-
-      nutrientTargets: {
-        select: {
-          targetValue: true,
-          calculated: true,
-          nutrient: {
-            select: {
-              code: true,
-            },
-          },
-        },
-      },
-
-      bodyMetrics: {
-        orderBy: {
-          createdAt: "desc",
-        },
-        take: 1,
-        select: {
-          weightKg: true,
-          activityLevel: true,
-          goal: true,
-          goalRate: true,
-          createdAt: true,
-        },
-      },
-
-      mealSettings: {
-        orderBy: {
-          createdAt: "desc",
-        },
-        take: 1,
-        select: {
-          mealsPerDay: true,
-          snacksEnabled: true,
-          createdAt: true,
-        },
-      },
-    },
+    select: mealPlanUserSelect,
   },
   recipe: {
     select: {
@@ -117,6 +115,9 @@ export const mealEntryInclude = {
   },
 } satisfies Prisma.MealEntryInclude;
 
+export type MealPlanUser = Prisma.UserGetPayload<{
+  select: typeof mealPlanUserSelect;
+}>;
 export type MealEntryWithRelations = Prisma.MealEntryGetPayload<{
   include: typeof mealEntryInclude;
 }>;

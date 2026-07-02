@@ -78,6 +78,7 @@ export class MealPlanService {
 
   async getPlanEntries(familyId: string, date: string, days?: string) {
     const { weekStart } = this.getPeriod(date);
+    const familyMembers = await this.repo.findFamilyMembers(familyId);
 
     let plan = await this.repo.findByFamilyAndWeek(familyId, weekStart);
 
@@ -85,21 +86,27 @@ export class MealPlanService {
       plan = await this.repo.createPlan(familyId, weekStart);
     }
 
-    let entries;
+    const selectedDates = days
+      ? days.split(",").filter(Boolean).sort()
+      : [date];
 
-    if (days) {
-      const selectedDates = days.split(",").map(toUTCDateOnly);
-      entries = await this.repo.findEntriesByDates(plan.id, selectedDates);
-    } else {
-      const selectedDate = toUTCDateOnly(date);
-      entries = await this.repo.findEntriesByDates(plan.id, [selectedDate]);
-    }
+    const selectedDateObjects = selectedDates.map(toUTCDateOnly);
 
-    const periodDaysCount = days ? days.split(",").filter(Boolean).length : 1;
+    const entries = await this.repo.findEntriesByDates(
+      plan.id,
+      selectedDateObjects,
+    );
+
+    const periodDaysCount = selectedDates.length;
 
     return {
       week: mapToWeekView(entries, weekStart),
-      aggregated: mapToAggregatedMealPlan(entries, periodDaysCount),
+      aggregated: mapToAggregatedMealPlan(
+        entries,
+        familyMembers.map((member) => member.user),
+        periodDaysCount,
+        selectedDates,
+      ),
     };
   }
 

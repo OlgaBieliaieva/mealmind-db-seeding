@@ -1,7 +1,7 @@
 "use client";
 
+import { useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
 
 import { useFamilyMembers } from "@/shared/lib/hooks/useFamilyMembers";
 import { useMealTypes } from "@/shared/lib/hooks/useMealTypes";
@@ -29,6 +29,10 @@ export default function AdvancedAddPage() {
   const router = useRouter();
   const params = useSearchParams();
 
+  const daysParam = params.get("days");
+  const preselectedUserId = params.get("userId");
+  const preselectedMealTypeId = params.get("mealTypeId");
+  const amountGParam = Number(params.get("amountG") ?? 0);
   const date = params.get("date") ?? "";
   const recipeId = params.get("recipeId");
   const productId = params.get("productId");
@@ -43,10 +47,40 @@ export default function AdvancedAddPage() {
       id: m.id,
       name: m.name,
     })) ?? [];
+  const prefilledPortions = useMemo<PortionItem[]>(() => {
+    if (!preselectedUserId || !users.length) {
+      return [];
+    }
 
-  const [selectedDays, setSelectedDays] = useState<string[]>([date]);
+    const user = users.find((item) => item.id === preselectedUserId);
+
+    if (!user) {
+      return [];
+    }
+
+    return [
+      {
+        userId: user.id,
+        name: user.name,
+        sex: user.sex,
+        avatarUrl: user.avatarUrl ?? undefined,
+        grams: amountGParam || 100,
+      },
+    ];
+  }, [preselectedUserId, users, amountGParam]);
+  const [selectedDays, setSelectedDays] = useState<string[]>(
+    daysParam ? daysParam.split(",").filter(Boolean) : [date],
+  );
+
+  const [mealTypeId, setMealTypeId] = useState<string | null>(
+    preselectedMealTypeId,
+  );
+
   const [portions, setPortions] = useState<PortionItem[]>([]);
-  const [mealTypeId, setMealTypeId] = useState<string | null>(null);
+  const [hasUserEditedPortions, setHasUserEditedPortions] = useState(false);
+  const effectivePortions = hasUserEditedPortions
+    ? portions
+    : prefilledPortions;
 
   const { data: food } = useFoodData(recipeId, productId);
   const macros = food?.macros;
@@ -57,7 +91,7 @@ export default function AdvancedAddPage() {
     if (!mealTypeId) return;
 
     const entries = selectedDays.flatMap((day) =>
-      portions.map((p) => ({
+      effectivePortions.map((p) => ({
         date: day,
         userId: p.userId,
         mealTypeId,
@@ -76,8 +110,8 @@ export default function AdvancedAddPage() {
     );
   }
 
-  const entriesCount = selectedDays.length * portions.length;
-  const totalGrams = portions.reduce((sum, p) => sum + p.grams, 0);
+  const entriesCount = selectedDays.length * effectivePortions.length;
+  const totalGrams = effectivePortions.reduce((sum, p) => sum + p.grams, 0);
 
   return (
     <div className="flex flex-col h-full bg-gray-50">
@@ -109,8 +143,11 @@ export default function AdvancedAddPage() {
             ...u,
             avatarUrl: u.avatarUrl ?? undefined,
           }))}
-          portions={portions}
-          onChange={setPortions}
+          portions={effectivePortions}
+          onChange={(next) => {
+            setHasUserEditedPortions(true);
+            setPortions(next);
+          }}
           macrosPer100g={macros}
         />
 

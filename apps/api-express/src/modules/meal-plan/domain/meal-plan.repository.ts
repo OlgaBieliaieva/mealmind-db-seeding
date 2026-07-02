@@ -1,5 +1,8 @@
 import { PrismaClient, MealEntryStatus } from "@prisma/client";
-import { mealEntryInclude } from "../transport/client/types/meal-plan.types";
+import {
+  mealEntryInclude,
+  mealPlanUserSelect,
+} from "../transport/client/types/meal-plan.types";
 
 export class MealPlanRepository {
   constructor(private prisma: PrismaClient) {}
@@ -188,5 +191,27 @@ export class MealPlanRepository {
     );
 
     await this.prisma.$transaction(updates);
+  }
+
+  // =========================
+  // FAMILY MEMBERS
+  // =========================
+  async findFamilyMembers(familyId: string) {
+    return this.prisma.familyMember.findMany({
+      where: {
+        familyId,
+        isActive: true,
+      },
+      orderBy: {
+        joinedAt: "asc",
+      },
+      select: {
+        role: true,
+        joinedAt: true,
+        user: {
+          select: mealPlanUserSelect,
+        },
+      },
+    });
   }
 }

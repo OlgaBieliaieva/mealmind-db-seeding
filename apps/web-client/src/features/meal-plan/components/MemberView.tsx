@@ -59,6 +59,7 @@ export function MemberView({ aggregated }: Props) {
           summary={activeMember.summary}
           nutrition={activeMember.nutrition}
           byMealType={activeMember.byMealType}
+          byDay={activeMember.byDay}
           selectedDays={selectedDays}
         />
       ) : (

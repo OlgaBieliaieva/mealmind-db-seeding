@@ -11,7 +11,7 @@ type Props = {
   item: AggregatedMealItemDTO;
 };
 
-const RecipeCategoryIcons: Record<string, string> = {
+export const RecipeCategoryIcons: Record<string, string> = {
   breakfast: "🍳",
   appetizers: "🥪",
   soups: "🍲",

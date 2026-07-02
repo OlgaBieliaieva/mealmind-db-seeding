@@ -3,6 +3,7 @@
 import Image from "next/image";
 
 import {
+  AggregatedMemberDayGroupDTO,
   AggregatedMemberMealTypeGroupDTO,
   AggregatedMemberRefDTO,
   AggregatedNutritionSnapshotDTO,
@@ -10,6 +11,7 @@ import {
 } from "@/shared/types/meal-plan.types";
 
 import { InfoTooltip } from "./InfoTooltip";
+import { MemberDaySection } from "./MemberDaySection";
 import { MemberMealTypeSection } from "./MemberMealTypeSection";
 import { MemberNutritionOverview } from "./MemberNutritionOverview";
 
@@ -18,6 +20,7 @@ type Props = {
   summary: AggregatedSummaryDTO;
   nutrition?: AggregatedNutritionSnapshotDTO;
   byMealType: AggregatedMemberMealTypeGroupDTO[];
+  byDay: AggregatedMemberDayGroupDTO[];
   selectedDays: string[];
 };
 
@@ -26,12 +29,15 @@ export function MemberSectionCard({
   summary,
   nutrition,
   byMealType,
+  byDay,
   selectedDays,
 }: Props) {
   const defaultAvatar =
     member.sex === "female"
       ? "/avatars/default-female.jpg"
       : "/avatars/default-male.jpg";
+
+  const isMultiDay = selectedDays.length > 1;
 
   return (
     <section className="overflow-hidden rounded-2xl border bg-white shadow-sm">
@@ -52,16 +58,21 @@ export function MemberSectionCard({
               <div className="truncate font-medium text-gray-900">
                 {member.firstName}
               </div>
+
               <div className="text-xs text-gray-500">
-                {selectedDays.length === 1 ? "1 день" : `${selectedDays.length} днів`} •{" "}
-                {byMealType.length} прийом(и) їжі • {summary.totalItems} позицій
+                {isMultiDay ? `${selectedDays.length} днів` : "1 день"} •{" "}
+                {summary.totalItems} позицій
               </div>
             </div>
           </div>
 
           <InfoTooltip
             title="Профіль члена родини"
-            description="Тут показано загальну оцінку плану для конкретної людини, а нижче - деталізацію по прийомах їжі."
+            description={
+              isMultiDay
+                ? "Тут показано загальну оцінку плану за весь обраний період, а нижче - деталізацію по днях і прийомах їжі."
+                : "Тут показано загальну оцінку плану для конкретної людини, а нижче - деталізацію по прийомах їжі."
+            }
             align="right"
             side="bottom"
           />
@@ -74,25 +85,53 @@ export function MemberSectionCard({
           selectedDays={selectedDays}
         />
 
-        {!!byMealType.length && (
-          <div className="px-1 text-sm font-medium text-gray-900">
-            По прийомах їжі
-          </div>
-        )}
+        {isMultiDay ? (
+          <>
+            {!!byDay.length && (
+              <div className="px-1 text-sm font-medium text-gray-900">
+                По днях
+              </div>
+            )}
 
-        {byMealType.map((group) => (
-          <MemberMealTypeSection
-            key={group.mealType.id}
-            group={group}
-            memberId={member.id}
-          />
-        ))}
+            {byDay.map((day, index) => (
+              <MemberDaySection
+                key={`${member.id}-${day.date}`}
+                day={day}
+                member={member}
+                defaultExpanded={index === 0}
+              />
+            ))}
 
-        {!byMealType.length && (
-          <div className="rounded-2xl border border-dashed border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-500">
-            У вибраному періоді ще немає запланованих прийомів їжі для цього
-            члена родини.
-          </div>
+            {!byDay.length && (
+              <div className="rounded-2xl border border-dashed border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-500">
+                У вибраному періоді ще немає запланованих страв для цього члена
+                родини.
+              </div>
+            )}
+          </>
+        ) : (
+          <>
+            {!!byMealType.length && (
+              <div className="px-1 text-sm font-medium text-gray-900">
+                По прийомах їжі
+              </div>
+            )}
+
+            {byMealType.map((group) => (
+              <MemberMealTypeSection
+                key={group.mealType.id}
+                group={group}
+                memberId={member.id}
+              />
+            ))}
+
+            {!byMealType.length && (
+              <div className="rounded-2xl border border-dashed border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-500">
+                У вибраному періоді ще немає запланованих прийомів їжі для цього
+                члена родини.
+              </div>
+            )}
+          </>
         )}
       </div>
     </section>
