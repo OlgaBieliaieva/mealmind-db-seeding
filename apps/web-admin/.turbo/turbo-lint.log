@@ -1,0 +1,34 @@
+
+> web-admin@0.1.0 lint
+> eslint
+
+
+C:\Users\Admin\my\projects\meal_mind\mealmind-db-seeding\apps\web-admin\src\features\product-form\components\ProductForm\sections\ProductBasicSection.tsx
+  5:10  warning  'ProductFormInput' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Admin\my\projects\meal_mind\mealmind-db-seeding\apps\web-admin\src\features\product-form\components\ProductForm\sections\ProductParentSection.tsx
+  17:5   warning  'parentLocked' is assigned a value but never used                                                                    @typescript-eslint/no-unused-vars
+  29:11  warning  'canEditParent' is assigned a value but never used                                                                   @typescript-eslint/no-unused-vars
+  35:6   warning  React Hook useEffect has a missing dependency: 'applyInheritance'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+C:\Users\Admin\my\projects\meal_mind\mealmind-db-seeding\apps\web-admin\src\features\product-form\mappers\productFormToUpdatePayload.mapper.ts
+  6:10  warning  'mapProductFormToProductInput' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Admin\my\projects\meal_mind\mealmind-db-seeding\apps\web-admin\src\features\product-form\schemas\product-form.schema.ts
+   5:10  warning  'addFieldError' is defined but never used  @typescript-eslint/no-unused-vars
+  12:10  warning  'NUTRIENT_META' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Admin\my\projects\meal_mind\mealmind-db-seeding\apps\web-admin\src\features\product\constants\product.ui.options.ts
+  12:10  warning  'string' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Admin\my\projects\meal_mind\mealmind-db-seeding\apps\web-admin\src\features\recipe-form\components\ingredients\ProductSearchSelect.tsx
+  11:39  warning  'value' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Admin\my\projects\meal_mind\mealmind-db-seeding\apps\web-admin\src\features\recipe-form\components\inputs\CreateAuthorInline.tsx
+  19:21  warning  'setAvatarUrl' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Admin\my\projects\meal_mind\mealmind-db-seeding\apps\web-admin\src\shared\ui\page\PageLoader.tsx
+  7:30  warning  'title' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+✖ 11 problems (0 errors, 11 warnings)
+

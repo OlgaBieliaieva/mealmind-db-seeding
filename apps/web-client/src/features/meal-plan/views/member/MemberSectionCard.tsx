@@ -9,11 +9,14 @@ import {
   AggregatedNutritionSnapshotDTO,
   AggregatedSummaryDTO,
 } from "@/shared/types/meal-plan.types";
-
-import { InfoTooltip } from "./InfoTooltip";
-import { MemberDaySection } from "./MemberDaySection";
-import { MemberMealTypeSection } from "./MemberMealTypeSection";
-import { MemberNutritionOverview } from "./MemberNutritionOverview";
+import {
+  getMemberPeriodMeta,
+  isMultiDayPeriod,
+} from "./presenters/member-section.presenter";
+import { InfoTooltip } from "@/features/meal-plan/shared/components/InfoTooltip";
+import { MemberDaySection } from "@/features/meal-plan/views/member/MemberDaySection";
+import { MemberMealTypeSection } from "@/features/meal-plan/views/member/MemberMealTypeSection";
+import { MemberNutritionOverview } from "@/features/meal-plan/views/member/MemberNutritionOverview";
 
 type Props = {
   member: AggregatedMemberRefDTO;
@@ -37,7 +40,8 @@ export function MemberSectionCard({
       ? "/avatars/default-female.jpg"
       : "/avatars/default-male.jpg";
 
-  const isMultiDay = selectedDays.length > 1;
+  const isMultiDay = isMultiDayPeriod(selectedDays);
+  const memberMeta = getMemberPeriodMeta(selectedDays, summary.totalItems);
 
   return (
     <section className="overflow-hidden rounded-2xl border bg-white shadow-sm">
@@ -59,10 +63,7 @@ export function MemberSectionCard({
                 {member.firstName}
               </div>
 
-              <div className="text-xs text-gray-500">
-                {isMultiDay ? `${selectedDays.length} днів` : "1 день"} •{" "}
-                {summary.totalItems} позицій
-              </div>
+              <div className="text-xs text-gray-500">{memberMeta}</div>
             </div>
           </div>
 

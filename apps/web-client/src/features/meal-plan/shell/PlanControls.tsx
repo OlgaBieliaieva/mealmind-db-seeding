@@ -1,8 +1,8 @@
 "use client";
 
-import { usePlanParams } from "../hooks/usePlanParams";
-import { ViewModeSwitch } from "./ViewModeSwitch";
-import { MultiDayToggle } from "./MultiDayToggle";
+import { usePlanParams } from "@/features/meal-plan/hooks/usePlanParams";
+import { ViewModeSwitch } from "@/features/meal-plan/shell/ViewModeSwitch";
+import { MultiDayToggle } from "@/features/meal-plan/shell/MultiDayToggle";
 
 export default function PlanControls() {
   const { viewMode, setViewMode, isMulti, toggleMulti } = usePlanParams();

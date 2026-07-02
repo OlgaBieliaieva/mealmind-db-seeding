@@ -1,32 +1,26 @@
 "use client";
 
 import { ChevronDown } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 
 import {
   AggregatedMemberDayGroupDTO,
   AggregatedMemberRefDTO,
 } from "@/shared/types/meal-plan.types";
 
-import { MemberMealTypeSection } from "./MemberMealTypeSection";
-import { MemberNutritionOverview } from "./MemberNutritionOverview";
+import {
+  formatMemberDayLabel,
+  formatMemberDayShortMeta,
+} from "./presenters/member-day.presenter";
+
+import { MemberMealTypeSection } from "@/features/meal-plan/views/member/MemberMealTypeSection";
+import { MemberNutritionOverview } from "@/features/meal-plan/views/member/MemberNutritionOverview";
 
 type Props = {
   day: AggregatedMemberDayGroupDTO;
   member: AggregatedMemberRefDTO;
   defaultExpanded?: boolean;
 };
-
-function formatDayLabel(date: string) {
-  const [year, month, day] = date.split("-").map(Number);
-  const safeDate = new Date(Date.UTC(year, month - 1, day));
-
-  return safeDate.toLocaleDateString("uk-UA", {
-    day: "numeric",
-    month: "long",
-    weekday: "long",
-  });
-}
 
 export function MemberDaySection({
   day,
@@ -35,12 +29,10 @@ export function MemberDaySection({
 }: Props) {
   const [isExpanded, setIsExpanded] = useState(defaultExpanded);
 
-  const shortMeta = useMemo(() => {
-    const mealTypesCount = day.byMealType.length;
-    const itemCount = day.summary.totalItems;
-
-    return `${mealTypesCount} прийом(и) їжі • ${itemCount} позицій`;
-  }, [day]);
+  const shortMeta = formatMemberDayShortMeta(
+    day.byMealType.length,
+    day.summary.totalItems,
+  );
 
   return (
     <section className="overflow-hidden rounded-2xl border bg-white shadow-sm">
@@ -54,7 +46,7 @@ export function MemberDaySection({
             <div className="min-w-0">
               <div className="flex items-center gap-2">
                 <div className="truncate text-sm font-semibold text-gray-900">
-                  {formatDayLabel(day.date)}
+                  {formatMemberDayLabel(day.date)}
                 </div>
 
                 <ChevronDown

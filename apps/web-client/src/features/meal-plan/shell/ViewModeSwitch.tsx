@@ -1,6 +1,6 @@
 "use client";
 
-import { ViewMode } from "../hooks/usePlanParams";
+import { ViewMode } from "@/features/meal-plan/hooks/usePlanParams";
 
 type Props = {
   value: ViewMode;

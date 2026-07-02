@@ -1,6 +1,9 @@
 "use client";
 
-import { generateWeek, getWeekStart } from "@/features/meal-plan/lib/date";
+import {
+  generateWeek,
+  getWeekStart,
+} from "@/features/meal-plan/shared/lib/date";
 
 type Props = {
   baseDate: string;

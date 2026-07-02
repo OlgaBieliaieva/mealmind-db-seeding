@@ -3,13 +3,14 @@
 import { useMemo, useRef, useState } from "react";
 
 import { AggregatedMemberViewDTO } from "@/shared/types/meal-plan.types";
+import { useMealPlanActions } from "@/features/meal-plan/hooks/useMealPlanActions";
+import { usePlanParams } from "@/features/meal-plan/hooks/usePlanParams";
+import { PlanFloatingActionButton } from "@/features/meal-plan/shared/components/PlanFloatingActionButton";
 
-import { usePlanParams } from "../hooks/usePlanParams";
-
-import { FamilyMembersOverview } from "./FamilyMembersOverview";
-import { MemberOverviewCard } from "./MemberOverviewCard";
-import { MemberSectionCard } from "./MemberSectionCard";
-import { MemberTabs } from "./MemberTabs";
+import { FamilyMembersOverview } from "@/features/meal-plan/views/member/FamilyMembersOverview";
+import { MemberOverviewCard } from "@/features/meal-plan/views/member/MemberOverviewCard";
+import { MemberSectionCard } from "@/features/meal-plan/views/member/MemberSectionCard";
+import { MemberTabs } from "@/features/meal-plan/views/member/MemberTabs";
 
 type Props = {
   aggregated: AggregatedMemberViewDTO;
@@ -17,6 +18,7 @@ type Props = {
 
 export function MemberView({ aggregated }: Props) {
   const { selectedDays } = usePlanParams();
+  const actions = useMealPlanActions();
   const [activeMemberId, setActiveMemberId] = useState("all");
   const containerRef = useRef<HTMLDivElement | null>(null);
 
@@ -44,6 +46,12 @@ export function MemberView({ aggregated }: Props) {
     activeMemberId === "all"
       ? null
       : aggregated.members.find((group) => group.member.id === activeMemberId);
+
+  const handleAdd = () => {
+    actions.openCreate({
+      memberId: activeMemberId === "all" ? undefined : activeMemberId,
+    });
+  };
 
   return (
     <div ref={containerRef} className="space-y-4 pb-20">
@@ -77,6 +85,7 @@ export function MemberView({ aggregated }: Props) {
           </div>
         </>
       )}
+      <PlanFloatingActionButton onClick={handleAdd} />
     </div>
   );
 }

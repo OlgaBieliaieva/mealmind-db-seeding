@@ -4,9 +4,16 @@ import { ChevronDown } from "lucide-react";
 import { useState } from "react";
 
 import { AggregatedNutritionSnapshotDTO } from "@/shared/types/meal-plan.types";
+import {
+  getControlledNutrientsSummary,
+  getEnergyTarget,
+  getNutritionSignalsSummary,
+  getNutritionStatusLabel,
+  getNutritionStatusTone,
+} from "./presenters/member-nutrition.presenter";
 
-import { InfoTooltip } from "./InfoTooltip";
-import EnergyBattery from "./nutrition/EnergyBattery";
+import { InfoTooltip } from "@/features/meal-plan/shared/components/InfoTooltip";
+import EnergyBattery from "@/features/meal-plan/views/member/nutrition/EnergyBattery";
 
 type Props = {
   nutrition?: AggregatedNutritionSnapshotDTO;
@@ -31,68 +38,14 @@ function getPeriodLabel(selectedDays: string[]) {
   return `За ${selectedDays.length} днів`;
 }
 
-function getEnergyTarget(nutrition?: AggregatedNutritionSnapshotDTO) {
-  if (!nutrition?.energyPercent) {
-    return undefined;
-  }
-
-  return nutrition.energyKcal / (nutrition.energyPercent / 100);
-}
-
-function getStatusLabel(nutrition?: AggregatedNutritionSnapshotDTO) {
-  if (!nutrition) {
-    return "Оцінка поки неповна";
-  }
-
-  switch (nutrition.energyStatus) {
-    case "balanced":
-      return "У межах балансу";
-    case "warning":
-      return "Потребує уваги";
-    case "critical":
-      return "Є суттєві відхилення";
-    default:
-      return nutrition.issues?.length ? "Потребує уваги" : "Оцінка поки неповна";
-  }
-}
-
-function getStatusTone(nutrition?: AggregatedNutritionSnapshotDTO) {
-  switch (nutrition?.energyStatus) {
-    case "balanced":
-      return "text-green-700 bg-green-50 border-green-200";
-    case "warning":
-      return "text-amber-700 bg-amber-50 border-amber-200";
-    case "critical":
-      return "text-red-700 bg-red-50 border-red-200";
-    default:
-      return "text-slate-600 bg-slate-100 border-slate-200";
-  }
-}
-
-function getSignalsSummary(nutrition?: AggregatedNutritionSnapshotDTO) {
-  const count = nutrition?.issues?.length ?? 0;
-
-  if (count === 0) {
-    return "Без критичних відхилень";
-  }
-
-  if (count === 1) {
-    return "1 сигнал";
-  }
-
-  return `${count} сигнали`;
-}
-
-export function MemberNutritionOverview({
-  nutrition,
-  selectedDays,
-}: Props) {
+export function MemberNutritionOverview({ nutrition, selectedDays }: Props) {
   const [isExpanded, setIsExpanded] = useState(false);
   const periodLabel = getPeriodLabel(selectedDays);
   const targetEnergyKcal = getEnergyTarget(nutrition);
-  const statusLabel = getStatusLabel(nutrition);
-  const statusTone = getStatusTone(nutrition);
-  const signalsSummary = getSignalsSummary(nutrition);
+  const statusLabel = getNutritionStatusLabel(nutrition);
+  const statusTone = getNutritionStatusTone(nutrition);
+  const signalsSummary = getNutritionSignalsSummary(nutrition);
+  const controlledNutrients = getControlledNutrientsSummary(nutrition);
 
   if (!nutrition) {
     return (
@@ -102,7 +55,9 @@ export function MemberNutritionOverview({
             <div className="text-xs font-medium uppercase tracking-wide text-slate-500">
               Загальна оцінка
             </div>
-            <div className="text-sm font-medium text-slate-900">{periodLabel}</div>
+            <div className="text-sm font-medium text-slate-900">
+              {periodLabel}
+            </div>
           </div>
 
           <InfoTooltip
@@ -129,7 +84,9 @@ export function MemberNutritionOverview({
             <div className="text-xs font-medium uppercase tracking-wide text-slate-500">
               Загальна оцінка
             </div>
-            <div className="text-sm font-medium text-slate-900">{periodLabel}</div>
+            <div className="text-sm font-medium text-slate-900">
+              {periodLabel}
+            </div>
           </div>
 
           <div className="flex items-center gap-2">
@@ -155,7 +112,9 @@ export function MemberNutritionOverview({
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
-          <span className={`rounded-full border px-3 py-1 text-xs font-medium ${statusTone}`}>
+          <span
+            className={`rounded-full border px-3 py-1 text-xs font-medium ${statusTone}`}
+          >
             {statusLabel}
           </span>
           <span className="text-sm text-slate-700">
@@ -231,10 +190,30 @@ export function MemberNutritionOverview({
               </span>
             </div>
 
-            <div className="rounded-xl border border-dashed border-slate-200 bg-slate-50 px-3 py-2 text-xs leading-5 text-slate-500">
-              Контрольовані нутрієнти, такі як сіль, цукор чи клітковина, тут
-              можна буде показати окремо після розширення даних з бекенду.
-            </div>
+            {controlledNutrients.length > 0 ? (
+              <div className="space-y-2">
+                <div className="text-sm font-medium text-slate-900">
+                  Контрольовані нутрієнти
+                </div>
+
+                <div className="flex flex-wrap gap-2">
+                  {controlledNutrients.map((item) => (
+                    <span
+                      key={item.code}
+                      className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs text-slate-700"
+                    >
+                      {item.name}: {item.valueLabel}
+                      {item.targetLabel ? ` / ${item.targetLabel}` : ""}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <div className="rounded-xl border border-dashed border-slate-200 bg-slate-50 px-3 py-2 text-xs leading-5 text-slate-500">
+                Контрольовані нутрієнти, такі як сіль, цукор чи клітковина, тут
+                можна буде показати окремо після розширення даних з бекенду.
+              </div>
+            )}
           </div>
         </div>
       )}

@@ -1,0 +1,14 @@
+
+> web-client@0.1.0 lint
+> eslint
+
+
+C:\Users\Admin\my\projects\meal_mind\mealmind-db-seeding\apps\web-client\src\features\meal-plan\add\advanced\components\AdvancedAddPage.tsx
+  41:9  warning  The 'users' logical expression could make the dependencies of useMemo Hook (at line 70) change on every render. To fix this, wrap the initialization of 'users' in its own useMemo() Hook  react-hooks/exhaustive-deps
+
+C:\Users\Admin\my\projects\meal_mind\mealmind-db-seeding\apps\web-client\src\features\meal-plan\views\member\MemberNutritionItemCard.tsx
+  19:49  warning  'memberId' is defined but never used    @typescript-eslint/no-unused-vars
+  19:59  warning  'mealTypeId' is defined but never used  @typescript-eslint/no-unused-vars
+
+✖ 3 problems (0 errors, 3 warnings)
+
