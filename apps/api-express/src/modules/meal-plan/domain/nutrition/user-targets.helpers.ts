@@ -1,13 +1,60 @@
 import { differenceInYears } from "date-fns";
-import { MealEntryWithRelations } from "../../transport/client/types/meal-plan.types";
+import { MealPlanUser } from "../../transport/client/types/meal-plan.types";
 import {
   UserProfileForTargets,
   UserTargetsMap,
+  ControlledNutrientDefinition,
 } from "./meal-plan-nutrition.types";
 
-function buildStoredTargetsMap(
-  user: MealEntryWithRelations["user"],
-): UserTargetsMap {
+const CORE_TARGET_CODES = new Set([
+  "energy_kcal",
+  "protein",
+  "fat",
+  "carbohydrates",
+]);
+
+const DEFAULT_CONTROLLED_NUTRIENTS: Record<
+  string,
+  { name: string; unit: string; direction: "min" | "max" | "target" }
+> = {
+  sugar: { name: "Цукор", unit: "г", direction: "max" },
+  fiber: { name: "Клітковина", unit: "г", direction: "min" },
+  sodium: { name: "Натрій", unit: "мг", direction: "max" },
+  cholesterol: { name: "Холестерин", unit: "мг", direction: "max" },
+};
+
+export function getControlledNutrientDefinitions(
+  user: MealPlanUser,
+): ControlledNutrientDefinition[] {
+  const resolvedTargets = resolveUserTargets(user);
+
+  const stored = user.nutrientTargets
+    .filter((target) => !CORE_TARGET_CODES.has(target.nutrient.code))
+    .map((target) => ({
+      code: target.nutrient.code,
+      name: target.nutrient.nameUa,
+      unit: target.nutrient.defaultUnit,
+      direction:
+        DEFAULT_CONTROLLED_NUTRIENTS[target.nutrient.code]?.direction ??
+        "target",
+      targetValue: resolvedTargets[target.nutrient.code],
+    }));
+
+  const fallback = Object.entries(DEFAULT_CONTROLLED_NUTRIENTS)
+    .filter(([code]) => !stored.find((item) => item.code === code))
+    .filter(([code]) => resolvedTargets[code] !== undefined)
+    .map(([code, meta]) => ({
+      code,
+      name: meta.name,
+      unit: meta.unit,
+      direction: meta.direction,
+      targetValue: resolvedTargets[code],
+    }));
+
+  return [...stored, ...fallback];
+}
+
+function buildStoredTargetsMap(user: MealPlanUser): UserTargetsMap {
   if (!user.nutrientTargets?.length) {
     return {};
   }
@@ -21,7 +68,7 @@ function buildStoredTargetsMap(
 }
 
 function buildProfileForTargets(
-  user: MealEntryWithRelations["user"],
+  user: MealPlanUser,
 ): UserProfileForTargets | undefined {
   const latestMetric = user.bodyMetrics?.[0];
 
@@ -85,7 +132,7 @@ function calculateDefaultTargets(
   const carbohydrates = Math.round(carbsKcal / 4);
 
   const sugar = Math.round((energy_kcal * 0.1) / 4);
-  const fiber = 30
+  const fiber = 30;
   // Math.round((energy_kcal / 1000) * 14);
   const sodium = 2000;
   const cholesterol = 300;
@@ -102,9 +149,7 @@ function calculateDefaultTargets(
   };
 }
 
-function buildDefaultTargetsMap(
-  user: MealEntryWithRelations["user"],
-): UserTargetsMap {
+function buildDefaultTargetsMap(user: MealPlanUser): UserTargetsMap {
   const profile = buildProfileForTargets(user);
 
   if (!profile) {
@@ -114,9 +159,7 @@ function buildDefaultTargetsMap(
   return calculateDefaultTargets(profile);
 }
 
-export function resolveUserTargets(
-  user: MealEntryWithRelations["user"],
-): UserTargetsMap {
+export function resolveUserTargets(user: MealPlanUser): UserTargetsMap {
   const storedTargets = buildStoredTargetsMap(user);
 
   if (Object.keys(storedTargets).length > 0) {

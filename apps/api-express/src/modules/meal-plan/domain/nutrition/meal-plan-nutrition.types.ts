@@ -11,6 +11,16 @@ export type MacroTotals = {
 
 export type MealDistributionMap = Record<string, number>;
 
+export type NutrientTotalsMap = Record<string, number>;
+
+export type ControlledNutrientDefinition = {
+  code: string;
+  name: string;
+  unit: string;
+  direction: "min" | "max" | "target";
+  targetValue?: number;
+};
+
 export type UserNutritionContext = {
   user: MealEntryWithRelations["user"];
   targets: UserTargetsMap;

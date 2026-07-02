@@ -5,7 +5,7 @@ import { useState } from "react";
 
 import { AggregatedMemberMealTypeGroupDTO } from "@/shared/types/meal-plan.types";
 
-import { MealItem } from "./MealItem";
+import { MemberNutritionItemCard } from "./MemberNutritionItemCard";
 import EnergyBattery from "./nutrition/EnergyBattery";
 
 type Props = {
@@ -14,7 +14,7 @@ type Props = {
 };
 
 export function MemberMealTypeSection({ group, memberId }: Props) {
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(true);
 
   return (
     <div className="overflow-hidden rounded-xl border">
@@ -39,8 +39,8 @@ export function MemberMealTypeSection({ group, memberId }: Props) {
               </div>
 
               <div className="text-xs text-gray-500">
-                {group.summary.totalItems} позицій • {group.summary.preparedItems}/
-                {group.summary.totalItems} готово
+                {group.summary.totalItems} позицій •{" "}
+                {group.summary.preparedItems}/{group.summary.totalItems} готово
               </div>
             </div>
 
@@ -88,9 +88,11 @@ export function MemberMealTypeSection({ group, memberId }: Props) {
             <div className="text-sm text-gray-400">Немає страв</div>
           ) : (
             group.items.map((item) => (
-              <MealItem
+              <MemberNutritionItemCard
                 key={`${memberId}-${group.mealType.id}-${item.type}-${item.id}`}
                 item={item}
+                memberId={memberId}
+                mealTypeId={group.mealType.id}
               />
             ))
           )}

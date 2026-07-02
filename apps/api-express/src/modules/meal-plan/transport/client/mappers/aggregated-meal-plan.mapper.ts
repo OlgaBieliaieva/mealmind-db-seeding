@@ -1,9 +1,10 @@
-import { MealEntryWithRelations } from "../types/meal-plan.types";
+import { MealEntryWithRelations, MealPlanUser } from "../types/meal-plan.types";
 import {
   AggregatedMealItemDTO,
   AggregatedMealPlanDTO,
   AggregatedMealTypeGroupDTO,
   AggregatedMealTypeRefDTO,
+  AggregatedMemberDayGroupDTO,
   AggregatedMemberGroupDTO,
   AggregatedMemberMealTypeGroupDTO,
   AggregatedSummaryDTO,
@@ -11,6 +12,7 @@ import {
 import {
   makeMealTypeNutritionSnapshot,
   makeNutritionSnapshot,
+  makeItemNutritionSnapshot,
 } from "../../../domain/nutrition/member-nutrition.helpers";
 
 type AggregateMode = "all" | "mealType";
@@ -20,6 +22,7 @@ type AggregatedItemInternal = AggregatedMealItemDTO & {
   totalCount: number;
   firstCreatedAtMs: number;
   firstMealTypeOrderIndex: number;
+  sourceEntries: MealEntryWithRelations[];
 };
 
 function buildAggregatedItems(
@@ -83,6 +86,8 @@ function buildAggregatedItems(
         totalCount: 0,
         firstCreatedAtMs: entry.createdAt.getTime(),
         firstMealTypeOrderIndex: entry.mealType.orderIndex,
+        nutrition: undefined,
+        sourceEntries: [],
       });
     }
 
@@ -92,6 +97,7 @@ function buildAggregatedItems(
     item.portions += 1;
     item.entryIds.push(entry.id);
     item.totalCount += 1;
+    item.sourceEntries.push(entry);
 
     if (entry.status === "prepared") {
       item.preparedCount += 1;
@@ -132,9 +138,11 @@ function buildAggregatedItems(
         totalCount,
         firstCreatedAtMs,
         firstMealTypeOrderIndex,
+        sourceEntries,
         ...rest
       }) => ({
         ...rest,
+        nutrition: makeItemNutritionSnapshot(sourceEntries),
         isPrepared: preparedCount === totalCount,
         mealTypes: [...rest.mealTypes].sort(
           (a, b) => a.orderIndex - b.orderIndex,
@@ -186,6 +194,12 @@ function getMealTypes(
   ).sort((a, b) => a.orderIndex - b.orderIndex);
 }
 
+function getDates(entries: MealEntryWithRelations[]): string[] {
+  return Array.from(
+    new Set(entries.map((entry) => entry.date.toISOString().slice(0, 10))),
+  ).sort((a, b) => a.localeCompare(b));
+}
+
 function buildMealView(
   entries: MealEntryWithRelations[],
 ): AggregatedMealPlanDTO["views"]["meal"] {
@@ -215,23 +229,58 @@ function buildMealView(
   };
 }
 
+function buildMemberDayGroups(
+  memberEntries: MealEntryWithRelations[],
+  mealTypes: AggregatedMealTypeRefDTO[],
+  selectedDates?: string[],
+): AggregatedMemberDayGroupDTO[] {
+  const dates = selectedDates?.length ? selectedDates : getDates(memberEntries);
+
+  return dates.map((date) => {
+    const dayEntries = memberEntries.filter(
+      (entry) => entry.date.toISOString().slice(0, 10) === date,
+    );
+
+    const byMealType: AggregatedMemberMealTypeGroupDTO[] = mealTypes
+      .map((mealType) => {
+        const mealEntries = dayEntries.filter(
+          (entry) => entry.mealTypeId === mealType.id,
+        );
+
+        const items = buildAggregatedItems(mealEntries, "mealType");
+
+        return {
+          mealType,
+          summary: makeSummary(items),
+          nutrition: makeMealTypeNutritionSnapshot(mealEntries, 1),
+          items,
+        };
+      })
+      .filter((group) => group.items.length > 0);
+
+    const dayItems = buildAggregatedItems(dayEntries, "all");
+
+    return {
+      date,
+      summary: makeSummary(dayItems),
+      nutrition: makeNutritionSnapshot(dayEntries, 1),
+      byMealType,
+    };
+  });
+}
+
 function buildMemberView(
   entries: MealEntryWithRelations[],
+  familyMembers: MealPlanUser[],
   periodDaysCount: number,
+  selectedDates?: string[],
 ): AggregatedMealPlanDTO["views"]["member"] {
-  const members = Array.from(
-    new Map(
-      entries.map((entry) => [
-        entry.user.id,
-        {
-          id: entry.user.id,
-          firstName: entry.user.firstName,
-          sex: entry.user.sex,
-          avatarUrl: entry.user.avatarUrl,
-        },
-      ]),
-    ).values(),
-  ).sort((a, b) => a.firstName.localeCompare(b.firstName, "uk"));
+  const members = familyMembers.map((member) => ({
+    id: member.id,
+    firstName: member.firstName,
+    sex: member.sex,
+    avatarUrl: member.avatarUrl,
+  }));
 
   const mealTypes = getMealTypes(entries);
 
@@ -258,6 +307,12 @@ function buildMemberView(
       })
       .filter((group) => group.items.length > 0);
 
+    const byDay = buildMemberDayGroups(
+      memberEntries,
+      mealTypes,
+      selectedDates,
+    );
+
     const memberItems = buildAggregatedItems(memberEntries, "all");
 
     return {
@@ -265,6 +320,7 @@ function buildMemberView(
       summary: makeSummary(memberItems),
       nutrition: makeNutritionSnapshot(memberEntries, periodDaysCount),
       byMealType,
+      byDay,
     };
   });
 
@@ -290,12 +346,19 @@ function buildMemberView(
 
 export function mapToAggregatedMealPlan(
   entries: MealEntryWithRelations[],
+  familyMembers: MealPlanUser[],
   periodDaysCount: number,
+  selectedDates?: string[],
 ): AggregatedMealPlanDTO {
   return {
     views: {
       meal: buildMealView(entries),
-      member: buildMemberView(entries, periodDaysCount),
+      member: buildMemberView(
+        entries,
+        familyMembers,
+        periodDaysCount,
+        selectedDates,
+      ),
     },
   };
 }

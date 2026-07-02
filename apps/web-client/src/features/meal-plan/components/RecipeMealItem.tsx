@@ -1,6 +1,6 @@
 "use client";
 
-import { ChefHat } from "lucide-react";
+import { CookingPot } from "lucide-react";
 import { AggregatedMealItemDTO } from "@/shared/types/meal-plan.types";
 
 type Props = {
@@ -34,7 +34,7 @@ export function RecipeMealItem({ item }: Props) {
         <div className="flex items-center gap-2 text-sm font-medium text-gray-900">
           {/* <span>{categoryIcons[item.categoryCode ?? ""] ?? "🍽"}</span> */}
 
-          <ChefHat size={16} className="text-gray-400" />
+          <CookingPot size={16} className="text-gray-400" />
           <span>{item.name}</span>
         </div>
 

@@ -16,12 +16,26 @@ export function generateWeek(start: Date) {
 }
 
 export function formatWeekLabel(days: string[]) {
-  const start = new Date(days[0]);
-  const end = new Date(days[6]);
+  const start = toUTCDateOnly(days[0]);
+  const end = toUTCDateOnly(days[6]);
 
-  return `${start.getDate()}–${end.getDate()} ${start.toLocaleString("uk-UA", {
+  const startMonth = start.toLocaleString("uk-UA", {
     month: "long",
-  })}`;
+    timeZone: "UTC",
+  });
+  const endMonth = end.toLocaleString("uk-UA", {
+    month: "long",
+    timeZone: "UTC",
+  });
+
+  if (
+    start.getUTCFullYear() === end.getUTCFullYear() &&
+    start.getUTCMonth() === end.getUTCMonth()
+  ) {
+    return `${start.getUTCDate()}–${end.getUTCDate()} ${startMonth}`;
+  }
+
+  return `${start.getUTCDate()} ${startMonth}–${end.getUTCDate()} ${endMonth}`;
 }
 
 export function toUTCDateOnly(dateStr: string) {

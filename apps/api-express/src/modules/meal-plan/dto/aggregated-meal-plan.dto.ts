@@ -4,6 +4,25 @@ export type AggregatedMealTypeRefDTO = {
   orderIndex: number;
 };
 
+export type AggregatedMealItemNutritionDTO = {
+  energyKcalPer100g: number;
+  energyKcalPerPortion: number;
+  proteinPerPortion: number;
+  fatPerPortion: number;
+  carbsPerPortion: number;
+};
+
+export type AggregatedControlledNutrientDTO = {
+  code: string;
+  name: string;
+  unit: string;
+  actualValue: number;
+  targetValue?: number;
+  percentOfTarget?: number;
+  direction: "min" | "max" | "target";
+  status: "low" | "ok" | "high" | "unknown";
+};
+
 export type AggregatedMealItemDTO = {
   id: string;
   type: "recipe" | "product";
@@ -35,6 +54,8 @@ export type AggregatedMealItemDTO = {
 
   mealTypes: AggregatedMealTypeRefDTO[];
 
+  nutrition?: AggregatedMealItemNutritionDTO;
+
   sort: {
     firstCreatedAt: string;
     firstMealTypeOrderIndex: number;
@@ -53,6 +74,7 @@ export type AggregatedNutritionSnapshotDTO = {
 
   energyPercent?: number;
   energyStatus?: "balanced" | "warning" | "critical";
+  controlledNutrients?: AggregatedControlledNutrientDTO[];
   issues?: string[];
 };
 
@@ -87,11 +109,19 @@ export type AggregatedMemberRefDTO = {
   avatarUrl: string | null;
 };
 
+export type AggregatedMemberDayGroupDTO = {
+  date: string;
+  summary: AggregatedSummaryDTO;
+  nutrition?: AggregatedNutritionSnapshotDTO;
+  byMealType: AggregatedMemberMealTypeGroupDTO[];
+};
+
 export type AggregatedMemberGroupDTO = {
   member: AggregatedMemberRefDTO;
   summary: AggregatedSummaryDTO;
   nutrition?: AggregatedNutritionSnapshotDTO;
   byMealType: AggregatedMemberMealTypeGroupDTO[];
+  byDay: AggregatedMemberDayGroupDTO[];
 };
 
 export type AggregatedMemberViewDTO = {
